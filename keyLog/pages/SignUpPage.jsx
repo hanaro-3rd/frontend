@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import InfoText from '../components/SignUp/InfoText';
 import InputField from '../components/SignUp/InputField';
+import ModalContent from '../components/SignUp/ModalContent';
 
 const isValidName = name => {
   const regex = /^[가-힣]*$/;
@@ -26,6 +27,7 @@ const SignUpPage = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isNameValid, setIsNameValid] = useState(true);
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const nameInputRef = useRef(null);
   const phoneNumberInputRef = useRef(null);
@@ -88,6 +90,10 @@ const SignUpPage = () => {
     }
   };
 
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
   return (
     <ScrollView
       contentContainerStyle={styles.root}
@@ -132,12 +138,13 @@ const SignUpPage = () => {
               (!isNameValid || !isValidPhoneNumber(phoneNumber)) &&
                 styles.disabledButton,
             ]}
-            onPress={handleAuthentication}
+            onPress={toggleModal}
             disabled={!isNameValid || !isValidPhoneNumber(phoneNumber)}
           >
             <Text style={styles.buttonText}>인증 요청</Text>
           </TouchableOpacity>
         </View>
+        <ModalContent modalVisible={modalVisible} toggleModal={toggleModal} />
       </View>
     </ScrollView>
   );
