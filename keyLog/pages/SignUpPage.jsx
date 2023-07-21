@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Keyboard,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -13,18 +14,30 @@ const InfoText = ({ text }) => (
 );
 
 const InputField = React.forwardRef(
-  ({ placeholder, handlePress, value, onChangeText }, ref) => (
-    <TouchableOpacity style={styles.inputFieldContainer} onPress={handlePress}>
-      <TextInput
-        ref={ref}
-        style={styles.inputField}
-        placeholder={placeholder}
-        value={value}
-        onChangeText={onChangeText}
-      />
-    </TouchableOpacity>
+  ({ placeholder, handlePress, value, onChangeText, hasError }, ref) => (
+    <View style={styles.inputFieldWrapper}>
+      <TouchableOpacity
+        style={[styles.inputFieldContainer, hasError && styles.errorInputField]}
+        onPress={handlePress}
+      >
+        <TextInput
+          ref={ref}
+          style={styles.inputField}
+          placeholder={placeholder}
+          value={value}
+          onChangeText={onChangeText}
+          placeholderTextColor='#B0B8C1'
+        />
+      </TouchableOpacity>
+      {hasError && <InfoText text='입력 형식을 확인하세요' />}
+    </View>
   )
 );
+
+const isValidName = name => {
+  const regex = /^[가-힣]*$/;
+  return regex.test(name);
+};
 
 const isValidPhoneNumber = number => {
   const regex = /^010-\d{4}-\d{4}$/;
@@ -35,6 +48,8 @@ const SignUpPage = () => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [isNameValid, setIsNameValid] = useState(true);
+  const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(true);
 
   const nameInputRef = useRef(null);
   const phoneNumberInputRef = useRef(null);
@@ -69,6 +84,11 @@ const SignUpPage = () => {
     '주말 및 공휴일은 수수료가 붙습니다.. 어쩌구',
   ];
 
+  const handleNameChange = text => {
+    setName(text);
+    setIsNameValid(isValidName(text));
+  };
+
   const handlePhoneChange = number => {
     let cleaned = ('' + number).replace(/\D/g, '');
     let match;
@@ -86,12 +106,17 @@ const SignUpPage = () => {
         part2 = match[2] || '',
         part3 = match[3] || '';
 
-      setPhoneNumber([part1, part2, part3].filter(Boolean).join('-'));
+      const newPhoneNumber = [part1, part2, part3].filter(Boolean).join('-');
+      setPhoneNumber(newPhoneNumber);
+      setIsPhoneNumberValid(isValidPhoneNumber(newPhoneNumber));
     }
   };
 
   return (
-    <View style={styles.root}>
+    <ScrollView
+      contentContainerStyle={styles.root}
+      keyboardShouldPersistTaps='handled'
+    >
       <View style={styles.body}>
         <View style={styles.bodyHeader}>
           <Text style={styles.title}>휴대폰 본인인증</Text>
@@ -104,8 +129,9 @@ const SignUpPage = () => {
             ref={nameInputRef}
             placeholder='이름'
             value={name}
-            onChangeText={text => setName(text)}
+            onChangeText={handleNameChange}
             handlePress={() => nameInputRef.current?.focus()}
+            hasError={!isNameValid}
           />
           <InputField
             ref={phoneNumberInputRef}
@@ -113,6 +139,7 @@ const SignUpPage = () => {
             value={phoneNumber}
             onChangeText={handlePhoneChange}
             handlePress={() => phoneNumberInputRef.current?.focus()}
+            hasError={!isPhoneNumberValid}
           />
         </View>
         <View style={styles.bodyFooter}>
@@ -126,17 +153,17 @@ const SignUpPage = () => {
           <TouchableOpacity
             style={[
               styles.submitButton,
-              (!name || !isValidPhoneNumber(phoneNumber)) &&
+              (!isNameValid || !isValidPhoneNumber(phoneNumber)) &&
                 styles.disabledButton,
             ]}
             onPress={handleAuthentication}
-            disabled={!name || !isValidPhoneNumber(phoneNumber)}
+            disabled={!isNameValid || !isValidPhoneNumber(phoneNumber)}
           >
             <Text style={styles.buttonText}>인증 요청</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -147,7 +174,7 @@ const commonTextStyle = {
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
+    flexGrow: 1,
     flexDirection: 'column',
     alignItems: 'flex-start',
     backgroundColor: '#F2F4F6',
@@ -194,6 +221,10 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 25,
   },
+  inputFieldWrapper: {
+    alignSelf: 'stretch', // 추가
+    marginBottom: 15, // 필요에 따라 조절
+  },
   inputFieldContainer: {
     height: 65,
     alignItems: 'center',
@@ -207,7 +238,7 @@ const styles = StyleSheet.create({
   },
   inputField: {
     ...commonTextStyle,
-    color: '#B0B8C1',
+    color: 'black',
     fontSize: 16,
     fontWeight: '700',
   },
@@ -252,7 +283,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   disabledButton: {
-    backgroundColor: '#F2F4F6', // 비활성화된 버튼의 배경색
+    backgroundColor: '#F2F4F6',
+  },
+  errorInputField: {
+    borderColor: 'red',
+    borderWidth: 1,
   },
 });
 
