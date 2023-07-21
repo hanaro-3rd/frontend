@@ -52,10 +52,6 @@ const SignUpPage = () => {
     };
   }, []);
 
-  const handleAuthentication = () => {
-    // Authentication logic
-  };
-
   const infoTexts = [
     '주말 및 공휴일은 수수료가 붙습니다.. 어쩌구',
     '주말 및 공휴일은 수수료가 붙습니다.. 어쩌구',
