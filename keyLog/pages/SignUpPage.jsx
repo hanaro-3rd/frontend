@@ -4,35 +4,11 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-
-const InfoText = ({ text }) => (
-  <Text style={styles.informationText}>{text}</Text>
-);
-
-const InputField = React.forwardRef(
-  ({ placeholder, handlePress, value, onChangeText, hasError }, ref) => (
-    <View style={styles.inputFieldWrapper}>
-      <TouchableOpacity
-        style={[styles.inputFieldContainer, hasError && styles.errorInputField]}
-        onPress={handlePress}
-      >
-        <TextInput
-          ref={ref}
-          style={styles.inputField}
-          placeholder={placeholder}
-          value={value}
-          onChangeText={onChangeText}
-          placeholderTextColor='#B0B8C1'
-        />
-      </TouchableOpacity>
-      {hasError && <InfoText text='입력 형식을 확인하세요' />}
-    </View>
-  )
-);
+import InfoText from '../components/SignUp/InfoText';
+import InputField from '../components/SignUp/InputField';
 
 const isValidName = name => {
   const regex = /^[가-힣]*$/;
@@ -221,33 +197,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 25,
   },
-  inputFieldWrapper: {
-    alignSelf: 'stretch', // 추가
-    marginBottom: 15, // 필요에 따라 조절
-  },
-  inputFieldContainer: {
-    height: 65,
-    alignItems: 'center',
-    gap: 10,
-    alignSelf: 'stretch',
-    backgroundColor: '#F9FAFB',
-    flexDirection: 'row',
-    paddingVertical: 0,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-  },
-  inputField: {
-    ...commonTextStyle,
-    color: 'black',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  informationText: {
-    ...commonTextStyle,
-    color: '#4E5968',
-    fontSize: 13,
-    fontWeight: '400',
-  },
   bodyFooter: {
     flexDirection: 'column',
     justifyContent: 'flex-end',
@@ -284,10 +233,6 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     backgroundColor: '#F2F4F6',
-  },
-  errorInputField: {
-    borderColor: 'red',
-    borderWidth: 1,
   },
 });
 
