@@ -1,8 +1,22 @@
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useRef } from 'react';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Modal from 'react-native-modal';
 
 const ModalContent = ({ modalVisible, toggleModal }) => {
+  const inputRef = useRef(null);
+
+  const handleInputPress = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
   return (
     <Modal
       isVisible={modalVisible}
@@ -36,7 +50,14 @@ const ModalContent = ({ modalVisible, toggleModal }) => {
             </View>
             <View style={styles.popupMain}>
               <View style={styles.input3}>
-                <Text style={styles.certificationNumber}>인증번호</Text>
+                <TouchableOpacity>
+                  <TextInput
+                    ref={inputRef}
+                    style={styles.certificationNumber}
+                    placeholder='인증번호'
+                    // Add any other TextInput props you might need
+                  />
+                </TouchableOpacity>
                 <View style={styles.resendButton}>
                   <Text style={styles.buttonText3}>재전송</Text>
                 </View>
