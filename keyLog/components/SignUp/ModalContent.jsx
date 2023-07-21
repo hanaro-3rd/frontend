@@ -67,15 +67,15 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     padding: 20,
-    maxHeight: '40%',
+    maxHeight: '38%',
   },
   certificationNumberPopup: {
     width: 390,
     height: 844,
     position: 'absolute',
+    alignSelf: 'center',
   },
   popup: {
-    width: 390,
     flexDirection: 'column',
     alignItems: 'flex-start',
     gap: 20,

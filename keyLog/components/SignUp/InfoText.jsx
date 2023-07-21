@@ -15,8 +15,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const InfoText = ({ text }) => (
-  <Text style={styles.informationText}>{text}</Text>
+const InfoText = ({ texts = [] }) => (
+  <>
+    {texts.map((text, index) => (
+      <Text key={index} style={styles.informationText}>
+        {text}
+      </Text>
+    ))}
+  </>
 );
 
 export default InfoText;

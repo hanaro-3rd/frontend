@@ -123,9 +123,7 @@ const SignUpPage = () => {
         <View style={styles.bodyFooter}>
           {!isKeyboardVisible && (
             <View style={styles.informationContainer}>
-              {infoTexts.map((text, index) => (
-                <InfoText key={index} text={text} />
-              ))}
+              <InfoText texts={infoTexts} />
             </View>
           )}
           <TouchableOpacity
