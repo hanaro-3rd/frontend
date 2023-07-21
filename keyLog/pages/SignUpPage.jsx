@@ -12,14 +12,30 @@ const InfoText = ({ text }) => (
   <Text style={styles.informationText}>{text}</Text>
 );
 
-const InputField = React.forwardRef(({ placeholder, handlePress }, ref) => (
-  <TouchableOpacity style={styles.inputFieldContainer} onPress={handlePress}>
-    <TextInput ref={ref} style={styles.inputField} placeholder={placeholder} />
-  </TouchableOpacity>
-));
+const InputField = React.forwardRef(
+  ({ placeholder, handlePress, value, onChangeText }, ref) => (
+    <TouchableOpacity style={styles.inputFieldContainer} onPress={handlePress}>
+      <TextInput
+        ref={ref}
+        style={styles.inputField}
+        placeholder={placeholder}
+        value={value}
+        onChangeText={onChangeText}
+      />
+    </TouchableOpacity>
+  )
+);
+
+const isValidPhoneNumber = number => {
+  const regex = /^010-\d{4}-\d{4}$/;
+  return regex.test(number);
+};
 
 const SignUpPage = () => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const [name, setName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+
   const nameInputRef = useRef(null);
   const phoneNumberInputRef = useRef(null);
 
@@ -53,6 +69,27 @@ const SignUpPage = () => {
     '주말 및 공휴일은 수수료가 붙습니다.. 어쩌구',
   ];
 
+  const handlePhoneChange = number => {
+    let cleaned = ('' + number).replace(/\D/g, '');
+    let match;
+
+    if (cleaned.length < 4) {
+      match = cleaned.match(/^(\d{0,3})/);
+    } else if (cleaned.length < 7) {
+      match = cleaned.match(/^(\d{3})(\d{0,4})/);
+    } else {
+      match = cleaned.match(/^(\d{3})(\d{4})(\d{0,4})/);
+    }
+
+    if (match) {
+      const part1 = match[1] || '',
+        part2 = match[2] || '',
+        part3 = match[3] || '';
+
+      setPhoneNumber([part1, part2, part3].filter(Boolean).join('-'));
+    }
+  };
+
   return (
     <View style={styles.root}>
       <View style={styles.body}>
@@ -66,11 +103,15 @@ const SignUpPage = () => {
           <InputField
             ref={nameInputRef}
             placeholder='이름'
+            value={name}
+            onChangeText={text => setName(text)}
             handlePress={() => nameInputRef.current?.focus()}
           />
           <InputField
             ref={phoneNumberInputRef}
             placeholder='휴대폰번호'
+            value={phoneNumber}
+            onChangeText={handlePhoneChange}
             handlePress={() => phoneNumberInputRef.current?.focus()}
           />
         </View>
@@ -83,8 +124,13 @@ const SignUpPage = () => {
             </View>
           )}
           <TouchableOpacity
-            style={styles.submitButton}
+            style={[
+              styles.submitButton,
+              (!name || !isValidPhoneNumber(phoneNumber)) &&
+                styles.disabledButton,
+            ]}
             onPress={handleAuthentication}
+            disabled={!name || !isValidPhoneNumber(phoneNumber)}
           >
             <Text style={styles.buttonText}>인증 요청</Text>
           </TouchableOpacity>
@@ -190,7 +236,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     ...commonTextStyle,
-    color: '#B0B8C1',
+    color: 'white',
     fontSize: 16,
     fontWeight: '700',
   },
@@ -200,10 +246,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     alignSelf: 'stretch',
-    backgroundColor: '#F2F4F6',
+    backgroundColor: '#55ACEE',
     flexDirection: 'row',
     padding: 10,
     borderRadius: 10,
+  },
+  disabledButton: {
+    backgroundColor: '#F2F4F6', // 비활성화된 버튼의 배경색
   },
 });
 
