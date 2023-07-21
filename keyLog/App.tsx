@@ -12,8 +12,8 @@ const App = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="AccountConnectPage">
-        <Stack.Screen name="MainPage" component={MainPage} />
+      <Stack.Navigator initialRouteName="MainPage">
+        <Stack.Screen name="MainPage" component={MainPage} options={{title:'트래블 하나로'}} />
         <Stack.Screen
           name="AccountConnectPage"
           component={AccountConnectPage}
