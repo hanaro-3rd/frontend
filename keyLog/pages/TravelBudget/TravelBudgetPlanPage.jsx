@@ -125,7 +125,7 @@ export default TravelBudgetPlanPage;
 
 const styles = StyleSheet.create({
   root: {
-    width: 390,
+    width: '100%',
     height: 844,
     flexDirection: "column",
     alignItems: "flex-start",
