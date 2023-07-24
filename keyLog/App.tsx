@@ -16,6 +16,7 @@ const App = () => {
       <Stack.Navigator initialRouteName="AccountConnectPage">
         <Stack.Screen name="MainPage" component={MainPage} />
         <Stack.Screen name="ExchangePage" component={ExchangePage} />
+
         <Stack.Screen
           name="AccountConnectPage"
           component={AccountConnectPage}
