@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import InfoText from '../components/SignUp/InfoText';
-import InputField from '../components/SignUp/InputField';
-import ModalContent from '../components/SignUp/ModalContent';
+import InfoText from '../../components/SignUpPageComponents/InfoText';
+import InputField from '../../components/SignUpPageComponents/InputField';
+import ModalContent from '../../components/SignUpPageComponents/ModalContent';
 
 const isValidName = name => {
   const regex = /^[가-힣]*$/;
