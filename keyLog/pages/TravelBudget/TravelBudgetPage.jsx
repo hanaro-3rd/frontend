@@ -63,7 +63,7 @@ const TravelBudgetPage = () => {
                 </View>
                 <View style={styles.remain}>
                   <Text style={styles.remainCost}>총 비용 ￥100,000</Text>
-                  <Text style={styles.remainCost2}>남은 비용 ￥100,000</Text>
+                  <Text style={styles.remainCost}>남은 비용 ￥100,000</Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -93,7 +93,7 @@ const TravelBudgetPage = () => {
               </View>
               <View style={styles.remain}>
                 <Text style={styles.remainCost}>총 비용 ￥100,000</Text>
-                <Text style={styles.remainCost6}>남은 비용 ￥100,000</Text>
+                <Text style={styles.remainCost}>남은 비용 ￥100,000</Text>
               </View>
             </View>
             <View style={styles.travelCard}>
@@ -120,7 +120,7 @@ export default TravelBudgetPage;
 
 const styles = StyleSheet.create({
   root: {
-    width: '100%',
+    width: "100%",
     height: 844,
     flexDirection: "column",
     alignItems: "flex-start",
@@ -145,14 +145,10 @@ const styles = StyleSheet.create({
   body: {
     flexDirection: "column",
     alignItems: "flex-start",
-    flexGrow: 1,
-    flexShrink: 0,
-    flexBasis: 0,
     alignSelf: "stretch",
   },
   bodyHeader: {
     alignItems: "center",
-    gap: 10,
     alignSelf: "stretch",
     backgroundColor: "#FFF",
     flexDirection: "row",
@@ -202,7 +198,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   travelCard: {
-    width: 350,
+    width: 370,
     height: 85,
     justifyContent: "space-between",
     alignItems: "flex-end",
@@ -219,13 +215,13 @@ const styles = StyleSheet.create({
   titleTextContainer: {
     flexDirection: "column",
     alignItems: "flex-start",
-    gap: 10,
+    gap: 5,
     alignSelf: "stretch",
   },
   titleContainer: {
-    flexDirection: "column",
-    justifyContent: "flex-end",
-    alignItems: "flex-start",
+    // flexDirection: "column",
+    // justifyContent: "flex-end",
+    // alignItems: "flex-start",
   },
   remainCost: {
     color: "#191F29",
@@ -235,10 +231,9 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "400",
   },
-  remain: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-end",
-  },
-  
+  // remain: {
+  //   flexDirection: "column",
+  //   justifyContent: "center",
+  //   alignItems: "flex-end",
+  // },
 });

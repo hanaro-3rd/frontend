@@ -6,10 +6,12 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 import CloseButton from "../../assets/CloseButton.png";
 import SelectButton from "../../assets/SelectButton.png";
-import React from "react";
+import SelectButtonBefore from "../../assets/SelectButtonBefore.png";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 const TravelSchedulePage = () => {
@@ -22,6 +24,19 @@ const TravelSchedulePage = () => {
   const handleGoBackToBudgetPage = () => {
     navigation.goBack();
   };
+
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const [selectedValue, setSelectedValue] = useState("나라");
+
+  const handleDropdownPress = () => {
+    setDropdownVisible(!isDropdownVisible);
+  };
+
+  const handleOptionSelect = (value) => {
+    setSelectedValue(value);
+    setDropdownVisible(false);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.root}>
       <View style={styles.header}>
@@ -42,40 +57,80 @@ const TravelSchedulePage = () => {
               <Text style={styles.containerTitle}>여행 제목</Text>
               <Text style={styles.textSize}>0 / 20</Text>
             </View>
-            <View style={styles.input}>
-              <Text style={styles.placeHolder}>이름없는 여행1</Text>
+            <View style={styles.inputTitle}>
+              <TextInput
+                style={styles.placeHolderInput}
+                placeholder="이름없는 여행1"
+                placeholderTextColor="#B0B8C1"
+              />
             </View>
           </View>
           <View style={styles.travelPlaceContainer}>
-            <View style={styles.titleContainer2}>
-              <Text style={styles.containerTitle2}>여행지</Text>
-              <Text style={styles.textSize2}>0 / 10</Text>
+            <View style={styles.titleContainer}>
+              <Text style={styles.containerTitle}>여행지</Text>
+              <Text style={styles.textSize}>0 / 10</Text>
             </View>
-            <View style={styles.frame109}>
-              <View style={styles.input2}>
-                <Text style={styles.placeHolder2}>나라</Text>
-                <View style={styles.selectButton2}>
-                  <Image source={SelectButton} />
+            <View style={styles.selectTravelCountry}>
+              {/* <View style={styles.inputCountry}>
+                <Text style={styles.placeHolder}>나라</Text>
+                <View style={styles.selectButton}>
+                  <Image source={SelectButtonBefore} />
                 </View>
+              </View> */}
+              <View style={styles.inputCountry}>
+                <TouchableOpacity onPress={handleDropdownPress}>
+                  <Text>{selectedValue}</Text>
+                </TouchableOpacity>
+                <Modal visible={isDropdownVisible} animationType="slide">
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => handleOptionSelect("대한민국")}
+                    >
+                      <Text>대한민국</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => handleOptionSelect("미국")}
+                    >
+                      <Text>미국</Text>
+                    </TouchableOpacity>
+                    {/* 추가적인 옵션들을 원하는대로 추가할 수 있습니다. */}
+                    <TouchableOpacity
+                      onPress={() => handleOptionSelect("일본")}
+                    >
+                      <Text>일본</Text>
+                    </TouchableOpacity>
+                    {/* 추가적인 옵션들을 원하는대로 추가할 수 있습니다. */}
+                  </View>
+                </Modal>
               </View>
-              <View style={styles.input3}>
-                <Text style={styles.placeHolder3}>도시 (선택)</Text>
+              <View style={styles.inputCountry}>
+                <TextInput
+                  style={styles.placeHolderInput}
+                  placeholder="도시 (선택)"
+                  placeholderTextColor="#B0B8C1"
+                />
               </View>
             </View>
           </View>
           <View style={styles.travelPeriodContainer}>
-            <View style={styles.titleContainer3}>
-              <Text style={styles.containerTitle3}>여행 기간</Text>
+            <View style={styles.titleContainer}>
+              <Text style={styles.containerTitle}>여행 기간</Text>
             </View>
             <View style={styles.selectContainer}>
               <View style={styles.startSelect}>
-                <View style={styles.selectButton4}>
-                  <Image source={SelectButton} />
+                <View style={styles.selectButton}>
+                  <Image source={SelectButtonBefore} />
                 </View>
               </View>
               <View style={styles.endSelect}>
-                <View style={styles.selectButton6}>
-                  <Image source={SelectButton} />
+                <View style={styles.selectButton}>
+                  <Image source={SelectButtonBefore} />
                 </View>
               </View>
             </View>
@@ -99,7 +154,7 @@ export default TravelSchedulePage;
 
 const styles = StyleSheet.create({
   root: {
-    width: '100%',
+    width: "100%",
     height: 844,
     flexDirection: "column",
     alignItems: "flex-start",
@@ -187,6 +242,13 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     paddingHorizontal: 5,
   },
+  placeHolderInput: {
+    height: 39,
+    color: "#191F29",
+    fontFamily: "Inter",
+    fontSize: 16,
+    fontWeight: "400",
+  },
   placeHolder: {
     color: "#B0B8C1",
     fontFamily: "Inter",
@@ -194,7 +256,7 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "400",
   },
-  input: {
+  inputTitle: {
     justifyContent: "flex-end",
     alignItems: "center",
     gap: 15,
@@ -204,22 +266,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 5,
-  },
-  containerTitle2: {
-    color: "#191F29",
-    textAlign: "center",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  textSize2: {
-    color: "#191F29",
-    textAlign: "center",
-    fontFamily: "Inter",
-    fontSize: 12,
-    fontStyle: "normal",
-    fontWeight: "400",
   },
   travelPlaceContainer: {
     flexDirection: "column",
@@ -227,28 +273,13 @@ const styles = StyleSheet.create({
     gap: 10,
     alignSelf: "stretch",
   },
-  titleContainer2: {
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    alignSelf: "stretch",
-    flexDirection: "row",
-    paddingVertical: 0,
-    paddingHorizontal: 5,
-  },
-  placeHolder2: {
-    color: "#B0B8C1",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  frame109: {
+  selectTravelCountry: {
     alignItems: "flex-start",
     gap: 10,
     alignSelf: "stretch",
     flexDirection: "row",
   },
-  input2: {
+  inputCountry: {
     justifyContent: "flex-end",
     alignItems: "center",
     gap: 15,
@@ -261,53 +292,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 5,
   },
-  selectButton2: {
+  selectButton: {
     height: 19,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     gap: 10,
   },
-  placeHolder3: {
-    color: "#B0B8C1",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  input3: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 15,
-    flexGrow: 1,
-    flexShrink: 0,
-    flexBasis: 0,
-    backgroundColor: "#F9FAFB",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-  },
-  containerTitle3: {
-    color: "#191F29",
-    textAlign: "center",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
   travelPeriodContainer: {
     flexDirection: "column",
     alignItems: "flex-start",
     gap: 10,
     alignSelf: "stretch",
-  },
-  titleContainer3: {
-    alignItems: "flex-start",
-    gap: 10,
-    flexDirection: "row",
-    paddingVertical: 0,
-    paddingHorizontal: 5,
   },
   selectContainer: {
     alignItems: "flex-start",
@@ -329,13 +325,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 5,
   },
-  selectButton4: {
-    height: 19,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 10,
-  },
   endSelect: {
     justifyContent: "flex-end",
     alignItems: "center",
@@ -348,13 +337,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 5,
-  },
-  selectButton6: {
-    height: 19,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 10,
   },
   buttonText: {
     color: "#FFF",

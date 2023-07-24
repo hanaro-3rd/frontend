@@ -55,124 +55,122 @@ const TravelBudgetDetailPage = () => {
                 <View style={styles.remainCostContainer}>
                   <Text style={styles.remainText}>계획한 비용</Text>
                   <Text style={styles.costText}>￥80,000</Text>
-                  <View style={styles.selectButton2}>
+                  <View style={styles.selectButton}>
                     <Image source={SelectButton} />
                   </View>
                 </View>
               </View>
               <View style={styles.paymentListContainer}>
                 <View style={styles.paymentContainer}>
-                  <View style={styles.categoryContainer2}>
-                    <Text style={styles.categotyText2}>스테이크</Text>
+                  <View style={styles.categoryDetailContainer}>
+                    <Text style={styles.categotyDetailText}>스테이크</Text>
                   </View>
-                  <Text style={styles.remainCost}>- ￥10,000</Text>
+                  <Text style={styles.payCost}>- ￥10,000</Text>
                 </View>
-                <View style={styles.paymentContainer2}>
-                  <View style={styles.categoryContainer3}>
-                    <Text style={styles.categotyText3}>오코노미야키</Text>
+                <View style={styles.paymentContainer}>
+                  <View style={styles.categoryDetailContainer}>
+                    <Text style={styles.categotyDetailText}>오코노미야키</Text>
                   </View>
-                  <Text style={styles.remainCost2}>- ￥10,000</Text>
+                  <Text style={styles.payCost}>- ￥10,000</Text>
                 </View>
-                <View style={styles.paymentContainer3}>
-                  <View style={styles.categoryContainer4}>
-                    <Text style={styles.categotyText4}>남은 비용</Text>
+                <View style={styles.paymentContainer}>
+                  <View style={styles.categoryDetailContainer}>
+                    <Text style={styles.categotyRemainText}>남은 비용</Text>
                   </View>
-                  <Text style={styles.remainCost3}>￥60,000</Text>
+                  <Text style={styles.remainCost}>￥60,000</Text>
                 </View>
               </View>
             </View>
-            <View style={styles.categoryPaymentContainer2}>
-              <View style={styles.categoryCardContainer2}>
-                <View style={styles.categoryContainer5}>
+            <View style={styles.categoryPaymentContainer}>
+              <View style={styles.categoryCardContainer}>
+                <View style={styles.categoryContainer}>
                   <Image source={TransIcon} />
-                  <Text style={styles.categotyText5}>교통</Text>
+                  <Text style={styles.categotyText}>교통</Text>
                 </View>
-                <View style={styles.remainCostContainer2}>
-                  <Text style={styles.remainText2}>계획한 비용</Text>
-                  <Text style={styles.costText2}>￥80,000</Text>
-                  <View style={styles.selectButton4}>
+                <View style={styles.remainCostContainer}>
+                  <Text style={styles.remainText}>계획한 비용</Text>
+                  <Text style={styles.costText}>￥80,000</Text>
+                  <View style={styles.selectButton}>
                     <Image source={SelectButton} />
                   </View>
                 </View>
               </View>
-              <View style={styles.paymentListContainer2}>
-                <View style={styles.paymentContainer4}>
-                  <View style={styles.categoryContainer6}>
-                    <Text style={styles.categotyText6}>지하철</Text>
+              <View style={styles.paymentListContainer}>
+                <View style={styles.paymentContainer}>
+                  <View style={styles.categoryDetailContainer}>
+                    <Text style={styles.categotyDetailText}>지하철</Text>
                   </View>
-                  <Text style={styles.remainCost4}>- ￥10,000</Text>
+                  <Text style={styles.payCost}>- ￥10,000</Text>
                 </View>
-                <View style={styles.paymentContainer5}>
-                  <View style={styles.categoryContainer7}>
-                    <Text style={styles.categotyText7}>신칸센</Text>
+                <View style={styles.paymentContainer}>
+                  <View style={styles.categoryDetailContainer}>
+                    <Text style={styles.categotyDetailText}>신칸센</Text>
                   </View>
-                  <Text style={styles.remainCost5}>- ￥10,000</Text>
+                  <Text style={styles.payCost}>- ￥10,000</Text>
                 </View>
-                <View style={styles.paymentContainer6}>
-                  <View style={styles.categoryContainer8}>
-                    <Text style={styles.categotyText8}>남은 비용</Text>
+                <View style={styles.paymentContainer}>
+                  <View style={styles.categoryDetailContainer}>
+                    <Text style={styles.categotyRemainText}>남은 비용</Text>
                   </View>
-                  <Text style={styles.remainCost6}>￥60,000</Text>
+                  <Text style={styles.remainCost}>￥60,000</Text>
                 </View>
               </View>
             </View>
-            <View style={styles.categoryPaymentContainer3}>
-              <View style={styles.categoryCardContainer3}>
-                <View style={styles.categoryContainer9}>
+            <View style={styles.categoryPaymentContainer}>
+              <View style={styles.categoryCardContainer}>
+                <View style={styles.categoryContainer}>
                   <Image source={HouseIcon} />
-                  <Text style={styles.categotyText9}>숙박</Text>
+                  <Text style={styles.categotyText}>숙박</Text>
                 </View>
-                <View style={styles.remainCostContainer3}>
-                  <Text style={styles.remainText3}>계획한 비용</Text>
-                  <Text style={styles.costText3}>￥80,000</Text>
-                  <View style={styles.selectButton6}>
+                <View style={styles.remainCostContainer}>
+                  <Text style={styles.remainText}>계획한 비용</Text>
+                  <Text style={styles.costText}>￥80,000</Text>
+                  <View style={styles.selectButton}>
                     <Image source={SelectButton} />
                   </View>
                 </View>
               </View>
-              <View style={styles.paymentListContainer3}>
-                <View style={styles.paymentContainer7}>
-                  <View style={styles.categoryContainer10}>
-                    <Text style={styles.categotyText10}>호텔</Text>
+              <View style={styles.paymentListContainer}>
+                <View style={styles.paymentContainer}>
+                  <View style={styles.categoryDetailContainer}>
+                    <Text style={styles.categotyDetailText}>호텔</Text>
                   </View>
-                  <Text style={styles.remainCost7}>- ￥10,000</Text>
+                  <Text style={styles.payCost}>- ￥10,000</Text>
                 </View>
-                <View style={styles.paymentContainer8}>
-                  <View style={styles.categoryContainer11}>
-                    <Text style={styles.categotyText11}>남은 비용</Text>
+                <View style={styles.paymentContainer}>
+                  <View style={styles.categoryDetailContainer}>
+                    <Text style={styles.categotyRemainText}>남은 비용</Text>
                   </View>
-                  <Text style={styles.remainCost8}>￥70,000</Text>
+                  <Text style={styles.remainCost}>￥70,000</Text>
                 </View>
               </View>
             </View>
-            <View style={styles.categoryPaymentContainer4}>
-              <View style={styles.categoryCardContainer4}>
-                <View style={styles.categoryContainer12}>
+            <View style={styles.categoryPaymentContainer}>
+              <View style={styles.categoryCardContainer}>
+                <View style={styles.categoryContainer}>
                   <Image source={ShopIcon} />
-                  <Text style={styles.categotyText12}>
-                    쇼핑 · 편의점 · 마트
-                  </Text>
+                  <Text style={styles.categotyText}>쇼핑 · 편의점 · 마트</Text>
                 </View>
-                <View style={styles.remainCostContainer4}>
-                  <Text style={styles.remainText4}>계획한 비용</Text>
-                  <Text style={styles.costText4}>￥80,000</Text>
-                  <View style={styles.selectButton8}>
+                <View style={styles.remainCostContainer}>
+                  <Text style={styles.remainText}>계획한 비용</Text>
+                  <Text style={styles.costText}>￥80,000</Text>
+                  <View style={styles.selectButton}>
                     <Image source={SelectButton} />
                   </View>
                 </View>
               </View>
-              <View style={styles.paymentListContainer4}>
-                <View style={styles.paymentContainer9}>
-                  <View style={styles.categoryContainer13}>
-                    <Text style={styles.categotyText13}>스테이크</Text>
+              <View style={styles.paymentListContainer}>
+                <View style={styles.paymentContainer}>
+                  <View style={styles.categoryDetailContainer}>
+                    <Text style={styles.categotyDetailText}>스테이크</Text>
                   </View>
-                  <Text style={styles.remainCost9}>- ￥10,000</Text>
+                  <Text style={styles.payCost}>- ￥10,000</Text>
                 </View>
-                <View style={styles.paymentContainer10}>
-                  <View style={styles.categoryContainer14}>
-                    <Text style={styles.categotyText14}>오코노미야키</Text>
+                <View style={styles.paymentContainer}>
+                  <View style={styles.categoryDetailContainer}>
+                    <Text style={styles.categotyDetailText}>오코노미야키</Text>
                   </View>
-                  <Text style={styles.remainCost10}>- ￥10,000</Text>
+                  <Text style={styles.payCost}>- ￥10,000</Text>
                 </View>
               </View>
             </View>
@@ -187,8 +185,8 @@ export default TravelBudgetDetailPage;
 
 const styles = StyleSheet.create({
   root: {
-    width: '100%',
-    height: 844,
+    width: "100%",
+    height: 1000,
     flexDirection: "column",
     alignItems: "flex-start",
     backgroundColor: "#F2F4F6",
@@ -224,7 +222,6 @@ const styles = StyleSheet.create({
   },
   bodyHeader: {
     alignItems: "center",
-    gap: 10,
     alignSelf: "stretch",
     backgroundColor: "#FFF",
     flexDirection: "row",
@@ -262,10 +259,9 @@ const styles = StyleSheet.create({
   mainTextContainer: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 10,
     alignSelf: "stretch",
     paddingVertical: 10,
-    paddingHorizontal: 0,
+    gap: 5,
   },
   mainContainer: {
     flexDirection: "column",
@@ -328,14 +324,12 @@ const styles = StyleSheet.create({
     gap: 5,
     flexDirection: "row",
   },
-  selectButton2: {
+  selectButton: {
     height: 19,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 10,
+    marginTop: 4,
+    // gap: 20,
   },
-  categotyText2: {
+  categotyDetailText: {
     color: "#191F29",
     fontFamily: "Inter",
     fontSize: 14,
@@ -357,10 +351,25 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
   },
-  categoryContainer2: {
+  categoryDetailContainer: {
     alignItems: "center",
     gap: 5,
     flexDirection: "row",
+  },
+  payCost: {
+    color: "#191F29",
+    textAlign: "right",
+    fontFamily: "Inter",
+    fontSize: 14,
+    fontStyle: "normal",
+    fontWeight: "400",
+  },
+  categotyRemainText: {
+    color: "#191F29",
+    fontFamily: "Inter",
+    fontSize: 14,
+    fontStyle: "normal",
+    fontWeight: "700",
   },
   remainCost: {
     color: "#191F29",
@@ -368,471 +377,6 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     fontSize: 14,
     fontStyle: "normal",
-    fontWeight: "400",
-  },
-  categotyText3: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  paymentContainer2: {
-    height: 50,
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  categoryContainer3: {
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  remainCost2: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  categotyText4: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
     fontWeight: "700",
-  },
-  paymentContainer3: {
-    height: 50,
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  categoryContainer4: {
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  remainCost3: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  icon2: {
-    width: 30,
-    height: 30,
-  },
-  categotyText5: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  categoryPaymentContainer2: {
-    flexDirection: "column",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-  },
-  categoryCardContainer2: {
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  categoryContainer5: {
-    alignItems: "center",
-    gap: 10,
-    flexDirection: "row",
-  },
-  remainText2: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  costText2: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  remainCostContainer2: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  selectButton4: {
-    height: 19,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 10,
-  },
-  categotyText6: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  paymentListContainer2: {
-    flexDirection: "column",
-    alignItems: "center",
-    alignSelf: "stretch",
-  },
-  paymentContainer4: {
-    height: 50,
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  categoryContainer6: {
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  remainCost4: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  categotyText7: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  paymentContainer5: {
-    height: 50,
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  categoryContainer7: {
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  remainCost5: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  categotyText8: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  paymentContainer6: {
-    height: 50,
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  categoryContainer8: {
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  remainCost6: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  icon3: {
-    width: 30,
-    height: 30,
-  },
-  categotyText9: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  categoryPaymentContainer3: {
-    flexDirection: "column",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-  },
-  categoryCardContainer3: {
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  categoryContainer9: {
-    alignItems: "center",
-    gap: 10,
-    flexDirection: "row",
-  },
-  remainText3: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  costText3: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  remainCostContainer3: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  selectButton6: {
-    height: 19,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 10,
-  },
-  categotyText10: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  paymentListContainer3: {
-    flexDirection: "column",
-    alignItems: "center",
-    alignSelf: "stretch",
-  },
-  paymentContainer7: {
-    height: 50,
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  categoryContainer10: {
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  remainCost7: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  categotyText11: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  paymentContainer8: {
-    height: 50,
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  categoryContainer11: {
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  remainCost8: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  icon4: {
-    width: 30,
-    height: 30,
-  },
-  categotyText12: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  categoryPaymentContainer4: {
-    flexDirection: "column",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-  },
-  categoryCardContainer4: {
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  categoryContainer12: {
-    alignItems: "center",
-    gap: 10,
-    flexDirection: "row",
-  },
-  remainText4: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  costText4: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  remainCostContainer4: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  selectButton8: {
-    height: 19,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 10,
-  },
-  categotyText13: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  paymentListContainer4: {
-    flexDirection: "column",
-    alignItems: "center",
-    alignSelf: "stretch",
-  },
-  paymentContainer9: {
-    height: 50,
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  categoryContainer13: {
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  remainCost9: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  categotyText14: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  paymentContainer10: {
-    height: 50,
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  categoryContainer14: {
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  remainCost10: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
   },
 });

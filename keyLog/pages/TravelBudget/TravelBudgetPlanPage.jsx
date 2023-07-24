@@ -5,6 +5,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 import FoodIcon from "../../assets/FoodIcon.png";
 import TransIcon from "../../assets/TransIcon.png";
@@ -46,68 +47,73 @@ const TravelBudgetPlanPage = () => {
                 <Text style={styles.categotyText}>식비</Text>
               </View>
               <View style={styles.input}>
+                {/* <Text style={styles.budgetText}>0</Text> */}
+                <TextInput
+                  // style={styles.budgetInput}
+                  keyboardType="numeric"
+                  placeholder="0"
+                />
+                <Text style={styles.moneyUnitText}>￥</Text>
+              </View>
+            </View>
+            <View style={styles.budgetContainer}>
+              <View style={styles.categoryContainer}>
+                <Image source={TransIcon} />
+                <Text style={styles.categotyText}>교통</Text>
+              </View>
+              <View style={styles.input}>
                 <Text style={styles.budgetText}>0</Text>
                 <Text style={styles.moneyUnitText}>￥</Text>
               </View>
             </View>
-            <View style={styles.budgetContainer2}>
-              <View style={styles.categoryContainer2}>
-                <Image source={TransIcon} />
-                <Text style={styles.categotyText2}>교통</Text>
-              </View>
-              <View style={styles.input2}>
-                <Text style={styles.budgetText2}>0</Text>
-                <Text style={styles.moneyUnitText2}>￥</Text>
-              </View>
-            </View>
-            <View style={styles.budgetContainer3}>
-              <View style={styles.categoryContainer3}>
+            <View style={styles.budgetContainer}>
+              <View style={styles.categoryContainer}>
                 <Image source={HouseIcon} />
-                <Text style={styles.categotyText3}>숙박</Text>
+                <Text style={styles.categotyText}>숙박</Text>
               </View>
-              <View style={styles.input3}>
-                <Text style={styles.budgetText3}>0</Text>
-                <Text style={styles.moneyUnitText3}>￥</Text>
+              <View style={styles.input}>
+                <Text style={styles.budgetText}>0</Text>
+                <Text style={styles.moneyUnitText}>￥</Text>
               </View>
             </View>
-            <View style={styles.budgetContainer4}>
-              <View style={styles.categoryContainer4}>
+            <View style={styles.budgetContainer}>
+              <View style={styles.categoryContainer}>
                 <Image source={ShopIcon} />
-                <Text style={styles.categotyText4}>쇼핑 · 편의점 · 마트</Text>
+                <Text style={styles.categotyText}>쇼핑 · 편의점 · 마트</Text>
               </View>
-              <View style={styles.input4}>
-                <Text style={styles.budgetText4}>0</Text>
-                <Text style={styles.moneyUnitText4}>￥</Text>
+              <View style={styles.input}>
+                <Text style={styles.budgetText}>0</Text>
+                <Text style={styles.moneyUnitText}>￥</Text>
               </View>
             </View>
-            <View style={styles.budgetContainer5}>
-              <View style={styles.categoryContainer5}>
+            <View style={styles.budgetContainer}>
+              <View style={styles.categoryContainer}>
                 <Image source={PlayIcon} />
-                <Text style={styles.categotyText5}>문화 · 여가</Text>
+                <Text style={styles.categotyText}>문화 · 여가</Text>
               </View>
-              <View style={styles.input5}>
-                <Text style={styles.budgetText5}>0</Text>
-                <Text style={styles.moneyUnitText5}>￥</Text>
+              <View style={styles.input}>
+                <Text style={styles.budgetText}>0</Text>
+                <Text style={styles.moneyUnitText}>￥</Text>
               </View>
             </View>
-            <View style={styles.budgetContainer6}>
-              <View style={styles.categoryContainer6}>
+            <View style={styles.budgetContainer}>
+              <View style={styles.categoryContainer}>
                 <Image source={EtcIcon} />
-                <Text style={styles.categotyText6}>기타</Text>
+                <Text style={styles.categotyText}>기타</Text>
               </View>
-              <View style={styles.input6}>
-                <Text style={styles.budgetText6}>0</Text>
-                <Text style={styles.moneyUnitText6}>￥</Text>
+              <View style={styles.input}>
+                <Text style={styles.budgetText}>0</Text>
+                <Text style={styles.moneyUnitText}>￥</Text>
               </View>
             </View>
           </View>
-          <View style={styles.budgetContainer7}>
-            <View style={styles.categoryContainer7}>
+          <View style={styles.budgetTotalContainer}>
+            <View style={styles.categoryTotalContainer}>
               <Text style={styles.totalText}>총</Text>
             </View>
-            <View style={styles.input7}>
-              <Text style={styles.budgetText7}>0</Text>
-              <Text style={styles.moneyUnitText7}>￥</Text>
+            <View style={styles.inputTotal}>
+              <Text style={styles.budgetTotalText}>0</Text>
+              <Text style={styles.moneyTotalUnitText}>￥</Text>
             </View>
           </View>
         </View>
@@ -125,8 +131,8 @@ export default TravelBudgetPlanPage;
 
 const styles = StyleSheet.create({
   root: {
-    width: '100%',
-    height: 844,
+    width: "100%",
+    height: 900,
     flexDirection: "column",
     alignItems: "flex-start",
     backgroundColor: "#F2F4F6",
@@ -240,249 +246,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingVertical: 10,
     paddingHorizontal: 0,
-  },
-  icon2: {
-    width: 30,
-    height: 30,
-  },
-  categotyText2: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  budgetContainer2: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    alignSelf: "stretch",
-    paddingVertical: 5,
-    paddingHorizontal: 0,
-  },
-  categoryContainer2: {
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  budgetText2: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  moneyUnitText2: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  input2: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 10,
-    alignSelf: "stretch",
-    borderBottom: "2px solid #F2F4F6",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 0,
-  },
-  icon3: {
-    width: 30,
-    height: 30,
-  },
-  categotyText3: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  budgetContainer3: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    alignSelf: "stretch",
-    paddingVertical: 5,
-    paddingHorizontal: 0,
-  },
-  categoryContainer3: {
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  budgetText3: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  moneyUnitText3: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  input3: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 10,
-    alignSelf: "stretch",
-    borderBottom: "2px solid #F2F4F6",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 0,
-  },
-  icon4: {
-    width: 30,
-    height: 30,
-  },
-  categotyText4: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  budgetContainer4: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    gap: 5,
-    alignSelf: "stretch",
-    paddingVertical: 5,
-    paddingHorizontal: 0,
-  },
-  categoryContainer4: {
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  budgetText4: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  moneyUnitText4: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  input4: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 10,
-    alignSelf: "stretch",
-    borderBottom: "2px solid #F2F4F6",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 0,
-  },
-  icon5: {
-    width: 30,
-    height: 30,
-  },
-  categotyText5: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  budgetContainer5: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    gap: 5,
-    alignSelf: "stretch",
-    paddingVertical: 5,
-    paddingHorizontal: 0,
-  },
-  categoryContainer5: {
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  budgetText5: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  moneyUnitText5: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  input5: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 10,
-    alignSelf: "stretch",
-    borderBottom: "2px solid #F2F4F6",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 0,
-  },
-  icon6: {
-    width: 30,
-    height: 30,
-  },
-  categotyText6: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  budgetContainer6: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    gap: 5,
-    alignSelf: "stretch",
-    paddingVertical: 5,
-    paddingHorizontal: 0,
-  },
-  categoryContainer6: {
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  budgetText6: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  moneyUnitText6: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  input6: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 10,
-    alignSelf: "stretch",
-    borderBottom: "2px solid #F2F4F6",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 0,
+    borderBottomWidth: 2,
+    borderBottomColor: "#F2F4F6",
   },
   totalText: {
     color: "#191F29",
@@ -491,7 +256,7 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "700",
   },
-  budgetContainer7: {
+  budgetTotalContainer: {
     alignItems: "center",
     gap: 20,
     alignSelf: "stretch",
@@ -502,27 +267,28 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
+    marginTop: 19,
   },
-  categoryContainer7: {
+  categoryTotalContainer: {
     alignItems: "center",
     gap: 5,
     flexDirection: "row",
   },
-  budgetText7: {
+  budgetTotalText: {
     color: "#191F29",
     fontFamily: "Inter",
     fontSize: 24,
     fontStyle: "normal",
     fontWeight: "700",
   },
-  moneyUnitText7: {
+  moneyTotalUnitText: {
     color: "#191F29",
     fontFamily: "Inter",
     fontSize: 24,
     fontStyle: "normal",
     fontWeight: "700",
   },
-  input7: {
+  inputTotal: {
     justifyContent: "flex-end",
     alignItems: "center",
     gap: 10,
@@ -560,5 +326,27 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 10,
     borderRadius: 10,
+  },
+  budgetInput: {
+    fontSize: 16,
+    color: "#191F29",
+    fontStyle: "normal",
+    fontWeight: "400",
+    flexGrow: 1,
+    flexShrink: 0,
+    flexBasis: 0,
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+  },
+  budgetTotalInput: {
+    fontSize: 24,
+    color: "#191F29",
+    fontStyle: "normal",
+    fontWeight: "700",
+    flexGrow: 1,
+    flexShrink: 0,
+    flexBasis: 0,
+    paddingVertical: 0,
+    paddingHorizontal: 0,
   },
 });
