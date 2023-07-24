@@ -2,22 +2,23 @@ import {
   StyleSheet,
   Text,
   View,
-  Modal,
   Image,
   TextInput,
   FlatList,
-  Button,
   ScrollView,
   Pressable,
   Dimensions,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { PreventRemoveContext } from "@react-navigation/native";
+import ChooseAccount from "./ChooseAccount";
 
 const windowDimensions = Dimensions.get("window");
 const screenDimensions = Dimensions.get("screen");
 
 const ExchangePage = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
   const [dimensions, setDimensions] = useState({
     window: windowDimensions,
     screen: screenDimensions,
@@ -32,14 +33,13 @@ const ExchangePage = () => {
     );
     return () => subscription?.remove();
   });
-  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <View style={styles.Container}>
       <ScrollView>
         <View style={styles.s1}>
           <Image
-            source={require("../public/img/CloseButton.png")}
+            source={require("../../public/img/CloseButton.png")}
             style={styles.button}
           />
         </View>
@@ -50,54 +50,7 @@ const ExchangePage = () => {
           </Text>
         </View>
         <View style={styles.bodyMain}>
-          <View style={styles.accountContainer}>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => {
-                setModalVisible(!modalVisible);
-              }}
-            >
-              <View style={styles.Container}>
-                <ScrollView>
-                  <View style={styles.s1}>
-                    <Pressable onPress={() => setModalVisible(!modalVisible)}>
-                      <Image
-                        source={require("../public/img/CloseButton.png")}
-                        style={styles.button}
-                      />
-                    </Pressable>
-                  </View>
-                  <View style={styles.s2}>
-                    <Text>
-                      내 계좌 목록을 가져옵니다. 아래를 읽고 동의해 주세요.
-                    </Text>
-                    <Text> 개인신용정보 전송요구 및 수집, 이용</Text>
-
-                    <Text> 정보 제공자 </Text>
-                    <Text> 하나은행 </Text>
-
-                    <Text>정보 수신자</Text>
-                    <Text>KeyLog</Text>
-
-                    <Text>전송 정보</Text>
-                  </View>
-                </ScrollView>
-              </View>
-            </Modal>
-            <Text style={styles.accountTitle}> 계좌 선택 </Text>
-            <Pressable
-              style={styles.accountList}
-              onPress={() => setModalVisible(true)}
-            >
-              <Text style={styles.accountListDefault}>계좌를 선택해주세요</Text>
-              <Image
-                style={styles.selectbutton}
-                source={require("../public/img/SelectButton.png")}
-              />
-            </Pressable>
-          </View>
+          <ChooseAccount />
           <View style={styles.MoneyTextContainer}>
             <View style={styles.MoneyTitleContainer}>
               <Text style={styles.MoneyTitle}> 환전 금액 </Text>
@@ -109,12 +62,12 @@ const ExchangePage = () => {
               <View style={styles.CountryList}>
                 <Image
                   style={styles.selectCountry}
-                  source={require("../public/img/USD.png")}
+                  source={require("../../public/img/USD.png")}
                 />
                 <Text style={styles.unitText}>USD</Text>
                 <Image
                   style={styles.selectbutton}
-                  source={require("../public/img/SelectButton.png")}
+                  source={require("../../public/img/SelectButton.png")}
                 />
               </View>
               <TextInput
@@ -125,7 +78,7 @@ const ExchangePage = () => {
           </View>
           <View style={styles.KoreaMoney}>
             <View style={styles.KoreaContainer}>
-              <Image source={require("../public/img/Korea.png")} />
+              <Image source={require("../../public/img/Korea.png")} />
               <Text style={styles.unitText}> KRW </Text>
             </View>
             <TextInput editable={false} defaultValue={"10,000~10,000,000"} />
@@ -175,7 +128,9 @@ export default ExchangePage;
 export const styles = StyleSheet.create({
   Container: {
     backgroundColor: "#ffffff",
-    flex: 1,
+    flexGrow: 1,
+    justifyContent: "space-between",
+    minHeight: 550,
   },
   s1: {
     paddingTop: 13,
@@ -208,17 +163,15 @@ export const styles = StyleSheet.create({
     paddingTop: 15,
     paddingLeft: 20,
     paddingRight: 20,
-    flex: 1,
+    flexDirection: "column",
+    alignSelf: "stretch",
   },
   accountContainer: {
     display: "flex",
     flexDirection: "column",
     paddingTop: 15,
   },
-  accountTitle: {
-    color: "#191F29",
-    Text: 16,
-  },
+
   accountList: {
     backgroundColor: "#F9FAFB",
     height: 64,
@@ -344,7 +297,7 @@ export const styles = StyleSheet.create({
   },
   listitem: {
     fontSize: 13,
-    padding: 10,
+    padding: 5,
   },
   submitButton: {
     height: 55,
@@ -359,6 +312,8 @@ export const styles = StyleSheet.create({
     paddingTop: 15,
     paddingLeft: 20,
     paddingRight: 20,
+    flexDirection: "column",
+    justifyContent: "flex-end",
   },
   pressBeforeTextStyle: {
     color: "#FFF",
