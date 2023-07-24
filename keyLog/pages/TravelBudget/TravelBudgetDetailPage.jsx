@@ -28,7 +28,7 @@ const TravelBudgetDetailPage = () => {
         <TouchableOpacity onPress={handleGoBackToBudgetPage}>
           <Image source={CloseButton} />
         </TouchableOpacity>
-        <View style={styles.frame92}>
+        <View style={styles.headerRight}>
           <Image source={DeleteButton} />
           <Image source={EditButton} />
         </View>
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     paddingHorizontal: 12,
   },
-  frame92: {
+  headerRight: {
     alignItems: "flex-start",
     gap: 10,
     flexDirection: "row",
