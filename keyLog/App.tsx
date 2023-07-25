@@ -26,9 +26,21 @@ const App = () => {
         />
         <Stack.Screen name='ExchangePage' component={ExchangePage} />
         <Stack.Screen name='PickUpKeyPage' component={PickUpKeyPage} />
-        <Stack.Screen name='SignUpPage' component={SignUpPage} />
-        <Stack.Screen name='LoginPasswordPage' component={LoginPasswordPage} />
-        <Stack.Screen name='LoginPatternPage' component={LoginPatternPage} />
+        <Stack.Screen
+          name='SignUpPage'
+          component={SignUpPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='LoginPasswordPage'
+          component={LoginPasswordPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='LoginPatternPage'
+          component={LoginPatternPage}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name='TravelBudgetPage' component={TravelBudgetPage} />
         <Stack.Screen name='TravelRecordPage' component={TravelRecordPage} />
       </Stack.Navigator>

@@ -1,12 +1,23 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import Ellipse from '../../assets/SignUp/Ellipse.svg';
 
-const LoginPage = () => {
+const LoginPatternPage = () => {
+  const navigation = useNavigation();
+
+  const goToLoginPasswordPage = () => {
+    navigation.replace('LoginPasswordPage');
+  };
+
+  const goToMainPage = () => {
+    navigation.replace('MainPage');
+  };
+
   return (
     <View style={styles.root}>
       <View style={styles.header}></View>
@@ -51,13 +62,20 @@ const LoginPage = () => {
             </View>
           </View>
         </View>
-        <View style={styles.bodyFooter}></View>
+        <View style={styles.bodyFooter}>
+          <TouchableOpacity onPress={goToLoginPasswordPage}>
+            <Text>Go to Login Password Page</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={goToMainPage}>
+            <Text>Go to Main Page</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 };
 
-export default LoginPage;
+export default LoginPatternPage;
 
 const styles = StyleSheet.create({
   root: {

@@ -1,9 +1,19 @@
+import { useNavigation, HeaderTitle } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import BackSpace from '../../assets/SignUp/BackSpace.svg';
 import Ellipse from '../../assets/SignUp/Ellipse.svg';
 
-const LoginPage = () => {
+const LoginPasswordPage = () => {
+  const navigation = useNavigation();
+  const goToMainPage = () => {
+    navigation.replace('MainPage');
+  };
+
+  const goToLoginPatternPage = () => {
+    navigation.replace('LoginPatternPage');
+  };
+
   return (
     <View style={styles.root}>
       <View style={styles.header}></View>
@@ -63,13 +73,20 @@ const LoginPage = () => {
             </View>
           </View>
         </View>
-        <View style={styles.bodyFooter}></View>
+        <View style={styles.bodyFooter}>
+          <TouchableOpacity onPress={goToLoginPatternPage}>
+            <Text>Go to Login Pattern Page</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={goToMainPage}>
+            <Text>Go to Main Page</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 };
 
-export default LoginPage;
+export default LoginPasswordPage;
 
 const styles = StyleSheet.create({
   root: {
