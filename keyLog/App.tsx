@@ -7,26 +7,62 @@ import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
 import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
 import ChooseAccount from "./pages/ExchangeSelectAccount/ChooseAccount";
 import PickUpKeyPage from "./pages/PickUpKeyPage";
-import SignUpPage from "./pages/SignUpPage";
+import SignUpPage from "./pages/SignUp/SignUpPage";
 import TravelBudgetPage from "./pages/TravelBudgetPage";
 import TravelRecordPage from "./pages/TravelRecordPage";
+import PaymentPageInputComponent from "./components/PaymentPageComponents/PaymentPageInputComponent";
+import TravelRecordDetailComponent from "./components/TravelRecordPageComponents/TravelRecordDetailComponent";
+import TravelRecordMainComponent from "./components/TravelRecordPageComponents/TravelRecordMainComponent";
+import LoginPasswordPage from "./pages/SignUp/LoginPasswordPage";
+import LoginPatternPage from "./pages/SignUp/LoginPatternPage";
+
 const App = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="ExchangeSuccess">
-        <Stack.Screen name="MainPage" component={MainPage} />
-        <Stack.Screen name="ExchangePage" component={ExchangePage} />
-        <Stack.Screen name="ExchangeSuccess" component={ExchangeSuccess} />
+      <Stack.Navigator initialRouteName="MainPage">
+        <Stack.Screen
+          name="MainPage"
+          component={MainPage}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="AccountConnectPage"
           component={AccountConnectPage}
         />
+        <Stack.Screen name="ExchangePage" component={ExchangePage} />
+        <Stack.Screen name="ExchangeSuccess" component={ExchangeSuccess} />
         <Stack.Screen name="ChooseAccount" component={ChooseAccount} />
         <Stack.Screen name="PickUpKeyPage" component={PickUpKeyPage} />
-        <Stack.Screen name="SignUpPage" component={SignUpPage} />
-        <Stack.Screen name="TravelBudgetPage" component={TravelBudgetPage} />
+        <Stack.Screen
+          name="SignUpPage"
+          component={SignUpPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="LoginPasswordPage"
+          component={LoginPasswordPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="LoginPatternPage"
+          component={LoginPatternPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TravelRecordMainComponent"
+          component={TravelRecordMainComponent}
+        />
+        <Stack.Screen
+          name="TravelRecordDetailComponent"
+          component={TravelRecordDetailComponent}
+        />
+        <Stack.Screen
+          name="PaymentPageInputComponent"
+          component={PaymentPageInputComponent}
+        />
         <Stack.Screen name="TravelRecordPage" component={TravelRecordPage} />
+        <Stack.Screen name="TravelBudgetPage" component={TravelBudgetPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
