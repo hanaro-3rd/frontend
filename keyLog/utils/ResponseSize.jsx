@@ -26,7 +26,7 @@ export function heightPercentage(height) {// // 피그마 픽셀을 현재 노�
 }
 
 export function fontPercentage(size) { // 폰트 크기도 피그마 크기에 맞게 변환
-  const percentage = size * 0.135;
+  const percentage = size * 0.12;
 
   return responsiveScreenFontSize(percentage);
 }
