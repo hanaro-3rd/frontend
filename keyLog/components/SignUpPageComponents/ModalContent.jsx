@@ -71,6 +71,7 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
           onBackdropPress={toggleModal}
           animationIn='slideInUp'
           animationOut='slideOutDown'
+          ㅇㅇ
           backdropTransitionOutTiming={0}
           backdropOpacity={0.5}
           style={styles.certificationNumberPopup}
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
   subtitle2: {
     color: '#4E5968',
     fontFamily: 'Inter',
-    fontSize: fontPercentage(12) * 0.88,
+    fontSize: fontPercentage(12),
     fontStyle: 'normal',
     fontWeight: '700',
   },
@@ -223,14 +224,14 @@ const styles = StyleSheet.create({
   certificationNumber: {
     color: '#B0B8C1',
     fontFamily: 'Inter',
-    fontSize: fontPercentage(16) * 0.88,
+    fontSize: fontPercentage(16),
     fontStyle: 'normal',
     fontWeight: '700',
   },
   buttonText3: {
     color: '#F9FAFB',
     fontFamily: 'Inter',
-    fontSize: fontPercentage(14) * 0.88,
+    fontSize: fontPercentage(14),
     fontStyle: 'normal',
     fontWeight: '700',
   },
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
   buttonText4: {
     color: '#B0B8C1',
     fontFamily: 'Inter',
-    fontSize: fontPercentage(16) * 0.88,
+    fontSize: fontPercentage(16),
     fontStyle: 'normal',
     fontWeight: '700',
   },
