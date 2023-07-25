@@ -2,7 +2,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import MainPage from "./pages/MainPage";
-import AccountConnectPage from "./pages/AccountConnectPage";
+import AccountConnectPage from "./pages/AccountConnect/AccountConnectPage";
+import AccountConnectSuccess from "./pages/AccountConnect/AccountConnectSuccess";
+import AccountConnectFail from "./pages/AccountConnect/AccountConnectFail";
 import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
 import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
 import ExchangeFail from "./pages/ExchangeSelectAccount/ExchangeFail";
@@ -21,7 +23,7 @@ const App = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="ExchangeFail">
+      <Stack.Navigator initialRouteName="LoginPasswordPage">
         <Stack.Screen
           name="MainPage"
           component={MainPage}
@@ -31,8 +33,16 @@ const App = () => {
           name="AccountConnectPage"
           component={AccountConnectPage}
         />
+        <Stack.Screen
+          name="AccountConnectSuccess"
+          component={AccountConnectSuccess}
+        />
         <Stack.Screen name="ExchangePage" component={ExchangePage} />
         <Stack.Screen name="ExchangeSuccess" component={ExchangeSuccess} />
+        <Stack.Screen
+          name="AccountConnectFail"
+          component={AccountConnectFail}
+        />
         <Stack.Screen name="ExchangeFail" component={ExchangeFail} />
         <Stack.Screen name="ChooseAccount" component={ChooseAccount} />
         <Stack.Screen name="PickUpKeyPage" component={PickUpKeyPage} />

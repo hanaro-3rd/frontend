@@ -10,8 +10,8 @@ import {
   Dimensions,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { styles } from "./ExchangeSelectAccount/ExchangePage";
-import AccountPasswordModal from "../components/AccountConnectPageComponents/AccountPasswordModal";
+import { styles } from "../ExchangeSelectAccount/ExchangePage";
+import AccountPasswordModal from "../../components/AccountConnectPageComponents/AccountPasswordModal";
 
 const AccountConnectPage = () => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -32,7 +32,7 @@ const AccountConnectPage = () => {
           {isSelected && (
             <Image
               style={{ height: 30, marginRight: 20 }}
-              source={require("../assets/accountImg/check.png")}
+              source={require("../../assets/accountImg/check.png")}
               resizeMode="contain"
             />
           )}
@@ -47,7 +47,7 @@ const AccountConnectPage = () => {
         <View>
           <View style={styles.s1}>
             <Image
-              source={require("../assets/accountImg/CloseButton.png")}
+              source={require("../../assets/accountImg/CloseButton.png")}
               style={styles.button}
             />
           </View>
