@@ -6,51 +6,51 @@ import Vector from "../../assets/accountImg/Vector.png";
 
 const ExchangeSuccess = () => {
   return (
-    <View style={styles4.root}>
+    <View style={styles.root}>
       <View>
-        <View style={styles4.header}>
+        <View style={styles.header}>
           <Image source={Close} />
         </View>
-        <View style={styles4.body}>
-          <View style={styles4.bodyHeader}>
-            <Text style={styles4.title}>환전 완료</Text>
-            <Text style={styles4.subtitle}>
+        <View style={styles.body}>
+          <View style={styles.bodyHeader}>
+            <Text style={styles.title}>환전 완료</Text>
+            <Text style={styles.subtitle}>
               환전이 완료되었어요. 하나머니를 확인해주세요.
             </Text>
           </View>
-          <View style={styles4.bodyMain}>
-            <View style={styles4.mainIconContainer}>
+          <View style={styles.bodyMain}>
+            <View style={styles.mainIconContainer}>
               <Image
                 source={Success}
                 style={{ width: 100, height: 100 }}
                 resizeMode="contain"
               />
             </View>
-            <View style={styles4.exchangeInformationContainer}>
-              <View style={styles4.exchangeMoneyContainer}>
-                <Text style={styles4.containerTitle}>환전 금액</Text>
-                <View style={styles4.exchangeMoneyBox}>
-                  <View style={styles4.koreaMoneyContianer}>
-                    <Text style={styles4.koreaMoneyUnitText}>KRW</Text>
-                    <Text style={styles4.koreaMoneyText}>1,300,000</Text>
+            <View style={styles.exchangeInformationContainer}>
+              <View style={styles.exchangeMoneyContainer}>
+                <Text style={styles.containerTitle}>환전 금액</Text>
+                <View style={styles.exchangeMoneyBox}>
+                  <View style={styles.koreaMoneyContianer}>
+                    <Text style={styles.koreaMoneyUnitText}>KRW</Text>
+                    <Text style={styles.koreaMoneyText}>1,300,000</Text>
                   </View>
                   <Image source={Vector} />
-                  <View style={styles4.foreignMoneyContainer}>
-                    <Text style={styles4.foreignMoneyUnitText}>USD</Text>
-                    <Text style={styles4.foreignMoneyText}>1,000</Text>
+                  <View style={styles.foreignMoneyContainer}>
+                    <Text style={styles.foreignMoneyUnitText}>USD</Text>
+                    <Text style={styles.foreignMoneyText}>1,000</Text>
                   </View>
                 </View>
               </View>
-              <View style={styles4.exchangeRateContainer}>
-                <Text style={styles4.containerTitle2}>적용 환율</Text>
-                <View style={styles4.currentExchangeRateContainer}>
-                  <View style={styles4.countryInformationContainer}>
-                    <Text style={styles4.countryText}>미국</Text>
-                    <Text style={styles4.unitText}>USD</Text>
+              <View style={styles.exchangeRateContainer}>
+                <Text style={styles.containerTitle2}>적용 환율</Text>
+                <View style={styles.currentExchangeRateContainer}>
+                  <View style={styles.countryInformationContainer}>
+                    <Text style={styles.countryText}>미국</Text>
+                    <Text style={styles.unitText}>USD</Text>
                   </View>
-                  <View style={styles4.currentExchangeRateTextContainer}>
-                    <Text style={styles4.exchangeRateText}>1,294.50</Text>
-                    <Text style={styles4.changeRateText}>▼ 12.00</Text>
+                  <View style={styles.currentExchangeRateTextContainer}>
+                    <Text style={styles.exchangeRateText}>1,294.50</Text>
+                    <Text style={styles.changeRateText}>▼ 12.00</Text>
                   </View>
                 </View>
               </View>
@@ -58,9 +58,9 @@ const ExchangeSuccess = () => {
           </View>
         </View>
       </View>
-      <View style={styles4.footer}>
-        <View style={styles4.submitButton}>
-          <Text style={styles4.buttonText}>하나머니 확인하기</Text>
+      <View style={styles.footer}>
+        <View style={styles.submitButton}>
+          <Text style={styles.buttonText}>하나머니 확인하기</Text>
         </View>
       </View>
     </View>
@@ -70,7 +70,7 @@ export default ExchangeSuccess;
 
 const { height } = Dimensions.get("window");
 
-export const styles4 = StyleSheet.create({
+export const styles = StyleSheet.create({
   root: {
     flexDirection: "column",
     backgroundColor: "#fff",
