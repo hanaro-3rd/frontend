@@ -9,7 +9,6 @@ import SignUpPage from './pages/SignUpPage';
 import TravelBudgetPage from './pages/TravelBudgetPage';
 import TravelRecordPage from './pages/TravelRecordPage';
 import TravelRecordMainComponent from './components/TravelRecordPageComponents/TravelRecordMainComponent';
-import TravelRecordPageDetailComponent from './components/TravelRecordPageComponents/TravelRecordDetailComponent';
 import TravelRecordDetailComponent from './components/TravelRecordPageComponents/TravelRecordDetailComponent';
 import PaymentPageInputComponent from './components/PaymentPageComponents/PaymentPageInputComponent';
 const App = () => {
@@ -17,7 +16,11 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="PaymentPageInputComponent" screenOptions={{headerShown:false}}>
-        <Stack.Screen name="MainPage" component={MainPage} />
+      <Stack.Screen
+          name="MainPage"
+          component={MainPage}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="AccountConnectPage"
           component={AccountConnectPage}
@@ -28,6 +31,8 @@ const App = () => {
         <Stack.Screen name="TravelRecordMainComponent" component={TravelRecordMainComponent} />
         <Stack.Screen name="TravelRecordDetailComponent" component={TravelRecordDetailComponent} />
         <Stack.Screen name="PaymentPageInputComponent" component = {PaymentPageInputComponent} />
+        <Stack.Screen name="TravelRecordPage" component={TravelRecordPage} />
+        <Stack.Screen name="TravelBudgetPage" component={TravelBudgetPage} />
         <Stack.Screen name="TravelRecordPage" component={TravelRecordPage} />
       </Stack.Navigator>
     </NavigationContainer>
