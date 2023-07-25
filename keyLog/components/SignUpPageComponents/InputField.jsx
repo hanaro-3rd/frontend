@@ -1,11 +1,16 @@
 import React from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {
   fontPercentage,
   heightPercentage,
   widthPercentage,
 } from '../../utils/ResponseSize';
-import InfoText from './InfoText';
 
 const commonTextStyle = {
   fontFamily: 'Inter',
@@ -34,8 +39,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   errorInputField: {
-    borderColor: 'red',
+    borderColor: '#E90061',
     borderWidth: 1,
+  },
+  errorMessage: {
+    color: '#E90061',
+    marginTop: heightPercentage(10),
+    paddingVertical: heightPercentage(15),
+    fontSize: fontPercentage(12),
   },
 });
 
@@ -55,7 +66,9 @@ const InputField = React.forwardRef(
           placeholderTextColor='#B0B8C1'
         />
       </TouchableOpacity>
-      {hasError && <InfoText text='입력 형식을 확인하세요' />}
+      {hasError && (
+        <Text style={styles.errorMessage}>입력하신 정보를 확인해주세요.</Text>
+      )}
     </View>
   )
 );
