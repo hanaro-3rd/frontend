@@ -7,6 +7,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import InfoText from '../../components/SignUpPageComponents/InfoText';
 import InputField from '../../components/SignUpPageComponents/InputField';
 import ModalContent from '../../components/SignUpPageComponents/ModalContent';
@@ -14,6 +18,11 @@ import ModalContent from '../../components/SignUpPageComponents/ModalContent';
 const isValidName = name => {
   const regex = /^[가-힣]*$/;
   return regex.test(name);
+};
+
+const isValidPersonalNumber = number => {
+  const regex = /^\d{6}-\d{7}$/;
+  return regex.test(number);
 };
 
 const isValidPhoneNumber = number => {
@@ -24,13 +33,16 @@ const isValidPhoneNumber = number => {
 const SignUpPage = () => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [name, setName] = useState('');
+  const [personalNumber, setPersonalNumber] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isNameValid, setIsNameValid] = useState(true);
+  const [isPersonalNumberValid, setIsPersonalNumberValid] = useState(true);
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
 
   const nameInputRef = useRef(null);
   const phoneNumberInputRef = useRef(null);
+  const personalNumberInputRef = useRef(null);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -61,6 +73,26 @@ const SignUpPage = () => {
   const handleNameChange = text => {
     setName(text);
     setIsNameValid(isValidName(text));
+  };
+
+  const handlePersonalNumberChange = text => {
+    let cleaned = ('' + text).replace(/\D/g, '');
+    let match;
+
+    if (cleaned.length < 7) {
+      match = cleaned.match(/^(\d{0,6})/);
+    } else {
+      match = cleaned.match(/^(\d{6})(\d{0,7})/);
+    }
+
+    if (match) {
+      const part1 = match[1] || '',
+        part2 = match[2] || '';
+
+      const newPersonalNumber = [part1, part2].filter(Boolean).join('-');
+      setPersonalNumber(newPersonalNumber);
+      setIsPersonalNumberValid(isValidPersonalNumber(newPersonalNumber));
+    }
   };
 
   const handlePhoneChange = number => {
@@ -95,6 +127,7 @@ const SignUpPage = () => {
       contentContainerStyle={styles.root}
       keyboardShouldPersistTaps='handled'
     >
+      <View style={styles.header}></View>
       <View style={styles.body}>
         <View style={styles.bodyHeader}>
           <Text style={styles.title}>휴대폰 본인인증</Text>
@@ -110,6 +143,14 @@ const SignUpPage = () => {
             onChangeText={handleNameChange}
             handlePress={() => nameInputRef.current?.focus()}
             hasError={!isNameValid}
+          />
+          <InputField
+            ref={personalNumberInputRef}
+            placeholder='주민번호'
+            value={personalNumber}
+            onChangeText={handlePersonalNumberChange}
+            handlePress={() => personalNumberInputRef.current?.focus()}
+            hasError={!isPersonalNumberValid}
           />
           <InputField
             ref={phoneNumberInputRef}
@@ -129,11 +170,17 @@ const SignUpPage = () => {
           <TouchableOpacity
             style={[
               styles.submitButton,
-              (!isNameValid || !isValidPhoneNumber(phoneNumber)) &&
+              (!isNameValid ||
+                !isValidPhoneNumber(phoneNumber) ||
+                !isValidPersonalNumber(personalNumber)) &&
                 styles.disabledButton,
             ]}
             onPress={toggleModal}
-            disabled={!isNameValid || !isValidPhoneNumber(phoneNumber)}
+            disabled={
+              !isNameValid ||
+              !isValidPhoneNumber(phoneNumber) ||
+              !isValidPersonalNumber(personalNumber)
+            }
           >
             <Text style={styles.buttonText}>인증 요청</Text>
           </TouchableOpacity>
@@ -156,16 +203,24 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     backgroundColor: '#F2F4F6',
   },
+  header: {
+    alignItems: 'flex-start',
+    flexShrink: 0,
+    alignSelf: 'stretch',
+    backgroundColor: '#FFF',
+    flexDirection: 'row',
+    paddingVertical: hp('2%'),
+  },
   title: {
     ...commonTextStyle,
     color: '#191F29',
-    fontSize: 23,
+    fontSize: wp('5.5%'),
     fontWeight: '700',
   },
   subtitle: {
     ...commonTextStyle,
     color: '#8B95A1',
-    fontSize: 16,
+    fontSize: wp('3.5%'),
     fontWeight: '400',
   },
   body: {
@@ -189,7 +244,6 @@ const styles = StyleSheet.create({
   bodyMain: {
     flexDirection: 'column',
     alignItems: 'center',
-    gap: 15,
     flexGrow: 1,
     flexShrink: 0,
     flexBasis: 0,
@@ -202,11 +256,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    gap: 10,
+    gap: hp('2%'),
     alignSelf: 'stretch',
     backgroundColor: '#FFF',
     paddingVertical: 15,
-    paddingHorizontal: 25,
+    paddingHorizontal: wp('7%'),
+    // paddingHorizontal: 25,
   },
   informationContainer: {
     flexDirection: 'column',

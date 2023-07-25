@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useRef } from 'react';
 import {
   StyleSheet,
@@ -15,6 +16,12 @@ const ModalContent = ({ modalVisible, toggleModal }) => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
+  };
+
+  const navigation = useNavigation();
+
+  const goToLoginPasswordPage = () => {
+    navigation.replace('LoginPasswordPage');
   };
 
   return (
@@ -65,7 +72,9 @@ const ModalContent = ({ modalVisible, toggleModal }) => {
             </View>
             <View style={styles.popupFooter}>
               <View style={styles.submitButton2}>
-                <Text style={styles.buttonText4}>확인</Text>
+                <TouchableOpacity onPress={goToLoginPasswordPage}>
+                  <Text style={styles.buttonText4}>확인</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>

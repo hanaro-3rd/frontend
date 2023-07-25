@@ -1,6 +1,10 @@
-import { useNavigation, HeaderTitle } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import BackSpace from '../../assets/SignUp/BackSpace.svg';
 import Ellipse from '../../assets/SignUp/Ellipse.svg';
 
@@ -97,25 +101,21 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'flex-start',
-    gap: 10,
     flexShrink: 0,
     alignSelf: 'stretch',
     backgroundColor: '#FFF',
     flexDirection: 'row',
-    paddingVertical: 13,
-    paddingHorizontal: 12,
+    paddingVertical: hp('2%'),
   },
   mainText: {
     color: '#191F29',
     textAlign: 'center',
     fontFamily: 'Inter',
-    fontSize: 20,
+    fontSize: wp('5%'),
     fontStyle: 'normal',
     fontWeight: '700',
   },
   ellipse: {
-    width: 15,
-    height: 15,
     fill: '#B0B8C1',
   },
   body: {
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
   bodyMain: {
     flex: 1,
-    paddingTop: 150,
+    paddingTop: hp('16%'),
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -140,12 +140,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 30,
+    gap: hp('5%'),
   },
   passwordSymbol: {
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 10,
+    gap: wp('3%'),
     flexDirection: 'row',
   },
   numberPad: {
@@ -157,18 +157,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   number: {
-    width: 130,
-    height: 60,
+    width: wp('33%'),
+    height: hp('10%'),
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    padding: 10,
   },
   num: {
     color: '#191F29',
     textAlign: 'center',
     fontFamily: 'Inter',
-    fontSize: 24,
+    fontSize: wp('6%'),
     fontStyle: 'normal',
     fontWeight: '400',
   },
@@ -176,10 +175,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    gap: 10,
+    gap: hp('1%'),
+    height: hp('10%'),
     alignSelf: 'stretch',
     backgroundColor: '#FFF',
-    paddingVertical: 15,
-    paddingHorizontal: 25,
+    paddingVertical: hp('2%'),
   },
 });
