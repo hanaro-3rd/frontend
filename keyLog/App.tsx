@@ -59,7 +59,6 @@ const App = () => {
         />
         <Stack.Screen name='TravelRecordPage' component={TravelRecordPage} />
         <Stack.Screen name='TravelBudgetPage' component={TravelBudgetPage} />
-        <Stack.Screen name='TravelRecordPage' component={TravelRecordPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
