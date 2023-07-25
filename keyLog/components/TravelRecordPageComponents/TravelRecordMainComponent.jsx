@@ -1,36 +1,38 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, Touchable, TouchableOpacity, View } from "react-native";
 import React from "react";
 
-const TravelRecordPage = () => {
+const TravelRecordMainComponent = ({navigation}) => {
   return (
     <View style={styles.main}>
       <View style={styles.bgWhite}>
-        <Image source={require("../Images/삭제.png")} style={styles.image} />
+        <Image source={require("../../Images/삭제.png")} style={styles.image} />
       </View>
       <Text style={[styles.title, styles.bgWhite]}>내 여행 기록</Text>
       <View style={[styles.planContainer, styles.bgWhite]}>
         <View style={styles.titleWrapper}>
           <Text style={styles.planYear}>2023</Text>
         </View>
-        <View style={styles.planDateContainer}>
-          <Image
-            resizeMode="contain"
-            style={styles.planImageContainer}
-            source={require("../Images/도쿄.png")}
-          ></Image>
-          <View style={styles.planTextContainer}>
-            <Text style={styles.planTitle}>일본,도쿄</Text>
-            <Text style={styles.planDuringText}>2023.07.01~2023.07.10</Text>
-            <View style={styles.planPriceWrapper}>
-              <Text style={styles.planPriceText}>총 비용 ￥100,000</Text>
+        <TouchableOpacity onPress={()=> navigation.navigate('TravelRecordDetailComponent')}>
+          <View style={styles.planDateContainer}>
+            <Image
+              resizeMode="contain"
+              style={styles.planImageContainer}
+              source={require("../../Images/도쿄.png")}
+            ></Image>
+            <View style={styles.planTextContainer}>
+              <Text style={styles.planTitle}>일본,도쿄</Text>
+              <Text style={styles.planDuringText}>2023.07.01~2023.07.10</Text>
+              <View style={styles.planPriceWrapper}>
+                <Text style={styles.planPriceText}>총 비용 ￥100,000</Text>
+              </View>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
         <View style={styles.planDateContainer}>
           <Image
             resizeMode="contain"
             style={styles.planImageContainer}
-            source={require("../Images/도쿄.png")}
+            source={require("../../Images/도쿄.png")}
           ></Image>
           <View style={styles.planTextContainer}>
             <Text style={styles.planTitle}>일본,도쿄</Text>
@@ -49,7 +51,7 @@ const TravelRecordPage = () => {
           <Image
             resizeMode="contain"
             style={styles.planImageContainer}
-            source={require("../Images/도쿄.png")}
+            source={require("../../Images/도쿄.png")}
           ></Image>
           <View style={styles.planTextContainer}>
             <Text style={styles.planTitle}>일본,도쿄</Text>
@@ -63,7 +65,7 @@ const TravelRecordPage = () => {
           <Image
             resizeMode="contain"
             style={styles.planImageContainer}
-            source={require("../Images/도쿄.png")}
+            source={require("../../Images/도쿄.png")}
           ></Image>
           <View style={styles.planTextContainer}>
             <Text style={styles.planTitle}>일본,도쿄</Text>
@@ -74,12 +76,11 @@ const TravelRecordPage = () => {
           </View>
         </View>
       </View>
-    
     </View>
   );
 };
 
-export default TravelRecordPage;
+export default TravelRecordMainComponent;
 
 const styles = StyleSheet.create({
   main: {
@@ -141,9 +142,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10, // 왼쪽 아래 모서리를 둥글게 설정
   },
   planTextContainer: {
-    marginLeft:10,
+    marginLeft: 10,
     marginTop: 10,
-    width:"70%"
+    width: "70%",
   },
   planTitle: {
     fontSize: 20,
@@ -156,13 +157,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   planPriceWrapper: {
-    width:"100%",
-    paddingRight:20,
-    marginTop:10,
+    width: "100%",
+    paddingRight: 20,
+    marginTop: 10,
     flexDirection: "row",
-    justifyContent:"flex-end"
+    justifyContent: "flex-end",
   },
   planPriceText: {
-    color:"black"
+    color: "black",
   },
 });
