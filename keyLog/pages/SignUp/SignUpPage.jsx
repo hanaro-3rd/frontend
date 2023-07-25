@@ -186,7 +186,11 @@ const SignUpPage = () => {
             <Text style={styles.buttonText}>인증 요청</Text>
           </TouchableOpacity>
         </View>
-        <ModalContent modalVisible={modalVisible} toggleModal={toggleModal} />
+        <ModalContent
+          modalVisible={modalVisible}
+          toggleModal={toggleModal}
+          phoneNumber={phoneNumber}
+        />
       </View>
     </ScrollView>
   );

@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,9 +8,40 @@ import {
   View,
 } from 'react-native';
 import Modal from 'react-native-modal';
+import CloseButton from '../../assets/SignUp/CloseButton.svg';
+import {
+  fontPercentage,
+  heightPercentage,
+  widthPercentage,
+} from '../../utils/ResponseSize';
 
-const ModalContent = ({ modalVisible, toggleModal }) => {
+const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
+  const [remainTime, setRemainTime] = useState(180);
+
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      if (remainTime > 0) {
+        setRemainTime(remainTime - 1);
+      } else {
+        clearInterval(countdown);
+      }
+    }, 1000);
+    return () => clearInterval(countdown);
+  }, [remainTime]);
+
+  const extendTime = () => {
+    setRemainTime(180);
+  };
+
+  const displayTime = () => {
+    const minutes = Math.floor(remainTime / 60);
+    const seconds = remainTime % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds
+      .toString()
+      .padStart(2, '0')}`;
+  };
 
   const handleInputPress = () => {
     if (inputRef.current) {
@@ -35,7 +66,15 @@ const ModalContent = ({ modalVisible, toggleModal }) => {
       style={styles.modalContainer}
     >
       <View style={styles.modalContent}>
-        <View style={styles.certificationNumberPopup}>
+        <View
+          isVisible={modalVisible}
+          onBackdropPress={toggleModal}
+          animationIn='slideInUp'
+          animationOut='slideOutDown'
+          backdropTransitionOutTiming={0}
+          backdropOpacity={0.5}
+          style={styles.certificationNumberPopup}
+        >
           <View style={styles.popup}>
             <View style={styles.popupHeader}>
               <View style={styles.popupHeaderRight}>
@@ -43,12 +82,15 @@ const ModalContent = ({ modalVisible, toggleModal }) => {
                   <Text style={styles.title2}>인증번호 입력</Text>
                 </View>
                 <View style={styles.popupSubtitle}>
-                  <Text style={styles.subtitle2}>010-9556-4022</Text>
+                  <Text style={styles.subtitle2}>{phoneNumber}</Text>
                 </View>
               </View>
               <View style={styles.popupHeaderLeft}>
+                <CloseButton />
                 <View style={styles.popupRemainTime}>
-                  <Text style={styles.remainTime}>02:41</Text>
+                  <Text style={styles.remainTime} onPress={extendTime}>
+                    {displayTime()}
+                  </Text>
                   <View style={styles.extendTimeButton}>
                     <Text style={styles.buttonText2}>시간 연장</Text>
                   </View>
@@ -62,7 +104,6 @@ const ModalContent = ({ modalVisible, toggleModal }) => {
                     ref={inputRef}
                     style={styles.certificationNumber}
                     placeholder='인증번호'
-                    // Add any other TextInput props you might need
                   />
                 </TouchableOpacity>
                 <View style={styles.resendButton}>
@@ -92,30 +133,29 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    flex: 1,
     backgroundColor: 'white',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    padding: 20,
-    maxHeight: '38%',
+    padding: widthPercentage(20),
+    height: heightPercentage(280),
   },
   certificationNumberPopup: {
-    width: 390,
-    height: 844,
+    width: widthPercentage(390),
+    height: heightPercentage(844),
     position: 'absolute',
     alignSelf: 'center',
   },
   popup: {
     flexDirection: 'column',
     alignItems: 'flex-start',
-    gap: 20,
+    gap: heightPercentage(20),
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,
     backgroundColor: '#FFF',
     boxShadow: '1px -1px 10px 0px rgba(0, 0, 0, 0.20)',
-    padding: 20,
+    padding: widthPercentage(20),
   },
   popupHeader: {
     justifyContent: 'space-between',
@@ -127,18 +167,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
-    gap: 10,
+    gap: heightPercentage(10),
     alignSelf: 'stretch',
   },
   popupTitle: {
     alignItems: 'center',
-    gap: 10,
     flexDirection: 'row',
   },
   subtitle2: {
     color: '#4E5968',
     fontFamily: 'Inter',
-    fontSize: 12,
+    fontSize: fontPercentage(12) * 0.88,
     fontStyle: 'normal',
     fontWeight: '700',
   },
@@ -168,43 +207,42 @@ const styles = StyleSheet.create({
   },
   popupRemainTime: {
     alignItems: 'center',
-    gap: 5,
+    gap: widthPercentage(5),
     flexDirection: 'row',
   },
   extendTimeButton: {
     alignItems: 'flex-end',
-    gap: 10,
     borderWidth: 1,
     borderColor: '#55ACEE',
     borderStyle: 'solid',
     flexDirection: 'row',
-    paddingVertical: 3,
-    paddingHorizontal: 4,
+    paddingVertical: heightPercentage(3),
+    paddingHorizontal: widthPercentage(4),
     borderRadius: 2,
   },
   certificationNumber: {
     color: '#B0B8C1',
     fontFamily: 'Inter',
-    fontSize: 16,
+    fontSize: fontPercentage(16) * 0.88,
     fontStyle: 'normal',
     fontWeight: '700',
   },
   buttonText3: {
     color: '#F9FAFB',
     fontFamily: 'Inter',
-    fontSize: 14,
+    fontSize: fontPercentage(14) * 0.88,
     fontStyle: 'normal',
     fontWeight: '700',
   },
   popupMain: {
-    height: 65,
+    height: heightPercentage(65),
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'stretch',
     flexDirection: 'row',
   },
   input3: {
-    width: 350,
+    width: widthPercentage(350),
     justifyContent: 'space-between',
     alignItems: 'center',
     alignSelf: 'stretch',
@@ -215,20 +253,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   resendButton: {
-    width: 59,
+    width: widthPercentage(59),
     justifyContent: 'space-between',
     alignItems: 'center',
     flexShrink: 0,
     backgroundColor: '#333D4B',
     flexDirection: 'row',
-    paddingVertical: 7,
-    paddingHorizontal: 10,
+    paddingVertical: heightPercentage(7),
+    paddingHorizontal: widthPercentage(10),
     borderRadius: 5,
   },
   buttonText4: {
     color: '#B0B8C1',
     fontFamily: 'Inter',
-    fontSize: 16,
+    fontSize: fontPercentage(16) * 0.88,
     fontStyle: 'normal',
     fontWeight: '700',
   },
@@ -240,7 +278,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   submitButton2: {
-    width: 350,
+    width: widthPercentage(350),
     justifyContent: 'center',
     alignItems: 'center',
     gap: 10,
