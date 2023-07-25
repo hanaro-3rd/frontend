@@ -1,6 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Ellipse from '../../assets/vectors/Ellipse.svg';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
+import Ellipse from '../../assets/SignUp/Ellipse.svg';
 
 const LoginPage = () => {
   return (
@@ -64,7 +68,6 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'flex-start',
-    gap: 10,
     flexShrink: 0,
     alignSelf: 'stretch',
     backgroundColor: '#FFF',
@@ -81,8 +84,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   ellipse: {
-    width: 15,
-    height: 15,
     fill: '#B0B8C1',
   },
   body: {
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
   },
   bodyMain: {
     flex: 1,
-    paddingTop: 150,
+    paddingTop: hp('16%'),
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -107,7 +108,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 30,
   },
   numberPad: {
     alignItems: 'center',
@@ -115,21 +115,13 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     flexWrap: 'wrap',
     backgroundColor: '#FFF',
-    paddingHorizontal: 40,
+    paddingHorizontal: wp('10%'),
   },
   patternRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignSelf: 'stretch',
-    paddingBottom: 80,
-  },
-  dot: {
-    width: 130,
-    height: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    padding: 10,
+    paddingBottom: hp('12%'),
   },
   bodyFooter: {
     flexDirection: 'column',

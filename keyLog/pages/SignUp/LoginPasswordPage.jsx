@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import BackSpace from '../../assets/vectors/BackSpace.svg';
-import Ellipse from '../../assets/vectors/Ellipse.svg';
+import BackSpace from '../../assets/SignUp/BackSpace.svg';
+import Ellipse from '../../assets/SignUp/Ellipse.svg';
 
 const LoginPage = () => {
   return (
