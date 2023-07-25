@@ -4,6 +4,7 @@ import React from "react";
 import MainPage from "./pages/MainPage";
 import AccountConnectPage from "./pages/AccountConnectPage";
 import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
+import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
 import ChooseAccount from "./pages/ExchangeSelectAccount/ChooseAccount";
 import PickUpKeyPage from "./pages/PickUpKeyPage";
 import SignUpPage from "./pages/SignUpPage";
@@ -13,10 +14,10 @@ const App = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="AccountConnectPage">
+      <Stack.Navigator initialRouteName="ExchangeSuccess">
         <Stack.Screen name="MainPage" component={MainPage} />
         <Stack.Screen name="ExchangePage" component={ExchangePage} />
-
+        <Stack.Screen name="ExchangeSuccess" component={ExchangeSuccess} />
         <Stack.Screen
           name="AccountConnectPage"
           component={AccountConnectPage}

@@ -39,7 +39,7 @@ const ExchangePage = () => {
       <ScrollView>
         <View style={styles.s1}>
           <Image
-            source={require("../../public/img/CloseButton.png")}
+            source={require("../../assets/accountImg/CloseButton.png")}
             style={styles.button}
           />
         </View>
@@ -62,12 +62,12 @@ const ExchangePage = () => {
               <View style={styles.CountryList}>
                 <Image
                   style={styles.selectCountry}
-                  source={require("../../public/img/USD.png")}
+                  source={require("../../assets/exchangeImg/USD.png")}
                 />
                 <Text style={styles.unitText}>USD</Text>
                 <Image
                   style={styles.selectbutton}
-                  source={require("../../public/img/SelectButton.png")}
+                  source={require("../../assets/exchangeImg/SelectButton.png")}
                 />
               </View>
               <TextInput
@@ -78,7 +78,7 @@ const ExchangePage = () => {
           </View>
           <View style={styles.KoreaMoney}>
             <View style={styles.KoreaContainer}>
-              <Image source={require("../../public/img/Korea.png")} />
+              <Image source={require("../../assets/exchangeImg/Korea.png")} />
               <Text style={styles.unitText}> KRW </Text>
             </View>
             <TextInput editable={false} defaultValue={"10,000~10,000,000"} />

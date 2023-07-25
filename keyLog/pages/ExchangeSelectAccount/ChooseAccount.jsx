@@ -28,7 +28,7 @@ const ChooseAccount = () => {
             <View style={styles.s1}>
               <Pressable onPress={() => setModalVisible(!modalVisible)}>
                 <Image
-                  source={require("../../public/img/CloseButton.png")}
+                  source={require("../../assets/accountImg/CloseButton.png")}
                   style={styles.button}
                 />
               </Pressable>
@@ -56,7 +56,7 @@ const ChooseAccount = () => {
         <Text style={styles.accountListDefault}>계좌를 선택해주세요</Text>
         <Image
           style={styles.selectbutton}
-          source={require("../../public/img/SelectButton.png")}
+          source={require("../../assets/exchangeImg/SelectButton.png")}
         />
       </Pressable>
     </View>

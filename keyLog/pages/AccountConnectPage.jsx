@@ -32,7 +32,7 @@ const AccountConnectPage = () => {
           {isSelected && (
             <Image
               style={{ height: 30, marginRight: 20 }}
-              source={require("../public/img/check.png")}
+              source={require("../assets/accountImg/check.png")}
               resizeMode="contain"
             />
           )}
@@ -47,7 +47,7 @@ const AccountConnectPage = () => {
         <View>
           <View style={styles.s1}>
             <Image
-              source={require("../public/img/CloseButton.png")}
+              source={require("../assets/accountImg/CloseButton.png")}
               style={styles.button}
             />
           </View>

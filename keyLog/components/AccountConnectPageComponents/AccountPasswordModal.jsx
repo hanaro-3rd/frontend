@@ -11,8 +11,8 @@ import {
 } from "react-native";
 import ReactNativePinView from "react-native-pin-view";
 import { styles } from "../../pages/ExchangeSelectAccount/ExchangePage";
-import Ellipse from "../../public/img/Ellipse.png";
-import Vector from "../../public/img/Vector.png";
+import Ellipse from "../../assets/accountImg/Ellipse.png";
+import Vector from "../../assets/accountImg/Vector.png";
 
 const AccountPasswordModal = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -41,7 +41,7 @@ const AccountPasswordModal = () => {
                 <Text style={styles3.popupHeaderText}>계좌 비밀번호 입력</Text>
                 <Pressable onPress={() => setModalVisible(!modalVisible)}>
                   <Image
-                    source={require("../../public/img/CloseButton.png")}
+                    source={require("../../assets/accountImg/CloseButton.png")}
                     style={styles.button}
                   />
                 </Pressable>
