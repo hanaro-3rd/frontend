@@ -1,146 +1,229 @@
-import { Image, StyleSheet, Text, Touchable, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  SafeAreaView,
+} from "react-native";
+import {
+  fontPercentage,
+  getStatusBarHeight,
+  heightPercentage,
+  phoneHeight,
+  phoneWidth,
+  widthPercentage,
+} from "../../utils/ResponseSize";
 import React from "react";
+import styled from "styled-components/native";
+import DeleteHeader from "../Header/DeleteHeader";
+const TravelRecordMainComponent = ({ navigation }) => {
+  const Main = styled.SafeAreaView`
+    margin-top: ${getStatusBarHeight}px;
+    min-height: ${phoneHeight}px;
+    width: 100%;
+  `;
+  const PlanTextView = styled.View`
+    width: 100%;
+    height: ${heightPercentage(58)}px;
+    justify-content: center;
+    background-color: #fff;
+  `;
+  const PlanText = styled.Text`
+    margin-left: ${widthPercentage(20)}px;
+    color: #191f29;
+    font-size: ${fontPercentage(23)}px;
+    font-weight: 700;
+  `;
+  const PlanComponent = styled.View`
+    width: ${phoneWidth}px;
+    height: auto;
+    align-items: center;
+    margin-bottom: ${heightPercentage(15)}px;
+  `;
+  const PlanContainer = styled.View`
+    padding: ${widthPercentage(20)}px;
+    background-color: white;
+  `;
 
-const TravelRecordMainComponent = ({navigation}) => {
+  const PlanDataView = styled.TouchableOpacity`
+    width: ${widthPercentage(350)}px;
+    height: ${widthPercentage(100)}px;
+    border-radius: 10px;
+    flex-direction: row;
+    border: 1px solid black;
+    margin-bottom: ${heightPercentage(10)}px;
+  `;
+  const PlanMainTextView = styled.View`
+    width: 100%;
+  `;
+  const PlanMainText = styled.Text`
+    color: #191f29;
+    font-size: ${fontPercentage(20)}px;
+    font-weight: 400;
+    margin-bottom: ${heightPercentage(15)}px;
+  `;
+
+  const PlanDataImage = styled.Image`
+    width: ${widthPercentage(100)}px;
+    height: ${widthPercentage(100)}px;
+  `;
+
   return (
-    <View style={styles.main}>
-      <View style={styles.bgWhite}>
-        <Image source={require("../../Images/삭제.png")} style={styles.image} />
-      </View>
-      <Text style={[styles.title, styles.bgWhite]}>내 여행 기록</Text>
-      <View style={[styles.planContainer, styles.bgWhite]}>
-        <View style={styles.titleWrapper}>
-          <Text style={styles.planYear}>2023</Text>
-        </View>
-        <TouchableOpacity onPress={()=> navigation.navigate('TravelRecordDetailComponent')}>
-          <View style={styles.planDateContainer}>
-            <Image
+    <Main>
+      <DeleteHeader />
+      <PlanTextView>
+        <PlanText>내 여행 기록</PlanText>
+      </PlanTextView>
+
+      <PlanComponent>
+        <PlanContainer>
+          <PlanMainTextView>
+            <PlanMainText>2023</PlanMainText>
+          </PlanMainTextView>
+
+          <PlanDataView
+            onPress={() => navigation.navigate("TravelRecordDetailComponent")}
+          >
+            <PlanDataImage
               resizeMode="contain"
-              style={styles.planImageContainer}
               source={require("../../Images/도쿄.png")}
-            ></Image>
-            <View style={styles.planTextContainer}>
-              <Text style={styles.planTitle}>일본,도쿄</Text>
-              <Text style={styles.planDuringText}>2023.07.01~2023.07.10</Text>
-              <View style={styles.planPriceWrapper}>
+            />
+            <PlanTextContainer>
+              <PlanTextTitle>일본,도쿄</PlanTextTitle>
+              <PlanDuringTitle style={styles.planDuringText}>
+                2023.07.01~2023.07.10
+              </PlanDuringTitle>
+              <PlanCostView>
                 <Text style={styles.planPriceText}>총 비용 ￥100,000</Text>
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
-        <View style={styles.planDateContainer}>
-          <Image
-            resizeMode="contain"
-            style={styles.planImageContainer}
-            source={require("../../Images/도쿄.png")}
-          ></Image>
-          <View style={styles.planTextContainer}>
-            <Text style={styles.planTitle}>일본,도쿄</Text>
-            <Text style={styles.planDuringText}>2023.07.01~2023.07.10</Text>
-            <View style={styles.planPriceWrapper}>
-              <Text style={styles.planPriceText}>총 비용 ￥100,000</Text>
-            </View>
-          </View>
-        </View>
-      </View>
-      <View style={[styles.planContainer, styles.bgWhite]}>
-        <View style={styles.titleWrapper}>
-          <Text style={styles.planYear}>2023</Text>
-        </View>
-        <View style={styles.planDateContainer}>
-          <Image
-            resizeMode="contain"
-            style={styles.planImageContainer}
-            source={require("../../Images/도쿄.png")}
-          ></Image>
-          <View style={styles.planTextContainer}>
-            <Text style={styles.planTitle}>일본,도쿄</Text>
-            <Text style={styles.planDuringText}>2023.07.01~2023.07.10</Text>
-            <View style={styles.planPriceWrapper}>
-              <Text style={styles.planPriceText}>총 비용 ￥100,000</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.planDateContainer}>
-          <Image
-            resizeMode="contain"
-            style={styles.planImageContainer}
-            source={require("../../Images/도쿄.png")}
-          ></Image>
-          <View style={styles.planTextContainer}>
-            <Text style={styles.planTitle}>일본,도쿄</Text>
-            <Text style={styles.planDuringText}>2023.07.01~2023.07.10</Text>
-            <View style={styles.planPriceWrapper}>
-              <Text style={styles.planPriceText}>총 비용 ￥100,000</Text>
-            </View>
-          </View>
-        </View>
-      </View>
-    </View>
+              </PlanCostView>
+            </PlanTextContainer>
+          </PlanDataView>
+          <PlanDataView
+            onPress={() => navigation.navigate("TravelRecordDetailComponent")}
+          >
+            <PlanDataImage
+              resizeMode="contain"
+              source={require("../../Images/도쿄.png")}
+            />
+            <PlanTextContainer>
+              <PlanTextTitle>일본,도쿄</PlanTextTitle>
+              <PlanDuringTitle style={styles.planDuringText}>
+                2023.07.01~2023.07.10
+              </PlanDuringTitle>
+              <PlanCostView>
+                <Text style={styles.planPriceText}>총 비용 ￥100,000</Text>
+              </PlanCostView>
+            </PlanTextContainer>
+          </PlanDataView>
+          <PlanDataView
+            onPress={() => navigation.navigate("TravelRecordDetailComponent")}
+          >
+            <PlanDataImage
+              resizeMode="contain"
+              source={require("../../Images/도쿄.png")}
+            />
+            <PlanTextContainer>
+              <PlanTextTitle>일본,도쿄</PlanTextTitle>
+              <PlanDuringTitle style={styles.planDuringText}>
+                2023.07.01~2023.07.10
+              </PlanDuringTitle>
+              <PlanCostView>
+                <Text style={styles.planPriceText}>총 비용 ￥100,000</Text>
+              </PlanCostView>
+            </PlanTextContainer>
+          </PlanDataView>
+        </PlanContainer>
+      </PlanComponent>
+      <PlanComponent>
+        <PlanContainer>
+          <PlanMainTextView>
+            <PlanMainText>2023</PlanMainText>
+          </PlanMainTextView>
+
+          <PlanDataView
+            onPress={() => navigation.navigate("TravelRecordDetailComponent")}
+          >
+            <PlanDataImage
+              resizeMode="contain"
+              source={require("../../Images/도쿄.png")}
+            />
+            <PlanTextContainer>
+              <PlanTextTitle>일본,도쿄</PlanTextTitle>
+              <PlanDuringTitle style={styles.planDuringText}>
+                2023.07.01~2023.07.10
+              </PlanDuringTitle>
+              <PlanCostView>
+                <Text style={styles.planPriceText}>총 비용 ￥100,000</Text>
+              </PlanCostView>
+            </PlanTextContainer>
+          </PlanDataView>
+          <PlanDataView
+            onPress={() => navigation.navigate("TravelRecordDetailComponent")}
+          >
+            <PlanDataImage
+              resizeMode="contain"
+              source={require("../../Images/도쿄.png")}
+            />
+            <PlanTextContainer>
+              <PlanTextTitle>일본,도쿄</PlanTextTitle>
+              <PlanDuringTitle style={styles.planDuringText}>
+                2023.07.01~2023.07.10
+              </PlanDuringTitle>
+              <PlanCostView>
+                <Text style={styles.planPriceText}>총 비용 ￥100,000</Text>
+              </PlanCostView>
+            </PlanTextContainer>
+          </PlanDataView>
+          <PlanDataView
+            onPress={() => navigation.navigate("TravelRecordDetailComponent")}
+          >
+            <PlanDataImage
+              resizeMode="contain"
+              source={require("../../Images/도쿄.png")}
+            />
+            <PlanTextContainer>
+              <PlanTextTitle>일본,도쿄</PlanTextTitle>
+              <PlanDuringTitle style={styles.planDuringText}>
+                2023.07.01~2023.07.10
+              </PlanDuringTitle>
+              <PlanCostView>
+                <Text style={styles.planPriceText}>총 비용 ￥100,000</Text>
+              </PlanCostView>
+            </PlanTextContainer>
+          </PlanDataView>
+        </PlanContainer>
+      </PlanComponent>
+    </Main>
   );
 };
 
 export default TravelRecordMainComponent;
 
+const PlanTextContainer = styled.View`
+  margin-left: ${widthPercentage(10)}px;
+  margin-top: ${heightPercentage(5)}px;
+  width: 70%;
+`;
+const PlanTextTitle = styled.Text`
+  color: #191f29;
+  font-size: ${fontPercentage(18)}px;
+  font-weight: 700;
+`;
+const PlanDuringTitle = styled.Text`
+  color: #191f29;
+  font-size: ${fontPercentage(14)}px;
+  font-weight: 400;
+`;
+const PlanCostView = styled.View`
+    width: 100%;
+    padding-right : ${widthPercentage(12)}px;
+    margin-top : ${heightPercentage(10)}px;
+    flex-direction: row;
+    justify-content: flex-end;
+`;
+const PlanCostTitle = styled.Text``;
 const styles = StyleSheet.create({
-  main: {
-    alignContent: "center",
-    justifyContent: "center",
-  },
-  bgWhite: {
-    backgroundColor: "white",
-  },
-  image: {
-    marginTop: 10,
-    marginLeft: 10,
-    width: 25,
-    height: 25,
-    paddingLeft: 10,
-  },
-  titleWrapper: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-  },
-  title: {
-    width: "100%",
-    paddingTop: 10,
-    alignItems: "flex-end",
-    paddingLeft: 10,
-    color: "black",
-    fontSize: 25,
-    fontWeight: "600",
-    textAlign: "left",
-  },
-  planContainer: {
-    height: "auto",
-    display: "flex",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  planYear: {
-    paddingTop: 30,
-    backgroundColor: "white",
-    color: "black",
-    fontSize: 20,
-    paddingLeft: 10,
-    textAlign: "left",
-    alignItems: "flex-left",
-  },
-  planDateContainer: {
-    flexDirection: "row",
-    marginVertical: "2%",
-    height: 110,
-    width: "95%",
-    borderRadius: 10,
-    borderWidth: 1,
-  },
-  planImageContainer: {
-    height: 110,
-    width: "30%",
-    borderTopLeftRadius: 10, // 왼쪽 위 모서리를 둥글게 설정
-    borderBottomLeftRadius: 10, // 왼쪽 아래 모서리를 둥글게 설정
-  },
   planTextContainer: {
     marginLeft: 10,
     marginTop: 10,
