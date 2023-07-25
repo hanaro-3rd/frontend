@@ -10,13 +10,16 @@ import LoginPatternPage from './pages/SignUp/LoginPatternPage';
 import SignUpPage from './pages/SignUp/SignUpPage';
 import TravelBudgetPage from './pages/TravelBudgetPage';
 import TravelRecordPage from './pages/TravelRecordPage';
+import TravelRecordMainComponent from './components/TravelRecordPageComponents/TravelRecordMainComponent';
+import TravelRecordDetailComponent from './components/TravelRecordPageComponents/TravelRecordDetailComponent';
+import PaymentPageInputComponent from './components/PaymentPageComponents/PaymentPageInputComponent';
 const App = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='MainPage'>
-        <Stack.Screen
-          name='MainPage'
+      <Stack.Navigator initialRouteName="MainPage">
+      <Stack.Screen
+          name="MainPage"
           component={MainPage}
           options={{ headerShown: false }}
         />
@@ -24,7 +27,7 @@ const App = () => {
           name='AccountConnectPage'
           component={AccountConnectPage}
         />
-        <Stack.Screen name='ExchangePage' component={ExchangePage} />
+      <Stack.Screen name='ExchangePage' component={ExchangePage} />
         <Stack.Screen name='PickUpKeyPage' component={PickUpKeyPage} />
         <Stack.Screen
           name='SignUpPage'
