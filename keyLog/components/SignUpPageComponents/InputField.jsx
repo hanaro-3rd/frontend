@@ -1,5 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  fontPercentage,
+  heightPercentage,
+  widthPercentage,
+} from '../../utils/ResponseSize';
 import InfoText from './InfoText';
 
 const commonTextStyle = {
@@ -9,25 +14,24 @@ const commonTextStyle = {
 
 const styles = StyleSheet.create({
   inputFieldWrapper: {
-    alignSelf: 'stretch', // 추가
-    marginBottom: 15, // 필요에 따라 조절
+    alignSelf: 'stretch',
+    marginBottom: widthPercentage(15),
   },
   inputFieldContainer: {
-    height: 65,
+    height: heightPercentage(65),
     alignItems: 'center',
-    gap: 10,
     alignSelf: 'stretch',
     backgroundColor: '#F9FAFB',
     flexDirection: 'row',
-    paddingVertical: 0,
-    paddingHorizontal: 20,
+    paddingHorizontal: widthPercentage(20),
     borderRadius: 10,
   },
   inputField: {
     ...commonTextStyle,
     color: 'black',
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontWeight: '700',
+    flex: 1,
   },
   errorInputField: {
     borderColor: 'red',
