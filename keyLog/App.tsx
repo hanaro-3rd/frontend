@@ -21,7 +21,7 @@ const App = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="ExchangeFail">
+      <Stack.Navigator initialRouteName="PaymentPageInputComponent">
         <Stack.Screen
           name="MainPage"
           component={MainPage}
@@ -54,14 +54,17 @@ const App = () => {
         <Stack.Screen
           name="TravelRecordMainComponent"
           component={TravelRecordMainComponent}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="TravelRecordDetailComponent"
           component={TravelRecordDetailComponent}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="PaymentPageInputComponent"
           component={PaymentPageInputComponent}
+          options={{ headerShown: false }}
         />
         <Stack.Screen name="TravelRecordPage" component={TravelRecordPage} />
         <Stack.Screen name="TravelBudgetPage" component={TravelBudgetPage} />
