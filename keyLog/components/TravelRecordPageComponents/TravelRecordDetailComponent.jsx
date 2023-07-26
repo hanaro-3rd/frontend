@@ -1,205 +1,187 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StatusBar,
+} from "react-native";
 import React from "react";
-import { vw, vh } from "react-native-viewport-units";
+import styled from "styled-components/native";
+import {
+  fontPercentage,
+  getStatusBarHeight,
+  heightPercentage,
+  phoneHeight,
+  phoneWidth,
+  widthPercentage,
+} from "../../utils/ResponseSize";
+import DeleteHeader from "../Header/DeleteHeader";
+
+const Main = styled.SafeAreaView`
+  margin-top: ${getStatusBarHeight}px;
+  background-color: white;
+  min-height: ${phoneHeight}px;
+  align-items: center;
+  width: 100%;
+  background-color: white;
+`;
+const Header = styled.View`
+  width: ${phoneWidth}px;
+  height: ${heightPercentage(50)}px;
+  justify-content: center;
+`;
+const HeaderImage = styled.Image`
+  margin-left: ${widthPercentage(20)}px;
+  width: ${widthPercentage(24)}px;
+  height: ${heightPercentage(24)}px;
+`
+const TitleView = styled.View`
+  width: ${phoneWidth}px;
+  align-items: center;
+  justify-content: center;
+  height: ${heightPercentage(49)}px;
+`;
+const DateText = styled.Text`
+  color: #191f29;
+  font-size: ${fontPercentage(16)}px;
+`;
+const MapImage = styled.Image`
+  height: ${heightPercentage(271)}px;
+`;
+const MapView = styled.View`
+  height: ${heightPercentage(55)}px;
+  justify-content: space-evenly;
+  align-items: center;
+  width: ${phoneWidth}px;
+`;
+const ListIcon = styled.View`
+  width: ${widthPercentage(40)}px;
+  height: ${heightPercentage(3)}px;
+  background-color: #d9d9d9;
+  border-radius: 2px;
+`;
+const TotalBudget = styled.Text`
+  font-size: ${fontPercentage(16)}px;
+  color: #191f29;
+`;
+const DateComponent = styled.View`
+  width: ${phoneWidth};
+  align-items: center;
+`;
+const DateTextView = styled.View`
+  width: ${widthPercentage(350)};
+  height: ${heightPercentage(20)};
+  margin-bottom: ${heightPercentage(15)}px;
+`;
+const PlanDateText = styled.Text`
+  font-size: ${fontPercentage(12)}px;
+  color: #191f29;
+`;
+const ListView = styled.View`
+  width: ${widthPercentage(350)}px;
+  height: ${heightPercentage(40)}px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${heightPercentage(20)}px;
+`;
+const ListTitleView = styled.View`
+  width: ${widthPercentage(140)}px;
+  height: ${heightPercentage(40)}px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+const ListTitle = styled.Text`
+  color: #191f29;
+  font-size: ${fontPercentage(16)}px;
+`;
+const ListSubTitle = styled.Text`
+  color: #4e5968;
+  font-size: ${fontPercentage(12)}px;
+`;
+const PriceSubTitle = styled.Text`
+  color: #4e5968;
+  font-size: ${fontPercentage(14)}px;
+`;
+const ListImage = styled.Image`
+  width: ${widthPercentage(40)}px;
+  height: ${heightPercentage(40)}px;
+`;
+const PriceView = styled.View`
+  align-items: flex-end;
+  margin-right: 10;
+`;
 const TravelRecordDetailComponent = ({ navigation }) => {
+  StatusBar.setTranslucent(true);
   return (
-    <View style={styles.main}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("TravelRecordMainComponent")}
-      >
-        <View
-          style={{
-            width: 400,
-            justifyContent: "flex-start",
-            alignItems: "flex-start",
-          }}
-        >
-          <Image
-            source={require("../../Images/삭제.png")}
-            style={styles.image}
-          />
-        </View>
-      </TouchableOpacity>
-      <View
-        style={{
-          width: "100%",
-          alignItems: "center",
-          height: 350,
-          borderBottomWidth: 1,
-          borderBottomColor: "lightgray",
-        }}
-      >
-        <View
-          style={{
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-            height: 40,
-          }}
-        >
-          <Text style={{ fontSize: 17, color: "black" }}>
-            2023.07.01 ~ 2023.07.10
-          </Text>
-        </View>
+    <Main>
+      <DeleteHeader navigation={navigation} to="TravelRecordMainComponent"/>
+      <TitleView>
+        <DateText>2023.07.01 ~ 2023.07.10</DateText>
+      </TitleView>
 
-        <Image
-          source={require("../../Images/지도.png")}
-          style={{ height: 250 }}
-        />
-        <View
-          style={{
-            width: "100%",
-            justifyContent: "space-evenly",
-            alignItems: "center",
-            height: 60,
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: "lightgray",
-              borderRadius: 5,
-              width: 60,
-              height: 5,
-            }}
-          ></View>
-          <Text style={{ fontSize: 17, color: "black" }}>총 ￥100,000</Text>
-        </View>
-      </View>
-      <View
-        style={{
-          width: "95%",
-          height: 600,
-        }}
-      >
-        <View>
-          <Text style={{ marginTop: 5, marginBottom: 20 }}>7월 1일</Text>
-          <View
-            style={{
-              height: "auto",
-              flexDirection: "row",
-              alignItems:"center",
-              justifyContent:'space-between',
-              marginBottom: 10
-            }}
-          >
-            <View
-              style={{
-                height: 50,
-                flexDirection: "row",
-                width: "35%",
-                justifyContent:"space-between",
-                alignItems:"center"
-              }}
-            >
-              <Image
-                source={require("../../Images/세븐일레븐.png")}
-                resizeMode="contain"
-                style={{
-                  height: 50,
-                  width: 50,
-                }}
-              />
+      <MapImage source={require("../../Images/지도.png")} />
+      <MapView>
+        <ListIcon></ListIcon>
+        <TotalBudget>총 ￥100,000</TotalBudget>
+      </MapView>
+      <DateComponent>
+        <DateTextView>
+          <PlanDateText>7월 1일</PlanDateText>
+        </DateTextView>
+        <ListView>
+          <ListTitleView>
+            <ListImage
+              source={require("../../Images/세븐일레븐.png")}
+              resizeMode="contain"
+            />
 
-              <View>
-                <Text>세븐일레븐</Text>
-                <Text>13:58</Text>
-              </View>
+            <View>
+              <ListTitle>세븐일레븐</ListTitle>
+              <Text>13:58</Text>
             </View>
-            <View style={{alignItems:"flex-end", marginRight:10}}>
-              <Text>￥10,000</Text>
-              <Text>총 ￥20,000</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              height: "auto",
-              flexDirection: "row",
-              alignItems:"center",
-              justifyContent:'space-between',
-              marginBottom: 10
-            }}
-          >
-            <View
-              style={{
-                height: 50,
-                flexDirection: "row",
-                width: "35%",
-                justifyContent:"space-between",
-                alignItems:"center"
-              }}
-            >
-              <Image
-                source={require("../../Images/세븐일레븐.png")}
-                resizeMode="contain"
-                style={{
-                  height: 50,
-                  width: 50,
-                }}
-              />
+          </ListTitleView>
+          <PriceView>
+            <ListTitle>￥10,000</ListTitle>
+            <PriceSubTitle>총 ￥20,000</PriceSubTitle>
+          </PriceView>
+        </ListView>
+        <ListView>
+          <ListTitleView>
+            <ListImage
+              source={require("../../Images/세븐일레븐.png")}
+              resizeMode="contain"
+            />
 
-              <View>
-                <Text>세븐일레븐</Text>
-                <Text>13:58</Text>
-              </View>
+            <View>
+              <ListTitle>세븐일레븐</ListTitle>
+              <Text>13:58</Text>
             </View>
-            <View style={{alignItems:"flex-end", marginRight:10}}>
-              <Text>￥10,000</Text>
-              <Text>총 ￥20,000</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              height: "auto",
-              flexDirection: "row",
-              alignItems:"center",
-              justifyContent:'space-between',
-              marginBottom: 10
-            }}
-          >
-            <View
-              style={{
-                height: 50,
-                flexDirection: "row",
-                width: "35%",
-                justifyContent:"space-between",
-                alignItems:"center"
-              }}
-            >
-              <Image
-                source={require("../../Images/세븐일레븐.png")}
-                resizeMode="contain"
-                style={{
-                  height: 50,
-                  width: 50,
-                }}
-              />
+          </ListTitleView>
+          <PriceView>
+            <ListTitle>￥10,000</ListTitle>
+            <PriceSubTitle>총 ￥20,000</PriceSubTitle>
+          </PriceView>
+        </ListView>
+        <ListView>
+          <ListTitleView>
+            <ListImage
+              source={require("../../Images/세븐일레븐.png")}
+              resizeMode="contain"
+            />
 
-              <View>
-                <Text>세븐일레븐</Text>
-                <Text>13:58</Text>
-              </View>
+            <View>
+              <ListTitle>세븐일레븐</ListTitle>
+              <Text>13:58</Text>
             </View>
-            <View style={{alignItems:"flex-end", marginRight:10}}>
-              <Text>￥10,000</Text>
-              <Text>총 ￥20,000</Text>
-            </View>
-          </View>
-          
-        </View>
-      </View>
-      <Text>TravelRecordPageDetailComponent</Text>
-      <Text>TravelRecordPageDetailComponent</Text>
-    </View>
+          </ListTitleView>
+          <PriceView>
+            <ListTitle>￥10,000</ListTitle>
+            <PriceSubTitle>총 ￥20,000</PriceSubTitle>
+          </PriceView>
+        </ListView>
+      </DateComponent>
+    </Main>
   );
 };
 
 export default TravelRecordDetailComponent;
-
-const styles = StyleSheet.create({
-  main: {
-    backgroundColor: "white",
-    height: 1000,
-    alignItems: "center",
-    width: "100vw",
-  },
-});

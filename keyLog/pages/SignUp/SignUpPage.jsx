@@ -14,6 +14,7 @@ import {
 import InfoText from '../../components/SignUpPageComponents/InfoText';
 import InputField from '../../components/SignUpPageComponents/InputField';
 import ModalContent from '../../components/SignUpPageComponents/ModalContent';
+import { fontPercentage } from '../../utils/ResponseSize';
 
 const isValidName = name => {
   const regex = /^[가-힣]*$/;
@@ -185,7 +186,11 @@ const SignUpPage = () => {
             <Text style={styles.buttonText}>인증 요청</Text>
           </TouchableOpacity>
         </View>
-        <ModalContent modalVisible={modalVisible} toggleModal={toggleModal} />
+        <ModalContent
+          modalVisible={modalVisible}
+          toggleModal={toggleModal}
+          phoneNumber={phoneNumber}
+        />
       </View>
     </ScrollView>
   );
@@ -272,7 +277,7 @@ const styles = StyleSheet.create({
   buttonText: {
     ...commonTextStyle,
     color: 'white',
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontWeight: '700',
   },
   submitButton: {

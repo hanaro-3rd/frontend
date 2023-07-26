@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
+import { fontPercentage } from '../../utils/ResponseSize';
 
 const commonTextStyle = {
   fontFamily: 'Inter',
@@ -10,7 +11,7 @@ const styles = StyleSheet.create({
   informationText: {
     ...commonTextStyle,
     color: '#4E5968',
-    fontSize: 13,
+    fontSize: fontPercentage(13),
     fontWeight: '400',
   },
 });
