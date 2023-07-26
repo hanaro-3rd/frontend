@@ -130,7 +130,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     flexGrow: 1,
     justifyContent: "space-between",
-    minHeight: 550,
+    minHeight: 580,
   },
   s1: {
     paddingTop: 13,

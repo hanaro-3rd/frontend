@@ -23,7 +23,7 @@ const App = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="LoginPasswordPage">
+      <Stack.Navigator initialRouteName="AccountConnectSuccess">
         <Stack.Screen
           name="MainPage"
           component={MainPage}
@@ -32,6 +32,7 @@ const App = () => {
         <Stack.Screen
           name="AccountConnectPage"
           component={AccountConnectPage}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="AccountConnectSuccess"
@@ -41,11 +42,31 @@ const App = () => {
           name="AccountConnectFail"
           component={AccountConnectFail}
         />
-        <Stack.Screen name="ExchangePage" component={ExchangePage} />
-        <Stack.Screen name="ExchangeSuccess" component={ExchangeSuccess} />
-        <Stack.Screen name="ExchangeFail" component={ExchangeFail} />
-        <Stack.Screen name="ChooseAccount" component={ChooseAccount} />
-        <Stack.Screen name="PickUpKeyPage" component={PickUpKeyPage} />
+        <Stack.Screen
+          name="ExchangePage"
+          component={ExchangePage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ExchangeSuccess"
+          component={ExchangeSuccess}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ExchangeFail"
+          component={ExchangeFail}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ChooseAccount"
+          component={ChooseAccount}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PickUpKeyPage"
+          component={PickUpKeyPage}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="SignUpPage"
           component={SignUpPage}

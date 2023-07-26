@@ -5,16 +5,19 @@ import {
   ScrollView,
   Image,
   FlatList,
-  Button,
+  Modal,
   Pressable,
   Dimensions,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { styles } from "../ExchangeSelectAccount/ExchangePage";
+import Ellipse from "../../assets/SignUp/Ellipse.svg";
+import Vector from "../../assets/accountImg/Vector.png";
 import AccountPasswordModal from "../../components/AccountConnectPageComponents/AccountPasswordModal";
 
 const AccountConnectPage = () => {
   const [selectedItem, setSelectedItem] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const renderItem = ({ item }) => {
     const isSelected = item.key === selectedItem;
@@ -70,7 +73,97 @@ const AccountConnectPage = () => {
             />
           </View>
         </View>
-        <AccountPasswordModal />
+
+        <View style={styles.buttonContainer}>
+          <Pressable
+            style={styles.submitButton}
+            onPress={() => setModalVisible(true)}
+          >
+            <Text style={styles.pressBeforeTextStyle}>연결하기</Text>
+          </Pressable>
+        </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles2.modalBackground}>
+            <View style={styles2.popup}>
+              <View style={styles2.popupHeader}>
+                <View style={styles2.popupHeaderTitle}>
+                  <Text style={styles2.popupHeaderText}>
+                    계좌 비밀번호 입력
+                  </Text>
+                  <Pressable onPress={() => setModalVisible(!modalVisible)}>
+                    <Image
+                      source={require("../../assets/accountImg/CloseButton.png")}
+                      style={styles2.button}
+                    />
+                  </Pressable>
+                </View>
+                <View style={styles2.popupSubtitle}>
+                  <Text style={styles2.popupBank}>신한</Text>
+                  <Text>302-9556-4022-11</Text>
+                </View>
+              </View>
+
+              <View>
+                <View style={styles2.passwordSymbol}>
+                  <Ellipse />
+                  <Ellipse />
+                  <Ellipse />
+                  <Ellipse />
+                </View>
+                <View style={styles2.numberPad}>
+                  <View style={styles2.number}>
+                    <Text style={styles2.num}>1</Text>
+                  </View>
+                  <View style={styles2.number}>
+                    <Text style={styles2.num}>2</Text>
+                  </View>
+                  <View style={styles2.number}>
+                    <Text style={styles2.num}>3</Text>
+                  </View>
+                  <View style={styles2.number}>
+                    <Text style={styles2.num}>4</Text>
+                  </View>
+                  <View style={styles2.number}>
+                    <Text style={styles2.num}>5</Text>
+                  </View>
+                  <View style={styles2.number}>
+                    <Text style={styles2.num}>6</Text>
+                  </View>
+                  <View style={styles2.number}>
+                    <Text style={styles2.num}>7</Text>
+                  </View>
+                  <View style={styles2.number}>
+                    <Text style={styles2.num}>8</Text>
+                  </View>
+                  <View style={styles2.number}>
+                    <Text style={styles2.num}>9</Text>
+                  </View>
+                  <View style={styles2.number}>
+                    <Text style={styles2.num}></Text>
+                  </View>
+                  <View style={styles2.number}>
+                    <Text style={styles2.num}>0</Text>
+                  </View>
+                  <View style={styles2.number}>
+                    <Text style={styles2.num}>
+                      <Image source={Vector} />
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <Pressable style={styles.submitButton}>
+                <Text style={styles.pressBeforeTextStyle}>확인</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
       </View>
     </ScrollView>
   );
@@ -112,5 +205,76 @@ const styles2 = StyleSheet.create({
   accountTitle: {
     color: "#191F29",
     Text: 16,
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.65)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  popup: {
+    backgroundColor: "#FFFFFF",
+    flex: 1,
+    width: "100%",
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    marginTop: 250,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 20,
+    paddingBottom: 15,
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+  popupHeader: {
+    // flex: "column",
+  },
+  popupHeaderTitle: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  popupHeaderText: {
+    color: "#191F29",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  popupBank: {
+    marginRight: 10,
+  },
+  popupSubtitle: {
+    marginTop: 10,
+    flexDirection: "row",
+    color: "#4E5968",
+  },
+  passwordSymbol: {
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 20,
+    flexDirection: "row",
+    marginTop: 20,
+  },
+  num: {
+    color: "#191F29",
+    textAlign: "center",
+    fontSize: 24,
+    fontWeight: "400",
+  },
+  numberPad: {
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+    alignSelf: "stretch",
+    flexWrap: "wrap",
+    backgroundColor: "#FFF",
+    flexDirection: "row",
+  },
+  number: {
+    width: 110,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+    flexDirection: "row",
+    padding: 10,
   },
 });
