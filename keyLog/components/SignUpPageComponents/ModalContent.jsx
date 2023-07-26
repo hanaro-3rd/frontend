@@ -66,63 +66,52 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
       style={styles.modalContainer}
     >
       <View style={styles.modalContent}>
-        <View
-          isVisible={modalVisible}
-          onBackdropPress={toggleModal}
-          animationIn='slideInUp'
-          animationOut='slideOutDown'
-          ㅇㅇ
-          backdropTransitionOutTiming={0}
-          backdropOpacity={0.5}
-          style={styles.certificationNumberPopup}
-        >
-          <View style={styles.popup}>
-            <View style={styles.popupHeader}>
-              <View style={styles.popupHeaderRight}>
-                <View style={styles.popupTitle}>
-                  <Text style={styles.title2}>인증번호 입력</Text>
-                </View>
-                <View style={styles.popupSubtitle}>
-                  <Text style={styles.subtitle2}>{phoneNumber}</Text>
-                </View>
+        <View style={styles.popup}>
+          <View style={styles.popupHeader}>
+            <View style={styles.popupHeaderRight}>
+              <View style={styles.popupTitle}>
+                <Text style={styles.title2}>인증번호 입력</Text>
               </View>
-              <View style={styles.popupHeaderLeft}>
-                <CloseButton />
-                <View style={styles.popupRemainTime}>
-                  <Text style={styles.remainTime} onPress={extendTime}>
-                    {displayTime()}
-                  </Text>
-                  <View style={styles.extendTimeButton}>
-                    <Text style={styles.buttonText2}>시간 연장</Text>
-                  </View>
-                </View>
+              <View style={styles.popupSubtitle}>
+                <Text style={styles.subtitle2}>{phoneNumber}</Text>
               </View>
             </View>
-            <View style={styles.popupMain}>
-              <View style={styles.input3}>
-                <TouchableOpacity>
-                  <TextInput
-                    ref={inputRef}
-                    style={styles.certificationNumber}
-                    placeholder='인증번호'
-                  />
-                </TouchableOpacity>
-                <View style={styles.resendButton}>
-                  <Text style={styles.buttonText3}>재전송</Text>
+            <View style={styles.popupHeaderLeft}>
+              <CloseButton />
+              <View style={styles.popupRemainTime}>
+                <Text style={styles.remainTime} onPress={extendTime}>
+                  {displayTime()}
+                </Text>
+                <View style={styles.extendTimeButton}>
+                  <Text style={styles.buttonText2}>시간 연장</Text>
                 </View>
-              </View>
-            </View>
-            <View style={styles.popupFooter}>
-              <View style={styles.submitButton2}>
-                <TouchableOpacity onPress={goToLoginPasswordPage}>
-                  <Text style={styles.buttonText4}>확인</Text>
-                </TouchableOpacity>
               </View>
             </View>
           </View>
+          <View style={styles.popupMain}>
+            <View style={styles.input3}>
+              <TouchableOpacity>
+                <TextInput
+                  ref={inputRef}
+                  style={styles.certificationNumber}
+                  placeholder='인증번호'
+                />
+              </TouchableOpacity>
+              <View style={styles.resendButton}>
+                <Text style={styles.buttonText3}>재전송</Text>
+              </View>
+            </View>
+          </View>
+          <View style={styles.popupFooter}>
+            <View style={styles.submitButton2}>
+              <TouchableOpacity onPress={goToLoginPasswordPage}>
+                <Text style={styles.buttonText4}>확인</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-        <TouchableOpacity onPress={toggleModal}></TouchableOpacity>
       </View>
+      <TouchableOpacity onPress={toggleModal}></TouchableOpacity>
     </Modal>
   );
 };
