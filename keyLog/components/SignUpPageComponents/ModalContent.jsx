@@ -102,7 +102,7 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
                   { color: inputText.length > 0 ? '#000000' : '#B0B8C1' },
                 ]}
                 value={inputText}
-                onChangeText={setInputText}
+                onChangeText={text => setInputText(text.replace(/[^0-9]/g, ''))}
                 maxLength={6}
                 placeholder='인증번호'
               />
