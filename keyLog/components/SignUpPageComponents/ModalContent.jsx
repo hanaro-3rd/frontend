@@ -16,17 +16,21 @@ import {
 } from '../../utils/ResponseSize';
 
 const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
-  console.log('모달 비저블: ', modalVisible);
-  console.log('토글 모달: ', toggleModal);
+  const navigation = useNavigation();
+  const goToLoginPasswordPage = () => {
+    navigation.replace('LoginPasswordPage');
+  };
 
   const [inputText, setInputText] = useState('');
   const [remainTime, setRemainTime] = useState(180);
+  const [extended, setExtended] = useState(false);
 
   const inputRef = useRef(null);
 
   useEffect(() => {
     if (!modalVisible) {
       setRemainTime(180);
+      setExtended(false);
     }
   }, [modalVisible]);
 
@@ -52,10 +56,13 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
       .padStart(2, '0')}`;
   };
 
-  const navigation = useNavigation();
-
-  const goToLoginPasswordPage = () => {
-    navigation.replace('LoginPasswordPage');
+  const extendTime = () => {
+    if (!extended) {
+      setRemainTime(180);
+      setExtended(true);
+    } else {
+      console.log('시간 연장은 최초 1회만 가능합니다.');
+    }
   };
 
   const resendCode = () => {
@@ -89,7 +96,9 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
               <View style={styles.popupRemainTime}>
                 <Text style={styles.remainTime}>{displayTime()}</Text>
                 <View style={styles.extendTimeButton}>
-                  <Text style={styles.buttonText2}>시간 연장</Text>
+                  <TouchableOpacity onPress={extendTime}>
+                    <Text style={styles.buttonText2}>시간 연장</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
