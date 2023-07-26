@@ -24,6 +24,7 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
   const [inputText, setInputText] = useState('');
   const [remainTime, setRemainTime] = useState(180);
   const [extended, setExtended] = useState(false);
+  const [buttonEnabled, setButtonEnabled] = useState(true);
 
   const inputRef = useRef(null);
 
@@ -47,6 +48,14 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
 
     return () => clearInterval(countdown);
   }, [modalVisible, remainTime]);
+
+  useEffect(() => {
+    if (remainTime > 0) {
+      setButtonEnabled(true);
+    } else {
+      setButtonEnabled(false);
+    }
+  }, [remainTime]);
 
   const displayTime = () => {
     const minutes = Math.floor(remainTime / 60);
@@ -129,21 +138,28 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
           <View style={styles.popupFooter}>
             <TouchableOpacity
               onPress={goToLoginPasswordPage}
-              disabled={inputText.length !== 6}
+              disabled={!buttonEnabled || inputText.length !== 6}
             >
               <View
                 style={[
                   styles.submitButton2,
                   {
                     backgroundColor:
-                      inputText.length === 6 ? '#55ACEE' : '#F2F4F6',
+                      buttonEnabled && inputText.length === 6
+                        ? '#55ACEE'
+                        : '#F2F4F6',
                   },
                 ]}
               >
                 <Text
                   style={[
                     styles.buttonText4,
-                    { color: inputText.length === 6 ? '#FFFFFF' : '#B0B8C1' },
+                    {
+                      color:
+                        buttonEnabled && inputText.length === 6
+                          ? '#FFFFFF'
+                          : '#B0B8C1',
+                    },
                   ]}
                 >
                   확인
