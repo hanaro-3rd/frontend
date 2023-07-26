@@ -195,7 +195,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,
     backgroundColor: '#FFF',
-    boxShadow: '1px -1px 10px 0px rgba(0, 0, 0, 0.20)',
     padding: widthPercentage(20),
   },
   popupHeader: {
@@ -230,21 +229,21 @@ const styles = StyleSheet.create({
   remainTime: {
     color: '#55ACEE',
     fontFamily: 'Inter',
-    fontSize: 12,
+    fontSize: fontPercentage(12),
     fontStyle: 'normal',
     fontWeight: '700',
   },
   buttonText2: {
     color: '#55ACEE',
     fontFamily: 'Inter',
-    fontSize: 10,
+    fontSize: fontPercentage(10),
     fontStyle: 'normal',
     fontWeight: '400',
   },
   popupHeaderLeft: {
     flexDirection: 'column',
     alignItems: 'flex-end',
-    gap: 8,
+    gap: heightPercentage(8),
   },
   popupRemainTime: {
     alignItems: 'center',
@@ -312,7 +311,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   popupFooter: {
-    height: 55,
+    height: heightPercentage(55),
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'stretch',
@@ -322,11 +321,10 @@ const styles = StyleSheet.create({
     width: widthPercentage(350),
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 10,
     alignSelf: 'stretch',
     backgroundColor: '#F2F4F6',
     flexDirection: 'row',
-    padding: 10,
+    padding: widthPercentage(10),
     borderRadius: 10,
   },
 });

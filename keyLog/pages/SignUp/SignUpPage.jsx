@@ -7,14 +7,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
 import InfoText from '../../components/SignUpPageComponents/InfoText';
 import InputField from '../../components/SignUpPageComponents/InputField';
 import ModalContent from '../../components/SignUpPageComponents/ModalContent';
-import { fontPercentage } from '../../utils/ResponseSize';
+import {
+  fontPercentage,
+  heightPercentage,
+  widthPercentage,
+} from '../../utils/ResponseSize';
 
 const isValidName = name => {
   const regex = /^[가-힣]*$/;
@@ -214,18 +214,18 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     backgroundColor: '#FFF',
     flexDirection: 'row',
-    paddingVertical: hp('2%'),
+    paddingVertical: heightPercentage(13),
   },
   title: {
     ...commonTextStyle,
     color: '#191F29',
-    fontSize: wp('5.5%'),
+    fontSize: fontPercentage(23),
     fontWeight: '700',
   },
   subtitle: {
     ...commonTextStyle,
     color: '#8B95A1',
-    fontSize: wp('3.5%'),
+    fontSize: fontPercentage(16),
     fontWeight: '400',
   },
   body: {
@@ -240,11 +240,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
-    gap: hp('1.5%'),
+    gap: heightPercentage(10),
     alignSelf: 'stretch',
     backgroundColor: '#FFF',
-    paddingVertical: hp('2%'),
-    paddingHorizontal: wp('5%'),
+    paddingVertical: heightPercentage(16),
+    paddingHorizontal: widthPercentage(20),
   },
   bodyMain: {
     flexDirection: 'column',
@@ -254,24 +254,24 @@ const styles = StyleSheet.create({
     flexBasis: 0,
     alignSelf: 'stretch',
     backgroundColor: '#FFF',
-    paddingVertical: hp('1.5%'),
-    paddingHorizontal: wp('4%'),
+    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(25),
   },
   bodyFooter: {
     flexDirection: 'column',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    gap: hp('2%'),
+    gap: heightPercentage(10),
     alignSelf: 'stretch',
     backgroundColor: '#FFF',
-    paddingVertical: hp('2%'),
-    paddingHorizontal: wp('5%'),
+    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(25),
   },
   informationContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
-    gap: hp('0.5%'),
+    gap: heightPercentage(5),
     alignSelf: 'stretch',
   },
   buttonText: {
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   submitButton: {
-    height: 55,
+    height: heightPercentage(55),
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'stretch',
