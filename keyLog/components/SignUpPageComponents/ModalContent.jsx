@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -18,9 +18,12 @@ import {
 const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
   console.log('모달 비저블: ', modalVisible);
   console.log('토글 모달: ', toggleModal);
-  // const [remainTime, setRemainTime] = useState(180);
+
+  const [inputText, setInputText] = useState('');
 
   const inputRef = useRef(null);
+
+  // const [remainTime, setRemainTime] = useState(180);
 
   // useEffect(() => {
   //   const countdown = setInterval(() => {
@@ -94,7 +97,13 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
             >
               <TextInput
                 ref={inputRef}
-                style={styles.certificationNumber}
+                style={[
+                  styles.certificationNumber,
+                  { color: inputText.length > 0 ? '#000000' : '#B0B8C1' },
+                ]}
+                value={inputText}
+                onChangeText={setInputText}
+                maxLength={6}
                 placeholder='인증번호'
               />
               <TouchableOpacity onPress={resendCode}>
@@ -105,9 +114,27 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
             </View>
           </View>
           <View style={styles.popupFooter}>
-            <View style={styles.submitButton2}>
-              <TouchableOpacity onPress={goToLoginPasswordPage}>
-                <Text style={styles.buttonText4}>확인</Text>
+            <View
+              style={[
+                styles.submitButton2,
+                {
+                  backgroundColor:
+                    inputText.length === 6 ? '#55ACEE' : '#F2F4F6',
+                },
+              ]}
+            >
+              <TouchableOpacity
+                onPress={goToLoginPasswordPage}
+                disabled={inputText.length !== 6}
+              >
+                <Text
+                  style={[
+                    styles.buttonText4,
+                    { color: inputText.length === 6 ? '#FFFFFF' : '#B0B8C1' },
+                  ]}
+                >
+                  확인
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
