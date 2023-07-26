@@ -1,16 +1,39 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Svg, { Circle } from 'react-native-svg';
 import BackSpace from '../../assets/SignUp/BackSpace.svg';
-import Ellipse from '../../assets/SignUp/Ellipse.svg';
 import {
   fontPercentage,
   heightPercentage,
   widthPercentage,
 } from '../../utils/ResponseSize';
 
+const Ellipse = ({ fill }) => (
+  <Svg width='15' height='15' viewBox='0 0 15 15' fill='none'>
+    <Circle cx='7.5' cy='7.5' r='7.5' fill={fill} />
+  </Svg>
+);
+
 const LoginPasswordPage = () => {
   const navigation = useNavigation();
+
+  const [password, setPassword] = useState('');
+
+  const handleNumPress = num => {
+    if (password.length < 6) {
+      setPassword(password + num);
+    }
+  };
+
+  const handleBackspacePress = () => {
+    setPassword(password.slice(0, -1));
+  };
+
+  useEffect(() => {
+    console.log('Password state:', password);
+  }, [password]);
+
   const goToMainPage = () => {
     navigation.replace('MainPage');
   };
@@ -29,53 +52,40 @@ const LoginPasswordPage = () => {
               잠금해제 비밀번호를 설정해주세요
             </Text>
             <View style={styles.passwordSymbol}>
-              <Ellipse />
-              <Ellipse />
-              <Ellipse />
-              <Ellipse />
-              <Ellipse />
-              <Ellipse />
+              {[...Array(6)].map((_, index) => (
+                <Ellipse
+                  key={index}
+                  fill={password.length > index ? '#55ACEE' : '#B0B8C1'}
+                />
+              ))}
             </View>
           </View>
           <View style={styles.numberPad}>
-            <View style={styles.number}>
-              <Text style={styles.num}>1</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>2</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>3</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>4</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>5</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>6</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>7</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>8</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>9</Text>
-            </View>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+              <TouchableOpacity
+                key={num}
+                onPress={() => handleNumPress(num.toString())}
+              >
+                <View style={styles.number}>
+                  <Text style={styles.num}>{num}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
             <View style={styles.number}>
               <Text style={styles.num}></Text>
             </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>0</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>
-                <BackSpace />
-              </Text>
-            </View>
+            <TouchableOpacity onPress={() => handleNumPress('0')}>
+              <View style={styles.number}>
+                <Text style={styles.num}>0</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleBackspacePress}>
+              <View style={styles.number}>
+                <Text style={styles.num}>
+                  <BackSpace />
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.bodyFooter}>
@@ -118,6 +128,9 @@ const styles = StyleSheet.create({
   },
   ellipse: {
     fill: '#B0B8C1',
+  },
+  ellipseActive: {
+    fill: '#55ACEE',
   },
   body: {
     flexDirection: 'column',
