@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -16,43 +16,44 @@ import {
 } from '../../utils/ResponseSize';
 
 const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
-  const [remainTime, setRemainTime] = useState(180);
+  console.log('모달 비저블: ', modalVisible);
+  console.log('토글 모달: ', toggleModal);
+  // const [remainTime, setRemainTime] = useState(180);
 
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    const countdown = setInterval(() => {
-      if (remainTime > 0) {
-        setRemainTime(remainTime - 1);
-      } else {
-        clearInterval(countdown);
-      }
-    }, 1000);
-    return () => clearInterval(countdown);
-  }, [remainTime]);
+  // useEffect(() => {
+  //   const countdown = setInterval(() => {
+  //     if (remainTime > 0) {
+  //       setRemainTime(remainTime - 1);
+  //     } else {
+  //       clearInterval(countdown);
+  //     }
+  //   }, 1000);
+  //   return () => clearInterval(countdown);
+  // }, [remainTime]);
 
-  const extendTime = () => {
-    setRemainTime(180);
-  };
+  // const extendTime = () => {
+  //   setRemainTime(180);
+  // };
 
-  const displayTime = () => {
-    const minutes = Math.floor(remainTime / 60);
-    const seconds = remainTime % 60;
-    return `${minutes.toString().padStart(2, '0')}:${seconds
-      .toString()
-      .padStart(2, '0')}`;
-  };
-
-  const handleInputPress = () => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
+  // const displayTime = () => {
+  //   const minutes = Math.floor(remainTime / 60);
+  //   const seconds = remainTime % 60;
+  //   return `${minutes.toString().padStart(2, '0')}:${seconds
+  //     .toString()
+  //     .padStart(2, '0')}`;
+  // };
 
   const navigation = useNavigation();
 
   const goToLoginPasswordPage = () => {
     navigation.replace('LoginPasswordPage');
+  };
+
+  const resendCode = () => {
+    console.log('Resend code clicked');
+    // 여기에 인증 코드를 재전송하는 로직을 작성하세요.
   };
 
   return (
@@ -77,11 +78,9 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
               </View>
             </View>
             <View style={styles.popupHeaderLeft}>
-              <CloseButton />
+              <CloseButton onPress={toggleModal} />
               <View style={styles.popupRemainTime}>
-                <Text style={styles.remainTime} onPress={extendTime}>
-                  {displayTime()}
-                </Text>
+                <Text style={styles.remainTime}>02:30</Text>
                 <View style={styles.extendTimeButton}>
                   <Text style={styles.buttonText2}>시간 연장</Text>
                 </View>
@@ -89,17 +88,20 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
             </View>
           </View>
           <View style={styles.popupMain}>
-            <View style={styles.input3}>
-              <TouchableOpacity>
-                <TextInput
-                  ref={inputRef}
-                  style={styles.certificationNumber}
-                  placeholder='인증번호'
-                />
+            <View
+              style={styles.input3}
+              onStartShouldSetResponder={() => inputRef.current.focus()}
+            >
+              <TextInput
+                ref={inputRef}
+                style={styles.certificationNumber}
+                placeholder='인증번호'
+              />
+              <TouchableOpacity onPress={resendCode}>
+                <View style={styles.resendButton}>
+                  <Text style={styles.buttonText3}>재전송</Text>
+                </View>
               </TouchableOpacity>
-              <View style={styles.resendButton}>
-                <Text style={styles.buttonText3}>재전송</Text>
-              </View>
             </View>
           </View>
           <View style={styles.popupFooter}>
@@ -127,13 +129,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     padding: widthPercentage(20),
-    height: heightPercentage(280),
-  },
-  certificationNumberPopup: {
-    width: widthPercentage(390),
-    height: heightPercentage(844),
-    position: 'absolute',
-    alignSelf: 'center',
+    height: heightPercentage(310),
   },
   popup: {
     flexDirection: 'column',
