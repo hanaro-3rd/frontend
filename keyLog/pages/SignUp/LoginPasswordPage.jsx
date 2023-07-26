@@ -1,12 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
 import BackSpace from '../../assets/SignUp/BackSpace.svg';
 import Ellipse from '../../assets/SignUp/Ellipse.svg';
+import {
+  fontPercentage,
+  heightPercentage,
+  widthPercentage,
+} from '../../utils/ResponseSize';
 
 const LoginPasswordPage = () => {
   const navigation = useNavigation();
@@ -105,13 +106,13 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     backgroundColor: '#FFF',
     flexDirection: 'row',
-    paddingVertical: hp('2%'),
+    paddingVertical: heightPercentage(13),
   },
   mainText: {
     color: '#191F29',
     textAlign: 'center',
     fontFamily: 'Inter',
-    fontSize: wp('5%'),
+    fontSize: fontPercentage(20),
     fontStyle: 'normal',
     fontWeight: '700',
   },
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
   },
   bodyMain: {
     flex: 1,
-    paddingTop: hp('16%'),
+    paddingTop: heightPercentage(150),
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -140,12 +141,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: hp('5%'),
+    gap: heightPercentage(30),
   },
   passwordSymbol: {
     justifyContent: 'center',
     alignItems: 'center',
-    gap: wp('3%'),
+    gap: widthPercentage(10),
     flexDirection: 'row',
   },
   numberPad: {
@@ -157,8 +158,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   number: {
-    width: wp('33%'),
-    height: hp('10%'),
+    width: widthPercentage(130),
+    height: heightPercentage(60),
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     color: '#191F29',
     textAlign: 'center',
     fontFamily: 'Inter',
-    fontSize: wp('6%'),
+    fontSize: fontPercentage(24),
     fontStyle: 'normal',
     fontWeight: '400',
   },
@@ -175,10 +176,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    gap: hp('1%'),
-    height: hp('10%'),
+    gap: heightPercentage(10),
+    height: heightPercentage(71),
     alignSelf: 'stretch',
     backgroundColor: '#FFF',
-    paddingVertical: hp('2%'),
+    paddingVertical: heightPercentage(15),
   },
 });
