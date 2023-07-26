@@ -114,18 +114,18 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
             </View>
           </View>
           <View style={styles.popupFooter}>
-            <View
-              style={[
-                styles.submitButton2,
-                {
-                  backgroundColor:
-                    inputText.length === 6 ? '#55ACEE' : '#F2F4F6',
-                },
-              ]}
+            <TouchableOpacity
+              onPress={goToLoginPasswordPage}
+              disabled={inputText.length !== 6}
             >
-              <TouchableOpacity
-                onPress={goToLoginPasswordPage}
-                disabled={inputText.length !== 6}
+              <View
+                style={[
+                  styles.submitButton2,
+                  {
+                    backgroundColor:
+                      inputText.length === 6 ? '#55ACEE' : '#F2F4F6',
+                  },
+                ]}
               >
                 <Text
                   style={[
@@ -135,12 +135,11 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
                 >
                   확인
                 </Text>
-              </TouchableOpacity>
-            </View>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
-      <TouchableOpacity onPress={toggleModal}></TouchableOpacity>
     </Modal>
   );
 };
