@@ -19,20 +19,49 @@ const LoginPasswordPage = () => {
   const navigation = useNavigation();
 
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [isPasswordMismatch, setIsPasswordMismatch] = useState(false);
 
   const handleNumPress = num => {
-    if (password.length < 6) {
-      setPassword(password + num);
+    if (isConfirming) {
+      if (confirmPassword.length < 6) {
+        setConfirmPassword(confirmPassword + num);
+      }
+    } else {
+      if (password.length < 6) {
+        setPassword(password + num);
+      }
     }
   };
 
   const handleBackspacePress = () => {
-    setPassword(password.slice(0, -1));
+    if (isConfirming) {
+      setConfirmPassword(confirmPassword.slice(0, -1));
+    } else {
+      setPassword(password.slice(0, -1));
+    }
   };
 
   useEffect(() => {
-    console.log('Password state:', password);
-  }, [password]);
+    console.log('password state', password);
+    if (password.length === 6 && !isConfirming) {
+      setIsConfirming(true);
+    }
+
+    if (confirmPassword.length === 6) {
+      if (password === confirmPassword) {
+        console.log('Passwords match');
+        setIsPasswordMismatch(false);
+      } else {
+        console.log('Passwords do not match');
+        setIsPasswordMismatch(true);
+        setIsConfirming(false);
+        setConfirmPassword('');
+        setPassword('');
+      }
+    }
+  }, [password, confirmPassword, isConfirming]);
 
   const goToMainPage = () => {
     navigation.replace('MainPage');
@@ -49,16 +78,33 @@ const LoginPasswordPage = () => {
         <View style={styles.bodyMain}>
           <View style={styles.textContainer}>
             <Text style={styles.mainText}>
-              잠금해제 비밀번호를 설정해주세요
+              {isConfirming
+                ? isPasswordMismatch
+                  ? '잠금해제 비밀번호를 설정해주세요'
+                  : '확인을 위해 비밀번호를 한 번 더 입력해주세요'
+                : '잠금해제 비밀번호를 설정해주세요'}
             </Text>
             <View style={styles.passwordSymbol}>
               {[...Array(6)].map((_, index) => (
                 <Ellipse
                   key={index}
-                  fill={password.length > index ? '#55ACEE' : '#B0B8C1'}
+                  fill={
+                    isConfirming
+                      ? confirmPassword.length > index
+                        ? '#55ACEE'
+                        : '#B0B8C1'
+                      : password.length > index
+                      ? '#55ACEE'
+                      : '#B0B8C1'
+                  }
                 />
               ))}
             </View>
+            {isPasswordMismatch && (
+              <Text style={styles.errorText}>
+                비밀번호가 일치하지 않습니다.
+              </Text>
+            )}
           </View>
           <View style={styles.numberPad}>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
