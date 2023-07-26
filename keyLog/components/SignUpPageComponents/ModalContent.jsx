@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -20,33 +20,37 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
   console.log('토글 모달: ', toggleModal);
 
   const [inputText, setInputText] = useState('');
+  const [remainTime, setRemainTime] = useState(180);
 
   const inputRef = useRef(null);
 
-  // const [remainTime, setRemainTime] = useState(180);
+  useEffect(() => {
+    if (!modalVisible) {
+      setRemainTime(180);
+    }
+  }, [modalVisible]);
 
-  // useEffect(() => {
-  //   const countdown = setInterval(() => {
-  //     if (remainTime > 0) {
-  //       setRemainTime(remainTime - 1);
-  //     } else {
-  //       clearInterval(countdown);
-  //     }
-  //   }, 1000);
-  //   return () => clearInterval(countdown);
-  // }, [remainTime]);
+  useEffect(() => {
+    if (!modalVisible) return;
 
-  // const extendTime = () => {
-  //   setRemainTime(180);
-  // };
+    const countdown = setInterval(() => {
+      if (remainTime > 0) {
+        setRemainTime(remainTime - 1);
+      } else {
+        clearInterval(countdown);
+      }
+    }, 1000);
 
-  // const displayTime = () => {
-  //   const minutes = Math.floor(remainTime / 60);
-  //   const seconds = remainTime % 60;
-  //   return `${minutes.toString().padStart(2, '0')}:${seconds
-  //     .toString()
-  //     .padStart(2, '0')}`;
-  // };
+    return () => clearInterval(countdown);
+  }, [modalVisible, remainTime]);
+
+  const displayTime = () => {
+    const minutes = Math.floor(remainTime / 60);
+    const seconds = remainTime % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds
+      .toString()
+      .padStart(2, '0')}`;
+  };
 
   const navigation = useNavigation();
 
@@ -83,7 +87,7 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
             <View style={styles.popupHeaderLeft}>
               <CloseButton onPress={toggleModal} />
               <View style={styles.popupRemainTime}>
-                <Text style={styles.remainTime}>02:30</Text>
+                <Text style={styles.remainTime}>{displayTime()}</Text>
                 <View style={styles.extendTimeButton}>
                   <Text style={styles.buttonText2}>시간 연장</Text>
                 </View>
