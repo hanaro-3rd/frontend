@@ -1,9 +1,9 @@
-import { StatusBar, useWindowDimensions } from 'react-native';
+import { StatusBar, useWindowDimensions } from "react-native";
 import {
   responsiveScreenFontSize,
   responsiveScreenHeight,
   responsiveScreenWidth,
-} from 'react-native-responsive-dimensions';
+} from "react-native-responsive-dimensions";
 
 const FIGMA_WINDOW_WIDTH = 390;
 const FIGMA_WINDOW_HEIGHT = 844;

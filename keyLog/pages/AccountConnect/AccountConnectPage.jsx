@@ -13,7 +13,14 @@ import React, { useState, useEffect } from "react";
 import { styles } from "../ExchangeSelectAccount/ExchangePage";
 import Ellipse from "../../assets/SignUp/Ellipse.svg";
 import Vector from "../../assets/accountImg/Vector.png";
-import AccountPasswordModal from "../../components/AccountConnectPageComponents/AccountPasswordModal";
+import {
+  fontPercentage,
+  getStatusBarHeight,
+  heightPercentage,
+  phoneHeight,
+  phoneWidth,
+  widthPercentage,
+} from "../../utils/ResponseSize";
 
 const AccountConnectPage = () => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -45,7 +52,7 @@ const AccountConnectPage = () => {
   };
 
   return (
-    <ScrollView>
+    <View>
       <View style={styles.Container}>
         <View>
           <View style={styles.s1}>
@@ -165,7 +172,7 @@ const AccountConnectPage = () => {
           </View>
         </Modal>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 export default AccountConnectPage;
@@ -176,27 +183,27 @@ const styles2 = StyleSheet.create({
   },
   listtextAfter: {
     color: "#191F29",
-    fontSize: 14,
+    fontSize: fontPercentage(14),
     fontWeight: "700",
     textAlignVertical: "center",
   },
   accountitem: {
     backgroundColor: "#F9FAFB",
     color: "#B0B8C1",
-    margin: 9,
-    height: 50,
+    margin: heightPercentage(9),
+    height: heightPercentage(55),
     borderRadius: 5,
-    paddingLeft: 20,
-
+    paddingLeft: widthPercentage(20),
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
   selectedItem: {
-    height: 50,
+    height: heightPercentage(55),
     borderRadius: 5,
     borderColor: "#55ACEE",
-    borderWidth: 1,
+    borderWidth: widthPercentage(1),
+    margin: heightPercentage(9),
     backgroundColor: "#fff",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -204,7 +211,7 @@ const styles2 = StyleSheet.create({
   },
   accountTitle: {
     color: "#191F29",
-    Text: 16,
+    fontSize: fontPercentage(16),
   },
   modalBackground: {
     flex: 1,
@@ -218,11 +225,11 @@ const styles2 = StyleSheet.create({
     width: "100%",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    marginTop: 250,
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 20,
-    paddingBottom: 15,
+    marginTop: heightPercentage(250),
+    paddingLeft: widthPercentage(20),
+    paddingRight: widthPercentage(20),
+    paddingTop: heightPercentage(20),
+    paddingBottom: widthPercentage(15),
     flexDirection: "column",
     justifyContent: "space-between",
   },
@@ -235,28 +242,28 @@ const styles2 = StyleSheet.create({
   },
   popupHeaderText: {
     color: "#191F29",
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontWeight: "700",
   },
   popupBank: {
-    marginRight: 10,
+    marginRight: widthPercentage(10),
   },
   popupSubtitle: {
-    marginTop: 10,
+    marginTop: heightPercentage(10),
     flexDirection: "row",
     color: "#4E5968",
   },
   passwordSymbol: {
     justifyContent: "center",
     alignItems: "center",
-    gap: 20,
+    gap: widthPercentage(20),
     flexDirection: "row",
-    marginTop: 20,
+    marginTop: heightPercentage(20),
   },
   num: {
     color: "#191F29",
     textAlign: "center",
-    fontSize: 24,
+    fontSize: fontPercentage(24),
     fontWeight: "400",
   },
   numberPad: {
@@ -269,11 +276,11 @@ const styles2 = StyleSheet.create({
     flexDirection: "row",
   },
   number: {
-    width: 110,
-    height: 60,
+    width: widthPercentage(110),
+    height: heightPercentage(60),
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
+    gap: heightPercentage(10),
     flexDirection: "row",
     padding: 10,
   },

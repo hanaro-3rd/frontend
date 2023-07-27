@@ -23,7 +23,7 @@ const App = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="AccountConnectSuccess">
+      <Stack.Navigator initialRouteName="AccountConnectPage">
         <Stack.Screen
           name="MainPage"
           component={MainPage}
@@ -37,10 +37,12 @@ const App = () => {
         <Stack.Screen
           name="AccountConnectSuccess"
           component={AccountConnectSuccess}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="AccountConnectFail"
           component={AccountConnectFail}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ExchangePage"

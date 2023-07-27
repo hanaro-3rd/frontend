@@ -12,28 +12,16 @@ import {
 import React, { useState, useEffect } from "react";
 import { PreventRemoveContext } from "@react-navigation/native";
 import ChooseAccount from "./ChooseAccount";
-
-const windowDimensions = Dimensions.get("window");
-const screenDimensions = Dimensions.get("screen");
+import {
+  fontPercentage,
+  getStatusBarHeight,
+  heightPercentage,
+  phoneHeight,
+  phoneWidth,
+  widthPercentage,
+} from "../../utils/ResponseSize";
 
 const ExchangePage = () => {
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const [dimensions, setDimensions] = useState({
-    window: windowDimensions,
-    screen: screenDimensions,
-  });
-
-  useEffect(() => {
-    const subscription = Dimensions.addEventListener(
-      "change",
-      ({ window, screen }) => {
-        setDimensions({ window, screen });
-      }
-    );
-    return () => subscription?.remove();
-  });
-
   return (
     <View style={styles.Container}>
       <ScrollView>
@@ -98,24 +86,22 @@ const ExchangePage = () => {
                 <Text style={styles.ChangeRateText}> ▼ 12.00</Text>
               </View>
             </View>
-            <View style={styles.s3}>
-              <FlatList
-                scrollEnabled={false}
-                data={[
-                  { key: "주말이나 공휴일에는 수수료가 붙습니다." },
-                  { key: "주말이나 공휴일에는 수수료가 붙습니다." },
-                  { key: "주말이나 공휴일에는 수수료가 붙습니다." },
-                ]}
-                renderItem={({ item }) => (
-                  <Text style={styles.listitem}>{item.key}</Text>
-                )}
-              />
-              <View style={styles.buttonContainer}>
-                <Pressable style={styles.submitButton}>
-                  <Text style={styles.pressBeforeTextStyle}>환전하기</Text>
-                </Pressable>
-              </View>
-            </View>
+          </View>
+          <View style={styles.s3}>
+            <FlatList
+              scrollEnabled={false}
+              data={[
+                { key: "주말이나 공휴일에는 수수료가 붙습니다." },
+                { key: "주말이나 공휴일에는 수수료가 붙습니다." },
+                { key: "주말이나 공휴일에는 수수료가 붙습니다." },
+              ]}
+              renderItem={({ item }) => (
+                <Text style={styles.listitem}>{item.key}</Text>
+              )}
+            />
+            <Pressable style={styles.submitButton}>
+              <Text style={styles.pressBeforeTextStyle}>환전하기</Text>
+            </Pressable>
           </View>
         </View>
       </ScrollView>
@@ -130,7 +116,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     flexGrow: 1,
     justifyContent: "space-between",
-    minHeight: 580,
+    minHeight: 560,
   },
   s1: {
     paddingTop: 13,
@@ -291,7 +277,6 @@ export const styles = StyleSheet.create({
   },
   s3: {
     paddingTop: 15,
-    paddingBottom: 15,
     paddingLeft: 25,
     paddingRight: 25,
   },

@@ -1,6 +1,14 @@
 import { StyleSheet, View, Text, Image } from "react-native";
 import Close from "../../assets/accountImg/CloseButton.png";
 import Success from "../../assets/accountImg/AccountSuccess.png";
+import {
+  fontPercentage,
+  getStatusBarHeight,
+  heightPercentage,
+  phoneHeight,
+  phoneWidth,
+  widthPercentage,
+} from "../../utils/ResponseSize";
 
 const AccountConnectSuccess = () => {
   return (
@@ -57,24 +65,23 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "flex-start",
-    gap: 10,
+    gap: heightPercentage(10),
     alignSelf: "stretch",
     backgroundColor: "#FFF",
     flexDirection: "row",
-    paddingVertical: 13,
-    paddingHorizontal: 12,
+    paddingVertical: heightPercentage(13),
+    paddingHorizontal: widthPercentage(12),
   },
   title: {
     color: "#191F29",
     fontFamily: "Inter",
-    fontSize: 23,
-
+    fontSize: fontPercentage(23),
     fontWeight: "700",
   },
   subtitle: {
     color: "#8B95A1",
     fontFamily: "Inter",
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontWeight: "400",
   },
   body: {
@@ -89,65 +96,61 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "flex-start",
-    gap: 10,
+    gap: heightPercentage(10),
     alignSelf: "stretch",
     backgroundColor: "#FFF",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(20),
   },
   bodyMain: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 20,
+    gap: heightPercentage(20),
     flexGrow: 1,
     flexShrink: 0,
     flexBasis: 0,
     alignSelf: "stretch",
     backgroundColor: "#FFF",
     paddingVertical: 0,
-    paddingHorizontal: 25,
+    paddingHorizontal: widthPercentage(25),
   },
   mainIconContainer: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
-    paddingVertical: 29,
-    paddingHorizontal: 0,
+    gaps: heightPercentage(10),
+    paddingVertical: heightPercentage(29),
   },
   containerTitle: {
     color: "#191F29",
     fontFamily: "Inter",
-    fontSize: 18,
-
+    fontSize: fontPercentage(18),
     fontWeight: "700",
   },
   containerTitle2: {
-    width: 60,
+    width: widthPercentage(60),
     color: "#191F29",
     textAlign: "center",
     fontFamily: "Inter",
-    fontSize: 16,
-
+    fontSize: fontPercentage(16),
     fontWeight: "400",
   },
   containerTitle3: {
     color: "#191F29",
     fontFamily: "Inter",
-    fontSize: 16,
-
+    fontSize: fontPercentage(16),
     fontWeight: "400",
   },
   frame91: {
     flexDirection: "column",
     alignItems: "flex-start",
-    gap: 20,
+    gap: heightPercentage(20),
     alignSelf: "stretch",
   },
   exchangeInformationContainer: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 20,
+    gap: heightPercentage(20),
     alignSelf: "stretch",
   },
   exchangeMoneyContainer: {
@@ -157,18 +160,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   containerTitle4: {
-    width: 60,
+    width: widthPercentage(60),
     color: "#191F29",
     textAlign: "center",
     fontFamily: "Inter",
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontWeight: "400",
   },
   containerTitle5: {
     color: "#191F29",
     fontFamily: "Inter",
-    fontSize: 16,
-
+    fontSize: fontPercentage(16),
     fontWeight: "400",
   },
   exchangeMoneyContainer2: {
@@ -178,19 +180,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   containerTitle6: {
-    width: 60,
+    width: widthPercentage(60),
     color: "#191F29",
     textAlign: "center",
     fontFamily: "Inter",
-    fontSize: 16,
-
+    fontSize: fontPercentage(16),
     fontWeight: "400",
   },
   containerTitle7: {
     color: "#191F29",
     fontFamily: "Inter",
-    fontSize: 16,
-
+    fontSize: fontPercentage(16),
     fontWeight: "400",
   },
   exchangeRateContainer: {
@@ -202,29 +202,28 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#FFF",
     fontFamily: "Inter",
-    fontSize: 16,
-
+    fontSize: fontPercentage(16),
     fontWeight: "700",
   },
   footer: {
     flexDirection: "column",
     justifyContent: "flex-end",
     alignItems: "center",
-    gap: 20,
+    gap: heightPercentage(20),
     alignSelf: "stretch",
     backgroundColor: "#FFF",
-    paddingVertical: 15,
-    paddingHorizontal: 25,
+    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(25),
   },
   submitButton: {
-    height: 55,
+    height: heightPercentage(55),
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
+    gap: heightPercentage(10),
     alignSelf: "stretch",
     backgroundColor: "#55ACEE",
     flexDirection: "row",
-    padding: 10,
+    padding: heightPercentage(10),
     borderRadius: 10,
   },
 });
