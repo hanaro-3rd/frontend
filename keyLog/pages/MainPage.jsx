@@ -6,7 +6,17 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import {
+  fontPercentage,
+  getStatusBarHeight,
+  heightPercentage,
+  phoneHeight,
+  phoneWidth,
+  widthPercentage,
+} from "../utils/ResponseSize";
 import { useNavigation } from "@react-navigation/native";
+import styled from "styled-components/native";
+
 import arrow_next from "../assets/Main/arrow_next.png";
 import SettingButton from "../assets/Main/SettingButton.png";
 import arrow_prev from "../assets/Main/arrow_prev.png";
@@ -24,6 +34,7 @@ import HanaCapitalIcon from "../assets/Main/HanaServiceIcon3.png";
 import HanaLifeIcon from "../assets/Main/HanaServiceIcon4.png";
 import HanaStockIcon from "../assets/Main/HanaServiceIcon5.png";
 import HanaSavingIcon from "../assets/Main/HanaServiceIcon6.png";
+
 import React, { useEffect } from "react";
 
 const MainPage = () => {
@@ -35,6 +46,13 @@ const MainPage = () => {
   const handleExchangeButtonPress = () => {
     navigation.navigate("ExchangePage");
   };
+
+  const Main = styled.SafeAreaView`
+    margin-top: ${getStatusBarHeight}px;
+    min-height: ${phoneHeight}px;
+    width: 100%;
+  `;
+
   return (
     <ScrollView contentContainerStyle={styles.root}>
       <View style={styles.header}>

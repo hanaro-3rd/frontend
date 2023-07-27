@@ -10,6 +10,7 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import CloseButton from "../../assets/travelBudget/CloseButton.png";
 import AddButton from "../../assets/travelBudget/add.png";
+import Header from "../../components/Header/Header";
 
 const TravelBudgetPage = () => {
   const navigation = useNavigation();
@@ -35,16 +36,15 @@ const TravelBudgetPage = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.root}>
-      <View style={styles.header}>
-        {/* <TouchableOpacity onPress={handleGoToTravelSchedule}> */}
+      {/* <View style={styles.header}>
         <TouchableOpacity onPress={handleGoBackToMainPage}>
           <Image source={CloseButton} />
         </TouchableOpacity>
-        {/* </TouchableOpacity> */}
         <TouchableOpacity onPress={handleGoToTravelSchedule}>
           <Image source={AddButton} />
         </TouchableOpacity>
-      </View>
+      </View> */}
+      <Header type="DELETE" navigation={navigation} to="MainPage" />
       <View style={styles.body}>
         <View style={styles.bodyHeader}>
           <Text style={styles.title}>내 경비 계획</Text>

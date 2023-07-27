@@ -6,6 +6,16 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import {
+  fontPercentage,
+  getStatusBarHeight,
+  heightPercentage,
+  phoneHeight,
+  phoneWidth,
+  widthPercentage,
+} from "../../utils/ResponseSize";
+import { useNavigation } from "@react-navigation/native";
+import styled from "styled-components/native";
 import CloseButton from "../../assets/travelBudget/CloseButton.png";
 import DeleteButton from "../../assets/travelBudget/delete.png";
 import EditButton from "../../assets/travelBudget/edit.png";
@@ -14,7 +24,7 @@ import TransIcon from "../../assets/travelBudget/TransIcon.png";
 import HouseIcon from "../../assets/travelBudget/HouseIcon.png";
 import ShopIcon from "../../assets/travelBudget/ShopIcon.png";
 import SelectButton from "../../assets/travelBudget/SelectButton.png";
-import { useNavigation } from "@react-navigation/native";
+import DeleteHeader from "../../components/Header/DeleteHeader";
 
 const TravelBudgetDetailPage = () => {
   const navigation = useNavigation();
@@ -22,8 +32,28 @@ const TravelBudgetDetailPage = () => {
   const handleGoBackToBudgetPage = () => {
     navigation.goBack();
   };
+
+  const Root = styled.ScrollView`
+    margin-top: ${getStatusBarHeight}px;
+    min-height: ${phoneHeight}px;
+    width: 100%;
+    flex-direction: column;
+    background-color: "#F2F4F6";
+  `;
+  const Header = styled.View`
+    width: ${phoneWidth}px;
+    height: ${heightPercentage(50)}px;
+    justify-content: space-between;
+
+    background-color: white;
+  `;
+  const HeaderImage = styled.Image`
+    margin-left: ${widthPercentage(20)}px;
+    width: ${widthPercentage(24)}px;
+    height: ${heightPercentage(24)}px;
+  `;
   return (
-    <ScrollView contentContainerStyle={styles.root}>
+    <Root>
       <View style={styles.header}>
         <TouchableOpacity onPress={handleGoBackToBudgetPage}>
           <Image source={CloseButton} />
@@ -177,20 +207,13 @@ const TravelBudgetDetailPage = () => {
           </View>
         </View>
       </View>
-    </ScrollView>
+    </Root>
   );
 };
 
 export default TravelBudgetDetailPage;
 
 const styles = StyleSheet.create({
-  root: {
-    width: "100%",
-    height: 1000,
-    flexDirection: "column",
-    alignItems: "flex-start",
-    backgroundColor: "#F2F4F6",
-  },
   header: {
     justifyContent: "space-between",
     alignItems: "flex-start",
