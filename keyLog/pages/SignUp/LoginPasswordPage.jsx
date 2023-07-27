@@ -58,6 +58,12 @@ const LoginPasswordPage = () => {
   };
 
   useEffect(() => {
+    if (password === '' && confirmPassword === '') {
+      setAlertInconsistencyPassword(true);
+    }
+  }, [password, confirmPassword]);
+
+  useEffect(() => {
     console.log('password state', password);
     if (password.length === 6 && !isConfirming) {
       setIsConfirming(true);
@@ -69,6 +75,7 @@ const LoginPasswordPage = () => {
       if (password === confirmPassword) {
         console.log('Passwords match');
         setIsPasswordMismatch(false);
+        navigation.replace('MainPage');
       } else {
         console.log('Passwords do not match');
         setIsPasswordMismatch(true);
