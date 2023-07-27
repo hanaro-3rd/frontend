@@ -46,6 +46,10 @@ const MainPage = () => {
     navigation.navigate("ExchangePage");
   };
 
+  const handleGotoSignUpPage = () => {
+    navigation.navigate("SignUpPage");
+  };
+
   const Main = styled.SafeAreaView`
     margin-top: ${getStatusBarHeight}px;
     min-height: ${phoneHeight}px;
@@ -56,7 +60,9 @@ const MainPage = () => {
     <ScrollView contentContainerStyle={styles.root}>
       <View style={styles.header}>
         <Text style={styles.logo}>트래블 하나로</Text>
-        <Image source={SettingButton} />
+        <TouchableOpacity onPress={handleGotoSignUpPage}>
+          <Image source={SettingButton} />
+        </TouchableOpacity>
       </View>
       {/*사용자*/}
       <View style={styles.body}>
