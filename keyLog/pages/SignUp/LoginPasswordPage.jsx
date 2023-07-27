@@ -22,8 +22,15 @@ const LoginPasswordPage = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isConfirming, setIsConfirming] = useState(false);
   const [isPasswordMismatch, setIsPasswordMismatch] = useState(false);
+  const [alertInconsistencyPassword, setAlertInconsistencyPassword] =
+    useState(false);
 
   const handleNumPress = num => {
+    if (alertInconsistencyPassword) {
+      resetPasswordProcess();
+      setAlertInconsistencyPassword(false);
+    }
+
     if (isConfirming) {
       if (confirmPassword.length < 6) {
         setConfirmPassword(confirmPassword + num);
@@ -43,11 +50,20 @@ const LoginPasswordPage = () => {
     }
   };
 
+  const resetPasswordProcess = () => {
+    setIsConfirming(false);
+    setIsPasswordMismatch(false);
+    setConfirmPassword('');
+    setPassword('');
+  };
+
   useEffect(() => {
     console.log('password state', password);
     if (password.length === 6 && !isConfirming) {
       setIsConfirming(true);
     }
+
+    console.log(confirmPassword);
 
     if (confirmPassword.length === 6) {
       if (password === confirmPassword) {
@@ -56,12 +72,16 @@ const LoginPasswordPage = () => {
       } else {
         console.log('Passwords do not match');
         setIsPasswordMismatch(true);
-        setIsConfirming(false);
-        setConfirmPassword('');
-        setPassword('');
+        setIsConfirming(true);
       }
     }
-  }, [password, confirmPassword, isConfirming]);
+  }, [password, confirmPassword, setIsPasswordMismatch]);
+
+  useEffect(() => {
+    if (isPasswordMismatch) {
+      setAlertInconsistencyPassword(true);
+    }
+  }, [isPasswordMismatch]);
 
   const goToMainPage = () => {
     navigation.replace('MainPage');
@@ -78,10 +98,8 @@ const LoginPasswordPage = () => {
         <View style={styles.bodyMain}>
           <View style={styles.textContainer}>
             <Text style={styles.mainText}>
-              {isConfirming
-                ? isPasswordMismatch
-                  ? '잠금해제 비밀번호를 설정해주세요'
-                  : '확인을 위해 비밀번호를 한 번 더 입력해주세요'
+              {isConfirming && !isPasswordMismatch
+                ? '확인을 위해 비밀번호를 한 번 더 입력해주세요'
                 : '잠금해제 비밀번호를 설정해주세요'}
             </Text>
             <View style={styles.passwordSymbol}>
