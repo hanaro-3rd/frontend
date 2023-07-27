@@ -18,6 +18,9 @@ import TravelRecordDetailComponent from "./components/TravelRecordPageComponents
 import TravelRecordMainComponent from "./components/TravelRecordPageComponents/TravelRecordMainComponent";
 import LoginPasswordPage from "./pages/SignUp/LoginPasswordPage";
 import LoginPatternPage from "./pages/SignUp/LoginPatternPage";
+import TravelBudgetDetailPage from "./pages/TravelBudget/TravelBudgetDetailPage";
+import TravelBudgetPlanPage from "./pages/TravelBudget/TravelBudgetPlanPage";
+import TravelSchedulePage from "./pages/TravelBudget/TravelSchedulePage";
 
 const App = () => {
   const Stack = createNativeStackNavigator();
@@ -100,7 +103,26 @@ const App = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen name="TravelRecordPage" component={TravelRecordPage} />
-        <Stack.Screen name="TravelBudgetPage" component={TravelBudgetPage} />
+        <Stack.Screen
+          name="TravelBudgetPage"
+          component={TravelBudgetPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TravelBudgetDetailPage"
+          component={TravelBudgetDetailPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TravelSchedulePage"
+          component={TravelSchedulePage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TravelBudgetPlanPage"
+          component={TravelBudgetPlanPage}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

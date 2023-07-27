@@ -16,11 +16,28 @@ import {
 } from '../../utils/ResponseSize';
 
 const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
+  const navigation = useNavigation();
+  const goToLoginPasswordPage = () => {
+    navigation.replace('LoginPasswordPage');
+  };
+
+  const [inputText, setInputText] = useState('');
   const [remainTime, setRemainTime] = useState(180);
+  const [extended, setExtended] = useState(false);
+  const [buttonEnabled, setButtonEnabled] = useState(true);
 
   const inputRef = useRef(null);
 
   useEffect(() => {
+    if (!modalVisible) {
+      setRemainTime(180);
+      setExtended(false);
+    }
+  }, [modalVisible]);
+
+  useEffect(() => {
+    if (!modalVisible) return;
+
     const countdown = setInterval(() => {
       if (remainTime > 0) {
         setRemainTime(remainTime - 1);
@@ -28,12 +45,17 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
         clearInterval(countdown);
       }
     }, 1000);
-    return () => clearInterval(countdown);
-  }, [remainTime]);
 
-  const extendTime = () => {
-    setRemainTime(180);
-  };
+    return () => clearInterval(countdown);
+  }, [modalVisible, remainTime]);
+
+  useEffect(() => {
+    if (remainTime > 0) {
+      setButtonEnabled(true);
+    } else {
+      setButtonEnabled(false);
+    }
+  }, [remainTime]);
 
   const displayTime = () => {
     const minutes = Math.floor(remainTime / 60);
@@ -43,16 +65,18 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
       .padStart(2, '0')}`;
   };
 
-  const handleInputPress = () => {
-    if (inputRef.current) {
-      inputRef.current.focus();
+  const extendTime = () => {
+    if (!extended) {
+      setRemainTime(180);
+      setExtended(true);
+    } else {
+      console.log('시간 연장은 최초 1회만 가능합니다.');
     }
   };
 
-  const navigation = useNavigation();
-
-  const goToLoginPasswordPage = () => {
-    navigation.replace('LoginPasswordPage');
+  const resendCode = () => {
+    console.log('Resend code clicked');
+    // 여기에 인증 코드를 재전송하는 로직을 작성하세요.
   };
 
   return (
@@ -77,41 +101,74 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
               </View>
             </View>
             <View style={styles.popupHeaderLeft}>
-              <CloseButton />
+              <CloseButton onPress={toggleModal} />
               <View style={styles.popupRemainTime}>
-                <Text style={styles.remainTime} onPress={extendTime}>
-                  {displayTime()}
-                </Text>
+                <Text style={styles.remainTime}>{displayTime()}</Text>
                 <View style={styles.extendTimeButton}>
-                  <Text style={styles.buttonText2}>시간 연장</Text>
+                  <TouchableOpacity onPress={extendTime}>
+                    <Text style={styles.buttonText2}>시간 연장</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
           </View>
           <View style={styles.popupMain}>
-            <View style={styles.input3}>
-              <TouchableOpacity>
-                <TextInput
-                  ref={inputRef}
-                  style={styles.certificationNumber}
-                  placeholder='인증번호'
-                />
+            <View
+              style={styles.input3}
+              onStartShouldSetResponder={() => inputRef.current.focus()}
+            >
+              <TextInput
+                ref={inputRef}
+                style={[
+                  styles.certificationNumber,
+                  { color: inputText.length > 0 ? '#000000' : '#B0B8C1' },
+                ]}
+                value={inputText}
+                onChangeText={text => setInputText(text.replace(/[^0-9]/g, ''))}
+                maxLength={6}
+                placeholder='인증번호'
+              />
+              <TouchableOpacity onPress={resendCode}>
+                <View style={styles.resendButton}>
+                  <Text style={styles.buttonText3}>재전송</Text>
+                </View>
               </TouchableOpacity>
-              <View style={styles.resendButton}>
-                <Text style={styles.buttonText3}>재전송</Text>
-              </View>
             </View>
           </View>
           <View style={styles.popupFooter}>
-            <View style={styles.submitButton2}>
-              <TouchableOpacity onPress={goToLoginPasswordPage}>
-                <Text style={styles.buttonText4}>확인</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              onPress={goToLoginPasswordPage}
+              disabled={!buttonEnabled || inputText.length !== 6}
+            >
+              <View
+                style={[
+                  styles.submitButton2,
+                  {
+                    backgroundColor:
+                      buttonEnabled && inputText.length === 6
+                        ? '#55ACEE'
+                        : '#F2F4F6',
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.buttonText4,
+                    {
+                      color:
+                        buttonEnabled && inputText.length === 6
+                          ? '#FFFFFF'
+                          : '#B0B8C1',
+                    },
+                  ]}
+                >
+                  확인
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
-      <TouchableOpacity onPress={toggleModal}></TouchableOpacity>
     </Modal>
   );
 };
@@ -127,13 +184,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     padding: widthPercentage(20),
-    height: heightPercentage(280),
-  },
-  certificationNumberPopup: {
-    width: widthPercentage(390),
-    height: heightPercentage(844),
-    position: 'absolute',
-    alignSelf: 'center',
+    height: heightPercentage(310),
   },
   popup: {
     flexDirection: 'column',
@@ -144,7 +195,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,
     backgroundColor: '#FFF',
-    boxShadow: '1px -1px 10px 0px rgba(0, 0, 0, 0.20)',
     padding: widthPercentage(20),
   },
   popupHeader: {
@@ -179,21 +229,21 @@ const styles = StyleSheet.create({
   remainTime: {
     color: '#55ACEE',
     fontFamily: 'Inter',
-    fontSize: 12,
+    fontSize: fontPercentage(12),
     fontStyle: 'normal',
     fontWeight: '700',
   },
   buttonText2: {
     color: '#55ACEE',
     fontFamily: 'Inter',
-    fontSize: 10,
+    fontSize: fontPercentage(10),
     fontStyle: 'normal',
     fontWeight: '400',
   },
   popupHeaderLeft: {
     flexDirection: 'column',
     alignItems: 'flex-end',
-    gap: 8,
+    gap: heightPercentage(8),
   },
   popupRemainTime: {
     alignItems: 'center',
@@ -261,7 +311,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   popupFooter: {
-    height: 55,
+    height: heightPercentage(55),
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'stretch',
@@ -271,11 +321,10 @@ const styles = StyleSheet.create({
     width: widthPercentage(350),
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 10,
     alignSelf: 'stretch',
     backgroundColor: '#F2F4F6',
     flexDirection: 'row',
-    padding: 10,
+    padding: widthPercentage(10),
     borderRadius: 10,
   },
 });

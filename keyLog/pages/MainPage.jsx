@@ -7,30 +7,33 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import arrow_next from "../assets/arrow_next.png";
-import SettingButton from "../assets/SettingButton.png";
-import arrow_prev from "../assets/arrow_prev.png";
-import CarouselMoneyIcon from "../assets/CarouselIcon.png";
-import CountryIcon from "../assets/CountryIcon.png";
-import KeyPickIcon from "../assets/MenuIcon1.png";
-import PlanTravelBudgetIcon from "../assets/MenuIcon2.png";
-import RecordTravleIcon from "../assets/MenuIcon3.png";
-import MoneyIcon from "../assets/MenuIcon4.png";
-import ExchangeIcon from "../assets/MenuIcon5.png";
-import AccountConnectIcon from "../assets/MenuIcon6.png";
-import HanaBankIcon from "../assets/HanaServiceIcon1.png";
-import HanaCardIcon from "../assets/HanaServiceIcon2.png";
-import HanaCapitalIcon from "../assets/HanaServiceIcon3.png";
-import HanaLifeIcon from "../assets/HanaServiceIcon4.png";
-import HanaStockIcon from "../assets/HanaServiceIcon5.png";
-import HanaSavingIcon from "../assets/HanaServiceIcon6.png";
+import arrow_next from "../assets/Main/arrow_next.png";
+import SettingButton from "../assets/Main/SettingButton.png";
+import arrow_prev from "../assets/Main/arrow_prev.png";
+import CarouselMoneyIcon from "../assets/Main/CarouselIcon.png";
+import CountryIcon from "../assets/Main/CountryIcon.png";
+import KeyPickIcon from "../assets/Main/MenuIcon1.png";
+import PlanTravelBudgetIcon from "../assets/Main/MenuIcon2.png";
+import RecordTravleIcon from "../assets/Main/MenuIcon3.png";
+import MoneyIcon from "../assets/Main/MenuIcon4.png";
+import ExchangeIcon from "../assets/Main/MenuIcon5.png";
+import AccountConnectIcon from "../assets/Main/MenuIcon6.png";
+import HanaBankIcon from "../assets/Main/HanaServiceIcon1.png";
+import HanaCardIcon from "../assets/Main/HanaServiceIcon2.png";
+import HanaCapitalIcon from "../assets/Main/HanaServiceIcon3.png";
+import HanaLifeIcon from "../assets/Main/HanaServiceIcon4.png";
+import HanaStockIcon from "../assets/Main/HanaServiceIcon5.png";
+import HanaSavingIcon from "../assets/Main/HanaServiceIcon6.png";
 import React, { useEffect } from "react";
 
 const MainPage = () => {
   const navigation = useNavigation();
 
   const handlePlanButtonPress = () => {
-    // navigation.navigate("TravelBudgetPage");
+    navigation.navigate("TravelBudgetPage");
+  };
+  const handleExchangeButtonPress = () => {
+    navigation.navigate("ExchangePage");
   };
   return (
     <ScrollView contentContainerStyle={styles.root}>
@@ -109,12 +112,12 @@ const MainPage = () => {
                   </Text>
                 </View>
                 <View style={styles.menuButton}>
-                {/* <TouchableOpacity
-                  style={styles.menuButton}
-                  onPress={handlePlanButtonPress}
-                > */}
-                  <Text style={styles.menuButtonText}>계획하러 가기</Text>
-                {/* </TouchableOpacity> */}
+                  <TouchableOpacity
+                    style={styles.menuButton}
+                    onPress={handlePlanButtonPress}
+                  >
+                    <Text style={styles.menuButtonText}>계획하러 가기</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -156,7 +159,12 @@ const MainPage = () => {
                   </Text>
                 </View>
                 <View style={styles.menuButton}>
-                  <Text style={styles.menuButtonText}>환전하러 가기</Text>
+                  <TouchableOpacity
+                    style={styles.menuButton}
+                    onPress={handleExchangeButtonPress}
+                  >
+                    <Text style={styles.menuButtonText}>환전하러 가기</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -213,7 +221,7 @@ export default MainPage;
 const styles = StyleSheet.create({
   root: {
     // flexGrow: 1,
-    width: '100%',
+    width: "100%",
     flexDirection: "column",
     // alignItems: "flex-start",
     backgroundColor: "#F2F4F6",
@@ -272,7 +280,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F9FAFB",
     boxShadow: "2px 2px 10px 0px rgba(0, 0, 0, 0.10)",
     borderRadius: 15,
-  },  
+  },
   carouselCardMain: {
     width: 300,
     flexDirection: "column",
@@ -407,7 +415,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-end",
   },
- 
 
   menuTitle: {
     color: "#191F29",
@@ -477,7 +484,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#55ACEE",
     borderRadius: 5,
   },
-  
+
   hanaServiceText: {
     color: "#191F29",
     fontFamily: "Inter",
