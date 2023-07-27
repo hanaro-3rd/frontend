@@ -34,7 +34,6 @@ import HanaCapitalIcon from "../assets/Main/HanaServiceIcon3.png";
 import HanaLifeIcon from "../assets/Main/HanaServiceIcon4.png";
 import HanaStockIcon from "../assets/Main/HanaServiceIcon5.png";
 import HanaSavingIcon from "../assets/Main/HanaServiceIcon6.png";
-
 import React, { useEffect } from "react";
 
 const MainPage = () => {

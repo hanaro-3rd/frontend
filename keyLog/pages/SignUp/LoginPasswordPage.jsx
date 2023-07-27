@@ -1,15 +1,95 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import Svg, { Circle } from 'react-native-svg';
 import BackSpace from '../../assets/SignUp/BackSpace.svg';
-import Ellipse from '../../assets/SignUp/Ellipse.svg';
+import {
+  fontPercentage,
+  heightPercentage,
+  widthPercentage,
+} from '../../utils/ResponseSize';
+
+const Ellipse = ({ fill }) => (
+  <Svg width='15' height='15' viewBox='0 0 15 15' fill='none'>
+    <Circle cx='7.5' cy='7.5' r='7.5' fill={fill} />
+  </Svg>
+);
 
 const LoginPasswordPage = () => {
   const navigation = useNavigation();
+
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [isPasswordMismatch, setIsPasswordMismatch] = useState(false);
+  const [alertInconsistencyPassword, setAlertInconsistencyPassword] =
+    useState(false);
+
+  const handleNumPress = num => {
+    if (alertInconsistencyPassword) {
+      resetPasswordProcess();
+      setAlertInconsistencyPassword(false);
+    }
+
+    if (isConfirming) {
+      if (confirmPassword.length < 6) {
+        setConfirmPassword(confirmPassword + num);
+      }
+    } else {
+      if (password.length < 6) {
+        setPassword(password + num);
+      }
+    }
+  };
+
+  const handleBackspacePress = () => {
+    if (isConfirming) {
+      setConfirmPassword(confirmPassword.slice(0, -1));
+    } else {
+      setPassword(password.slice(0, -1));
+    }
+  };
+
+  const resetPasswordProcess = () => {
+    setIsConfirming(false);
+    setIsPasswordMismatch(false);
+    setConfirmPassword('');
+    setPassword('');
+  };
+
+  useEffect(() => {
+    if (password === '' && confirmPassword === '') {
+      setAlertInconsistencyPassword(true);
+    }
+  }, [password, confirmPassword]);
+
+  useEffect(() => {
+    console.log('password state', password);
+    if (password.length === 6 && !isConfirming) {
+      setIsConfirming(true);
+    }
+
+    console.log(confirmPassword);
+
+    if (confirmPassword.length === 6) {
+      if (password === confirmPassword) {
+        console.log('Passwords match');
+        setIsPasswordMismatch(false);
+        navigation.replace('MainPage');
+      } else {
+        console.log('Passwords do not match');
+        setIsPasswordMismatch(true);
+        setIsConfirming(true);
+      }
+    }
+  }, [password, confirmPassword, setIsPasswordMismatch]);
+
+  useEffect(() => {
+    if (isPasswordMismatch) {
+      setAlertInconsistencyPassword(true);
+    }
+  }, [isPasswordMismatch]);
+
   const goToMainPage = () => {
     navigation.replace('MainPage');
   };
@@ -25,56 +105,58 @@ const LoginPasswordPage = () => {
         <View style={styles.bodyMain}>
           <View style={styles.textContainer}>
             <Text style={styles.mainText}>
-              잠금해제 비밀번호를 설정해주세요
+              {isConfirming && !isPasswordMismatch
+                ? '확인을 위해 비밀번호를 한 번 더 입력해주세요'
+                : '잠금해제 비밀번호를 설정해주세요'}
             </Text>
             <View style={styles.passwordSymbol}>
-              <Ellipse />
-              <Ellipse />
-              <Ellipse />
-              <Ellipse />
-              <Ellipse />
-              <Ellipse />
+              {[...Array(6)].map((_, index) => (
+                <Ellipse
+                  key={index}
+                  fill={
+                    isConfirming
+                      ? confirmPassword.length > index
+                        ? '#55ACEE'
+                        : '#B0B8C1'
+                      : password.length > index
+                      ? '#55ACEE'
+                      : '#B0B8C1'
+                  }
+                />
+              ))}
             </View>
+            {isPasswordMismatch && (
+              <Text style={styles.errorText}>
+                비밀번호가 일치하지 않습니다.
+              </Text>
+            )}
           </View>
           <View style={styles.numberPad}>
-            <View style={styles.number}>
-              <Text style={styles.num}>1</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>2</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>3</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>4</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>5</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>6</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>7</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>8</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>9</Text>
-            </View>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+              <TouchableOpacity
+                key={num}
+                onPress={() => handleNumPress(num.toString())}
+              >
+                <View style={styles.number}>
+                  <Text style={styles.num}>{num}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
             <View style={styles.number}>
               <Text style={styles.num}></Text>
             </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>0</Text>
-            </View>
-            <View style={styles.number}>
-              <Text style={styles.num}>
-                <BackSpace />
-              </Text>
-            </View>
+            <TouchableOpacity onPress={() => handleNumPress('0')}>
+              <View style={styles.number}>
+                <Text style={styles.num}>0</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleBackspacePress}>
+              <View style={styles.number}>
+                <Text style={styles.num}>
+                  <BackSpace />
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.bodyFooter}>
@@ -105,18 +187,21 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     backgroundColor: '#FFF',
     flexDirection: 'row',
-    paddingVertical: hp('2%'),
+    paddingVertical: heightPercentage(13),
   },
   mainText: {
     color: '#191F29',
     textAlign: 'center',
     fontFamily: 'Inter',
-    fontSize: wp('5%'),
+    fontSize: fontPercentage(20),
     fontStyle: 'normal',
     fontWeight: '700',
   },
   ellipse: {
     fill: '#B0B8C1',
+  },
+  ellipseActive: {
+    fill: '#55ACEE',
   },
   body: {
     flexDirection: 'column',
@@ -129,7 +214,7 @@ const styles = StyleSheet.create({
   },
   bodyMain: {
     flex: 1,
-    paddingTop: hp('16%'),
+    paddingTop: heightPercentage(150),
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -140,12 +225,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: hp('5%'),
+    gap: heightPercentage(30),
   },
   passwordSymbol: {
     justifyContent: 'center',
     alignItems: 'center',
-    gap: wp('3%'),
+    gap: widthPercentage(10),
     flexDirection: 'row',
   },
   numberPad: {
@@ -157,8 +242,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   number: {
-    width: wp('33%'),
-    height: hp('10%'),
+    width: widthPercentage(130),
+    height: heightPercentage(60),
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
@@ -167,7 +252,7 @@ const styles = StyleSheet.create({
     color: '#191F29',
     textAlign: 'center',
     fontFamily: 'Inter',
-    fontSize: wp('6%'),
+    fontSize: fontPercentage(24),
     fontStyle: 'normal',
     fontWeight: '400',
   },
@@ -175,10 +260,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    gap: hp('1%'),
-    height: hp('10%'),
+    gap: heightPercentage(10),
+    height: heightPercentage(71),
     alignSelf: 'stretch',
     backgroundColor: '#FFF',
-    paddingVertical: hp('2%'),
+    paddingVertical: heightPercentage(15),
   },
 });
