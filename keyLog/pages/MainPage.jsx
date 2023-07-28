@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -14,13 +7,15 @@ import {
   phoneWidth,
   widthPercentage,
 } from "../utils/ResponseSize";
-import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
 
+import MainCarousels from "../components/MainPageComponents/MainCarousels";
 import arrow_next from "../assets/Main/arrow_next.png";
 import SettingButton from "../assets/Main/SettingButton.png";
 import arrow_prev from "../assets/Main/arrow_prev.png";
 import CarouselMoneyIcon from "../assets/Main/CarouselIcon.png";
+import CarouselAccountIcon from "../assets/Main/CarouselAccountIcon.png";
+import CarouselHanaMoneyIcon from "../assets/Main/CarouselHanaMoneyIcon.png";
 import CountryIcon from "../assets/Main/CountryIcon.png";
 import KeyPickIcon from "../assets/Main/MenuIcon1.png";
 import PlanTravelBudgetIcon from "../assets/Main/MenuIcon2.png";
@@ -34,12 +29,46 @@ import HanaCapitalIcon from "../assets/Main/HanaServiceIcon3.png";
 import HanaLifeIcon from "../assets/Main/HanaServiceIcon4.png";
 import HanaStockIcon from "../assets/Main/HanaServiceIcon5.png";
 import HanaSavingIcon from "../assets/Main/HanaServiceIcon6.png";
-import React, { useEffect } from "react";
-import symbolicateStackTrace from "react-native/Libraries/Core/Devtools/symbolicateStackTrace";
+import React, { useState, useEffect } from "react";
 
 const MainPage = ({ navigation }) => {
-  // const navigation = useNavigation();
+  {
+    /* carousel 관련 */
+  }
+  const originalMainCardContent = {
+    subTitle: "어디서든 쓸 수 있는",
+    title: "하나머니",
+    imageSource: CarouselMoneyIcon,
+    buttonText: "하나머니 확인하기",
+  };
+  const updatedMainCardContent = {
+    subTitle: "계좌연결",
+    title: "어쩌구저쩌구",
+    imageSource: CarouselAccountIcon,
+    buttonText: "계좌연결하기",
+  };
+  const thirdMainCardContent = {
+    subTitle: "어디서든 쓸 수 있는",
+    title: "하나머니",
+    imageSource: CarouselHanaMoneyIcon,
+    buttonText: "하나머니 환전하기",
+  };
 
+  const [activeContentIndex, setActiveContentIndex] = useState(0);
+  const contents = [
+    originalMainCardContent,
+    updatedMainCardContent,
+    thirdMainCardContent,
+  ];
+  const mainCardContent = contents[activeContentIndex];
+
+  const handleCarouselCardPress = () => {
+    setActiveContentIndex((prevIndex) => (prevIndex + 1) % contents.length);
+  };
+
+  {
+    /* styled-components */
+  }
   const Main = styled.ScrollView`
     margin-top: ${getStatusBarHeight}px;
     min-height: ${phoneHeight}px;
@@ -98,42 +127,6 @@ const MainPage = ({ navigation }) => {
     /* box-shadow: 2px 2px 10px 0px rgba(0, 0, 0, 0.1); */
     border-radius: 15px;
   `;
-  const MainCarouselCard = styled.View`
-    display: flex;
-    width: ${widthPercentage(300)}px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 15px;
-    background: #fff;
-    elevation: 7;
-    /* box-shadow: 2px 2px 10px 0px rgba(0, 0, 0, 0.10); */
-  `;
-  const CarouselCardTextContainer = styled.View`
-    align-items: center;
-    padding: ${heightPercentage(20)}px 0px;
-  `;
-  const SubTitleText = styled.Text`
-    color: #6b7684;
-    font-family: Inter;
-    font-size: ${fontPercentage(16)}px;
-    font-style: normal;
-    font-weight: 700;
-  `;
-  const CarouselButton = styled.View`
-    display: flex;
-    padding: ${heightPercentage(20)}px 0px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  `;
-  const CarouselButtonText = styled.Text`
-    color: #55acee;
-    font-family: Inter;
-    font-size: ${fontPercentage(20)}px;
-    font-weight: 700;
-  `;
-
   const ExchangeRateContainer = styled.View`
     width: ${widthPercentage(390)}px;
     height: ${heightPercentage(80)}px;
@@ -152,6 +145,8 @@ const MainPage = ({ navigation }) => {
     align-self: stretch;
   `;
   const RateTextContainer = styled.View`
+    width: ${widthPercentage(70)}px;
+    height: ${heightPercentage(36)}px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -159,12 +154,12 @@ const MainPage = ({ navigation }) => {
     /* gap: 10px; */
   `;
   const CountryContainer = styled.View`
-    height: ${heightPercentage(24)}px;
     width: ${widthPercentage(65)}px;
+    height: ${heightPercentage(18)}px;
     display: flex;
+    flex-direction: row;
     align-items: flex-end;
     gap: 5px;
-    flex-direction: row;
   `;
   const CountryExchangeRateContainer = styled.View`
     width: ${widthPercentage(310)}px;
@@ -177,9 +172,9 @@ const MainPage = ({ navigation }) => {
     flex: 1 0 0;
   `;
   const CountryTextContainer = styled.View`
-    display: flex;
     width: ${widthPercentage(65)}px;
-    height: ${heightPercentage(48)}px;
+    height: ${heightPercentage(40)}px;
+    display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
@@ -189,13 +184,13 @@ const MainPage = ({ navigation }) => {
     height: ${heightPercentage(40)}px;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     flex: 1 0 0;
     flex-direction: row;
-    background-color: red;
   `;
   const Country = styled.Text`
     width: ${widthPercentage(34)}px;
+    height: ${heightPercentage(22)}px;
     color: #191f29;
     font-family: Inter;
     font-size: ${fontPercentage(18)}px;
@@ -204,6 +199,7 @@ const MainPage = ({ navigation }) => {
   `;
   const MoneytaryUnit = styled.Text`
     width: ${widthPercentage(26)}px;
+    height: ${heightPercentage(14)}px;
     color: #191f29;
     font-family: Inter;
     font-size: ${fontPercentage(12)}px;
@@ -211,7 +207,6 @@ const MainPage = ({ navigation }) => {
     font-weight: 400;
   `;
   const DateTime = styled.Text`
-    width: ${widthPercentage(72)}px;
     color: #8b95a1;
     font-family: Inter;
     font-size: ${fontPercentage(12)}px;
@@ -232,29 +227,50 @@ const MainPage = ({ navigation }) => {
     font-style: normal;
     font-weight: 700;
   `;
+  const MenuTitle = styled.Text`
+    color: #191f29;
+    font-family: Inter;
+    font-size: ${fontPercentage(20)}px;
+    font-style: normal;
+    font-weight: 700;
+  `;
+
+  const MenuSubtitle = styled.Text`
+    color: #8b95a1;
+    font-family: Inter;
+    font-size: ${fontPercentage(14)}px;
+    font-style: normal;
+    font-weight: 700;
+  `;
 
   const MenuContainer = styled.View`
-    display: flex;
+    width: ${widthPercentage(390)}px;
+    height: ${heightPercentage(1000)}px;
     padding: ${heightPercentage(30)}px ${widthPercentage(20)}px;
     flex-direction: column;
     align-items: center;
     gap: 20px;
     align-self: stretch;
-  `;
-  const MenuCard = styled.View`
     display: flex;
+    background-color: #f2f4f6;
+  `;
+
+  const MenuCard = styled.View`
     width: ${widthPercentage(350)}px;
     height: ${heightPercentage(140)}px;
-    padding: ${heightPercentage(10)}px ${widthPercentage(20)}px;
     align-items: center;
     gap: 20px;
-    border-radius: 15px;
-    background: #fff;
-    elevation: 1;
+    background-color: #fff;
+    /* box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.10); */
+    elevation: 3;
     flex-direction: row;
+    padding: ${heightPercentage(10)}px ${widthPercentage(20)}px;
+    border-radius: 15px;
   `;
+
   const MenuSubContainer = styled.View`
-    display: flex;
+    width: ${widthPercentage(210)}px;
+    height: ${heightPercentage(120)}px;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
@@ -262,44 +278,74 @@ const MainPage = ({ navigation }) => {
     flex: 1 0 0;
     align-self: stretch;
   `;
+
   const MenuTextContainer = styled.View`
-    display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
   `;
-  const MenuTitleText = styled.Text`
-    color: #191f29;
-    font-family: Inter;
-    font-size: ${fontPercentage(20)}px;
-    font-style: normal;
-    font-weight: 700;
-  `;
-  const MenuSubTitleText = styled.Text`
-    color: #8b95a1;
-    font-family: Inter;
-    font-size: ${fontPercentage(14)}px;
-    font-style: normal;
-    font-weight: 700;
-  `;
-  const MenuButton = styled.TouchableOpacity`
-    display: flex;
-    height: ${heightPercentage(30)}px;
-    flex-direction: column;
-    margin-top: ${heightPercentage(7.5)}px;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    align-self: stretch;
-    border-radius: 5px;
-    background: #55acee;
-  `;
+
   const MenuButtonText = styled.Text`
     color: #fff;
     font-family: Inter;
     font-size: ${fontPercentage(12)}px;
     font-style: normal;
     font-weight: 700;
+  `;
+
+  const MenuButton = styled(TouchableOpacity)`
+    width: ${widthPercentage(210)}px;
+    height: ${heightPercentage(30)}px;
+    flex-direction: column;
+    padding-top: ${heightPercentage(5)}px;
+    align-items: center;
+    align-self: stretch;
+    background-color: #55acee;
+    border-radius: 5px;
+  `;
+
+  const HanaServiceText = styled.Text`
+    color: #191f29;
+    font-family: Inter;
+    font-size: ${fontPercentage(14)}px;
+    font-style: normal;
+    font-weight: 700;
+  `;
+
+  const HanaServiceContainer = styled.View`
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+    background-color: #f2f4f6;
+    padding: 0px ${widthPercentage(20)}px;
+    margin-bottom: ${heightPercentage(20)}px;
+  `;
+
+  const ButtonContainer = styled.View`
+    width: ${widthPercentage(350)}px;
+    height: ${heightPercentage(220)}px;
+    margin-bottom: ${heightPercentage(40)}px;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    row-gap: 20px;
+    align-self: stretch;
+    flex-wrap: wrap;
+    flex-direction: row;
+  `;
+
+  const HanaServiceButton = styled(TouchableOpacity)`
+    width: ${widthPercentage(100)}px;
+    height: ${heightPercentage(90)}px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background-color: #fff;
+    elevation: 2;
+    padding: ${heightPercentage(19)}px ${widthPercentage(4)}px;
+    border-radius: 5px;
   `;
 
   return (
@@ -319,18 +365,13 @@ const MainPage = ({ navigation }) => {
       {/*메뉴 carousel card*/}
       <BodyMain>
         <MenuCarousels>
-          <CarouselCard />
-          <MainCarouselCard>
-            <CarouselCardTextContainer>
-              <SubTitleText>어디서든 쓸 수 있는</SubTitleText>
-              <TitleText>하나머니</TitleText>
-            </CarouselCardTextContainer>
-            <Image source={CarouselMoneyIcon} />
-            <CarouselButton>
-              <CarouselButtonText>하나머니 확인하기</CarouselButtonText>
-            </CarouselButton>
-          </MainCarouselCard>
-          <CarouselCard />
+          <TouchableOpacity onPress={handleCarouselCardPress}>
+            <CarouselCard />
+          </TouchableOpacity>
+          <MainCarousels content={mainCardContent}></MainCarousels>
+          <TouchableOpacity onPress={handleCarouselCardPress}>
+            <CarouselCard />
+          </TouchableOpacity>
         </MenuCarousels>
 
         {/* 환율 */}
@@ -348,11 +389,12 @@ const MainPage = ({ navigation }) => {
                 </CountryContainer>
                 <DateTime>07.11. 18:19</DateTime>
               </CountryTextContainer>
+
+              <RateTextContainer>
+                <ExchangeRate>1,294.50</ExchangeRate>
+                <ChangeRate>▼ 12.00</ChangeRate>
+              </RateTextContainer>
             </TextContainer>
-            <RateTextContainer>
-              <ExchangeRate>1,294.50</ExchangeRate>
-              <ChangeRate>▼ 12.00</ChangeRate>
-            </RateTextContainer>
           </CountryExchangeRateContainer>
           <PrevOrNextButton>
             <Image source={arrow_next} />
@@ -360,259 +402,130 @@ const MainPage = ({ navigation }) => {
         </ExchangeRateContainer>
 
         {/* 메뉴들 */}
-        {/* <MenuContainer>
+        <MenuContainer>
           <MenuCard>
             <Image source={KeyPickIcon} />
             <MenuSubContainer>
               <MenuTextContainer>
-                <MenuTitleText>하나머니 줍기</MenuTitleText>
-                <MenuSubTitleText>
-                  여행을 떠나서 하나머니를 주워봐용
-                </MenuSubTitleText>
+                <MenuTitle>하나머니 줍기</MenuTitle>
+                <MenuSubtitle>여행을 떠나서 하나머니를 주워봐용</MenuSubtitle>
               </MenuTextContainer>
-              <MenuButton onPress={() => navigation.navigate("PickUpKeyPage")}>
+              <MenuButton
+              // onPress={() =>  }
+              >
                 <MenuButtonText>주우러 가기</MenuButtonText>
               </MenuButton>
             </MenuSubContainer>
-          </MenuCard> */}
-        <View style={styles.menuContainer}>
-          <View style={styles.menuCard}>
-            <Image source={KeyPickIcon} />
-            <View style={styles.menuSubContainer}>
-              <View style={styles.menuTextContainer}>
-                <Text style={styles.menuTitle}>하나머니 줍기</Text>
-                <Text style={styles.menuSubtitle}>
-                  여행을 떠나서 하나머니를 주워봐용
-                </Text>
-              </View>
-              <View style={styles.menuButton}>
-                <Text style={styles.menuButtonText}>주우러 가기</Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.menuCard}>
+          </MenuCard>
+          <MenuCard>
             <Image source={PlanTravelBudgetIcon} />
-            <View style={styles.menuSubContainer}>
-              <View style={styles.menuTextContainer}>
-                <Text style={styles.menuTitle}>여행 경비 계획하기</Text>
-                <Text style={styles.menuSubtitle}>
-                  여행 경비를 계획해보아용
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={styles.menuButton}
+            <MenuSubContainer>
+              <MenuTextContainer>
+                <MenuTitle>여행 경비 계획하기</MenuTitle>
+                <MenuSubtitle>여행 경비를 계획해보아용</MenuSubtitle>
+              </MenuTextContainer>
+              <MenuButton
                 onPress={() => navigation.navigate("TravelBudgetPage")}
               >
-                <Text style={styles.menuButtonText}>계획하러 가기</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.menuCard}>
+                <MenuButtonText>계획하러 가기</MenuButtonText>
+              </MenuButton>
+            </MenuSubContainer>
+          </MenuCard>
+          <MenuCard>
             <Image source={RecordTravleIcon} />
-            <View style={styles.menuSubContainer}>
-              <View style={styles.menuTextContainer}>
-                <Text style={styles.menuTitle}>여행 기록 확인하기</Text>
-                <Text style={styles.menuSubtitle}>
-                  여행 기록을 확인해보아용
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={styles.menuButton}
+            <MenuSubContainer>
+              <MenuTextContainer>
+                <MenuTitle>여행 기록 확인하기</MenuTitle>
+                <MenuSubtitle>여행 기록을 확인해보아용</MenuSubtitle>
+              </MenuTextContainer>
+              <MenuButton
                 onPress={() => navigation.navigate("TravelRecordMainComponent")}
               >
-                <Text style={styles.menuButtonText}>확인하러 가기</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.menuCard}>
+                <MenuButtonText fontPercentage={fontPercentage}>
+                  확인하러 가기
+                </MenuButtonText>
+              </MenuButton>
+            </MenuSubContainer>
+          </MenuCard>
+          <MenuCard>
             <Image source={MoneyIcon} />
-            <View style={styles.menuSubContainer}>
-              <View style={styles.menuTextContainer}>
-                <Text style={styles.menuTitle}>하나머니 확인하기</Text>
-                <Text style={styles.menuSubtitle}>
-                  내 하나머니를 확인해보아용
-                </Text>
-              </View>
-              <View style={styles.menuButton}>
-                <Text style={styles.menuButtonText}>확인하러 가기</Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.menuCard}>
-            <Image source={ExchangeIcon} />
-            <View style={styles.menuSubContainer}>
-              <View style={styles.menuTextContainer}>
-                <Text style={styles.menuTitle}>하나머니 환전하기</Text>
-                <Text style={styles.menuSubtitle}>하나머니를 환전해보아용</Text>
-              </View>
-              <TouchableOpacity
-                style={styles.menuButton}
-                onPress={() => {
-                  navigation.navigate("ExchangePage");
-                }}
+            <MenuSubContainer>
+              <MenuTextContainer>
+                <MenuTitle>하나머니 확인하기</MenuTitle>
+                <MenuSubtitle>내 하나머니를 확인해보아용</MenuSubtitle>
+              </MenuTextContainer>
+              <MenuButton
+              // onPress={() => }
               >
-                <Text style={styles.menuButtonText}>환전하러 가기</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.menuCard}>
+                <MenuButtonText>확인하러 가기</MenuButtonText>
+              </MenuButton>
+            </MenuSubContainer>
+          </MenuCard>
+          <MenuCard>
+            <Image source={ExchangeIcon} />
+            <MenuSubContainer>
+              <MenuTextContainer>
+                <MenuTitle>하나머니 환전하기</MenuTitle>
+                <MenuSubtitle>하나머니를 환전해보아용</MenuSubtitle>
+              </MenuTextContainer>
+              <MenuButton
+              // onPress={() => navigation.navigate("")}
+              >
+                <MenuButtonText fontPercentage={fontPercentage}>
+                  환전하러 가기
+                </MenuButtonText>
+              </MenuButton>
+            </MenuSubContainer>
+          </MenuCard>
+          <MenuCard>
             <Image source={AccountConnectIcon} />
-            <View style={styles.menuSubContainer}>
-              <View style={styles.menuTextContainer}>
-                <Text style={styles.menuTitle}>계좌 연결하기</Text>
-                <Text style={styles.menuSubtitle}>계좌를 연결해보아용</Text>
-              </View>
-              <TouchableOpacity
-                style={styles.menuButton}
+            <MenuSubContainer>
+              <MenuTextContainer>
+                <MenuTitle>계좌 연결하기</MenuTitle>
+                <MenuSubtitle>계좌를 연결해보아용</MenuSubtitle>
+              </MenuTextContainer>
+              <MenuButton
                 onPress={() => navigation.navigate("AccountConnectPage")}
               >
-                <Text style={styles.menuButtonText}>연결하러 가기</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-        <View style={styles.hanaServiceContainer}>
-          <Text style={styles.menuTitle}>하나금융그룹 서비스</Text>
-          <View style={styles.buttonContainer}>
-            <View style={styles.hanaServiceButton}>
+                <MenuButtonText fontPercentage={fontPercentage}>
+                  연결하러 가기
+                </MenuButtonText>
+              </MenuButton>
+            </MenuSubContainer>
+          </MenuCard>
+        </MenuContainer>
+        <HanaServiceContainer>
+          <MenuTitle>하나금융그룹 서비스</MenuTitle>
+          <ButtonContainer>
+            <HanaServiceButton>
               <Image source={HanaBankIcon} />
-              <Text style={styles.hanaServiceText}>하나은행</Text>
-            </View>
-            <View style={styles.hanaServiceButton}>
+              <HanaServiceText>하나은행</HanaServiceText>
+            </HanaServiceButton>
+            <HanaServiceButton>
               <Image source={HanaCardIcon} />
-              <Text style={styles.hanaServiceText}>하나카드</Text>
-            </View>
-            <View style={styles.hanaServiceButton}>
+              <HanaServiceText>하나카드</HanaServiceText>
+            </HanaServiceButton>
+            <HanaServiceButton>
               <Image source={HanaCapitalIcon} />
-              <Text style={styles.hanaServiceText}>하나캐피탈</Text>
-            </View>
-            <View style={styles.hanaServiceButton}>
+              <HanaServiceText>하나캐피탈</HanaServiceText>
+            </HanaServiceButton>
+            <HanaServiceButton>
               <Image source={HanaLifeIcon} />
-              <Text style={styles.hanaServiceText}>하나생명</Text>
-            </View>
-            <View style={styles.hanaServiceButton}>
+              <HanaServiceText>하나생명</HanaServiceText>
+            </HanaServiceButton>
+            <HanaServiceButton>
               <Image source={HanaStockIcon} />
-              <Text style={styles.hanaServiceText}>하나증권</Text>
-            </View>
-            <View style={styles.hanaServiceButton}>
+              <HanaServiceText>하나증권</HanaServiceText>
+            </HanaServiceButton>
+            <HanaServiceButton>
               <Image source={HanaSavingIcon} />
-              <Text style={styles.hanaServiceText}>하나저축은행</Text>
-            </View>
-          </View>
-        </View>
+              <HanaServiceText>하나저축은행</HanaServiceText>
+            </HanaServiceButton>
+          </ButtonContainer>
+        </HanaServiceContainer>
       </BodyMain>
     </Main>
   );
 };
 
 export default MainPage;
-
-const styles = StyleSheet.create({
-  menuTitle: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: fontPercentage(20),
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  menuSubtitle: {
-    color: "#8B95A1",
-    fontFamily: "Inter",
-    fontSize: fontPercentage(14),
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  menuContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 20,
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-    paddingVertical: heightPercentage(30),
-    paddingHorizontal: widthPercentage(20),
-  },
-  menuCard: {
-    width: widthPercentage(350),
-    height: heightPercentage(140),
-    alignItems: "center",
-    gap: 20,
-    backgroundColor: "#FFF",
-    boxShadow: "1px 1px 10px 0px rgba(0, 0, 0, 0.10)",
-    flexDirection: "row",
-    paddingVertical: heightPercentage(10),
-    paddingHorizontal: widthPercentage(20),
-    borderRadius: 15,
-    elevation: 3,
-  },
-  menuSubContainer: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    gap: 15,
-    flexGrow: 1,
-    flexShrink: 0,
-    flexBasis: 0,
-    alignSelf: "stretch",
-  },
-  menuTextContainer: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    gap: 5,
-  },
-  menuButtonText: {
-    color: "#FFF",
-    fontFamily: "Inter",
-    fontSize: fontPercentage(12),
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  menuButton: {
-    height: heightPercentage(30),
-    flexDirection: "column",
-    paddingVertical: heightPercentage(5),
-    // justifyContent: "center",
-    alignItems: "center",
-    // gap: 10,
-    alignSelf: "stretch",
-    backgroundColor: "#55ACEE",
-    borderRadius: 5,
-  },
-  hanaServiceText: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: fontPercentage(14),
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  hanaServiceContainer: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    gap: 10,
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-    paddingHorizontal: heightPercentage(30),
-  },
-  buttonContainer: {
-    paddingBottom: heightPercentage(20),
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignContent: "center",
-    rowGap: 20,
-    alignSelf: "stretch",
-    flexWrap: "wrap",
-    flexDirection: "row",
-  },
-  hanaServiceButton: {
-    width: widthPercentage(100),
-    height: heightPercentage(90),
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 10,
-    backgroundColor: "#FFF",
-    elevation: 1,
-    paddingVertical: heightPercentage(19),
-    paddingHorizontal: widthPercentage(4),
-    borderRadius: 5,
-  },
-});
