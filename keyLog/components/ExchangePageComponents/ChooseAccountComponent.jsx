@@ -36,7 +36,7 @@ const ChooseAccountComponent = () => {
   const navigation = useNavigation();
 
   const closeChooseAccountComponent = () => {
-    navigation.navigate("MainPage");
+    navigation.navigate("ExchangePage");
   };
 
   return (

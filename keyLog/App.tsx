@@ -7,6 +7,7 @@ import AccountConnectSuccess from "./pages/AccountConnect/AccountConnectSuccess"
 import AccountConnectFail from "./pages/AccountConnect/AccountConnectFail";
 import ChooseAccountComponent from "./components/ExchangePageComponents/ChooseAccountComponent";
 import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
+import CountryChoiceComponent from "./components/ExchangePageComponents/CountryChoiceComponent";
 import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
 import ExchangeFail from "./pages/ExchangeSelectAccount/ExchangeFail";
 import PickUpKeyPage from "./pages/PickUpKeyPage";
@@ -55,6 +56,11 @@ const App = () => {
         <Stack.Screen
           name="ExchangePage"
           component={ExchangePage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CountryChoiceComponent"
+          component={CountryChoiceComponent}
           options={{ headerShown: false }}
         />
         <Stack.Screen

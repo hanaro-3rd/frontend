@@ -1,3 +1,4 @@
+// 사용안함 합쳐버림
 // import {
 //   StyleSheet,
 //   Text,

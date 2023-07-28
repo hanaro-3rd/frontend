@@ -1,19 +1,14 @@
 import {
   StyleSheet,
-  Text,
   View,
-  ScrollView,
+  Text,
+  navigation,
+  Pressable,
+  Modal,
   Image,
   FlatList,
-  Modal,
-  Pressable,
-  Dimensions,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { styles } from "../ExchangeSelectAccount/ExchangePage";
-import Ellipse from "../../assets/SignUp/Ellipse.svg";
-import Vector from "../../assets/accountImg/Vector.png";
-import DeleteHeader from "../../components/Header/DeleteHeader";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -22,8 +17,11 @@ import {
   phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
+import DeleteHeader from "../../components/Header/DeleteHeader";
+import Ellipse from "../../assets/SignUp/Ellipse.svg";
+import Vector from "../../assets/accountImg/Vector.png";
 
-const AccountConnectPage = ({ navigation }) => {
+export const AccountConnectPage = ({ navigation }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -32,17 +30,14 @@ const AccountConnectPage = ({ navigation }) => {
 
     return (
       <Pressable onPress={() => setSelectedItem(item.key)}>
-        <View style={[styles2.accountitem, isSelected && styles2.selectedItem]}>
+        <View style={[styles.accountitem, isSelected && styles.selectedItem]}>
           <Text
-            style={
-              (styles2.listtextBefore, isSelected && styles2.listtextAfter)
-            }
+            style={(styles.listtextBefore, isSelected && styles.listtextAfter)}
           >
             {item.key}
           </Text>
           {isSelected && (
             <Image
-              style={{ height: 30, marginRight: 20 }}
               source={require("../../assets/accountImg/check.png")}
               resizeMode="contain"
             />
@@ -54,38 +49,34 @@ const AccountConnectPage = ({ navigation }) => {
 
   return (
     <View style={styles.root}>
-      <View style={styles.Container}>
-        <View>
-          <DeleteHeader navigation={navigation} to="MainPage" />
-          <View style={styles.s2}>
-            <Text style={styles.title}> 계좌 연결 </Text>
-            <Text style={styles.subtitle}>
-              <Text>연결할 계좌를 선택해주세요.</Text>
-            </Text>
-          </View>
-          <View style={styles.bodyMain}>
-            <Text style={styles2.accountTitle}> 연결 가능한 계좌 </Text>
-            <FlatList
-              scrollEnabled={false}
-              data={[
-                { key: "302-9556-4022-11" },
-                { key: "302-9556-4022-12" },
-                { key: "302-9556-4022-13" },
-              ]}
-              renderItem={renderItem}
-            />
-          </View>
+      <DeleteHeader navigation={navigation} to="MainPage" />
+      <View style={styles.body}>
+        <View style={styles.bodyHeader}>
+          <Text style={styles.title}>계좌 연결</Text>
+          <Text style={styles.subtitle}>연결할 계좌를 선택해주세요.</Text>
         </View>
-
-        <View style={styles.buttonContainer}>
-          <Pressable
-            style={styles.submitButton}
-            onPress={() => setModalVisible(true)}
-          >
-            <Text style={styles.pressBeforeTextStyle}>연결하기</Text>
-          </Pressable>
+        <View style={styles.bodyMain}>
+          <Text style={styles.containerTitle}>연결 가능한 계좌</Text>
+          <FlatList
+            scrollEnabled={false}
+            data={[
+              { key: "신한 302-9556-4022-11" },
+              { key: "하나 302-9556-4022-12" },
+              { key: "우리 302-9556-4022-13" },
+            ]}
+            renderItem={renderItem}
+          />
         </View>
       </View>
+      <View style={styles.footer}>
+        <Pressable
+          style={styles.submitButton}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={styles.buttonText}>연결하기</Text>
+        </Pressable>
+      </View>
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -94,67 +85,67 @@ const AccountConnectPage = ({ navigation }) => {
           setModalVisible(!modalVisible);
         }}
       >
-        <View style={styles2.modalBackground}>
-          <View style={styles2.popup}>
-            <View style={styles2.popupHeader}>
-              <View style={styles2.popupHeaderTitle}>
-                <Text style={styles2.popupHeaderText}>계좌 비밀번호 입력</Text>
+        <View style={styles.modalBackground}>
+          <View style={styles.popup}>
+            <View style={styles.popupHeader}>
+              <View style={styles.popupHeaderTitle}>
+                <Text style={styles.popupHeaderText}>계좌 비밀번호 입력</Text>
                 <Pressable onPress={() => setModalVisible(!modalVisible)}>
                   <Image
                     source={require("../../assets/accountImg/CloseButton.png")}
-                    style={styles2.button}
+                    style={styles.button}
                   />
                 </Pressable>
               </View>
-              <View style={styles2.popupSubtitle}>
-                <Text style={styles2.popupBank}>신한</Text>
+              <View style={styles.popupSubtitle}>
+                <Text style={styles.popupBank}>신한</Text>
                 <Text>302-9556-4022-11</Text>
               </View>
             </View>
 
             <View>
-              <View style={styles2.passwordSymbol}>
+              <View style={styles.passwordSymbol}>
                 <Ellipse />
                 <Ellipse />
                 <Ellipse />
                 <Ellipse />
               </View>
-              <View style={styles2.numberPad}>
-                <View style={styles2.number}>
-                  <Text style={styles2.num}>1</Text>
+              <View style={styles.numberPad}>
+                <View style={styles.number}>
+                  <Text style={styles.num}>1</Text>
                 </View>
-                <View style={styles2.number}>
-                  <Text style={styles2.num}>2</Text>
+                <View style={styles.number}>
+                  <Text style={styles.num}>2</Text>
                 </View>
-                <View style={styles2.number}>
-                  <Text style={styles2.num}>3</Text>
+                <View style={styles.number}>
+                  <Text style={styles.num}>3</Text>
                 </View>
-                <View style={styles2.number}>
-                  <Text style={styles2.num}>4</Text>
+                <View style={styles.number}>
+                  <Text style={styles.num}>4</Text>
                 </View>
-                <View style={styles2.number}>
-                  <Text style={styles2.num}>5</Text>
+                <View style={styles.number}>
+                  <Text style={styles.num}>5</Text>
                 </View>
-                <View style={styles2.number}>
-                  <Text style={styles2.num}>6</Text>
+                <View style={styles.number}>
+                  <Text style={styles.num}>6</Text>
                 </View>
-                <View style={styles2.number}>
-                  <Text style={styles2.num}>7</Text>
+                <View style={styles.number}>
+                  <Text style={styles.num}>7</Text>
                 </View>
-                <View style={styles2.number}>
-                  <Text style={styles2.num}>8</Text>
+                <View style={styles.number}>
+                  <Text style={styles.num}>8</Text>
                 </View>
-                <View style={styles2.number}>
-                  <Text style={styles2.num}>9</Text>
+                <View style={styles.number}>
+                  <Text style={styles.num}>9</Text>
                 </View>
-                <View style={styles2.number}>
-                  <Text style={styles2.num}></Text>
+                <View style={styles.number}>
+                  <Text style={styles.num}></Text>
                 </View>
-                <View style={styles2.number}>
-                  <Text style={styles2.num}>0</Text>
+                <View style={styles.number}>
+                  <Text style={styles.num}>0</Text>
                 </View>
-                <View style={styles2.number}>
-                  <Text style={styles2.num}>
+                <View style={styles.number}>
+                  <Text style={styles.num}>
                     <Image source={Vector} />
                   </Text>
                 </View>
@@ -171,42 +162,118 @@ const AccountConnectPage = ({ navigation }) => {
 };
 export default AccountConnectPage;
 
-const styles2 = StyleSheet.create({
-  listtextBefore: {
-    textAlignVertical: "center",
+const styles = StyleSheet.create({
+  root: {
+    width: widthPercentage(390),
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "flex-start",
+    backgroundColor: "#F2F4F6",
   },
-  listtextAfter: {
+  header: {
+    alignItems: "flex-start",
+    gap: 10,
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
+    flexDirection: "row",
+    paddingVertical: heightPercentage(13),
+    paddingHorizontal: widthPercentage(12),
+  },
+  title: {
     color: "#191F29",
-    fontSize: fontPercentage(14),
+    fontSize: fontPercentage(23),
     fontWeight: "700",
-    textAlignVertical: "center",
   },
-  accountitem: {
-    backgroundColor: "#F9FAFB",
-    color: "#B0B8C1",
-    margin: heightPercentage(9),
-    height: heightPercentage(55),
-    borderRadius: 5,
-    paddingLeft: widthPercentage(20),
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  subtitle: {
+    color: "#8B95A1",
+    fontSize: fontPercentage(16),
+    fontWeight: "400",
   },
-  selectedItem: {
-    height: heightPercentage(55),
-    borderRadius: 5,
-    borderColor: "#55ACEE",
-    borderWidth: widthPercentage(1),
-    margin: heightPercentage(9),
-    backgroundColor: "#fff",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  body: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    flexGrow: 1,
+    flexShrink: 0,
+    flexBasis: 0,
+    alignSelf: "stretch",
   },
-  accountTitle: {
+  bodyHeader: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    gap: 10,
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
+    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(20),
+  },
+  containerTitle: {
     color: "#191F29",
     fontSize: fontPercentage(16),
-    marginBottom: heightPercentage(10),
+    fontWeight: "700",
+  },
+  accountText: {
+    color: "#B0B8C1",
+    fontSize: fontPercentage(14),
+    fontWeight: "700",
+  },
+  accountText2: {
+    color: "#B0B8C1",
+    fontSize: fontPercentage(14),
+    fontWeight: "700",
+  },
+  bodyMain: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: 10,
+    flexGrow: 1,
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
+    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(25),
+  },
+  accountListContainer: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: 10,
+    alignSelf: "stretch",
+  },
+  accountContainer: {
+    height: heightPercentage(50),
+    alignItems: "center",
+    gap: 10,
+    alignSelf: "stretch",
+    backgroundColor: "#F9FAFB",
+    flexDirection: "row",
+    paddingHorizontal: widthPercentage(20),
+    borderRadius: 5,
+  },
+
+  buttonText: {
+    color: "#FFF",
+    fontSize: fontPercentage(16),
+    fontWeight: "700",
+  },
+  footer: {
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    gap: 20,
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
+    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(25),
+  },
+  submitButton: {
+    height: heightPercentage(55),
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+    alignSelf: "stretch",
+    backgroundColor: "#F2F4F6",
+    flexDirection: "row",
+    padding: 10,
+    borderRadius: 10,
   },
   modalBackground: {
     flex: 1,
@@ -218,6 +285,7 @@ const styles2 = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     flex: 1,
     width: "100%",
+    gap: 30,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     marginTop: heightPercentage(250),
@@ -279,5 +347,37 @@ const styles2 = StyleSheet.create({
     gap: heightPercentage(10),
     flexDirection: "row",
     padding: 10,
+  },
+  accountitem: {
+    backgroundColor: "#F9FAFB",
+    margin: heightPercentage(9),
+    height: heightPercentage(55),
+    borderRadius: 5,
+    paddingLeft: widthPercentage(20),
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  selectedItem: {
+    height: heightPercentage(55),
+    borderRadius: 5,
+    borderColor: "#55ACEE",
+    borderWidth: widthPercentage(1),
+    margin: heightPercentage(9),
+    backgroundColor: "#fff",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  listtextBefore: {
+    textAlignVertical: "center",
+  },
+  listtextAfter: {
+    color: "#191F29",
+    fontSize: fontPercentage(14),
+    fontWeight: "700",
+    textAlignVertical: "center",
   },
 });
