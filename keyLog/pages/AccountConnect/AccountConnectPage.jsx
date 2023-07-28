@@ -13,6 +13,7 @@ import React, { useState, useEffect } from "react";
 import { styles } from "../ExchangeSelectAccount/ExchangePage";
 import Ellipse from "../../assets/SignUp/Ellipse.svg";
 import Vector from "../../assets/accountImg/Vector.png";
+import DeleteHeader from "../../components/Header/DeleteHeader";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -22,7 +23,7 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 
-const AccountConnectPage = () => {
+const AccountConnectPage = ({ navigation }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -52,15 +53,10 @@ const AccountConnectPage = () => {
   };
 
   return (
-    <View>
+    <View style={styles.root}>
       <View style={styles.Container}>
         <View>
-          <View style={styles.s1}>
-            <Image
-              source={require("../../assets/accountImg/CloseButton.png")}
-              style={styles.button}
-            />
-          </View>
+          <DeleteHeader navigation={navigation} to="MainPage" />
           <View style={styles.s2}>
             <Text style={styles.title}> 계좌 연결 </Text>
             <Text style={styles.subtitle}>
@@ -89,89 +85,87 @@ const AccountConnectPage = () => {
             <Text style={styles.pressBeforeTextStyle}>연결하기</Text>
           </Pressable>
         </View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles2.modalBackground}>
-            <View style={styles2.popup}>
-              <View style={styles2.popupHeader}>
-                <View style={styles2.popupHeaderTitle}>
-                  <Text style={styles2.popupHeaderText}>
-                    계좌 비밀번호 입력
-                  </Text>
-                  <Pressable onPress={() => setModalVisible(!modalVisible)}>
-                    <Image
-                      source={require("../../assets/accountImg/CloseButton.png")}
-                      style={styles2.button}
-                    />
-                  </Pressable>
-                </View>
-                <View style={styles2.popupSubtitle}>
-                  <Text style={styles2.popupBank}>신한</Text>
-                  <Text>302-9556-4022-11</Text>
-                </View>
-              </View>
-
-              <View>
-                <View style={styles2.passwordSymbol}>
-                  <Ellipse />
-                  <Ellipse />
-                  <Ellipse />
-                  <Ellipse />
-                </View>
-                <View style={styles2.numberPad}>
-                  <View style={styles2.number}>
-                    <Text style={styles2.num}>1</Text>
-                  </View>
-                  <View style={styles2.number}>
-                    <Text style={styles2.num}>2</Text>
-                  </View>
-                  <View style={styles2.number}>
-                    <Text style={styles2.num}>3</Text>
-                  </View>
-                  <View style={styles2.number}>
-                    <Text style={styles2.num}>4</Text>
-                  </View>
-                  <View style={styles2.number}>
-                    <Text style={styles2.num}>5</Text>
-                  </View>
-                  <View style={styles2.number}>
-                    <Text style={styles2.num}>6</Text>
-                  </View>
-                  <View style={styles2.number}>
-                    <Text style={styles2.num}>7</Text>
-                  </View>
-                  <View style={styles2.number}>
-                    <Text style={styles2.num}>8</Text>
-                  </View>
-                  <View style={styles2.number}>
-                    <Text style={styles2.num}>9</Text>
-                  </View>
-                  <View style={styles2.number}>
-                    <Text style={styles2.num}></Text>
-                  </View>
-                  <View style={styles2.number}>
-                    <Text style={styles2.num}>0</Text>
-                  </View>
-                  <View style={styles2.number}>
-                    <Text style={styles2.num}>
-                      <Image source={Vector} />
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              <Pressable style={styles.submitButton}>
-                <Text style={styles.pressBeforeTextStyle}>확인</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
       </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles2.modalBackground}>
+          <View style={styles2.popup}>
+            <View style={styles2.popupHeader}>
+              <View style={styles2.popupHeaderTitle}>
+                <Text style={styles2.popupHeaderText}>계좌 비밀번호 입력</Text>
+                <Pressable onPress={() => setModalVisible(!modalVisible)}>
+                  <Image
+                    source={require("../../assets/accountImg/CloseButton.png")}
+                    style={styles2.button}
+                  />
+                </Pressable>
+              </View>
+              <View style={styles2.popupSubtitle}>
+                <Text style={styles2.popupBank}>신한</Text>
+                <Text>302-9556-4022-11</Text>
+              </View>
+            </View>
+
+            <View>
+              <View style={styles2.passwordSymbol}>
+                <Ellipse />
+                <Ellipse />
+                <Ellipse />
+                <Ellipse />
+              </View>
+              <View style={styles2.numberPad}>
+                <View style={styles2.number}>
+                  <Text style={styles2.num}>1</Text>
+                </View>
+                <View style={styles2.number}>
+                  <Text style={styles2.num}>2</Text>
+                </View>
+                <View style={styles2.number}>
+                  <Text style={styles2.num}>3</Text>
+                </View>
+                <View style={styles2.number}>
+                  <Text style={styles2.num}>4</Text>
+                </View>
+                <View style={styles2.number}>
+                  <Text style={styles2.num}>5</Text>
+                </View>
+                <View style={styles2.number}>
+                  <Text style={styles2.num}>6</Text>
+                </View>
+                <View style={styles2.number}>
+                  <Text style={styles2.num}>7</Text>
+                </View>
+                <View style={styles2.number}>
+                  <Text style={styles2.num}>8</Text>
+                </View>
+                <View style={styles2.number}>
+                  <Text style={styles2.num}>9</Text>
+                </View>
+                <View style={styles2.number}>
+                  <Text style={styles2.num}></Text>
+                </View>
+                <View style={styles2.number}>
+                  <Text style={styles2.num}>0</Text>
+                </View>
+                <View style={styles2.number}>
+                  <Text style={styles2.num}>
+                    <Image source={Vector} />
+                  </Text>
+                </View>
+              </View>
+            </View>
+            <Pressable style={styles.submitButton}>
+              <Text style={styles.pressBeforeTextStyle}>확인</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -212,6 +206,7 @@ const styles2 = StyleSheet.create({
   accountTitle: {
     color: "#191F29",
     fontSize: fontPercentage(16),
+    marginBottom: heightPercentage(10),
   },
   modalBackground: {
     flex: 1,
@@ -259,6 +254,7 @@ const styles2 = StyleSheet.create({
     gap: widthPercentage(20),
     flexDirection: "row",
     marginTop: heightPercentage(20),
+    marginBottom: heightPercentage(20),
   },
   num: {
     color: "#191F29",

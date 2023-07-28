@@ -5,10 +5,10 @@ import MainPage from "./pages/MainPage";
 import AccountConnectPage from "./pages/AccountConnect/AccountConnectPage";
 import AccountConnectSuccess from "./pages/AccountConnect/AccountConnectSuccess";
 import AccountConnectFail from "./pages/AccountConnect/AccountConnectFail";
+import ChooseAccountComponent from "./components/ExchangePageComponents/ChooseAccountComponent";
 import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
 import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
 import ExchangeFail from "./pages/ExchangeSelectAccount/ExchangeFail";
-import ChooseAccount from "./pages/ExchangeSelectAccount/ChooseAccount";
 import PickUpKeyPage from "./pages/PickUpKeyPage";
 import SignUpPage from "./pages/SignUp/SignUpPage";
 import TravelBudgetPage from "./pages/TravelBudgetPage";
@@ -26,7 +26,7 @@ const App = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="AccountConnectPage">
+      <Stack.Navigator initialRouteName="ExchangePage">
         <Stack.Screen
           name="MainPage"
           component={MainPage}
@@ -48,6 +48,11 @@ const App = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="ChooseAccountComponent"
+          component={ChooseAccountComponent}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="ExchangePage"
           component={ExchangePage}
           options={{ headerShown: false }}
@@ -60,11 +65,6 @@ const App = () => {
         <Stack.Screen
           name="ExchangeFail"
           component={ExchangeFail}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ChooseAccount"
-          component={ChooseAccount}
           options={{ headerShown: false }}
         />
         <Stack.Screen

@@ -9,13 +9,12 @@ import {
   phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
+import DeleteHeader from "../../components/Header/DeleteHeader";
 
-const AccountConnectFail = () => {
+const AccountConnectFail = ({ navigation }) => {
   return (
     <View style={styles.root}>
-      <View style={styles.header}>
-        <Image source={Close} />
-      </View>
+      <DeleteHeader navigation={navigation} to="MainPage" />
       <View style={styles.body}>
         <View style={styles.bodyHeader}>
           <Text style={styles.title}>연결 실패</Text>

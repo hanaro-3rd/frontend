@@ -9,13 +9,12 @@ import {
   phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
+import DeleteHeader from "../../components/Header/DeleteHeader";
 
-const AccountConnectSuccess = () => {
+const AccountConnectSuccess = ({ navigation }) => {
   return (
     <View style={styles.root}>
-      <View style={styles.header}>
-        <Image source={Close} />
-      </View>
+      <DeleteHeader navigation={navigation} to="MainPage" />
       <View style={styles.body}>
         <View style={styles.bodyHeader}>
           <Text style={styles.title}>계좌 연결 완료</Text>

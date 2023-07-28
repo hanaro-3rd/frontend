@@ -3,15 +3,20 @@ import {
   Text,
   View,
   Image,
+  Button,
   TextInput,
   FlatList,
   ScrollView,
   Pressable,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { PreventRemoveContext } from "@react-navigation/native";
 import ChooseAccount from "./ChooseAccount";
+import DeleteHeader from "../../components/Header/DeleteHeader";
+import ChooseAccountComponent from "../../components/ExchangePageComponents/ChooseAccountComponent";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -22,68 +27,79 @@ import {
 } from "../../utils/ResponseSize";
 
 const ExchangePage = () => {
+  const navigation = useNavigation();
+  const handleChooseAccountComponent = () => {
+    navigation.navigate("ChooseAccountComponent");
+  };
+
   return (
-    <View style={styles.Container}>
-      <ScrollView>
-        <View style={styles.s1}>
-          <Image
-            source={require("../../assets/accountImg/CloseButton.png")}
-            style={styles.button}
-          />
-        </View>
-        <View style={styles.s2}>
-          <Text style={styles.title}> 하나머니 환전 </Text>
-          <Text style={styles.subtitle}>
-            환전을 위해 계좌 및 금액을 설정합니다.
-          </Text>
-        </View>
-        <View style={styles.bodyMain}>
-          <ChooseAccount />
-          <View style={styles.MoneyTextContainer}>
-            <View style={styles.MoneyTitleContainer}>
-              <Text style={styles.MoneyTitle}> 환전 금액 </Text>
-              <Text style={styles.MoneySubtitle}>
-                휴일 수수료 10%가 적용됩니다
-              </Text>
-            </View>
-            <View style={styles.ForeignCurrencyContainer}>
-              <View style={styles.CountryList}>
-                <Image
-                  style={styles.selectCountry}
-                  source={require("../../assets/exchangeImg/USD.png")}
-                />
-                <Text style={styles.unitText}>USD</Text>
-                <Image
-                  style={styles.selectbutton}
-                  source={require("../../assets/exchangeImg/SelectButton.png")}
-                />
-              </View>
-              <TextInput
-                style={styles.MoneyInput}
-                placeholder="10 ~ 10,000"
-              ></TextInput>
-            </View>
+    <View styles={styles.root}>
+      <DeleteHeader navigation={navigation} to="MainPage" />
+      <View style={styles.Container}>
+        <ScrollView>
+          <View style={styles.s2}>
+            <Text style={styles.title}> 하나머니 환전 </Text>
+            <Text style={styles.subtitle}>
+              환전을 위해 계좌 및 금액을 설정합니다.
+            </Text>
           </View>
-          <View style={styles.KoreaMoney}>
-            <View style={styles.KoreaContainer}>
-              <Image source={require("../../assets/exchangeImg/Korea.png")} />
-              <Text style={styles.unitText}> KRW </Text>
-            </View>
-            <TextInput editable={false} defaultValue={"10,000~10,000,000"} />
-          </View>
-          <View style={styles.ExchangerateContainer}>
-            <View style={styles.ExchangeTitleContainer}>
-              <Text style={styles.MoneyTitle}> 현재 환율 </Text>
-              <Text style={styles.ExchangeSubtitle}> API 시간 </Text>
-            </View>
-            <View style={styles.CurrentExchangerateContainer}>
-              <View style={styles.CountryInformationContainer}>
-                <Text style={styles.CountryName}> 미국 </Text>
-                <Text style={styles.CountryEnglishName}> USD </Text>
+          <View style={styles.bodyMain}>
+            <TouchableOpacity
+              style={styles.accountList}
+              onPress={handleChooseAccountComponent}
+            >
+              <Text style={styles.accountListDefault}>계좌를 선택해주세요</Text>
+              <Image
+                style={styles.selectbutton}
+                source={require("../../assets/exchangeImg/SelectButton.png")}
+              />
+            </TouchableOpacity>
+            <View style={styles.MoneyTextContainer}>
+              <View style={styles.MoneyTitleContainer}>
+                <Text style={styles.MoneyTitle}> 환전 금액 </Text>
+                <Text style={styles.MoneySubtitle}>
+                  휴일 수수료 10%가 적용됩니다
+                </Text>
               </View>
-              <View style={styles.CountryInformationContainer}>
-                <Text style={styles.unitText}>1.294.50</Text>
-                <Text style={styles.ChangeRateText}> ▼ 12.00</Text>
+              <View style={styles.ForeignCurrencyContainer}>
+                <View style={styles.CountryList}>
+                  <Image
+                    style={styles.selectCountry}
+                    source={require("../../assets/exchangeImg/USD.png")}
+                  />
+                  <Text style={styles.unitText}>USD</Text>
+                  <Image
+                    style={styles.selectbutton}
+                    source={require("../../assets/exchangeImg/SelectButton.png")}
+                  />
+                </View>
+                <TextInput
+                  style={styles.MoneyInput}
+                  placeholder="10 ~ 10,000"
+                ></TextInput>
+              </View>
+            </View>
+            <View style={styles.KoreaMoney}>
+              <View style={styles.KoreaContainer}>
+                <Image source={require("../../assets/exchangeImg/Korea.png")} />
+                <Text style={styles.unitText}> KRW </Text>
+              </View>
+              <TextInput editable={false} defaultValue={"10,000~10,000,000"} />
+            </View>
+            <View style={styles.ExchangerateContainer}>
+              <View style={styles.ExchangeTitleContainer}>
+                <Text style={styles.MoneyTitle}> 현재 환율 </Text>
+                <Text style={styles.ExchangeSubtitle}> API 시간 </Text>
+              </View>
+              <View style={styles.CurrentExchangerateContainer}>
+                <View style={styles.CountryInformationContainer}>
+                  <Text style={styles.CountryName}> 미국 </Text>
+                  <Text style={styles.CountryEnglishName}> USD </Text>
+                </View>
+                <View style={styles.CountryInformationContainer}>
+                  <Text style={styles.unitText}>1.294.50</Text>
+                  <Text style={styles.ChangeRateText}> ▼ 12.00</Text>
+                </View>
               </View>
             </View>
           </View>
@@ -103,92 +119,88 @@ const ExchangePage = () => {
               <Text style={styles.pressBeforeTextStyle}>환전하기</Text>
             </Pressable>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </View>
   );
 };
-
 export default ExchangePage;
 
 export const styles = StyleSheet.create({
+  root: {
+    backgroundColor: "#ffffff",
+    height: phoneHeight,
+    flex: 1,
+  },
   Container: {
     backgroundColor: "#ffffff",
-    flexGrow: 1,
+    flexDirection: "column",
     justifyContent: "space-between",
-    minHeight: 560,
-  },
-  s1: {
-    paddingTop: 13,
-    paddingBottom: 13,
-    paddingLeft: 12,
-    paddingRight: 12,
-  },
-  button: {
-    width: 24,
-    height: 24,
+    height: phoneHeight,
+    alignSelf: "stretch",
   },
   s2: {
-    paddingTop: 15,
-    paddingBottom: 15,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingTop: heightPercentage(13),
+    paddingBottom: heightPercentage(13),
+    paddingLeft: widthPercentage(12),
+    paddingRight: widthPercentage(12),
   },
   title: {
     color: "#191F29",
-    Text: 23,
+    Text: fontPercentage(23),
     fontWeight: "700",
   },
   subtitle: {
-    paddingTop: 9.92,
+    paddingTop: heightPercentage(10),
     flexDirection: "column",
     justifyContent: "center",
   },
   bodyMain: {
-    paddingBottom: 15,
-    paddingTop: 15,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingBottom: heightPercentage(15),
+    paddingTop: heightPercentage(15),
+    paddingLeft: widthPercentage(20),
+    paddingRight: widthPercentage(20),
     flexDirection: "column",
     alignSelf: "stretch",
   },
   accountContainer: {
     display: "flex",
     flexDirection: "column",
-    paddingTop: 15,
+    paddingTop: heightPercentage(15),
+    height: phoneHeight,
   },
 
   accountList: {
     backgroundColor: "#F9FAFB",
-    height: 64,
+    height: heightPercentage(64),
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: heightPercentage(10),
   },
   accountListDefault: {
     color: "#B0B8C1",
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: widthPercentage(10),
+    paddingRight: widthPercentage(10),
   },
   selectbutton: {
-    marginRight: 20,
+    marginRight: widthPercentage(20),
   },
   selectCountry: {
-    marginLeft: 20,
+    marginLeft: widthPercentage(20),
   },
   MoneyTextContainer: {
     flexDirection: "column",
     justifyContent: "center",
   },
   MoneyTitleContainer: {
-    paddingTop: 30,
+    paddingTop: heightPercentage(30),
     flexDirection: "row",
     alignItems: "center",
   },
-  MoneyTitle: { color: "#191F29", Text: 16 },
-  MoneySubtitle: { color: "#EE3739", Text: 12 },
+  MoneyTitle: { color: "#191F29", Text: fontPercentage(16) },
+  MoneySubtitle: { color: "#EE3739", Text: fontPercentage(12) },
   CountryList: {
     borderRadius: 10,
     flexDirection: "row",
@@ -196,12 +208,12 @@ export const styles = StyleSheet.create({
     borderColor: "#191F29",
     borderStyle: "solid",
     borderWidth: 1,
-    height: 65,
+    height: heightPercentage(65),
   },
   MoneyInput: {
     backgroundColor: "rgba(249, 250, 251, 0.62)",
-    marginLeft: 10,
-    paddingRight: 20,
+    marginLeft: widthPercentage(10),
+    paddingRight: widthPercentage(20),
     flex: 1,
     textAlign: "right",
     borderRadius: 10,
@@ -211,8 +223,8 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: 65,
-    marginTop: 10,
+    height: heightPercentage(65),
+    marginTop: heightPercentage(10),
   },
   KoreaContainer: {
     flexDirection: "row",
@@ -224,34 +236,34 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: heightPercentage(10),
     borderRadius: 10,
-    height: 65,
-    paddingLeft: 20,
-    paddingRight: 20,
+    height: heightPercentage(65),
+    paddingLeft: widthPercentage(20),
+    paddingRight: widthPercentage(20),
   },
   unitText: {
     color: "#191F29",
     fontWeight: "700",
-    paddingLeft: 10,
+    paddingLeft: widthPercentage(10),
   },
   ExchangerateContainer: {
-    marginTop: 30,
+    marginTop: heightPercentage(30),
   },
   ExchangeTitleContainer: { flexDirection: "row" },
   ExchangeSubtitle: {
     color: "#8B95A1",
-    paddingLeft: 10,
+    paddingLeft: widthPercentage(10),
   },
   CurrentExchangerateContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: 65,
-    paddingLeft: 20,
-    paddingRight: 20,
-    marginTop: 10,
-    paddingBottom: 5,
+    height: heightPercentage(65),
+    paddingLeft: widthPercentage(20),
+    paddingRight: widthPercentage(20),
+    marginTop: heightPercentage(10),
+    paddingBottom: heightPercentage(5),
     borderRadius: 5,
     borderColor: "#8B95A1",
     borderStyle: "solid",
@@ -264,45 +276,46 @@ export const styles = StyleSheet.create({
   },
   CountryName: {
     color: "#191F29",
-    fontSize: 18,
+    fontSize: fontPercentage(18),
     fontWeight: "700",
   },
   CountryEnglishName: {
-    fontSize: 12,
-    paddingLeft: 10,
+    fontSize: fontPercentage(12),
+    paddingLeft: widthPercentage(10),
   },
   ChangeRateText: {
-    paddingLeft: 10,
+    paddingLeft: widthPercentage(10),
     color: "#0A7DF2",
   },
   s3: {
-    paddingTop: 15,
-    paddingLeft: 25,
-    paddingRight: 25,
+    paddingTop: heightPercentage(15),
+    paddingLeft: widthPercentage(25),
+    paddingRight: widthPercentage(25),
   },
   listitem: {
-    fontSize: 13,
-    padding: 5,
+    fontSize: fontPercentage(13),
+    padding: heightPercentage(5),
   },
   submitButton: {
-    height: 55,
+    height: heightPercentage(55),
     borderRadius: 10,
     backgroundColor: "#F2F4F6",
-    marginTop: 10,
+    marginTop: heightPercentage(10),
+    marginBottom: heightPercentage(10),
     justifyContent: "center",
     alignItems: "center",
   },
   buttonContainer: {
-    paddingBottom: 15,
-    paddingTop: 15,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingBottom: heightPercentage(15),
+    paddingTop: heightPercentage(15),
+    paddingLeft: widthPercentage(20),
+    paddingRight: widthPercentage(20),
     flexDirection: "column",
     justifyContent: "flex-end",
   },
   pressBeforeTextStyle: {
     color: "#FFF",
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontWeight: "700",
   },
 });
