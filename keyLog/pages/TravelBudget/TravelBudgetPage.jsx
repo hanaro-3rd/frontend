@@ -19,9 +19,9 @@ const TravelBudgetPage = () => {
     navigation.navigate("TravelBudgetDetailPage");
   };
 
-  // const handleGoBack = () => {
-  //   navigation.navigate("MainPage");
-  // };
+  const handleGoBack = () => {
+    navigation.navigate("MainPage");
+  };
 
   const handleGoToTravelSchedule = () => {
     navigation.navigate("TravelSchedulePage");
@@ -36,15 +36,15 @@ const TravelBudgetPage = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.root}>
-      {/* <View style={styles.header}>
+      <View style={styles.header}>
         <TouchableOpacity onPress={handleGoBackToMainPage}>
           <Image source={CloseButton} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleGoToTravelSchedule}>
           <Image source={AddButton} />
         </TouchableOpacity>
-      </View> */}
-      <Header type="DELETE" navigation={navigation} to="MainPage" />
+      </View>
+      {/* <Header type="DELETE" navigation={navigation} to="MainPage" /> */}
       <View style={styles.body}>
         <View style={styles.bodyHeader}>
           <Text style={styles.title}>내 경비 계획</Text>
