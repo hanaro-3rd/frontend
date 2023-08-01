@@ -1,3 +1,4 @@
+import React from "react";
 import {
   StyleSheet,
   View,
@@ -6,10 +7,138 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import {
+  fontPercentage,
+  getStatusBarHeight,
+  heightPercentage,
+  phoneHeight,
+  phoneWidth,
+  widthPercentage,
+} from "../../utils/ResponseSize";
 import { useNavigation } from "@react-navigation/native";
+import styled from "styled-components/native";
 import CloseButton from "../../assets/travelBudget/CloseButton.png";
 import AddButton from "../../assets/travelBudget/add.png";
+import Header from "../../components/Header/Header";
+
+const RootScrollView = styled.ScrollView`
+  margin-top: ${getStatusBarHeight}px;
+  min-height: ${phoneHeight}px;
+  width: 100%;
+  flex-direction: column;
+  /* align-items: flex-start; */
+  background-color: #f2f4f6;
+`;
+
+const HeaderContainer = styled.View`
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
+  background-color: #fff;
+  flex-direction: row;
+  padding: ${heightPercentage(13)}px ${widthPercentage(12)}px;
+`;
+
+const TitleText = styled.Text`
+  color: #191f29;
+  font-family: "Inter";
+  font-size: ${fontPercentage(23)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
+
+const BodyContainer = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+`;
+
+const BodyHeader = styled.View`
+  align-items: center;
+  align-self: stretch;
+  background-color: #fff;
+  flex-direction: row;
+  padding: ${heightPercentage(15)}px ${widthPercentage(20)}px;
+`;
+
+const YearText = styled.Text`
+  color: #191f29;
+  font-family: "Inter";
+  font-size: ${fontPercentage(20)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const PeriodText = styled.Text`
+  color: #191f29;
+  font-family: "Inter";
+  font-size: ${fontPercentage(10)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const TravelTitle = styled.Text`
+  color: #191f29;
+  font-family: "Inter";
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
+
+const CityText = styled.Text`
+  color: #191f29;
+  font-family: "Inter";
+  font-size: ${fontPercentage(14)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const BodyMain = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  align-self: stretch;
+`;
+
+const YearContainer = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+  align-self: stretch;
+  background-color: #fff;
+  padding: ${heightPercentage(20)}px ${widthPercentage(20)}px;
+`;
+
+const TravelCard = styled.View`
+  width: ${widthPercentage(350)}px;
+  height: ${heightPercentage(85)}px;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-width: 1px;
+  border-color: #55acee;
+  border-style: solid;
+  background-color: #fff;
+  /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); */
+  flex-direction: row;
+  padding: ${heightPercentage(10)}px ${widthPercentage(15)}px;
+  border-radius: 15px;
+`;
+
+const TitleTextContainer = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  align-self: stretch;
+`;
+
+const RemainCostText = styled.Text`
+  color: #191f29;
+  text-align: right;
+  font-family: "Inter";
+  font-size: ${fontPercentage(14)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
 
 const TravelBudgetPage = () => {
   const navigation = useNavigation();
@@ -18,9 +147,9 @@ const TravelBudgetPage = () => {
     navigation.navigate("TravelBudgetDetailPage");
   };
 
-  // const handleGoBack = () => {
-  //   navigation.navigate("MainPage");
-  // };
+  const handleGoBack = () => {
+    navigation.navigate("MainPage");
+  };
 
   const handleGoToTravelSchedule = () => {
     navigation.navigate("TravelSchedulePage");
@@ -34,206 +163,85 @@ const TravelBudgetPage = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.root}>
-      <View style={styles.header}>
-        {/* <TouchableOpacity onPress={handleGoToTravelSchedule}> */}
+    <RootScrollView>
+      <HeaderContainer>
         <TouchableOpacity onPress={handleGoBackToMainPage}>
           <Image source={CloseButton} />
         </TouchableOpacity>
-        {/* </TouchableOpacity> */}
         <TouchableOpacity onPress={handleGoToTravelSchedule}>
           <Image source={AddButton} />
         </TouchableOpacity>
-      </View>
-      <View style={styles.body}>
-        <View style={styles.bodyHeader}>
-          <Text style={styles.title}>내 경비 계획</Text>
-        </View>
-        <View style={styles.bodyMain}>
-          <View style={styles.yearContainer}>
-            <Text style={styles.yearText}>2023</Text>
+      </HeaderContainer>
+      {/* <Header type="DELETE" navigation={navigation} to="MainPage" /> */}
+      <BodyContainer>
+        <BodyHeader>
+          <TitleText>내 경비 계획</TitleText>
+        </BodyHeader>
+        <BodyMain>
+          <YearContainer>
+            <YearText>2023</YearText>
             <TouchableOpacity onPress={handleTravelCardPress}>
-              <View style={styles.travelCard}>
-                <View style={styles.titleTextContainer}>
-                  <Text style={styles.period}>2023.07.01 ~ 2023.07.10</Text>
-                  <View style={styles.titleContainer}>
-                    <Text style={styles.travelTitle}>첫 도쿄 여행</Text>
-                    <Text style={styles.cityText}>일본, 도쿄</Text>
+              <TravelCard>
+                <TitleTextContainer>
+                  <PeriodText>2023.07.01 ~ 2023.07.10</PeriodText>
+                  <View>
+                    <TravelTitle>첫 도쿄 여행</TravelTitle>
+                    <CityText>일본, 도쿄</CityText>
                   </View>
+                </TitleTextContainer>
+                <View>
+                  <RemainCostText>총 비용 ￥100,000</RemainCostText>
+                  <RemainCostText>남은 비용 ￥100,000</RemainCostText>
                 </View>
-                <View style={styles.remain}>
-                  <Text style={styles.remainCost}>총 비용 ￥100,000</Text>
-                  <Text style={styles.remainCost}>남은 비용 ￥100,000</Text>
-                </View>
-              </View>
+              </TravelCard>
             </TouchableOpacity>
-            <View style={styles.travelCard}>
-              <View style={styles.titleTextContainer}>
-                <Text style={styles.period}>2023.02.01 ~ 2023.02.10</Text>
-                <View style={styles.titleContainer}>
-                  <Text style={styles.travelTitle}>친구들이랑 부산 여행</Text>
-                  <Text style={styles.cityText}>대한민국, 부산</Text>
+            <TravelCard>
+              <TitleTextContainer>
+                <PeriodText>2023.02.01 ~ 2023.02.10</PeriodText>
+                <View>
+                  <TravelTitle>친구들이랑 부산 여행</TravelTitle>
+                  <CityText>대한민국, 부산</CityText>
                 </View>
+              </TitleTextContainer>
+              <View>
+                <RemainCostText>총 비용 ￦100,000</RemainCostText>
+                <RemainCostText>남은 비용 ￦100,000</RemainCostText>
               </View>
-              <View style={styles.remain}>
-                <Text style={styles.remainCost}>총 비용 ￦100,000</Text>
-                <Text style={styles.remainCost}>남은 비용 ￦100,000</Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.yearContainer}>
-            <Text style={styles.yearText}>2022</Text>
-            <View style={styles.travelCard}>
-              <View style={styles.titleTextContainer}>
-                <Text style={styles.period}>2023.07.01 ~ 2023.07.10</Text>
-                <View style={styles.titleContainer3}>
-                  <Text style={styles.travelTitle}>첫 도쿄 여행</Text>
-                  <Text style={styles.cityText}>일본, 도쿄</Text>
+            </TravelCard>
+          </YearContainer>
+          <YearContainer>
+            <YearText>2022</YearText>
+            <TravelCard>
+              <TitleTextContainer>
+                <PeriodText>2023.07.01 ~ 2023.07.10</PeriodText>
+                <View>
+                  <TravelTitle>첫 도쿄 여행</TravelTitle>
+                  <CityText>일본, 도쿄</CityText>
                 </View>
+              </TitleTextContainer>
+              <View>
+                <RemainCostText>총 비용 ￥100,000</RemainCostText>
+                <RemainCostText>남은 비용 ￥100,000</RemainCostText>
               </View>
-              <View style={styles.remain}>
-                <Text style={styles.remainCost}>총 비용 ￥100,000</Text>
-                <Text style={styles.remainCost}>남은 비용 ￥100,000</Text>
-              </View>
-            </View>
-            <View style={styles.travelCard}>
-              <View style={styles.titleTextContainer}>
-                <Text style={styles.period}>2023.02.01 ~ 2023.02.10</Text>
-                <View style={styles.titleContainer}>
-                  <Text style={styles.travelTitle}>친구들이랑 부산 여행</Text>
-                  <Text style={styles.cityText}>대한민국, 부산</Text>
+            </TravelCard>
+            <TravelCard>
+              <TitleTextContainer>
+                <PeriodText>2023.02.01 ~ 2023.02.10</PeriodText>
+                <View>
+                  <TravelTitle>친구들이랑 부산 여행</TravelTitle>
+                  <CityText>대한민국, 부산</CityText>
                 </View>
+              </TitleTextContainer>
+              <View>
+                <RemainCostText>총 비용 ￦100,000</RemainCostText>
+                <RemainCostText>남은 비용 ￦100,000</RemainCostText>
               </View>
-              <View style={styles.remain}>
-                <Text style={styles.remainCost}>총 비용 ￦100,000</Text>
-                <Text style={styles.remainCost}>남은 비용 ￦100,000</Text>
-              </View>
-            </View>
-          </View>
-        </View>
-      </View>
-    </ScrollView>
+            </TravelCard>
+          </YearContainer>
+        </BodyMain>
+      </BodyContainer>
+    </RootScrollView>
   );
 };
 
 export default TravelBudgetPage;
-
-const styles = StyleSheet.create({
-  root: {
-    width: "100%",
-    height: 844,
-    flexDirection: "column",
-    alignItems: "flex-start",
-    backgroundColor: "#F2F4F6",
-  },
-  header: {
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    flexDirection: "row",
-    paddingVertical: 13,
-    paddingHorizontal: 12,
-  },
-  title: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 23,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  body: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    alignSelf: "stretch",
-  },
-  bodyHeader: {
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    flexDirection: "row",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-  },
-  yearText: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 20,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  period: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 10,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  travelTitle: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  cityText: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  bodyMain: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    gap: 20,
-    alignSelf: "stretch",
-  },
-  yearContainer: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    gap: 15,
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    padding: 20,
-  },
-  travelCard: {
-    width: 370,
-    height: 85,
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    borderWidth: 1,
-    borderColor: "#55ACEE",
-    borderStyle: "solid",
-    backgroundColor: "#FFF",
-    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.10)",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 15,
-  },
-  titleTextContainer: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    gap: 5,
-    alignSelf: "stretch",
-  },
-  titleContainer: {
-    // flexDirection: "column",
-    // justifyContent: "flex-end",
-    // alignItems: "flex-start",
-  },
-  remainCost: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  // remain: {
-  //   flexDirection: "column",
-  //   justifyContent: "center",
-  //   alignItems: "flex-end",
-  // },
-});

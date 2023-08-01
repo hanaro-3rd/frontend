@@ -1,9 +1,9 @@
-import { StatusBar, useWindowDimensions } from 'react-native';
+import { StatusBar, useWindowDimensions } from "react-native";
 import {
   responsiveScreenFontSize,
   responsiveScreenHeight,
   responsiveScreenWidth,
-} from 'react-native-responsive-dimensions';
+} from "react-native-responsive-dimensions";
 
 const FIGMA_WINDOW_WIDTH = 390;
 const FIGMA_WINDOW_HEIGHT = 844;
@@ -23,7 +23,7 @@ export function widthPercentage(width) {
 export function heightPercentage(height) {
   // // 피그마 픽셀을 현재 노트북 픽셀 크기로 변환
 
-  const percentage = (height / FIGMA_WINDOW_HEIGHT) * 100;
+  const percentage = (height / FIGMA_WINDOW_HEIGHT) * 120;
 
   return responsiveScreenHeight(percentage);
 }

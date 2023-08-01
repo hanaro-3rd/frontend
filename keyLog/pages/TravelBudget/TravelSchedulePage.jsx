@@ -1,369 +1,316 @@
+import styled from "styled-components/native";
+import { View } from "react-native";
 import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-  Modal,
-} from "react-native";
+  fontPercentage,
+  getStatusBarHeight,
+  heightPercentage,
+  phoneHeight,
+  phoneWidth,
+  widthPercentage,
+} from "../../utils/ResponseSize";
 import CloseButton from "../../assets/travelBudget/CloseButton.png";
 import SelectButton from "../../assets/travelBudget/SelectButton.png";
 import SelectButtonBefore from "../../assets/travelBudget/SelectButtonBefore.png";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import DeleteHeader from "../../components/Header/DeleteHeader";
 
-const TravelSchedulePage = () => {
-  const navigation = useNavigation();
+const Root = styled.SafeAreaView`
+  width: ${phoneWidth}px;
+  height: ${phoneHeight}px;
+  justify-content: space-between;
+`;
+
+const Body = styled.SafeAreaView`
+  background-color: white;
+  width: 100%;
+  min-height: ${phoneHeight}px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 0 0;
+  align-self: stretch;
+`;
+
+const BodyHeader = styled.View`
+  display: flex;
+  padding: ${heightPercentage(15)}px ${widthPercentage(20)}px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+`;
+
+const Title = styled.Text`
+  color: #191f29;
+  font-family: Inter;
+  font-size: ${fontPercentage(23)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
+
+const SubTitle = styled.Text`
+  color: #8b95a1;
+  font-family: Inter;
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const BodyMain = styled.View`
+  display: flex;
+  padding: ${heightPercentage(20)}px ${widthPercentage(20)}px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1 0 0;
+  align-self: stretch;
+`;
+
+const TravelTitleContainer = styled.View`
+  width: ${widthPercentage(350)}px;
+  height: ${heightPercentage(68)}px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  margin-bottom: ${heightPercentage(10)}px;
+`;
+
+const TitleContainer = styled.View`
+  display: flex;
+  padding: 0px ${widthPercentage(5)}px;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-direction: row;
+  align-self: stretch;
+`;
+const TravelTitle = styled.Text`
+  color: #191f29;
+  text-align: center;
+  font-family: Inter;
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
+
+const TextSize = styled.Text`
+  color: #191f29;
+  text-align: center;
+  font-family: Inter;
+  font-size: ${fontPercentage(12)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const TravelTextinput = styled.TextInput`
+  display: flex;
+  width: ${widthPercentage(350)}px;
+  height: ${heightPercentage(39)}px;
+  padding: ${heightPercentage(10)}px ${widthPercentage(15)}px;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
+  align-self: stretch;
+  background-color: #f9fafb;
+  color: #b0b8c1;
+  border-radius: 5px;
+  text-align: right;
+  font-family: Inter;
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const TravelCountryTextinput = styled.TextInput`
+  width: ${widthPercentage(170)}px;
+  height: ${heightPercentage(39)}px;
+  display: flex;
+  padding: ${heightPercentage(10)}px ${widthPercentage(15)}px;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
+  flex: 1 0 0;
+  align-self: stretch;
+  background-color: #f9fafb;
+  color: #b0b8c1;
+  border-radius: 5px;
+  text-align: right;
+  font-family: Inter;
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const SelectedFrame = styled.View`
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  flex-direction: row;
+`;
+
+const Footer = styled.TouchableOpacity`
+  width: 100%;
+  display: flex;
+  padding: ${heightPercentage(15)}px ${widthPercentage(25)}px;
+  height: ${heightPercentage(85)}px;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+  align-self: stretch;
+  margin-bottom: ${heightPercentage(25)}px;
+  position: absolute;
+  bottom: 0;
+`;
+const NextButton = styled.TouchableOpacity`
+  display: flex;
+  width: ${widthPercentage(340)}px;
+  height: ${heightPercentage(55)}px;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+`;
+const NextButtonText = styled.Text`
+  color: #fff;
+  font-family: Inter;
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
+
+const TravelSchedulePage = ({ navigation }) => {
+  const [travelTitle, setTravelTitle] = useState("");
+  const [travelCountry, setTravelCountry] = useState("");
+  const [travelCountryOption, setTravelCountryOption] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [isAllFieldsFilled, setIsAllFieldsFilled] = useState(false);
+
+  const updateIsAllFieldsFilled = () => {
+    setIsAllFieldsFilled(
+      travelTitle !== "" &&
+        travelCountry !== "" &&
+        travelCountryOption !== "" &&
+        startDate !== "" &&
+        endDate !== ""
+    );
+  };
+
+  const handleTravelTitleChange = (text) => {
+    setTravelTitle(text);
+    updateIsAllFieldsFilled();
+  };
+
+  const handleTravelCountryChange = (text) => {
+    setTravelCountry(text);
+    updateIsAllFieldsFilled();
+  };
+
+  const handleTravelCountryOptionChange = (text) => {
+    setTravelCountryOption(text);
+    updateIsAllFieldsFilled();
+  };
+
+  const handleStartDateChange = (text) => {
+    setStartDate(text);
+    updateIsAllFieldsFilled();
+  };
+
+  const handleEndDateChange = (text) => {
+    setEndDate(text);
+    updateIsAllFieldsFilled();
+  };
+
+  useEffect(() => {
+    updateIsAllFieldsFilled();
+  }, [travelTitle, travelCountry, travelCountryOption, startDate, endDate]);
 
   const handleNextButtonPress = () => {
-    navigation.navigate("TravelBudgetPlanPage");
-  };
+    if (isAllFieldsFilled) {
+      navigation.navigate("TravelBudgetPlanPage");
+    }
+    // else {
 
-  const handleGoBackToBudgetPage = () => {
-    navigation.goBack();
-  };
-
-  const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const [selectedValue, setSelectedValue] = useState("나라");
-
-  const handleDropdownPress = () => {
-    setDropdownVisible(!isDropdownVisible);
-  };
-
-  const handleOptionSelect = (value) => {
-    setSelectedValue(value);
-    setDropdownVisible(false);
+    // }
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.root}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleGoBackToBudgetPage}>
-          <Image source={CloseButton} />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.body}>
-        <View style={styles.bodyHeader}>
-          <Text style={styles.title}>계획 작성</Text>
-          <Text style={styles.subtitle}>
-            계획중인 여행의 정보를 작성해주세요.
-          </Text>
-        </View>
-        <View style={styles.bodyMain}>
-          <View style={styles.travelTitleContainer}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.containerTitle}>여행 제목</Text>
-              <Text style={styles.textSize}>0 / 20</Text>
-            </View>
-            <View style={styles.inputTitle}>
-              <TextInput
-                style={styles.placeHolderInput}
-                placeholder="이름없는 여행1"
-                placeholderTextColor="#B0B8C1"
+    <Root>
+      <DeleteHeader navigation={navigation} to="TravelBudgetPage" />
+      <Body>
+        <BodyHeader>
+          <Title>계획 작성</Title>
+          <SubTitle>계획중인 여행의 정보를 작성해주세요.</SubTitle>
+        </BodyHeader>
+        <BodyMain>
+          <TravelTitleContainer>
+            <TitleContainer>
+              <TravelTitle>여행제목</TravelTitle>
+              <TextSize>0 / 20</TextSize>
+            </TitleContainer>
+            <TravelTextinput
+              placeholder="이름없는 여행1"
+              placeholderTextColor="#b0b8c1"
+              value={travelTitle}
+              onChangeText={handleTravelTitleChange}
+            />
+          </TravelTitleContainer>
+          <TravelTitleContainer>
+            <TitleContainer>
+              <TravelTitle>여행지</TravelTitle>
+              <TextSize>0 / 10</TextSize>
+            </TitleContainer>
+            <SelectedFrame>
+              <TravelCountryTextinput
+                placeholder=""
+                placeholderTextColor="#b0b8c1"
+                value={travelCountry}
+                onChangeText={handleTravelCountryChange}
               />
-            </View>
-          </View>
-          <View style={styles.travelPlaceContainer}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.containerTitle}>여행지</Text>
-              <Text style={styles.textSize}>0 / 10</Text>
-            </View>
-            <View style={styles.selectTravelCountry}>
-              {/* <View style={styles.inputCountry}>
-                <Text style={styles.placeHolder}>나라</Text>
-                <View style={styles.selectButton}>
-                  <Image source={SelectButtonBefore} />
-                </View>
-              </View> */}
-              <View style={styles.inputCountry}>
-                <TouchableOpacity onPress={handleDropdownPress}>
-                  <Text>{selectedValue}</Text>
-                </TouchableOpacity>
-                <Modal visible={isDropdownVisible} animationType="slide">
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TouchableOpacity
-                      onPress={() => handleOptionSelect("대한민국")}
-                    >
-                      <Text>대한민국</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => handleOptionSelect("미국")}
-                    >
-                      <Text>미국</Text>
-                    </TouchableOpacity>
-                    {/* 추가적인 옵션들을 원하는대로 추가할 수 있습니다. */}
-                    <TouchableOpacity
-                      onPress={() => handleOptionSelect("일본")}
-                    >
-                      <Text>일본</Text>
-                    </TouchableOpacity>
-                    {/* 추가적인 옵션들을 원하는대로 추가할 수 있습니다. */}
-                  </View>
-                </Modal>
-              </View>
-              <View style={styles.inputCountry}>
-                <TextInput
-                  style={styles.placeHolderInput}
-                  placeholder="도시 (선택)"
-                  placeholderTextColor="#B0B8C1"
-                />
-              </View>
-            </View>
-          </View>
-          <View style={styles.travelPeriodContainer}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.containerTitle}>여행 기간</Text>
-            </View>
-            <View style={styles.selectContainer}>
-              <View style={styles.startSelect}>
-                <View style={styles.selectButton}>
-                  <Image source={SelectButtonBefore} />
-                </View>
-              </View>
-              <View style={styles.endSelect}>
-                <View style={styles.selectButton}>
-                  <Image source={SelectButtonBefore} />
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.footer}>
-          <TouchableOpacity
-            style={styles.submitButton}
-            onPress={handleNextButtonPress}
-          >
-            <Text style={styles.buttonText}>다음</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </ScrollView>
+              <TravelCountryTextinput
+                placeholder="도시 (선택)"
+                placeholderTextColor="#b0b8c1"
+                value={travelCountryOption}
+                onChangeText={handleTravelCountryOptionChange}
+              />
+            </SelectedFrame>
+          </TravelTitleContainer>
+          <TravelTitleContainer>
+            <TitleContainer>
+              <TravelTitle>여행기간</TravelTitle>
+            </TitleContainer>
+            <SelectedFrame>
+              <TravelCountryTextinput
+                placeholder=""
+                placeholderTextColor="#b0b8c1"
+                value={startDate}
+                onChangeText={handleStartDateChange}
+              />
+              <TravelCountryTextinput
+                placeholder=""
+                placeholderTextColor="#b0b8c1"
+                value={endDate}
+                onChangeText={handleEndDateChange}
+              />
+            </SelectedFrame>
+          </TravelTitleContainer>
+        </BodyMain>
+      </Body>
+      <Footer>
+        <NextButton
+          style={{ backgroundColor: isAllFieldsFilled ? "#55acee" : "#f2f4f6" }}
+          onPress={handleNextButtonPress}
+        >
+          <NextButtonText>다음</NextButtonText>
+        </NextButton>
+      </Footer>
+    </Root>
   );
 };
 
 export default TravelSchedulePage;
-
-const styles = StyleSheet.create({
-  root: {
-    width: "100%",
-    height: 844,
-    flexDirection: "column",
-    alignItems: "flex-start",
-    backgroundColor: "#F2F4F6",
-  },
-  header: {
-    alignItems: "flex-start",
-    gap: 10,
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    flexDirection: "row",
-    paddingVertical: 13,
-    paddingHorizontal: 12,
-  },
-  title: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 23,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  subtitle: {
-    color: "#8B95A1",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  body: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    flexGrow: 1,
-    flexShrink: 0,
-    flexBasis: 0,
-    alignSelf: "stretch",
-  },
-  bodyHeader: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    gap: 10,
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-  },
-  containerTitle: {
-    color: "#191F29",
-    textAlign: "center",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  textSize: {
-    color: "#191F29",
-    textAlign: "center",
-    fontFamily: "Inter",
-    fontSize: 12,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  bodyMain: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    gap: 10,
-    flexGrow: 1,
-    flexShrink: 0,
-    flexBasis: 0,
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    padding: 20,
-  },
-  travelTitleContainer: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    gap: 10,
-    alignSelf: "stretch",
-  },
-  titleContainer: {
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    alignSelf: "stretch",
-    flexDirection: "row",
-    paddingVertical: 0,
-    paddingHorizontal: 5,
-  },
-  placeHolderInput: {
-    height: 39,
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontWeight: "400",
-  },
-  placeHolder: {
-    color: "#B0B8C1",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  inputTitle: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 15,
-    alignSelf: "stretch",
-    backgroundColor: "#F9FAFB",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-  },
-  travelPlaceContainer: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    gap: 10,
-    alignSelf: "stretch",
-  },
-  selectTravelCountry: {
-    alignItems: "flex-start",
-    gap: 10,
-    alignSelf: "stretch",
-    flexDirection: "row",
-  },
-  inputCountry: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 15,
-    flexGrow: 1,
-    flexShrink: 0,
-    flexBasis: 0,
-    backgroundColor: "#F9FAFB",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-  },
-  selectButton: {
-    height: 19,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 10,
-  },
-  travelPeriodContainer: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    gap: 10,
-    alignSelf: "stretch",
-  },
-  selectContainer: {
-    alignItems: "flex-start",
-    gap: 10,
-    alignSelf: "stretch",
-    flexDirection: "row",
-  },
-  startSelect: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 15,
-    flexGrow: 1,
-    flexShrink: 0,
-    flexBasis: 0,
-    alignSelf: "stretch",
-    backgroundColor: "#F9FAFB",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-  },
-  endSelect: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 15,
-    flexGrow: 1,
-    flexShrink: 0,
-    flexBasis: 0,
-    backgroundColor: "#F9FAFB",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: "#FFF",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  footer: {
-    flexDirection: "column",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 20,
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    paddingVertical: 15,
-    paddingHorizontal: 25,
-  },
-  submitButton: {
-    height: 55,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 10,
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-    flexDirection: "row",
-    padding: 10,
-    borderRadius: 10,
-  },
-});

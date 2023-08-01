@@ -1,8 +1,4 @@
-import {
-  Text,
-  View,
-  StatusBar,
-} from "react-native";
+import { Text, View, StatusBar, TouchableOpacity } from "react-native";
 import React from "react";
 import styled from "styled-components/native";
 import {
@@ -32,7 +28,7 @@ const HeaderImage = styled.Image`
   margin-left: ${widthPercentage(20)}px;
   width: ${widthPercentage(24)}px;
   height: ${heightPercentage(24)}px;
-`
+`;
 const TitleView = styled.View`
   width: ${phoneWidth}px;
   align-items: center;
@@ -114,7 +110,7 @@ const TravelRecordDetailComponent = ({ navigation }) => {
   StatusBar.setTranslucent(true);
   return (
     <Main>
-      <DeleteHeader navigation={navigation} to="TravelRecordMainComponent"/>
+      <DeleteHeader navigation={navigation} to="TravelRecordMainComponent" />
       <TitleView>
         <DateText>2023.07.01 ~ 2023.07.10</DateText>
       </TitleView>
@@ -134,11 +130,12 @@ const TravelRecordDetailComponent = ({ navigation }) => {
               source={require("../../Images/세븐일레븐.png")}
               resizeMode="contain"
             />
-
-            <View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("PaymentPageInputComponent")}
+            >
               <ListTitle>세븐일레븐</ListTitle>
               <Text>13:58</Text>
-            </View>
+            </TouchableOpacity>
           </ListTitleView>
           <PriceView>
             <ListTitle>￥10,000</ListTitle>

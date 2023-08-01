@@ -1,11 +1,14 @@
+import React from "react";
 import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+  fontPercentage,
+  getStatusBarHeight,
+  heightPercentage,
+  phoneHeight,
+  phoneWidth,
+  widthPercentage,
+} from "../../utils/ResponseSize";
+import { Image, TouchableOpacity } from "react-native";
+import styled from "styled-components/native";
 import CloseButton from "../../assets/travelBudget/CloseButton.png";
 import DeleteButton from "../../assets/travelBudget/delete.png";
 import EditButton from "../../assets/travelBudget/edit.png";
@@ -14,369 +17,381 @@ import TransIcon from "../../assets/travelBudget/TransIcon.png";
 import HouseIcon from "../../assets/travelBudget/HouseIcon.png";
 import ShopIcon from "../../assets/travelBudget/ShopIcon.png";
 import SelectButton from "../../assets/travelBudget/SelectButton.png";
-import { useNavigation } from "@react-navigation/native";
 
-const TravelBudgetDetailPage = () => {
-  const navigation = useNavigation();
+const RootScrollView = styled.ScrollView`
+  margin-top: ${getStatusBarHeight}px;
+  min-height: ${phoneHeight}px;
+  width: 100%;
+  flex-direction: column;
+  background-color: #f2f4f6;
+`;
 
+const Header = styled.View`
+  width: 100%;
+  height: ${heightPercentage(50)}px;
+  justify-content: space-between;
+  background-color: white;
+  flex-direction: row;
+  padding: ${heightPercentage(13)}px ${widthPercentage(12)}px;
+`;
+const HeaderRight = styled.View`
+  align-items: flex-start;
+  gap: 10px;
+  flex-direction: row;
+`;
+
+const TitleText = styled.Text`
+  color: #191f29;
+  font-family: "Inter";
+  font-size: ${fontPercentage(23)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
+
+const BodyContainer = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 0 0;
+  align-self: stretch;
+`;
+
+const BodyHeader = styled.View`
+  align-items: center;
+  align-self: stretch;
+  background-color: #fff;
+  flex-direction: row;
+  padding: ${heightPercentage(15)}px ${widthPercentage(20)}px;
+`;
+
+const PeriodText = styled.Text`
+  color: #191f29;
+  font-family: "Inter";
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const TitleTextMain = styled.Text`
+  color: #000;
+  font-family: "Inter";
+  font-size: ${fontPercentage(30)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
+
+const CityText = styled.Text`
+  color: #191f29;
+  font-family: "Inter";
+  font-size: ${fontPercentage(20)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const BodyMain = styled.View`
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  align-self: stretch;
+  background-color: #fff;
+`;
+
+const MainTextContainer = styled.View`
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  padding: ${heightPercentage(10)}px 0px;
+  gap: 5px;
+`;
+
+const MainContainer = styled.View`
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+`;
+
+const CategoryPaymentContainer = styled.View`
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  background-color: #f2f4f6;
+`;
+
+const CategoryCardContainer = styled.View`
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  background-color: #fff;
+  flex-direction: row;
+  padding: ${heightPercentage(10)}px ${widthPercentage(15)}px;
+`;
+
+const CategoryContainer = styled.View`
+  align-items: center;
+  gap: 10px;
+  flex-direction: row;
+`;
+
+const Icon = styled.View`
+  align-items: center;
+  gap: 10px;
+  flex-direction: row;
+  padding: 0px ${widthPercentage(5)}px;
+`;
+
+const CategoryText = styled.Text`
+  color: #191f29;
+  font-family: "Inter";
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const RemainText = styled.Text`
+  color: #191f29;
+  text-align: right;
+  font-family: "Inter";
+  font-size: ${fontPercentage(14)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const CostText = styled.Text`
+  color: #191f29;
+  text-align: right;
+  font-family: "Inter";
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
+
+const RemainCostContainer = styled.View`
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  flex-direction: row;
+`;
+
+const SelectButtonImage = styled.Image`
+  height: ${heightPercentage(19)}px;
+  margin-top: ${heightPercentage(4)}px;
+`;
+
+const CategoryDetailText = styled.Text`
+  color: #191f29;
+  font-family: "Inter";
+  font-size: ${fontPercentage(14)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const PaymentListContainer = styled.View`
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+`;
+
+const PaymentContainer = styled.View`
+  height: ${heightPercentage(50)}px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  background-color: #f2f4f6;
+  flex-direction: row;
+  padding: ${heightPercentage(10)}px ${widthPercentage(15)}px;
+`;
+
+const CategoryDetailContainer = styled.View`
+  align-items: center;
+  gap: 5px;
+  flex-direction: row;
+`;
+
+const PayCostText = styled.Text`
+  color: #191f29;
+  text-align: right;
+  font-family: "Inter";
+  font-size: ${fontPercentage(14)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const CategoryRemainText = styled.Text`
+  color: #191f29;
+  font-family: "Inter";
+  font-size: ${fontPercentage(14)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
+
+const RemainCostText = styled.Text`
+  color: #191f29;
+  text-align: right;
+  font-family: "Inter";
+  font-size: ${fontPercentage(14)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
+
+const TravelBudgetDetailPage = ({ navigation }) => {
   const handleGoBackToBudgetPage = () => {
     navigation.goBack();
   };
+
   return (
-    <ScrollView contentContainerStyle={styles.root}>
-      <View style={styles.header}>
+    <RootScrollView>
+      <Header>
         <TouchableOpacity onPress={handleGoBackToBudgetPage}>
           <Image source={CloseButton} />
         </TouchableOpacity>
-        <View style={styles.headerRight}>
+        <HeaderRight>
           <Image source={DeleteButton} />
           <Image source={EditButton} />
-        </View>
-      </View>
-      <View style={styles.body}>
-        <View style={styles.bodyHeader}>
-          <Text style={styles.title}>경비 계획 상세</Text>
-        </View>
-        <View style={styles.bodyMain}>
-          <View style={styles.mainTextContainer}>
-            <Text style={styles.periodText}>2023.07.01 ~ 2023.07.10</Text>
-            <Text style={styles.titleText}>첫 도쿄 여행</Text>
-            <Text style={styles.cityText}>일본, 도쿄</Text>
-          </View>
-          <View style={styles.mainContainer}>
-            <View style={styles.categoryPaymentContainer}>
-              <View style={styles.categoryCardContainer}>
-                <View style={styles.categoryContainer}>
-                  <View style={styles.icon}>
+        </HeaderRight>
+      </Header>
+      <BodyContainer>
+        <BodyHeader>
+          <TitleText>경비 계획 상세</TitleText>
+        </BodyHeader>
+        <BodyMain>
+          <MainTextContainer>
+            <PeriodText>2023.07.01 ~ 2023.07.10</PeriodText>
+            <TitleTextMain>첫 도쿄 여행</TitleTextMain>
+            <CityText>일본, 도쿄</CityText>
+          </MainTextContainer>
+          <MainContainer>
+            <CategoryPaymentContainer>
+              <CategoryCardContainer>
+                <CategoryContainer>
+                  <Icon>
                     <Image source={FoodIcon} />
-                  </View>
-                  <Text style={styles.categotyText}>식비</Text>
-                </View>
-                <View style={styles.remainCostContainer}>
-                  <Text style={styles.remainText}>계획한 비용</Text>
-                  <Text style={styles.costText}>￥80,000</Text>
-                  <View style={styles.selectButton}>
-                    <Image source={SelectButton} />
-                  </View>
-                </View>
-              </View>
-              <View style={styles.paymentListContainer}>
-                <View style={styles.paymentContainer}>
-                  <View style={styles.categoryDetailContainer}>
-                    <Text style={styles.categotyDetailText}>스테이크</Text>
-                  </View>
-                  <Text style={styles.payCost}>- ￥10,000</Text>
-                </View>
-                <View style={styles.paymentContainer}>
-                  <View style={styles.categoryDetailContainer}>
-                    <Text style={styles.categotyDetailText}>오코노미야키</Text>
-                  </View>
-                  <Text style={styles.payCost}>- ￥10,000</Text>
-                </View>
-                <View style={styles.paymentContainer}>
-                  <View style={styles.categoryDetailContainer}>
-                    <Text style={styles.categotyRemainText}>남은 비용</Text>
-                  </View>
-                  <Text style={styles.remainCost}>￥60,000</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.categoryPaymentContainer}>
-              <View style={styles.categoryCardContainer}>
-                <View style={styles.categoryContainer}>
-                  <Image source={TransIcon} />
-                  <Text style={styles.categotyText}>교통</Text>
-                </View>
-                <View style={styles.remainCostContainer}>
-                  <Text style={styles.remainText}>계획한 비용</Text>
-                  <Text style={styles.costText}>￥80,000</Text>
-                  <View style={styles.selectButton}>
-                    <Image source={SelectButton} />
-                  </View>
-                </View>
-              </View>
-              <View style={styles.paymentListContainer}>
-                <View style={styles.paymentContainer}>
-                  <View style={styles.categoryDetailContainer}>
-                    <Text style={styles.categotyDetailText}>지하철</Text>
-                  </View>
-                  <Text style={styles.payCost}>- ￥10,000</Text>
-                </View>
-                <View style={styles.paymentContainer}>
-                  <View style={styles.categoryDetailContainer}>
-                    <Text style={styles.categotyDetailText}>신칸센</Text>
-                  </View>
-                  <Text style={styles.payCost}>- ￥10,000</Text>
-                </View>
-                <View style={styles.paymentContainer}>
-                  <View style={styles.categoryDetailContainer}>
-                    <Text style={styles.categotyRemainText}>남은 비용</Text>
-                  </View>
-                  <Text style={styles.remainCost}>￥60,000</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.categoryPaymentContainer}>
-              <View style={styles.categoryCardContainer}>
-                <View style={styles.categoryContainer}>
-                  <Image source={HouseIcon} />
-                  <Text style={styles.categotyText}>숙박</Text>
-                </View>
-                <View style={styles.remainCostContainer}>
-                  <Text style={styles.remainText}>계획한 비용</Text>
-                  <Text style={styles.costText}>￥80,000</Text>
-                  <View style={styles.selectButton}>
-                    <Image source={SelectButton} />
-                  </View>
-                </View>
-              </View>
-              <View style={styles.paymentListContainer}>
-                <View style={styles.paymentContainer}>
-                  <View style={styles.categoryDetailContainer}>
-                    <Text style={styles.categotyDetailText}>호텔</Text>
-                  </View>
-                  <Text style={styles.payCost}>- ￥10,000</Text>
-                </View>
-                <View style={styles.paymentContainer}>
-                  <View style={styles.categoryDetailContainer}>
-                    <Text style={styles.categotyRemainText}>남은 비용</Text>
-                  </View>
-                  <Text style={styles.remainCost}>￥70,000</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.categoryPaymentContainer}>
-              <View style={styles.categoryCardContainer}>
-                <View style={styles.categoryContainer}>
-                  <Image source={ShopIcon} />
-                  <Text style={styles.categotyText}>쇼핑 · 편의점 · 마트</Text>
-                </View>
-                <View style={styles.remainCostContainer}>
-                  <Text style={styles.remainText}>계획한 비용</Text>
-                  <Text style={styles.costText}>￥80,000</Text>
-                  <View style={styles.selectButton}>
-                    <Image source={SelectButton} />
-                  </View>
-                </View>
-              </View>
-              <View style={styles.paymentListContainer}>
-                <View style={styles.paymentContainer}>
-                  <View style={styles.categoryDetailContainer}>
-                    <Text style={styles.categotyDetailText}>스테이크</Text>
-                  </View>
-                  <Text style={styles.payCost}>- ￥10,000</Text>
-                </View>
-                <View style={styles.paymentContainer}>
-                  <View style={styles.categoryDetailContainer}>
-                    <Text style={styles.categotyDetailText}>오코노미야키</Text>
-                  </View>
-                  <Text style={styles.payCost}>- ￥10,000</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-      </View>
-    </ScrollView>
+                  </Icon>
+                  <CategoryText>식비</CategoryText>
+                </CategoryContainer>
+                <RemainCostContainer>
+                  <RemainText>계획한 비용</RemainText>
+                  <CostText>￥80,000</CostText>
+                  <SelectButtonImage source={SelectButton} />
+                </RemainCostContainer>
+              </CategoryCardContainer>
+              <PaymentListContainer>
+                <PaymentContainer>
+                  <CategoryDetailContainer>
+                    <CategoryDetailText>스테이크</CategoryDetailText>
+                  </CategoryDetailContainer>
+                  <PayCostText>- ￥10,000</PayCostText>
+                </PaymentContainer>
+                <PaymentContainer>
+                  <CategoryDetailContainer>
+                    <CategoryDetailText>오코노미야키</CategoryDetailText>
+                  </CategoryDetailContainer>
+                  <PayCostText>- ￥10,000</PayCostText>
+                </PaymentContainer>
+                <PaymentContainer>
+                  <CategoryDetailContainer>
+                    <CategoryRemainText>남은 비용</CategoryRemainText>
+                  </CategoryDetailContainer>
+                  <RemainCostText>￥60,000</RemainCostText>
+                </PaymentContainer>
+              </PaymentListContainer>
+            </CategoryPaymentContainer>
+            <CategoryPaymentContainer>
+              <CategoryCardContainer>
+                <CategoryContainer>
+                  <Icon>
+                    <Image source={TransIcon} />
+                  </Icon>
+                  <CategoryText>교통</CategoryText>
+                </CategoryContainer>
+                <RemainCostContainer>
+                  <RemainText>계획한 비용</RemainText>
+                  <CostText>￥80,000</CostText>
+                  <SelectButtonImage source={SelectButton} />
+                </RemainCostContainer>
+              </CategoryCardContainer>
+              <PaymentListContainer>
+                <PaymentContainer>
+                  <CategoryDetailContainer>
+                    <CategoryDetailText>지하철</CategoryDetailText>
+                  </CategoryDetailContainer>
+                  <PayCostText>- ￥10,000</PayCostText>
+                </PaymentContainer>
+                <PaymentContainer>
+                  <CategoryDetailContainer>
+                    <CategoryDetailText>신칸센</CategoryDetailText>
+                  </CategoryDetailContainer>
+                  <PayCostText>- ￥10,000</PayCostText>
+                </PaymentContainer>
+                <PaymentContainer>
+                  <CategoryDetailContainer>
+                    <CategoryRemainText>남은 비용</CategoryRemainText>
+                  </CategoryDetailContainer>
+                  <RemainCostText>￥60,000</RemainCostText>
+                </PaymentContainer>
+              </PaymentListContainer>
+            </CategoryPaymentContainer>
+            <CategoryPaymentContainer>
+              <CategoryCardContainer>
+                <CategoryContainer>
+                  <Icon>
+                    <Image source={HouseIcon} />
+                  </Icon>
+                  <CategoryText>숙박</CategoryText>
+                </CategoryContainer>
+                <RemainCostContainer>
+                  <RemainText>계획한 비용</RemainText>
+                  <CostText>￥80,000</CostText>
+                  <SelectButtonImage source={SelectButton} />
+                </RemainCostContainer>
+              </CategoryCardContainer>
+              <PaymentListContainer>
+                <PaymentContainer>
+                  <CategoryDetailContainer>
+                    <CategoryDetailText>호텔</CategoryDetailText>
+                  </CategoryDetailContainer>
+                  <PayCostText>- ￥10,000</PayCostText>
+                </PaymentContainer>
+                <PaymentContainer>
+                  <CategoryDetailContainer>
+                    <CategoryRemainText>남은 비용</CategoryRemainText>
+                  </CategoryDetailContainer>
+                  <RemainCostText>￥70,000</RemainCostText>
+                </PaymentContainer>
+              </PaymentListContainer>
+            </CategoryPaymentContainer>
+            <CategoryPaymentContainer>
+              <CategoryCardContainer>
+                <CategoryContainer>
+                  <Icon>
+                    <Image source={ShopIcon} />
+                  </Icon>
+                  <CategoryText>쇼핑 · 편의점 · 마트</CategoryText>
+                </CategoryContainer>
+                <RemainCostContainer>
+                  <RemainText>계획한 비용</RemainText>
+                  <CostText>￥80,000</CostText>
+                  <SelectButtonImage source={SelectButton} />
+                </RemainCostContainer>
+              </CategoryCardContainer>
+              <PaymentListContainer>
+                <PaymentContainer>
+                  <CategoryDetailContainer>
+                    <CategoryDetailText>스테이크</CategoryDetailText>
+                  </CategoryDetailContainer>
+                  <PayCostText>- ￥10,000</PayCostText>
+                </PaymentContainer>
+                <PaymentContainer>
+                  <CategoryDetailContainer>
+                    <CategoryRemainText>남은 비용</CategoryRemainText>
+                  </CategoryDetailContainer>
+                  <RemainCostText>￥70,000</RemainCostText>
+                </PaymentContainer>
+              </PaymentListContainer>
+            </CategoryPaymentContainer>
+          </MainContainer>
+        </BodyMain>
+      </BodyContainer>
+    </RootScrollView>
   );
 };
 
 export default TravelBudgetDetailPage;
-
-const styles = StyleSheet.create({
-  root: {
-    width: "100%",
-    height: 1000,
-    flexDirection: "column",
-    alignItems: "flex-start",
-    backgroundColor: "#F2F4F6",
-  },
-  header: {
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    flexDirection: "row",
-    paddingVertical: 13,
-    paddingHorizontal: 12,
-  },
-  headerRight: {
-    alignItems: "flex-start",
-    gap: 10,
-    flexDirection: "row",
-  },
-  title: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 23,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  body: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    flexGrow: 1,
-    flexShrink: 0,
-    flexBasis: 0,
-    alignSelf: "stretch",
-  },
-  bodyHeader: {
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    flexDirection: "row",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-  },
-  periodText: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  titleText: {
-    color: "#000",
-    fontFamily: "Inter",
-    fontSize: 30,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  cityText: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 20,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  bodyMain: {
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 20,
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-  },
-  mainTextContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-    alignSelf: "stretch",
-    paddingVertical: 10,
-    gap: 5,
-  },
-  mainContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-    alignSelf: "stretch",
-  },
-  categoryPaymentContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-  },
-  categoryCardContainer: {
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  categoryContainer: {
-    alignItems: "center",
-    gap: 10,
-    flexDirection: "row",
-  },
-  icon: {
-    alignItems: "center",
-    gap: 10,
-    flexDirection: "row",
-    paddingVertical: 0,
-    paddingHorizontal: 5,
-  },
-  categotyText: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  remainText: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  costText: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  remainCostContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  selectButton: {
-    height: 19,
-    marginTop: 4,
-    // gap: 20,
-  },
-  categotyDetailText: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  paymentListContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-    alignSelf: "stretch",
-  },
-  paymentContainer: {
-    height: 50,
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#F2F4F6",
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  categoryDetailContainer: {
-    alignItems: "center",
-    gap: 5,
-    flexDirection: "row",
-  },
-  payCost: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-  },
-  categotyRemainText: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-  remainCost: {
-    color: "#191F29",
-    textAlign: "right",
-    fontFamily: "Inter",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "700",
-  },
-});
