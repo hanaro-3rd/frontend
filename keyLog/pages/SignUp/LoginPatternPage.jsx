@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Ellipse from '../../assets/SignUp/Ellipse.svg';
+// import Ellipse from '../../assets/SignUp/Ellipse.svg';
+import Ellipse from '../../components/SignUpPageComponents/Ellipse';
 import {
   fontPercentage,
   heightPercentage,
