@@ -24,7 +24,7 @@ const App = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="TravelBudgetPage">
+      <Stack.Navigator initialRouteName="MainPage">
         <Stack.Screen
           name="MainPage"
           component={MainPage}
@@ -38,7 +38,11 @@ const App = () => {
         <Stack.Screen name="ExchangeSuccess" component={ExchangeSuccess} />
         <Stack.Screen name="ExchangeFail" component={ExchangeFail} />
         <Stack.Screen name="ChooseAccount" component={ChooseAccount} />
-        <Stack.Screen name="PickUpKeyPage" component={PickUpKeyPage} />
+        <Stack.Screen
+          name="PickUpKeyPage"
+          component={PickUpKeyPage}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="SignUpPage"
           component={SignUpPage}

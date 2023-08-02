@@ -410,9 +410,7 @@ const MainPage = ({ navigation }) => {
                 <MenuTitle>하나머니 줍기</MenuTitle>
                 <MenuSubtitle>여행을 떠나서 하나머니를 주워봐용</MenuSubtitle>
               </MenuTextContainer>
-              <MenuButton
-              // onPress={() =>  }
-              >
+              <MenuButton onPress={() => navigation.navigate("PickUpKeyPage")}>
                 <MenuButtonText>주우러 가기</MenuButtonText>
               </MenuButton>
             </MenuSubContainer>
