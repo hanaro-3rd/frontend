@@ -164,7 +164,7 @@ export default AccountConnectPage;
 
 const styles = StyleSheet.create({
   root: {
-    width: widthPercentage(390),
+    width: phoneWidth,
     flex: 1,
     flexDirection: "column",
     alignItems: "flex-start",
@@ -190,6 +190,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
   },
   body: {
+    width: phoneWidth,
     flexDirection: "column",
     alignItems: "flex-start",
     flexGrow: 1,
@@ -223,6 +224,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   bodyMain: {
+    width: phoneWidth,
     flexDirection: "column",
     alignItems: "flex-start",
     gap: 10,

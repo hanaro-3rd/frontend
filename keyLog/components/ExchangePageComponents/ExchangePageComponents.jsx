@@ -1,12 +1,10 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { List } from "react-native-paper";
+import Japanflag from "../../assets/exchangeImg/Japan.png";
 
 const ExchangePageComponents = () => {
-  return (
-    <View>
-      <Text>ExchangePageComponents</Text>
-    </View>
-  );
+  return <View></View>;
 };
 
 export default ExchangePageComponents;

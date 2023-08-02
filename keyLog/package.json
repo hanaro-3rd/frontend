@@ -11,10 +11,12 @@
   "dependencies": {
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
+    "@rneui/themed": "^4.0.0-rc.8",
     "i": "^0.3.7",
     "npm": "^9.8.1",
     "or": "^0.2.0",
-    "react": "18.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-native": "0.72.3",
     "react-native-modal": "^13.0.1",
     "react-native-paper": "^5.9.1",

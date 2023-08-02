@@ -24,27 +24,34 @@ import {
 } from "../../utils/ResponseSize";
 
 export const CountryChoiceComponent = () => {
-  const [expanded, setExpanded] = React.useState(true);
-  const handlePress = () => setExpanded(!expanded);
-
+  const list = [
+    {
+      name: "USD",
+      country_url: "../../assets/exchangeImg/USD.png",
+    },
+    {
+      name: "Japan",
+      country_url: "../../assets/exchangeImg/Japan.png",
+    },
+  ];
   return (
-    // <TouchableOpacity style={styles.countrySelect}>
-    //   <Image
-    //     source={require("../../assets/exchangeImg/USD.png")}
-    //     resizeMode="contain"
-    //   />
-    //   <Text style={styles.unitText}>USD</Text>
-    //   <Image source={require("../../assets/exchangeImg/SelectButton.png")} />
-    // </TouchableOpacity>
-    <List.Section title="Accordions">
-      <List.Accordion
-        title="Uncontrolled Accordion"
-        left={(props) => <List.Icon {...props} />}
-      >
-        <List.Item title="First item" />
-        <List.Item title="Second item" />
-      </List.Accordion>
-    </List.Section>
+    <TouchableOpacity style={styles.countrySelect}>
+      <Image
+        source={require("../../assets/exchangeImg/USD.png")}
+        resizeMode="contain"
+      />
+      <Text style={styles.unitText}>USD</Text>
+      <Image source={require("../../assets/exchangeImg/SelectButton.png")} />
+    </TouchableOpacity>
+
+    // <View>
+    //   <List.Section style={styles.countrySelect}>
+    //     <List.Accordion title="USD" style={styles.unitText}>
+    //       <List.Item title="Japan" />
+    //       <List.Item title="EUR" />
+    //     </List.Accordion>
+    //   </List.Section>
+    // </View>
   );
 };
 export default CountryChoiceComponent;
@@ -69,33 +76,3 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 });
-
-// const MyComponent = () => {
-//   const [expanded, setExpanded] = React.useState(true);
-
-//   const handlePress = () => setExpanded(!expanded);
-
-//   return (
-<List.Section title="Accordions">
-  <List.Accordion
-    title="Uncontrolled Accordion"
-    left={(props) => <List.Icon {...props} icon="folder" />}
-  >
-    <List.Item title="First item" />
-    <List.Item title="Second item" />
-  </List.Accordion>
-
-  <List.Accordion
-    title="Controlled Accordion"
-    left={(props) => <List.Icon {...props} icon="folder" />}
-    expanded={expanded}
-    onPress={handlePress}
-  >
-    <List.Item title="First item" />
-    <List.Item title="Second item" />
-  </List.Accordion>
-</List.Section>;
-//   );
-// };
-
-// export default MyComponent;

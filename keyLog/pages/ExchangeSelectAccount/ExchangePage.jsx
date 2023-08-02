@@ -62,7 +62,7 @@ export const ExchangePage = () => {
                 </Text>
               </View>
               <View style={styles.foreignCurrencyContainer}>
-                {/* <CountryChoiceComponent /> */}
+                <CountryChoiceComponent />
                 <View style={styles.foreignCurrencyInput}>
                   <Text style={styles.foreignMoneyText}>10 ~ 10,000</Text>
                 </View>
