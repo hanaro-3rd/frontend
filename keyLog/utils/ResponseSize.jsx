@@ -23,7 +23,7 @@ export function widthPercentage(width) {
 export function heightPercentage(height) {
   // // 피그마 픽셀을 현재 노트북 픽셀 크기로 변환
 
-  const percentage = (height / FIGMA_WINDOW_HEIGHT) * 100;
+  const percentage = (height / FIGMA_WINDOW_HEIGHT) * 120;
 
   return responsiveScreenHeight(percentage);
 }

@@ -108,7 +108,11 @@ const App = () => {
           component={PaymentPageInputComponent}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="TravelRecordPage" component={TravelRecordPage} />
+        <Stack.Screen
+          name="TravelRecordPage"
+          component={TravelRecordPage}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="TravelBudgetPage"
           component={TravelBudgetPage}

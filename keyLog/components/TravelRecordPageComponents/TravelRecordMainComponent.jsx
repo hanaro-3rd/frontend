@@ -71,7 +71,7 @@ const TravelRecordMainComponent = ({ navigation }) => {
 
   return (
     <Main>
-      <DeleteHeader />
+      <DeleteHeader navigation={navigation} to="MainPage" />
       <PlanTextView>
         <PlanText>내 여행 기록</PlanText>
       </PlanTextView>
@@ -216,11 +216,11 @@ const PlanDuringTitle = styled.Text`
   font-weight: 400;
 `;
 const PlanCostView = styled.View`
-    width: 100%;
-    padding-right : ${widthPercentage(12)}px;
-    margin-top : ${heightPercentage(10)}px;
-    flex-direction: row;
-    justify-content: flex-end;
+  width: 100%;
+  padding-right: ${widthPercentage(12)}px;
+  margin-top: ${heightPercentage(10)}px;
+  flex-direction: row;
+  justify-content: flex-end;
 `;
 const PlanCostTitle = styled.Text``;
 const styles = StyleSheet.create({

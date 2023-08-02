@@ -1,12 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Ellipse from '../../assets/SignUp/Ellipse.svg';
-import {
-  fontPercentage,
-  heightPercentage,
-  widthPercentage,
-} from '../../utils/ResponseSize';
+import Pattern from '../../components/SignUpPageComponents/Pattern';
+import { fontPercentage, heightPercentage } from '../../utils/ResponseSize';
 
 const LoginPatternPage = () => {
   const navigation = useNavigation();
@@ -27,41 +23,7 @@ const LoginPatternPage = () => {
           <View style={styles.textContainer}>
             <Text style={styles.mainText}>잠금해제 패턴을 설정해주세요</Text>
           </View>
-          <View style={styles.numberPad}>
-            <View style={styles.patternRow}>
-              <View>
-                <Ellipse />
-              </View>
-              <View>
-                <Ellipse />
-              </View>
-              <View>
-                <Ellipse />
-              </View>
-            </View>
-            <View style={styles.patternRow}>
-              <View>
-                <Ellipse />
-              </View>
-              <View>
-                <Ellipse />
-              </View>
-              <View>
-                <Ellipse />
-              </View>
-            </View>
-            <View style={styles.patternRow}>
-              <View>
-                <Ellipse />
-              </View>
-              <View>
-                <Ellipse />
-              </View>
-              <View>
-                <Ellipse />
-              </View>
-            </View>
-          </View>
+          <Pattern />
         </View>
         <View style={styles.bodyFooter}>
           <TouchableOpacity onPress={goToLoginPasswordPage}>
@@ -126,20 +88,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  numberPad: {
-    alignItems: 'center',
-    alignContent: 'center',
-    alignSelf: 'stretch',
-    flexWrap: 'wrap',
-    backgroundColor: '#FFF',
-    paddingHorizontal: widthPercentage(50),
-  },
-  patternRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignSelf: 'stretch',
-    paddingBottom: heightPercentage(100),
   },
   bodyFooter: {
     flexDirection: 'column',
