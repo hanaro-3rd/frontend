@@ -1,19 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Svg, { Circle } from 'react-native-svg';
-import BackSpace from '../../assets/SignUp/BackSpace.svg';
-import {
-  fontPercentage,
-  heightPercentage,
-  widthPercentage,
-} from '../../utils/ResponseSize';
-
-const Ellipse = ({ fill }) => (
-  <Svg width='15' height='15' viewBox='0 0 15 15' fill='none'>
-    <Circle cx='7.5' cy='7.5' r='7.5' fill={fill} />
-  </Svg>
-);
+import NumberPad from '../../components/SignUpPageComponents/NumberPad';
+import PasswordSymbol from '../../components/SignUpPageComponents/PasswordSymbol';
+import { fontPercentage, heightPercentage } from '../../utils/ResponseSize';
 
 const LoginPasswordPage = () => {
   const navigation = useNavigation();
@@ -109,55 +99,21 @@ const LoginPasswordPage = () => {
                 ? '확인을 위해 비밀번호를 한 번 더 입력해주세요'
                 : '잠금해제 비밀번호를 설정해주세요'}
             </Text>
-            <View style={styles.passwordSymbol}>
-              {[...Array(6)].map((_, index) => (
-                <Ellipse
-                  key={index}
-                  fill={
-                    isConfirming
-                      ? confirmPassword.length > index
-                        ? '#55ACEE'
-                        : '#B0B8C1'
-                      : password.length > index
-                      ? '#55ACEE'
-                      : '#B0B8C1'
-                  }
-                />
-              ))}
-            </View>
+            <PasswordSymbol
+              isConfirming={isConfirming}
+              confirmPassword={confirmPassword}
+              password={password}
+            />
             {isPasswordMismatch && (
               <Text style={styles.errorText}>
                 비밀번호가 일치하지 않습니다.
               </Text>
             )}
           </View>
-          <View style={styles.numberPad}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
-              <TouchableOpacity
-                key={num}
-                onPress={() => handleNumPress(num.toString())}
-              >
-                <View style={styles.number}>
-                  <Text style={styles.num}>{num}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-            <View style={styles.number}>
-              <Text style={styles.num}></Text>
-            </View>
-            <TouchableOpacity onPress={() => handleNumPress('0')}>
-              <View style={styles.number}>
-                <Text style={styles.num}>0</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleBackspacePress}>
-              <View style={styles.number}>
-                <Text style={styles.num}>
-                  <BackSpace />
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+          <NumberPad
+            onNumPress={handleNumPress}
+            onBackspacePress={handleBackspacePress}
+          />
         </View>
         <View style={styles.bodyFooter}>
           <TouchableOpacity onPress={goToLoginPatternPage}>
@@ -197,12 +153,6 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '700',
   },
-  ellipse: {
-    fill: '#B0B8C1',
-  },
-  ellipseActive: {
-    fill: '#55ACEE',
-  },
   body: {
     flexDirection: 'column',
     alignItems: 'flex-start',
@@ -226,35 +176,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: heightPercentage(30),
-  },
-  passwordSymbol: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: widthPercentage(10),
-    flexDirection: 'row',
-  },
-  numberPad: {
-    alignItems: 'center',
-    alignContent: 'center',
-    alignSelf: 'stretch',
-    flexWrap: 'wrap',
-    backgroundColor: '#FFF',
-    flexDirection: 'row',
-  },
-  number: {
-    width: widthPercentage(130),
-    height: heightPercentage(60),
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  num: {
-    color: '#191F29',
-    textAlign: 'center',
-    fontFamily: 'Inter',
-    fontSize: fontPercentage(24),
-    fontStyle: 'normal',
-    fontWeight: '400',
   },
   bodyFooter: {
     flexDirection: 'column',
