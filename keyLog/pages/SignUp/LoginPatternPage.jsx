@@ -1,11 +1,19 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+import { useMutation, useQueryClient } from 'react-query';
+import { postSigninPassword, postSignup } from '../../api/api';
 import Pattern from '../../components/SignUpPageComponents/Pattern';
 import { fontPercentage, heightPercentage } from '../../utils/ResponseSize';
 
-const LoginPatternPage = () => {
+const LoginPatternPage = ({ route }) => {
   const navigation = useNavigation();
+
+  const uniqueID = DeviceInfo.getUniqueId();
+  console.log(uniqueID);
+
+  const { name, phoneNumber, personalNumber, password } = route.params;
 
   const goToLoginPasswordPage = () => {
     navigation.replace('LoginPasswordPage');
@@ -14,6 +22,38 @@ const LoginPatternPage = () => {
   const goToMainPage = () => {
     navigation.replace('MainPage');
   };
+
+  const queryClient = useQueryClient();
+
+  const postSignupMutation = useMutation(postSignup, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('postSignup');
+    },
+  });
+
+  const handlePostSignup = e => {
+    e.preventDefault();
+    postSignupMutation.mutate({
+      name,
+      phoneNumber,
+      personalNumber,
+      password,
+      pattern: '46253',
+    });
+
+    postPasswordSigninMutation.mutate({
+      deviceId,
+      password,
+    });
+
+    goToMainPage();
+  };
+
+  const postSigninPassword = useMutation(postSigninPassword, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('postSigninPassword');
+    },
+  });
 
   return (
     <View style={styles.root}>
@@ -26,10 +66,10 @@ const LoginPatternPage = () => {
           <Pattern />
         </View>
         <View style={styles.bodyFooter}>
-          <TouchableOpacity onPress={goToLoginPasswordPage}>
+          <TouchableOpacity onPress={handlePostSignup}>
             <Text>Go to Login Password Page</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={goToMainPage}>
+          <TouchableOpacity onPress={handlePostSignup}>
             <Text>Go to Main Page</Text>
           </TouchableOpacity>
         </View>

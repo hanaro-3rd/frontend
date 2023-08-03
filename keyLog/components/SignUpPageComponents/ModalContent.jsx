@@ -8,6 +8,8 @@ import {
   View,
 } from 'react-native';
 import Modal from 'react-native-modal';
+import { useMutation, useQueryClient } from 'react-query';
+import { postVerificationAuth } from '../../api/api';
 import CloseButton from '../../assets/SignUp/CloseButton.svg';
 import {
   fontPercentage,
@@ -15,10 +17,39 @@ import {
   widthPercentage,
 } from '../../utils/ResponseSize';
 
-const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
+const ModalContent = ({
+  modalVisible,
+  toggleModal,
+  phoneNumber,
+  personalNumber,
+  name,
+  setModalVisible,
+}) => {
+  const queryClient = useQueryClient();
+
+  const postVerificationAuthMutation = useMutation(postVerificationAuth, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('verificationAuth');
+    },
+  });
+
+  const handleVerificationAuth = e => {
+    e.preventDefault();
+    postVerificationAuthMutation.mutate({
+      code: TextInput,
+    });
+    //글자 초기화
+    setModalVisible(false);
+    goToLoginPasswordPage();
+  };
+
   const navigation = useNavigation();
   const goToLoginPasswordPage = () => {
-    navigation.replace('LoginPasswordPage');
+    navigation.navigate('LoginPasswordPage', {
+      phoneNumber,
+      personalNumber,
+      name,
+    });
   };
 
   const [inputText, setInputText] = useState('');

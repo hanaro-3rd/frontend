@@ -1,19 +1,20 @@
-export const postVerificationMutation = () => useMutation(postVerification, {
-    onSuccess:() => {
+export const postVerificationMutation = () =>
+  useMutation(postVerification, {
+    onSuccess: () => {
       // INvalidates cache and refetch
-      queryClient.invalidateQueries("verification")
-    }
-  })
+      queryClient.invalidateQueries('verification');
+    },
+  });
 
-  const handleVerification = (e) => {
-    e.preventDefault();
-    postVerificationMutation.mutate({"phonenum":"01063572816"})
-    //글자 초기화
-  }
+const handleVerification = e => {
+  e.preventDefault();
+  postVerificationMutation.mutate({ phonenum: '01028467723' });
+  //글자 초기화
+};
 
-  const postVerificationMutation = useMutation(postVerification, {
-    onSuccess:() => {
-      // INvalidates cache and refetch
-      queryClient.invalidateQueries("verification")
-    }
-  })
+const postVerificationMutation = useMutation(postVerification, {
+  onSuccess: () => {
+    // INvalidates cache and refetch
+    queryClient.invalidateQueries('verification');
+  },
+});

@@ -5,8 +5,10 @@ import NumberPad from '../../components/SignUpPageComponents/NumberPad';
 import PasswordSymbol from '../../components/SignUpPageComponents/PasswordSymbol';
 import { fontPercentage, heightPercentage } from '../../utils/ResponseSize';
 
-const LoginPasswordPage = () => {
+const LoginPasswordPage = ({ route }) => {
   const navigation = useNavigation();
+
+  const { name, phoneNumber, personalNumber } = route.params;
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -14,6 +16,24 @@ const LoginPasswordPage = () => {
   const [isPasswordMismatch, setIsPasswordMismatch] = useState(false);
   const [alertInconsistencyPassword, setAlertInconsistencyPassword] =
     useState(false);
+
+  // const queryClient = useQueryClient();
+
+  // const postSignupMutation = useMutation(postSignup, {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries('postSignup');
+  //   },
+  // });
+
+  // const handlePostSignup = e => {
+  //   e.preventDefault();
+  //   postSignupMutation.mutate({
+
+  //   });
+
+  //   setModalVisible(false);
+  //   goToLoginPasswordPage();
+  // };
 
   const handleNumPress = num => {
     if (alertInconsistencyPassword) {
@@ -65,7 +85,12 @@ const LoginPasswordPage = () => {
       if (password === confirmPassword) {
         console.log('Passwords match');
         setIsPasswordMismatch(false);
-        navigation.replace('MainPage');
+        navigation.navigate('LoginPatternPage', {
+          name,
+          phoneNumber,
+          personalNumber,
+          password,
+        });
       } else {
         console.log('Passwords do not match');
         setIsPasswordMismatch(true);
@@ -85,7 +110,12 @@ const LoginPasswordPage = () => {
   };
 
   const goToLoginPatternPage = () => {
-    navigation.replace('LoginPatternPage');
+    navigation.navigate('LoginPatternPage', {
+      name,
+      phoneNumber,
+      personalNumber,
+      password,
+    });
   };
 
   return (
@@ -119,7 +149,7 @@ const LoginPasswordPage = () => {
           <TouchableOpacity onPress={goToLoginPatternPage}>
             <Text>Go to Login Pattern Page</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={goToMainPage}>
+          <TouchableOpacity onPress={goToLoginPatternPage}>
             <Text>Go to Main Page</Text>
           </TouchableOpacity>
         </View>
