@@ -19,12 +19,15 @@ import TravelBudgetPage from './pages/TravelBudget/TravelBudgetPage';
 import TravelBudgetDetailPage from './pages/TravelBudget/TravelBudgetDetailPage';
 import TravelSchedulePage from './pages/TravelBudget/TravelSchedulePage';
 import TravelBudgetPlanPage from './pages/TravelBudget/TravelBudgetPlanPage';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const App = () => {
   const Stack = createNativeStackNavigator();
+  const queryClient = new QueryClient();
   return (
+    <QueryClientProvider client={queryClient}>
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='TravelBudgetPage'>
+      <Stack.Navigator initialRouteName='SignUpPage'>
         <Stack.Screen
           name='MainPage'
           component={MainPage}
@@ -96,6 +99,7 @@ const App = () => {
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </QueryClientProvider>
   );
 };
 

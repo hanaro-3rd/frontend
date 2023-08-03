@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   SafeAreaView,
+  ScrollView,
 } from "react-native";
 import {
   fontPercentage,
@@ -19,9 +20,9 @@ import styled from "styled-components/native";
 import DeleteHeader from "../Header/DeleteHeader";
 const TravelRecordMainComponent = ({ navigation }) => {
   const Main = styled.SafeAreaView`
-    margin-top: ${getStatusBarHeight}px;
     min-height: ${phoneHeight}px;
     width: 100%;
+    margin-top: ${getStatusBarHeight}px;
   `;
   const PlanTextView = styled.View`
     width: 100%;
@@ -71,6 +72,7 @@ const TravelRecordMainComponent = ({ navigation }) => {
 
   return (
     <Main>
+      <ScrollView>
       <DeleteHeader navigation={navigation} to="MainPage" />
       <PlanTextView>
         <PlanText>내 여행 기록</PlanText>
@@ -194,6 +196,7 @@ const TravelRecordMainComponent = ({ navigation }) => {
           </PlanDataView>
         </PlanContainer>
       </PlanComponent>
+      </ScrollView>
     </Main>
   );
 };
