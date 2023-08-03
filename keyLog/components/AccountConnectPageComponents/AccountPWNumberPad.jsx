@@ -7,7 +7,7 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 
-const NumberPad = ({ onNumPress, onBackspacePress }) => {
+const AccountPWNumberPad = ({ onNumPress, onBackspacePress }) => {
   return (
     <View style={styles.numberPad}>
       {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
@@ -36,7 +36,7 @@ const NumberPad = ({ onNumPress, onBackspacePress }) => {
   );
 };
 
-export default NumberPad;
+export default AccountPWNumberPad;
 
 const styles = StyleSheet.create({
   numberPad: {
@@ -46,10 +46,11 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     backgroundColor: "#FFF",
     flexDirection: "row",
+    marginTop: heightPercentage(20),
   },
   number: {
-    width: widthPercentage(130),
-    height: heightPercentage(60),
+    width: widthPercentage(110),
+    height: heightPercentage(50),
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",

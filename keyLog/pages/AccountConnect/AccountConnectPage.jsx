@@ -7,6 +7,7 @@ import {
   Modal,
   Image,
   FlatList,
+  Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import {
@@ -20,10 +21,19 @@ import {
 import DeleteHeader from "../../components/Header/DeleteHeader";
 import Ellipse from "../../assets/SignUp/Ellipse.svg";
 import Vector from "../../assets/accountImg/Vector.png";
+import AccountPasswordSymbol from "../../components/AccountConnectPageComponents/AccountPasswordSymbol";
+import AccountPWNumberPad from "../../components/AccountConnectPageComponents/AccountPWNumberPad";
 
 export const AccountConnectPage = ({ navigation }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("1234"); //계좌 비밀번호 받아오기
+  // const [isConfirming, setIsConfirming] = useState(false);
+  const [isPasswordMismatch, setIsPasswordMismatch] = useState(false);
+  const [alertInconsistencyPassword, setAlertInconsistencyPassword] =
+    useState(false);
 
   const renderItem = ({ item }) => {
     const isSelected = item.key === selectedItem;
@@ -46,6 +56,47 @@ export const AccountConnectPage = ({ navigation }) => {
       </Pressable>
     );
   };
+
+  const handleNumPress = (num) => {
+    if (alertInconsistencyPassword) {
+      resetPasswordProcess();
+      setAlertInconsistencyPassword(false);
+    }
+
+    if (password.length < 4) {
+      setPassword(password + num);
+    }
+  };
+
+  const handleBackspacePress = () => {
+    setPassword(password.slice(0, -1));
+  };
+
+  const resetPasswordProcess = () => {
+    setIsPasswordMismatch(false);
+    setPassword("");
+  };
+
+  useEffect(() => {
+    console.log("password state", password);
+
+    if (password.length === 4) {
+      if (password === confirmPassword) {
+        console.log("Passwords match");
+        setIsPasswordMismatch(false);
+        navigation.replace("AccountConnectPage");
+      } else {
+        console.log("Passwords do not match");
+        setIsPasswordMismatch(true);
+      }
+    }
+  }, [password, confirmPassword, setIsPasswordMismatch]);
+
+  useEffect(() => {
+    if (isPasswordMismatch) {
+      setAlertInconsistencyPassword(true);
+    }
+  }, [isPasswordMismatch]);
 
   return (
     <View style={styles.root}>
@@ -86,7 +137,9 @@ export const AccountConnectPage = ({ navigation }) => {
         }}
       >
         <View style={styles.modalBackground}>
-          <View style={styles.popup}>
+          <View
+            style={[styles.popup, isPasswordMismatch && styles.popupMismatch]}
+          >
             <View style={styles.popupHeader}>
               <View style={styles.popupHeaderTitle}>
                 <Text style={styles.popupHeaderText}>계좌 비밀번호 입력</Text>
@@ -104,52 +157,16 @@ export const AccountConnectPage = ({ navigation }) => {
             </View>
 
             <View>
-              <View style={styles.passwordSymbol}>
-                <Ellipse />
-                <Ellipse />
-                <Ellipse />
-                <Ellipse />
-              </View>
-              <View style={styles.numberPad}>
-                <View style={styles.number}>
-                  <Text style={styles.num}>1</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={styles.num}>2</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={styles.num}>3</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={styles.num}>4</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={styles.num}>5</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={styles.num}>6</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={styles.num}>7</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={styles.num}>8</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={styles.num}>9</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={styles.num}></Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={styles.num}>0</Text>
-                </View>
-                <View style={styles.number}>
-                  <Text style={styles.num}>
-                    <Image source={Vector} />
-                  </Text>
-                </View>
-              </View>
+              <AccountPasswordSymbol password={password} />
+              {isPasswordMismatch && (
+                <Text style={styles.errorText}>
+                  비밀번호가 일치하지 않습니다.
+                </Text>
+              )}
+              <AccountPWNumberPad
+                onNumPress={handleNumPress}
+                onBackspacePress={handleBackspacePress}
+              />
             </View>
             <Pressable style={styles.submitButton}>
               <Text style={styles.pressBeforeTextStyle}>확인</Text>
@@ -290,7 +307,22 @@ const styles = StyleSheet.create({
     gap: 30,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    marginTop: heightPercentage(250),
+    marginTop: heightPercentage(200),
+    paddingLeft: widthPercentage(20),
+    paddingRight: widthPercentage(20),
+    paddingTop: heightPercentage(20),
+    paddingBottom: widthPercentage(15),
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+  popupMismatch: {
+    backgroundColor: "#FFFFFF",
+    flex: 1,
+    width: "100%",
+    gap: 30,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    marginTop: heightPercentage(180),
     paddingLeft: widthPercentage(20),
     paddingRight: widthPercentage(20),
     paddingTop: heightPercentage(20),
@@ -326,30 +358,30 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(20),
     marginBottom: heightPercentage(20),
   },
-  num: {
-    color: "#191F29",
-    textAlign: "center",
-    fontSize: fontPercentage(24),
-    fontWeight: "400",
-  },
-  numberPad: {
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
-    alignSelf: "stretch",
-    flexWrap: "wrap",
-    backgroundColor: "#FFF",
-    flexDirection: "row",
-  },
-  number: {
-    width: widthPercentage(110),
-    height: heightPercentage(60),
-    justifyContent: "center",
-    alignItems: "center",
-    gap: heightPercentage(10),
-    flexDirection: "row",
-    padding: 10,
-  },
+  // num: {
+  //   color: "#191F29",
+  //   textAlign: "center",
+  //   fontSize: fontPercentage(24),
+  //   fontWeight: "400",
+  // },
+  // numberPad: {
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   alignContent: "center",
+  //   alignSelf: "stretch",
+  //   flexWrap: "wrap",
+  //   backgroundColor: "#FFF",
+  //   flexDirection: "row",
+  // },
+  // number: {
+  //   width: widthPercentage(110),
+  //   height: heightPercentage(60),
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   gap: heightPercentage(10),
+  //   flexDirection: "row",
+  //   padding: 10,
+  // },
   accountitem: {
     backgroundColor: "#F9FAFB",
     margin: heightPercentage(9),
@@ -381,5 +413,11 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(14),
     fontWeight: "700",
     textAlignVertical: "center",
+  },
+  errorText: {
+    color: "#E90061",
+    fontSize: fontPercentage(14),
+    fontWeight: "400",
+    textAlign: "center",
   },
 });
