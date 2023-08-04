@@ -8,6 +8,8 @@ import {
   View,
 } from 'react-native';
 import Modal from 'react-native-modal';
+import { useMutation, useQueryClient } from 'react-query';
+import { postVerificationAuth } from '../../api/api';
 import CloseButton from '../../assets/SignUp/CloseButton.svg';
 import {
   fontPercentage,
@@ -15,10 +17,43 @@ import {
   widthPercentage,
 } from '../../utils/ResponseSize';
 
-const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
+const ModalContent = ({
+  modalVisible,
+  toggleModal,
+  phoneNumber,
+  personalNumber,
+  name,
+  setModalVisible,
+}) => {
+  const queryClient = useQueryClient();
+
+  const postVerificationAuthMutation = useMutation(postVerificationAuth, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries('verificationAuth');
+      console.log("postverificationAuthMutation"+data)
+    },
+    onError:(error) =>{
+      console.log(error+"verificationAuth")
+    }
+  });
+
+  const handleVerificationAuth = e => {
+    e.preventDefault();
+    postVerificationAuthMutation.mutate({
+      code: inputText,
+    });
+    //글자 초기화
+    setModalVisible(false);
+    goToLoginPasswordPage();
+  };
+
   const navigation = useNavigation();
   const goToLoginPasswordPage = () => {
-    navigation.replace('LoginPasswordPage');
+    navigation.navigate('LoginPasswordPage', {
+      phoneNumber,
+      personalNumber,
+      name,
+    });
   };
 
   const [inputText, setInputText] = useState('');
@@ -27,7 +62,7 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
   const [buttonEnabled, setButtonEnabled] = useState(true);
 
   const inputRef = useRef(null);
-
+ // acceess,refresh 둘 다 발급 
   useEffect(() => {
     if (!modalVisible) {
       setRemainTime(180);
@@ -137,7 +172,7 @@ const ModalContent = ({ modalVisible, toggleModal, phoneNumber }) => {
           </View>
           <View style={styles.popupFooter}>
             <TouchableOpacity
-              onPress={goToLoginPasswordPage}
+              onPress={handleVerificationAuth}
               disabled={!buttonEnabled || inputText.length !== 6}
             >
               <View
