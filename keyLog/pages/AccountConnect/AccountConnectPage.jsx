@@ -30,7 +30,6 @@ export const AccountConnectPage = ({ navigation }) => {
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("1234"); //계좌 비밀번호 받아오기
-  // const [isConfirming, setIsConfirming] = useState(false);
   const [isPasswordMismatch, setIsPasswordMismatch] = useState(false);
   const [alertInconsistencyPassword, setAlertInconsistencyPassword] =
     useState(false);
@@ -49,7 +48,9 @@ export const AccountConnectPage = ({ navigation }) => {
           {isSelected && (
             <Image
               source={require("../../assets/accountImg/check.png")}
+              style={{ marginRight: 20 }}
               resizeMode="contain"
+              visible=""
             />
           )}
         </View>
@@ -84,7 +85,7 @@ export const AccountConnectPage = ({ navigation }) => {
       if (password === confirmPassword) {
         console.log("Passwords match");
         setIsPasswordMismatch(false);
-        navigation.replace("AccountConnectPage");
+        navigation.replace("MainPage");
       } else {
         console.log("Passwords do not match");
         setIsPasswordMismatch(true);
@@ -181,7 +182,7 @@ export default AccountConnectPage;
 
 const styles = StyleSheet.create({
   root: {
-    width: phoneWidth,
+    width: "100%",
     flex: 1,
     flexDirection: "column",
     alignItems: "flex-start",
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
   },
   body: {
-    width: phoneWidth,
+    width: "100%",
     flexDirection: "column",
     alignItems: "flex-start",
     flexGrow: 1,
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   bodyMain: {
-    width: phoneWidth,
+    width: "100%",
     flexDirection: "column",
     alignItems: "flex-start",
     gap: 10,
@@ -358,31 +359,8 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(20),
     marginBottom: heightPercentage(20),
   },
-  // num: {
-  //   color: "#191F29",
-  //   textAlign: "center",
-  //   fontSize: fontPercentage(24),
-  //   fontWeight: "400",
-  // },
-  // numberPad: {
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   alignContent: "center",
-  //   alignSelf: "stretch",
-  //   flexWrap: "wrap",
-  //   backgroundColor: "#FFF",
-  //   flexDirection: "row",
-  // },
-  // number: {
-  //   width: widthPercentage(110),
-  //   height: heightPercentage(60),
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   gap: heightPercentage(10),
-  //   flexDirection: "row",
-  //   padding: 10,
-  // },
   accountitem: {
+    // width: "83%",
     backgroundColor: "#F9FAFB",
     margin: heightPercentage(9),
     height: heightPercentage(55),
@@ -392,17 +370,20 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-
   selectedItem: {
+    // width: "83%",
+    margin: heightPercentage(9),
     height: heightPercentage(55),
+    borderRadius: 5,
+    paddingLeft: widthPercentage(20),
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     borderRadius: 5,
     borderColor: "#55ACEE",
     borderWidth: widthPercentage(1),
     margin: heightPercentage(9),
     backgroundColor: "#fff",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
   },
 
   listtextBefore: {

@@ -14,6 +14,7 @@ import {
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { List } from "react-native-paper";
+import { ListItem } from "@rneui/themed";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -22,6 +23,12 @@ import {
   phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
+import {
+  Collapse,
+  CollapseHeader,
+  CollapseBody,
+  AccordionList,
+} from "accordion-collapse-react-native";
 
 export const CountryChoiceComponent = () => {
   const list = [
@@ -33,16 +40,23 @@ export const CountryChoiceComponent = () => {
       name: "Japan",
       country_url: "../../assets/exchangeImg/Japan.png",
     },
+    {
+      name: "EUR",
+      country_url: "../../assets/exchangeImg/EUR.png",
+    },
   ];
+
+  const [expanded, setExpanded] = React.useState(false);
+
   return (
-    <TouchableOpacity style={styles.countrySelect}>
-      <Image
-        source={require("../../assets/exchangeImg/USD.png")}
-        resizeMode="contain"
-      />
-      <Text style={styles.unitText}>USD</Text>
-      <Image source={require("../../assets/exchangeImg/SelectButton.png")} />
-    </TouchableOpacity>
+    // <TouchableOpacity style={styles.countrySelect}>
+    //   <Image
+    //     source={require("../../assets/exchangeImg/USD.png")}
+    //     resizeMode="contain"
+    //   />
+    //   <Text style={styles.unitText}>USD</Text>
+    //   <Image source={require("../../assets/exchangeImg/SelectButton.png")} />
+    // </TouchableOpacity>
 
     // <View>
     //   <List.Section style={styles.countrySelect}>
@@ -52,6 +66,40 @@ export const CountryChoiceComponent = () => {
     //     </List.Accordion>
     //   </List.Section>
     // </View>
+
+    <View>
+      <Collapse>
+        <CollapseHeader>
+          <View style={styles.countrySelect}>
+            <Image source={require("../../assets/exchangeImg/USD.png")} />
+            <Text style={styles.unitText}>USD</Text>
+          </View>
+        </CollapseHeader>
+        <CollapseBody>
+          {/* Listitem */}
+          <View style={styles.countrySelect}>
+            <Image
+              source={require("../../assets/exchangeImg/Japan.png")}
+              style={{
+                width: widthPercentage(32),
+                height: heightPercentage(30),
+              }}
+            />
+            <Text style={styles.unitText}>Japan</Text>
+          </View>
+          <View style={styles.countrySelect}>
+            <Image
+              source={require("../../assets/exchangeImg/EUR.png")}
+              style={{
+                width: widthPercentage(32),
+                height: heightPercentage(30),
+              }}
+            />
+            <Text style={styles.unitText}>EUR</Text>
+          </View>
+        </CollapseBody>
+      </Collapse>
+    </View>
   );
 };
 export default CountryChoiceComponent;
