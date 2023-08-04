@@ -115,9 +115,10 @@ const SignUpPage = ({ navigation }) => {
   };
 
   const postVerificationMutation = useMutation(postVerification, {
-    onSuccess: () => {
+    onSuccess: (data) => {
       // INvalidates cache and refetch
       queryClient.invalidateQueries('verification');
+      console.log('Response Data:', data);
     },
   });
 

@@ -28,15 +28,19 @@ const ModalContent = ({
   const queryClient = useQueryClient();
 
   const postVerificationAuthMutation = useMutation(postVerificationAuth, {
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries('verificationAuth');
+      console.log("postverificationAuthMutation"+data)
     },
+    onError:(error) =>{
+      console.log(error+"verificationAuth")
+    }
   });
 
   const handleVerificationAuth = e => {
     e.preventDefault();
     postVerificationAuthMutation.mutate({
-      code: TextInput,
+      code: inputText,
     });
     //글자 초기화
     setModalVisible(false);
@@ -58,7 +62,7 @@ const ModalContent = ({
   const [buttonEnabled, setButtonEnabled] = useState(true);
 
   const inputRef = useRef(null);
-
+ // acceess,refresh 둘 다 발급 
   useEffect(() => {
     if (!modalVisible) {
       setRemainTime(180);
@@ -168,7 +172,7 @@ const ModalContent = ({
           </View>
           <View style={styles.popupFooter}>
             <TouchableOpacity
-              onPress={goToLoginPasswordPage}
+              onPress={handleVerificationAuth}
               disabled={!buttonEnabled || inputText.length !== 6}
             >
               <View
