@@ -70,6 +70,7 @@ const MainPage = ({ navigation }) => {
     /* styled-components */
   }
   const Main = styled.ScrollView`
+    margin-top: ${getStatusBarHeight}px;
     min-height: ${phoneHeight}px;
     width: 100%;
     background-color: #f2f4f6;
@@ -409,9 +410,7 @@ const MainPage = ({ navigation }) => {
                 <MenuTitle>하나머니 줍기</MenuTitle>
                 <MenuSubtitle>여행을 떠나서 하나머니를 주워봐용</MenuSubtitle>
               </MenuTextContainer>
-              <MenuButton
-              // onPress={() =>  }
-              >
+              <MenuButton onPress={() => navigation.navigate("PickUpKeyPage")}>
                 <MenuButtonText>주우러 가기</MenuButtonText>
               </MenuButton>
             </MenuSubContainer>
@@ -466,7 +465,7 @@ const MainPage = ({ navigation }) => {
               <MenuTextContainer>
                 <MenuTitle>하나머니 환전하기</MenuTitle>
                 <MenuSubtitle>하나머니를 환전해보아용</MenuSubtitle>
-              </MenuTextContainer>ㅎ
+              </MenuTextContainer>
               <MenuButton
               // onPress={() => navigation.navigate("")}
               >
