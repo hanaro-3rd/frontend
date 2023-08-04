@@ -16,7 +16,10 @@
     "react": "18.2.0",
     "react-native": "0.72.3",
     "react-native-device-info": "^10.8.0",
+<<<<<<< HEAD
     "react-native-google-places-autocomplete": "^2.5.1",
+=======
+>>>>>>> ceaf923045bca06c3f91f736b8a0f1740c067dd1
     "react-native-maps": "^1.7.1",
     "react-native-modal": "^13.0.1",
     "react-native-pin-view": "^3.0.3",

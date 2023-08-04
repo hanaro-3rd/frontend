@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
 import {
@@ -47,8 +48,14 @@ const PickUpKeyPage = ({ navigation }) => {
   const handleGoBackToPrevPage = () => {
     navigation.goBack();
   };
+=======
+import { View, Text } from "react-native";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import React from 'react';
+>>>>>>> ceaf923045bca06c3f91f736b8a0f1740c067dd1
 
   return (
+<<<<<<< HEAD
     // <View>
     //   <Header>
     //     <TouchableOpacity onPress={handleGoBackToPrevPage}>
@@ -65,13 +72,31 @@ const PickUpKeyPage = ({ navigation }) => {
       region={{
         latitude: 37.541,
         longitude: 80.986,
+=======
+    <View style={{ flex: 1 }}>
+    <MapView
+      style={{ flex: 1 }}
+      provider={PROVIDER_GOOGLE}
+      initialRegion={{
+        latitude: 37.78825,
+        longitude: -122.4324,
+>>>>>>> ceaf923045bca06c3f91f736b8a0f1740c067dd1
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       }}
     />
+<<<<<<< HEAD
 
     // </View>
+=======
+  </View>
+>>>>>>> ceaf923045bca06c3f91f736b8a0f1740c067dd1
   );
 };
 
 export default PickUpKeyPage;
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> ceaf923045bca06c3f91f736b8a0f1740c067dd1

@@ -13,10 +13,17 @@
       android:usesCleartextTraffic="true"
       android:theme="@style/AppTheme">
       <meta-data 
+<<<<<<< HEAD
     android:name="com.google.android.geo.API_KEY" 
     android:value="AIzaSyDZNxhjYKrDvFeEfGnmvzCJqUtklA76ioI"
 />
 <uses-library android:name="org.apache.http.legacy" android:required="false"/> 
+=======
+      android:name="com.google.android.geo.API_KEY" 
+      android:value="AIzaSyBodpYEgJFE5s0JUhGDS2_VhfpQY5mvUxQ"
+      />
+<uses-library android:name="org.apache.http.legacy" android:required="false"/>    
+>>>>>>> ceaf923045bca06c3f91f736b8a0f1740c067dd1
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

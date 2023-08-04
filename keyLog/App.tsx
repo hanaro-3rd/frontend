@@ -39,7 +39,6 @@ const App = () => {
   const checkToken = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
-      await AsyncStorage.removeItem("token");
       console.log(token);
       if (token) {
         // token이 있으면 MainPage로 이동
