@@ -183,6 +183,9 @@ const NextButtonText = styled.Text`
   font-weight: 700;
 `;
 
+const MAX_TITLE_LENGTH = 20;
+const MAX_COUNTRY_LENGTH = 10;
+
 const TravelSchedulePage = ({ navigation }) => {
   const [travelTitle, setTravelTitle] = useState("");
   const [travelCountry, setTravelCountry] = useState("");
@@ -202,8 +205,10 @@ const TravelSchedulePage = ({ navigation }) => {
   };
 
   const handleTravelTitleChange = (text) => {
-    setTravelTitle(text);
-    updateIsAllFieldsFilled();
+    if (text.length <= MAX_TITLE_LENGTH) {
+      setTravelTitle(text);
+      updateIsAllFieldsFilled();
+    }
   };
 
   const handleTravelCountryChange = (text) => {
@@ -212,8 +217,10 @@ const TravelSchedulePage = ({ navigation }) => {
   };
 
   const handleTravelCountryOptionChange = (text) => {
-    setTravelCountryOption(text);
-    updateIsAllFieldsFilled();
+    if (text.length <= MAX_COUNTRY_LENGTH) {
+      setTravelCountryOption(text);
+      updateIsAllFieldsFilled();
+    }
   };
 
   const handleStartDateChange = (text) => {
@@ -251,19 +258,24 @@ const TravelSchedulePage = ({ navigation }) => {
           <TravelTitleContainer>
             <TitleContainer>
               <TravelTitle>여행제목</TravelTitle>
-              <TextSize>0 / 20</TextSize>
+              <TextSize>
+                {travelTitle.length} / {MAX_TITLE_LENGTH}
+              </TextSize>
             </TitleContainer>
             <TravelTextinput
               placeholder="이름없는 여행1"
               placeholderTextColor="#b0b8c1"
               value={travelTitle}
               onChangeText={handleTravelTitleChange}
+              maxLength={MAX_TITLE_LENGTH}
             />
           </TravelTitleContainer>
           <TravelTitleContainer>
             <TitleContainer>
               <TravelTitle>여행지</TravelTitle>
-              <TextSize>0 / 10</TextSize>
+              <TextSize>
+                {travelCountryOption.length} / {MAX_TITLE_LENGTH}
+              </TextSize>
             </TitleContainer>
             <SelectedFrame>
               <TravelCountryTextinput
@@ -277,6 +289,7 @@ const TravelSchedulePage = ({ navigation }) => {
                 placeholderTextColor="#b0b8c1"
                 value={travelCountryOption}
                 onChangeText={handleTravelCountryOptionChange}
+                maxLength={MAX_TITLE_LENGTH}
               />
             </SelectedFrame>
           </TravelTitleContainer>
