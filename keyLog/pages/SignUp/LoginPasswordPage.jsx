@@ -8,7 +8,7 @@ import { fontPercentage, heightPercentage } from '../../utils/ResponseSize';
 const LoginPasswordPage = ({ route }) => {
   const navigation = useNavigation();
 
-  const { name, phoneNumber, personalNumber } = route.params;
+  const { name ="이수창", phoneNumber ="01063572816", personalNumber = "970917-1111111" } = route?.params;
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

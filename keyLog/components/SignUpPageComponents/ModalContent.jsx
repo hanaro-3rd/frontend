@@ -33,17 +33,22 @@ const ModalContent = ({
       console.log("postverificationAuthMutation"+data)
     },
     onError:(error) =>{
+      console.log(error.message);
       console.log(error+"verificationAuth")
     }
   });
 
-  const handleVerificationAuth = e => {
+  const handleVerificationAuth = async (e) => {
+
     e.preventDefault();
-    postVerificationAuthMutation.mutate({
+    console.log(phoneNumber)
+    console.log(inputText)
+    await postVerificationAuthMutation.mutate({
       code: inputText,
+      phonenum: phoneNumber,
     });
     //글자 초기화
-    setModalVisible(false);
+    await setModalVisible(false);
     goToLoginPasswordPage();
   };
 

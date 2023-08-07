@@ -163,7 +163,7 @@ const MainPage = ({ navigation }) => {
   `;
   const CountryExchangeRateContainer = styled.View`
     width: ${widthPercentage(310)}px;
-    height: ${heightPercentage(70)};
+    height: ${heightPercentage(70)}px;
     display: flex;
     padding: ${heightPercentage(5)}px 0px;
     align-items: center;
