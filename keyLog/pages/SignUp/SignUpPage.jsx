@@ -8,10 +8,14 @@ import {
   View,
 } from 'react-native';
 import { useMutation, useQueryClient } from 'react-query';
-import { postVerification, postVerificationAuth } from '../../api/api';
+import { postVerification } from '../../api/api';
 import InfoText from '../../components/SignUpPageComponents/InfoText';
 import InputField from '../../components/SignUpPageComponents/InputField';
 import ModalContent from '../../components/SignUpPageComponents/ModalContent';
+import {
+  isValidName,
+  isValidPersonalNumber,
+} from '../../utils/CheckValidation';
 import {
   checkPersonalNumberChange,
   checkPhoneChange,
@@ -21,29 +25,6 @@ import {
   heightPercentage,
   widthPercentage,
 } from '../../utils/ResponseSize';
-
-const isValidName = name => {
-  const regex = /^[가-힣]*$/;
-  return regex.test(name);
-};
-
-const isValidPersonalNumber = number => {
-  const regex = /^\d{6}-\d{7}$/;
-  return regex.test(number);
-};
-
-const isValidPhoneNumber = number => {
-  const regex = /^010-\d{4}-\d{4}$/;
-  return regex.test(number);
-};
-
-// export const postVerificationMutation = () =>
-//   useMutation(postVerification, {
-//     onSuccess: () => {
-//       // INvalidates cache and refetch
-//       queryClient.invalidateQueries('verification');
-//     },
-//   });
 
 const SignUpPage = ({ navigation }) => {
   const queryClient = useQueryClient();
@@ -60,6 +41,15 @@ const SignUpPage = ({ navigation }) => {
   const nameInputRef = useRef(null);
   const phoneNumberInputRef = useRef(null);
   const personalNumberInputRef = useRef(null);
+
+  const validateName = inputName => {
+    const hasIncompleteCharacters = /[ㄱ-ㅎㅏ-ㅣ]/.test(inputName);
+    setIsNameValid(!hasIncompleteCharacters);
+  };
+
+  const handleNameBlur = () => {
+    validateName(name);
+  };
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -88,8 +78,12 @@ const SignUpPage = ({ navigation }) => {
   ];
 
   const handleNameChange = text => {
-    setName(text);
-    setIsNameValid(isValidName(text));
+    if (isValidName(text) || text === '') {
+      setName(text);
+      setIsNameValid(true);
+    } else {
+      setIsNameValid(false);
+    }
   };
 
   const handlePersonalNumberChange = text => {
@@ -115,7 +109,7 @@ const SignUpPage = ({ navigation }) => {
   };
 
   const postVerificationMutation = useMutation(postVerification, {
-    onSuccess: (data) => {
+    onSuccess: data => {
       // INvalidates cache and refetch
       queryClient.invalidateQueries('verification');
       console.log('Response Data:', data);
@@ -148,6 +142,7 @@ const SignUpPage = ({ navigation }) => {
             placeholder='이름'
             value={name}
             onChangeText={handleNameChange}
+            onBlur={handleNameBlur}
             handlePress={() => nameInputRef.current?.focus()}
             hasError={!isNameValid}
           />
