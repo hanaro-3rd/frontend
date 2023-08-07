@@ -13,8 +13,6 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { List } from "react-native-paper";
-import { ListItem } from "@rneui/themed";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -50,15 +48,18 @@ export const CountryChoiceComponent = () => {
   const [selectedCountry, setSelectedCountry] = React.useState(list[0]);
 
   const handleCountryPress = (country) => {
-    setExpanded(false);
     console.log(expanded);
     setSelectedCountry(country);
+    setExpanded(false);
   };
 
   return (
     <View>
       <TouchableOpacity onPress={() => handleCountryPress(selectedCountry)}>
-        <Collapse isCollapsed={expanded}>
+        <Collapse
+          isExpanded={expanded}
+          onToggle={(isExpanded) => setExpanded({ isExpanded: false })}
+        >
           <CollapseHeader>
             <View style={styles.countrySelect}>
               <Image
@@ -74,21 +75,34 @@ export const CountryChoiceComponent = () => {
               />
             </View>
           </CollapseHeader>
+
           <CollapseBody>
             {list.map((item) => (
               <TouchableOpacity
                 key={item.name}
-                onPress={() => handleCountryPress(item)}
+                onPress={() => {
+                  handleCountryPress(item);
+                }}
               >
                 <View style={styles.countrySelect}>
-                  <Image
-                    source={item.country_url}
+                  <View
                     style={{
-                      width: widthPercentage(32),
-                      height: heightPercentage(30),
+                      width: 100,
+                      height: 30,
+                      flexDirection: "row",
+                      alignItems: "center",
                     }}
-                  />
-                  <Text style={styles.unitText}>{item.name}</Text>
+                  >
+                    <Image
+                      source={item.country_url}
+                      style={{
+                        width: widthPercentage(32),
+                        height: heightPercentage(30),
+                        marginRight: 10,
+                      }}
+                    />
+                    <Text style={styles.unitText}>{item.name}</Text>
+                  </View>
                 </View>
               </TouchableOpacity>
             ))}
