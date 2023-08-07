@@ -47,3 +47,18 @@ export function phoneHeight() {
   console.log(height);
   return height;
 }
+
+export function getMoneyUnit(country) {
+  switch (country) {
+    case "Korea":
+      return "₩";
+    case "USA":
+      return "$";
+    case "Japan":
+      return "¥";
+    case "Europe":
+      return "€";
+    default:
+      return "₩";
+  }
+}

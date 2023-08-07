@@ -7,6 +7,7 @@ import {
   phoneHeight,
   phoneWidth,
   widthPercentage,
+  getMoneyUnit,
 } from "../../utils/ResponseSize";
 import styled from "styled-components/native";
 import FoodIcon from "../../assets/travelBudget/FoodIcon.png";
@@ -16,7 +17,6 @@ import ShopIcon from "../../assets/travelBudget/ShopIcon.png";
 import PlayIcon from "../../assets/travelBudget/PlayIcon.png";
 import EtcIcon from "../../assets/travelBudget/EtcIcon.png";
 import arrow_back from "../../assets/travelBudget/arrow_back.png";
-import { useNavigation } from "@react-navigation/native";
 
 const RootScrollView = styled.ScrollView`
   margin-top: ${getStatusBarHeight}px;
@@ -133,7 +133,7 @@ const MoneyUnitText = styled.Text`
   font-size: ${fontPercentage(16)}px;
   font-style: normal;
   font-weight: 400;
-  margin-bottom: ${heightPercentage(10)}px;
+  margin-bottom: ${heightPercentage(6)}px;
 `;
 
 const Input = styled.View`
@@ -186,7 +186,7 @@ const MoneyTotalUnitText = styled.Text`
   font-size: ${fontPercentage(24)}px;
   font-weight: 700;
   height: ${heightPercentage(29)}px;
-  margin-bottom: ${heightPercentage(5)}px;
+  margin-bottom: ${heightPercentage(0)}px;
 `;
 
 const InputTotal = styled.View`
@@ -218,7 +218,7 @@ const Footer = styled.View`
 `;
 
 const SubmitButton = styled.TouchableOpacity`
-  height: ${heightPercentage(55)};
+  height: ${heightPercentage(55)}px;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -230,11 +230,11 @@ const SubmitButton = styled.TouchableOpacity`
   border-radius: 10px;
 `;
 
-const TravelBudgetPlanPage = ({ navigation }) => {
+const TravelBudgetPlanPage = ({ navigation, route }) => {
   const handleGoBackToSchedulePage = () => {
     navigation.goBack();
   };
-
+  const { travelCountry } = route.params;
   const handleSaveButtonPress = () => {
     if (isAnyBudgetInputFilled) {
       navigation.navigate("TravelBudgetPage");
@@ -247,7 +247,8 @@ const TravelBudgetPlanPage = ({ navigation }) => {
   const [shopBudget, setShopBudget] = useState(0);
   const [playBudget, setPlayBudget] = useState(0);
   const [etcBudget, setEtcBudget] = useState(0);
-
+  const [moneyUnit, setMoneyunit] = useState(getMoneyUnit(travelCountry));
+  console.log(moneyUnit);
   useEffect(() => {
     const totalBudget =
       foodBudget +
@@ -319,7 +320,7 @@ const TravelBudgetPlanPage = ({ navigation }) => {
                   onFocus={() => setIsFoodBudgetInputFilled(true)}
                   onBlur={() => setIsFoodBudgetInputFilled(!!foodBudget)}
                 />
-                <MoneyUnitText>￥</MoneyUnitText>
+                <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
             </BudgetContainer>
             <BudgetContainer>
@@ -340,7 +341,7 @@ const TravelBudgetPlanPage = ({ navigation }) => {
                   onFocus={() => setIsTransBudgetInputFilled(true)}
                   onBlur={() => setIsTransBudgetInputFilled(!!transBudget)}
                 />
-                <MoneyUnitText>￥</MoneyUnitText>
+                <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
             </BudgetContainer>
             <BudgetContainer>
@@ -361,7 +362,7 @@ const TravelBudgetPlanPage = ({ navigation }) => {
                   onFocus={() => setIsHouseBudgetInputFilled(true)}
                   onBlur={() => setIsHouseBudgetInputFilled(!!houseBudget)}
                 />
-                <MoneyUnitText>￥</MoneyUnitText>
+                <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
             </BudgetContainer>
             <BudgetContainer>
@@ -382,7 +383,7 @@ const TravelBudgetPlanPage = ({ navigation }) => {
                   onFocus={() => setIsShopBudgetInputFilled(true)}
                   onBlur={() => setIsShopBudgetInputFilled(!!shopBudget)}
                 />
-                <MoneyUnitText>￥</MoneyUnitText>
+                <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
             </BudgetContainer>
             <BudgetContainer>
@@ -403,7 +404,7 @@ const TravelBudgetPlanPage = ({ navigation }) => {
                   onFocus={() => setIsPlayBudgetInputFilled(true)}
                   onBlur={() => setIsPlayBudgetInputFilled(!!playBudget)}
                 />
-                <MoneyUnitText>￥</MoneyUnitText>
+                <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
             </BudgetContainer>
             <BudgetContainer>
@@ -424,7 +425,7 @@ const TravelBudgetPlanPage = ({ navigation }) => {
                   onFocus={() => setIsEtcBudgetInputFilled(true)}
                   onBlur={() => setIsEtcBudgetInputFilled(!!etcBudget)}
                 />
-                <MoneyUnitText>￥</MoneyUnitText>
+                <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
             </BudgetContainer>
           </BudgetListContainer>
@@ -432,7 +433,7 @@ const TravelBudgetPlanPage = ({ navigation }) => {
             <TotalText>총</TotalText>
             <InputTotal>
               <BudgetTotalText>{totalBudget}</BudgetTotalText>
-              <MoneyTotalUnitText>￥</MoneyTotalUnitText>
+              <MoneyTotalUnitText>{moneyUnit}</MoneyTotalUnitText>
             </InputTotal>
           </BudgetTotalContainer>
         </BodyMain>

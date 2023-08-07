@@ -86,11 +86,12 @@ const App = () => {
   }
   return (
     <NavigationContainer>
-      <Stack.Navigator
+      {/* <Stack.Navigator
         initialRouteName={
           login ? "MainPage" : haveDeviceId ? "LoginPasswordPage" : "SignUpPage"
         }
-      >
+      > */}
+      <Stack.Navigator initialRouteName="TravelBudgetPage">
         <Stack.Screen
           name="MainPage"
           component={MainPage}
