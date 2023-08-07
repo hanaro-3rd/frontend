@@ -17,8 +17,16 @@ export const postVerification = (verificationData) => {
 };
 
 export const postVerificationAuth = (verifiacationAuthData) => {
-  return axiosClient.post("/verifiaction/auth", verifiacationAuthData);
+  return axiosClient.post("/verification/auth", verifiacationAuthData);
 };
 export const getRegistrationDeviceId = (deviceId) => {
   return axiosClient.get(`/registration/${deviceId}`);
 };
+
+export const getMarkers = (markersData) => {
+  return axiosClient.get('/marker')
+} 
+
+export const postMarkers = (markerId) => {
+  return axiosClient.post(`/marker/${markerId}`)
+}
