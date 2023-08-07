@@ -23,10 +23,11 @@ export const getRegistrationDeviceId = (deviceId) => {
   return axiosClient.get(`/registration/${deviceId}`);
 };
 
-export const getMarkers = (markersData) => {
+export const getMarkers = () => {
   return axiosClient.get('/marker')
 } 
 
-export const postMarkers = (markerId) => {
-  return axiosClient.post(`/marker/${markerId}`)
+export const postMarkers = ({markerId,markerData}) => {
+  console.log(markerId,markerData)
+  return axiosClient.post(`/marker/${markerId}`,markerData)
 }
