@@ -109,20 +109,25 @@ export const AccountConnectPage = ({ navigation }) => {
         </View>
         <View style={styles.bodyMain}>
           <Text style={styles.containerTitle}>연결 가능한 계좌</Text>
-          <FlatList
-            scrollEnabled={false}
-            data={[
-              { key: "신한 302-9556-4022-11" },
-              { key: "하나 302-9556-4022-12" },
-              { key: "우리 302-9556-4022-13" },
-            ]}
-            renderItem={renderItem}
-          />
+          <View style={{ width: "100%" }}>
+            <FlatList
+              scrollEnabled={false}
+              data={[
+                { key: "신한 302-9556-4022-11" },
+                { key: "하나 302-9556-4022-12" },
+                { key: "우리 302-9556-4022-13" },
+              ]}
+              renderItem={renderItem}
+            />
+          </View>
         </View>
       </View>
       <View style={styles.footer}>
         <Pressable
-          style={styles.submitButton}
+          style={
+            (styles.submitButton,
+            selectedItem != null && styles.submitButtonAfter)
+          }
           onPress={() => setModalVisible(true)}
         >
           <Text style={styles.buttonText}>연결하기</Text>
@@ -168,7 +173,12 @@ export const AccountConnectPage = ({ navigation }) => {
                 onBackspacePress={handleBackspacePress}
               />
             </View>
-            <Pressable style={styles.submitButton}>
+            <Pressable
+              style={[
+                styles.submitButton,
+                password.length === 4 && styles.submitButtonAfter,
+              ]}
+            >
               <Text style={styles.pressBeforeTextStyle}>확인</Text>
             </Pressable>
           </View>
@@ -294,6 +304,17 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
   },
+  submitButtonAfter: {
+    height: heightPercentage(55),
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+    alignSelf: "stretch",
+    backgroundColor: "#55ACEE",
+    flexDirection: "row",
+    padding: 10,
+    borderRadius: 10,
+  },
   modalBackground: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.65)",
@@ -359,7 +380,6 @@ const styles = StyleSheet.create({
     marginBottom: heightPercentage(20),
   },
   accountitem: {
-    width: "83%",
     backgroundColor: "#F9FAFB",
     margin: heightPercentage(9),
     height: heightPercentage(55),
@@ -370,7 +390,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   selectedItem: {
-    width: "83%",
     margin: heightPercentage(9),
     height: heightPercentage(55),
     borderRadius: 5,
