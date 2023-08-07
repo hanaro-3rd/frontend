@@ -8,6 +8,7 @@ import {
   Image,
   FlatList,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import {
@@ -33,6 +34,7 @@ export const AccountConnectPage = ({ navigation }) => {
   const [isPasswordMismatch, setIsPasswordMismatch] = useState(false);
   const [alertInconsistencyPassword, setAlertInconsistencyPassword] =
     useState(false);
+  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
 
   const renderItem = ({ item }) => {
     const isSelected = item.key === selectedItem;
@@ -41,7 +43,7 @@ export const AccountConnectPage = ({ navigation }) => {
       <Pressable onPress={() => setSelectedItem(item.key)}>
         <View style={[styles.accountitem, isSelected && styles.selectedItem]}>
           <Text
-            style={(styles.listtextBefore, isSelected && styles.listtextAfter)}
+            style={[styles.listtextBefore, isSelected && styles.listtextAfter]}
           >
             {item.key}
           </Text>
@@ -78,20 +80,24 @@ export const AccountConnectPage = ({ navigation }) => {
     setPassword("");
   };
 
-  useEffect(() => {
+  const handlePassWord = () => {
     console.log("password state", password);
 
     if (password.length === 4) {
+      setIsButtonEnabled(true);
       if (password === confirmPassword) {
         console.log("Passwords match");
         setIsPasswordMismatch(false);
+        setIsButtonEnabled(false);
         navigation.replace("MainPage");
       } else {
         console.log("Passwords do not match");
         setIsPasswordMismatch(true);
+        setIsButtonEnabled(false);
+        setPassword("");
       }
     }
-  }, [password, confirmPassword, setIsPasswordMismatch]);
+  };
 
   useEffect(() => {
     if (isPasswordMismatch) {
@@ -124,10 +130,10 @@ export const AccountConnectPage = ({ navigation }) => {
       </View>
       <View style={styles.footer}>
         <Pressable
-          style={
-            (styles.submitButton,
-            selectedItem != null && styles.submitButtonAfter)
-          }
+          style={[
+            styles.submitButton,
+            selectedItem != null && styles.submitButtonAfter,
+          ]}
           onPress={() => setModalVisible(true)}
         >
           <Text style={styles.buttonText}>연결하기</Text>
@@ -173,14 +179,16 @@ export const AccountConnectPage = ({ navigation }) => {
                 onBackspacePress={handleBackspacePress}
               />
             </View>
-            <Pressable
+            <TouchableOpacity
+              onPress={handlePassWord}
+              disabled={isButtonEnabled}
               style={[
                 styles.submitButton,
                 password.length === 4 && styles.submitButtonAfter,
               ]}
             >
-              <Text style={styles.pressBeforeTextStyle}>확인</Text>
-            </Pressable>
+              <Text style={styles.buttonText}>확인</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
