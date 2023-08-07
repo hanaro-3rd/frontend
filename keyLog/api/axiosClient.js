@@ -9,8 +9,6 @@ const HEADERS = {
 export const axiosClient = axios.create({ baseURL: BASE_URL,headers:HEADERS, });
 
 axiosClient.interceptors.request.use(async(config) => {
-  const accessToken = await AsyncStorage.getItem("token")
-  console.log(JSON.parse(await AsyncStorage.getItem("token")))
   if ( await AsyncStorage.getItem("token") && config.headers) {
     config.headers['Authorization'] = `Bearer ${JSON.parse(await AsyncStorage.getItem("token"))}`;
   }
