@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -17,35 +17,17 @@ import TransIcon from "../../assets/travelBudget/TransIcon.png";
 import HouseIcon from "../../assets/travelBudget/HouseIcon.png";
 import ShopIcon from "../../assets/travelBudget/ShopIcon.png";
 import SelectButton from "../../assets/travelBudget/SelectButton.png";
+import DeleteHeader from "../../components/Header/DeleteHeader";
+import HeaderBack from "../../assets/travelBudget/Header-Back.png";
+import symbolicateStackTrace from "react-native/Libraries/Core/Devtools/symbolicateStackTrace";
+import { he } from "date-fns/locale";
 
 const RootScrollView = styled.ScrollView`
-  margin-top: ${getStatusBarHeight}px;
+  /* margin-top: ${getStatusBarHeight}px; */
   min-height: ${phoneHeight}px;
   width: 100%;
   flex-direction: column;
   background-color: #f2f4f6;
-`;
-
-const Header = styled.View`
-  width: 100%;
-  height: ${heightPercentage(50)}px;
-  justify-content: space-between;
-  background-color: white;
-  flex-direction: row;
-  padding: ${heightPercentage(13)}px ${widthPercentage(12)}px;
-`;
-const HeaderRight = styled.View`
-  align-items: flex-start;
-  gap: 10px;
-  flex-direction: row;
-`;
-
-const TitleText = styled.Text`
-  color: #191f29;
-  font-family: "Inter";
-  font-size: ${fontPercentage(23)}px;
-  font-style: normal;
-  font-weight: 700;
 `;
 
 const BodyContainer = styled.View`
@@ -55,52 +37,12 @@ const BodyContainer = styled.View`
   align-self: stretch;
 `;
 
-const BodyHeader = styled.View`
-  align-items: center;
-  align-self: stretch;
-  background-color: #fff;
-  flex-direction: row;
-  padding: ${heightPercentage(15)}px ${widthPercentage(20)}px;
-`;
-
-const PeriodText = styled.Text`
-  color: #191f29;
-  font-family: "Inter";
-  font-size: ${fontPercentage(16)}px;
-  font-style: normal;
-  font-weight: 400;
-`;
-
-const TitleTextMain = styled.Text`
-  color: #000;
-  font-family: "Inter";
-  font-size: ${fontPercentage(30)}px;
-  font-style: normal;
-  font-weight: 700;
-`;
-
-const CityText = styled.Text`
-  color: #191f29;
-  font-family: "Inter";
-  font-size: ${fontPercentage(20)}px;
-  font-style: normal;
-  font-weight: 400;
-`;
-
 const BodyMain = styled.View`
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  /* gap: 20px; */
   align-self: stretch;
   background-color: #fff;
-`;
-
-const MainTextContainer = styled.View`
-  flex-direction: column;
-  align-items: center;
-  align-self: stretch;
-  padding: ${heightPercentage(10)}px 0px;
-  gap: 5px;
 `;
 
 const MainContainer = styled.View`
@@ -117,12 +59,13 @@ const CategoryPaymentContainer = styled.View`
 `;
 
 const CategoryCardContainer = styled.View`
+  height: ${heightPercentage(40)}px;
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
   background-color: #fff;
   flex-direction: row;
-  padding: ${heightPercentage(10)}px ${widthPercentage(15)}px;
+  padding: ${heightPercentage(8)}px ${widthPercentage(15)}px;
 `;
 
 const CategoryContainer = styled.View`
@@ -132,13 +75,18 @@ const CategoryContainer = styled.View`
 `;
 
 const Icon = styled.View`
+  width: ${widthPercentage(30)}px;
+  height: ${heightPercentage(30)}px;
   align-items: center;
   gap: 10px;
   flex-direction: row;
   padding: 0px ${widthPercentage(5)}px;
+  margin-right: ${widthPercentage(8)}px;
 `;
 
 const CategoryText = styled.Text`
+  height: ${heightPercentage(24)}px;
+  width: ${widthPercentage(51)}px;
   color: #191f29;
   font-family: "Inter";
   font-size: ${fontPercentage(16)}px;
@@ -150,7 +98,7 @@ const RemainText = styled.Text`
   color: #191f29;
   text-align: right;
   font-family: "Inter";
-  font-size: ${fontPercentage(14)}px;
+  font-size: ${fontPercentage(12)}px;
   font-style: normal;
   font-weight: 400;
 `;
@@ -159,12 +107,14 @@ const CostText = styled.Text`
   color: #191f29;
   text-align: right;
   font-family: "Inter";
-  font-size: ${fontPercentage(16)}px;
+  font-size: ${fontPercentage(14)}px;
   font-style: normal;
   font-weight: 700;
 `;
 
 const RemainCostContainer = styled.View`
+  /* width: ${widthPercentage(150)}px; */
+  height: ${heightPercentage(20)}px;
   justify-content: center;
   align-items: center;
   gap: 5px;
@@ -178,8 +128,8 @@ const SelectButtonImage = styled.Image`
 
 const CategoryDetailText = styled.Text`
   color: #191f29;
-  font-family: "Inter";
-  font-size: ${fontPercentage(14)}px;
+  font-family: Inter;
+  font-size: ${fontPercentage(16)}px;
   font-style: normal;
   font-weight: 400;
 `;
@@ -191,10 +141,12 @@ const PaymentListContainer = styled.View`
 `;
 
 const PaymentContainer = styled.View`
-  height: ${heightPercentage(50)}px;
+  height: ${heightPercentage(58)}px;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
+  gap: 15px;
   background-color: #f2f4f6;
   flex-direction: row;
   padding: ${heightPercentage(10)}px ${widthPercentage(15)}px;
@@ -210,7 +162,7 @@ const PayCostText = styled.Text`
   color: #191f29;
   text-align: right;
   font-family: "Inter";
-  font-size: ${fontPercentage(14)}px;
+  font-size: ${fontPercentage(16)}px;
   font-style: normal;
   font-weight: 400;
 `;
@@ -223,13 +175,117 @@ const CategoryRemainText = styled.Text`
   font-weight: 700;
 `;
 
-const RemainCostText = styled.Text`
+const UsedCostText = styled.Text`
   color: #191f29;
   text-align: right;
   font-family: "Inter";
-  font-size: ${fontPercentage(14)}px;
+  font-size: ${fontPercentage(16)}px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
+`;
+
+const MapImage = styled.Image`
+  width: ${widthPercentage(390)}px;
+  height: ${heightPercentage(300)}px;
+`;
+
+const DropImage = styled.Image`
+  width: ${widthPercentage(390)}px;
+  height: ${heightPercentage(23)}px;
+`;
+
+const TotalBudgetContainer = styled.View`
+  width: ${widthPercentage(390)}px;
+  height: ${heightPercentage(45)}px;
+  display: flex;
+  padding: ${heightPercentage(13)}px ${widthPercentage(12)}px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-bottom-width: 1px;
+  border-bottom-color: #f2f4f6;
+  /* border-bottom: 1px solid #f2f4f6; */
+  /* background: #fff; */
+`;
+
+const TotalBudgetText = styled.Text`
+  width: ${widthPercentage(97)}px;
+  height: ${heightPercentage(23)}px;
+  color: #191f29;
+  font-family: Inter;
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const SelectMenuContainer = styled.View`
+  width: ${widthPercentage(390)}px;
+  height: ${heightPercentage(49)}px;
+  display: flex;
+  padding: ${heightPercentage(5)}px ${widthPercentage(12)}px;
+  justify-content: center;
+  align-items: center;
+  /* gap: 10px; */
+  align-self: stretch;
+  flex-direction: row;
+`;
+
+const CategoryOrDateContainer = styled.View`
+  width: ${widthPercentage(178)}px;
+  height: ${heightPercentage(39)}px;
+  border-bottom-width: 2px;
+  /* border-bottom-color: #55acee; */
+  /* border-bottom: 2px solid #55acee; */
+  display: flex;
+  padding: ${heightPercentage(10)}px 0px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex: 1 0 0;
+  align-self: stretch;
+`;
+
+const CategoryOrDateText = styled.Text`
+  width: ${widthPercentage(74)}px;
+  height: ${heightPercentage(24)}px;
+  color: #191f29;
+  text-align: center;
+  font-family: Inter;
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const CategoryDetailTextContainer = styled.View`
+  display: flex;
+  width: ${widthPercentage(200)}px;
+  padding: ${heightPercentage(2)}px 0px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
+`;
+
+const DateAndTimeText = styled.Text`
+  color: #4e5968;
+  font-family: Inter;
+  font-size: ${fontPercentage(12)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const PaymentTotalContainer = styled.View`
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex: 1 0 0;
+  align-self: stretch;
+  display: flex;
+  padding: ${heightPercentage(8)}px ${widthPercentage(15)}px;
+  height: ${heightPercentage(43)}px;
+  gap: 15px;
+  align-self: stretch;
 `;
 
 const TravelBudgetDetailPage = ({ navigation }) => {
@@ -237,157 +293,208 @@ const TravelBudgetDetailPage = ({ navigation }) => {
     navigation.goBack();
   };
 
+  const [selectedTab, setSelectedTab] = useState("category");
+
   return (
     <RootScrollView>
-      <Header>
-        <TouchableOpacity onPress={handleGoBackToBudgetPage}>
-          <Image source={CloseButton} />
-        </TouchableOpacity>
-        <HeaderRight>
-          <Image source={DeleteButton} />
-          <Image source={EditButton} />
-        </HeaderRight>
-      </Header>
+      <DeleteHeader navigation={navigation} to="TravelBudgetPage" />
       <BodyContainer>
-        <BodyHeader>
-          <TitleText>경비 계획 상세</TitleText>
-        </BodyHeader>
+        <MapImage source={require("../../Images/지도.png")} />
+        <DropImage
+          source={require("../../assets/travelBudget/Header-Back.png")}
+        />
         <BodyMain>
-          <MainTextContainer>
-            <PeriodText>2023.07.01 ~ 2023.07.10</PeriodText>
-            <TitleTextMain>첫 도쿄 여행</TitleTextMain>
-            <CityText>일본, 도쿄</CityText>
-          </MainTextContainer>
-          <MainContainer>
-            <CategoryPaymentContainer>
-              <CategoryCardContainer>
-                <CategoryContainer>
-                  <Icon>
-                    <Image source={FoodIcon} />
-                  </Icon>
-                  <CategoryText>식비</CategoryText>
-                </CategoryContainer>
-                <RemainCostContainer>
-                  <RemainText>계획한 비용</RemainText>
-                  <CostText>￥80,000</CostText>
-                  <SelectButtonImage source={SelectButton} />
-                </RemainCostContainer>
-              </CategoryCardContainer>
-              <PaymentListContainer>
-                <PaymentContainer>
-                  <CategoryDetailContainer>
-                    <CategoryDetailText>스테이크</CategoryDetailText>
-                  </CategoryDetailContainer>
-                  <PayCostText>- ￥10,000</PayCostText>
-                </PaymentContainer>
-                <PaymentContainer>
-                  <CategoryDetailContainer>
-                    <CategoryDetailText>오코노미야키</CategoryDetailText>
-                  </CategoryDetailContainer>
-                  <PayCostText>- ￥10,000</PayCostText>
-                </PaymentContainer>
-                <PaymentContainer>
-                  <CategoryDetailContainer>
-                    <CategoryRemainText>남은 비용</CategoryRemainText>
-                  </CategoryDetailContainer>
-                  <RemainCostText>￥60,000</RemainCostText>
-                </PaymentContainer>
-              </PaymentListContainer>
-            </CategoryPaymentContainer>
-            <CategoryPaymentContainer>
-              <CategoryCardContainer>
-                <CategoryContainer>
-                  <Icon>
-                    <Image source={TransIcon} />
-                  </Icon>
-                  <CategoryText>교통</CategoryText>
-                </CategoryContainer>
-                <RemainCostContainer>
-                  <RemainText>계획한 비용</RemainText>
-                  <CostText>￥80,000</CostText>
-                  <SelectButtonImage source={SelectButton} />
-                </RemainCostContainer>
-              </CategoryCardContainer>
-              <PaymentListContainer>
-                <PaymentContainer>
-                  <CategoryDetailContainer>
-                    <CategoryDetailText>지하철</CategoryDetailText>
-                  </CategoryDetailContainer>
-                  <PayCostText>- ￥10,000</PayCostText>
-                </PaymentContainer>
-                <PaymentContainer>
-                  <CategoryDetailContainer>
-                    <CategoryDetailText>신칸센</CategoryDetailText>
-                  </CategoryDetailContainer>
-                  <PayCostText>- ￥10,000</PayCostText>
-                </PaymentContainer>
-                <PaymentContainer>
-                  <CategoryDetailContainer>
-                    <CategoryRemainText>남은 비용</CategoryRemainText>
-                  </CategoryDetailContainer>
-                  <RemainCostText>￥60,000</RemainCostText>
-                </PaymentContainer>
-              </PaymentListContainer>
-            </CategoryPaymentContainer>
-            <CategoryPaymentContainer>
-              <CategoryCardContainer>
-                <CategoryContainer>
-                  <Icon>
-                    <Image source={HouseIcon} />
-                  </Icon>
-                  <CategoryText>숙박</CategoryText>
-                </CategoryContainer>
-                <RemainCostContainer>
-                  <RemainText>계획한 비용</RemainText>
-                  <CostText>￥80,000</CostText>
-                  <SelectButtonImage source={SelectButton} />
-                </RemainCostContainer>
-              </CategoryCardContainer>
-              <PaymentListContainer>
-                <PaymentContainer>
-                  <CategoryDetailContainer>
-                    <CategoryDetailText>호텔</CategoryDetailText>
-                  </CategoryDetailContainer>
-                  <PayCostText>- ￥10,000</PayCostText>
-                </PaymentContainer>
-                <PaymentContainer>
-                  <CategoryDetailContainer>
-                    <CategoryRemainText>남은 비용</CategoryRemainText>
-                  </CategoryDetailContainer>
-                  <RemainCostText>￥70,000</RemainCostText>
-                </PaymentContainer>
-              </PaymentListContainer>
-            </CategoryPaymentContainer>
-            <CategoryPaymentContainer>
-              <CategoryCardContainer>
-                <CategoryContainer>
-                  <Icon>
-                    <Image source={ShopIcon} />
-                  </Icon>
-                  <CategoryText>쇼핑 · 편의점 · 마트</CategoryText>
-                </CategoryContainer>
-                <RemainCostContainer>
-                  <RemainText>계획한 비용</RemainText>
-                  <CostText>￥80,000</CostText>
-                  <SelectButtonImage source={SelectButton} />
-                </RemainCostContainer>
-              </CategoryCardContainer>
-              <PaymentListContainer>
-                <PaymentContainer>
-                  <CategoryDetailContainer>
-                    <CategoryDetailText>스테이크</CategoryDetailText>
-                  </CategoryDetailContainer>
-                  <PayCostText>- ￥10,000</PayCostText>
-                </PaymentContainer>
-                <PaymentContainer>
-                  <CategoryDetailContainer>
-                    <CategoryRemainText>남은 비용</CategoryRemainText>
-                  </CategoryDetailContainer>
-                  <RemainCostText>￥70,000</RemainCostText>
-                </PaymentContainer>
-              </PaymentListContainer>
-            </CategoryPaymentContainer>
-          </MainContainer>
+          <TotalBudgetContainer>
+            <TotalBudgetText>총 ￥100,000</TotalBudgetText>
+          </TotalBudgetContainer>
+          <SelectMenuContainer>
+            <CategoryOrDateContainer
+              style={{
+                borderBottomColor:
+                  selectedTab === "category" ? "#55acee" : "white",
+              }}
+            >
+              <TouchableOpacity onPress={() => setSelectedTab("category")}>
+                <CategoryOrDateText>카테고리별</CategoryOrDateText>
+              </TouchableOpacity>
+            </CategoryOrDateContainer>
+            <CategoryOrDateContainer
+              style={{
+                borderBottomColor: selectedTab === "date" ? "#55acee" : "white",
+              }}
+            >
+              <TouchableOpacity onPress={() => setSelectedTab("date")}>
+                <CategoryOrDateText>날짜별</CategoryOrDateText>
+              </TouchableOpacity>
+            </CategoryOrDateContainer>
+          </SelectMenuContainer>
+          {selectedTab === "category" ? (
+            <MainContainer>
+              <CategoryPaymentContainer>
+                <CategoryCardContainer>
+                  <CategoryContainer>
+                    <CategoryText>식비</CategoryText>
+                  </CategoryContainer>
+                  <RemainCostContainer>
+                    <RemainText>계획한 비용</RemainText>
+                    <CostText>￥80,000</CostText>
+                    <SelectButtonImage source={SelectButton} />
+                  </RemainCostContainer>
+                </CategoryCardContainer>
+                <PaymentListContainer>
+                  <PaymentContainer>
+                    <CategoryDetailContainer>
+                      <Icon>
+                        <Image source={FoodIcon} />
+                      </Icon>
+                      <CategoryDetailTextContainer>
+                        <CategoryDetailText>스테이크</CategoryDetailText>
+                        <DateAndTimeText>7월 1일 13:59</DateAndTimeText>
+                      </CategoryDetailTextContainer>
+                    </CategoryDetailContainer>
+                    <PayCostText> ￥10,000</PayCostText>
+                  </PaymentContainer>
+                  <PaymentContainer>
+                    <CategoryDetailContainer>
+                      <Icon>
+                        <Image source={FoodIcon} />
+                      </Icon>
+                      <CategoryDetailTextContainer>
+                        <CategoryDetailText>오코노미야끼</CategoryDetailText>
+                        <DateAndTimeText>7월 2일 13:59</DateAndTimeText>
+                      </CategoryDetailTextContainer>
+                    </CategoryDetailContainer>
+                    <PayCostText> ￥10,000</PayCostText>
+                  </PaymentContainer>
+                  <PaymentTotalContainer>
+                    <UsedCostText>총 ￥20,000</UsedCostText>
+                  </PaymentTotalContainer>
+                </PaymentListContainer>
+              </CategoryPaymentContainer>
+              <CategoryPaymentContainer>
+                <CategoryCardContainer>
+                  <CategoryContainer>
+                    <CategoryText>교통</CategoryText>
+                  </CategoryContainer>
+                  <RemainCostContainer>
+                    <RemainText>계획한 비용</RemainText>
+                    <CostText>￥80,000</CostText>
+                    <SelectButtonImage source={SelectButton} />
+                  </RemainCostContainer>
+                </CategoryCardContainer>
+                <PaymentListContainer>
+                  <PaymentContainer>
+                    <CategoryDetailContainer>
+                      <Icon>
+                        <Image source={TransIcon} />
+                      </Icon>
+                      <CategoryDetailTextContainer>
+                        <CategoryDetailText>지하철</CategoryDetailText>
+                        <DateAndTimeText>7월 1일 13:59</DateAndTimeText>
+                      </CategoryDetailTextContainer>
+                    </CategoryDetailContainer>
+                    <PayCostText> ￥10,000</PayCostText>
+                  </PaymentContainer>
+                  <PaymentContainer>
+                    <CategoryDetailContainer>
+                      <Icon>
+                        <Image source={TransIcon} />
+                      </Icon>
+                      <CategoryDetailTextContainer>
+                        <CategoryDetailText>신칸센</CategoryDetailText>
+                        <DateAndTimeText>7월 2일 13:59</DateAndTimeText>
+                      </CategoryDetailTextContainer>
+                    </CategoryDetailContainer>
+                    <PayCostText> ￥10,000</PayCostText>
+                  </PaymentContainer>
+                  <PaymentTotalContainer>
+                    <UsedCostText>총 ￥20,000</UsedCostText>
+                  </PaymentTotalContainer>
+                </PaymentListContainer>
+              </CategoryPaymentContainer>
+            </MainContainer>
+          ) : (
+            <MainContainer>
+              <CategoryPaymentContainer>
+                <CategoryCardContainer>
+                  <CategoryContainer>
+                    <CategoryText>7월 1일</CategoryText>
+                  </CategoryContainer>
+                  <RemainCostContainer>
+                    <SelectButtonImage source={SelectButton} />
+                  </RemainCostContainer>
+                </CategoryCardContainer>
+                <PaymentListContainer>
+                  <PaymentContainer>
+                    <CategoryDetailContainer>
+                      <Icon>
+                        <Image source={FoodIcon} />
+                      </Icon>
+                      <CategoryDetailTextContainer>
+                        <CategoryDetailText>스테이크</CategoryDetailText>
+                        <DateAndTimeText>7월 1일 13:59</DateAndTimeText>
+                      </CategoryDetailTextContainer>
+                    </CategoryDetailContainer>
+                    <PayCostText> ￥10,000</PayCostText>
+                  </PaymentContainer>
+                  <PaymentContainer>
+                    <CategoryDetailContainer>
+                      <Icon>
+                        <Image source={TransIcon} />
+                      </Icon>
+                      <CategoryDetailTextContainer>
+                        <CategoryDetailText>지하철</CategoryDetailText>
+                        <DateAndTimeText>7월 1일 13:59</DateAndTimeText>
+                      </CategoryDetailTextContainer>
+                    </CategoryDetailContainer>
+                    <PayCostText> ￥10,000</PayCostText>
+                  </PaymentContainer>
+                  <PaymentTotalContainer>
+                    <UsedCostText>총 ￥20,000</UsedCostText>
+                  </PaymentTotalContainer>
+                </PaymentListContainer>
+              </CategoryPaymentContainer>
+              <CategoryPaymentContainer>
+                <CategoryCardContainer>
+                  <CategoryContainer>
+                    <CategoryText>7월 2일</CategoryText>
+                  </CategoryContainer>
+                  <RemainCostContainer>
+                    <SelectButtonImage source={SelectButton} />
+                  </RemainCostContainer>
+                </CategoryCardContainer>
+                <PaymentListContainer>
+                  <PaymentContainer>
+                    <CategoryDetailContainer>
+                      <Icon>
+                        <Image source={FoodIcon} />
+                      </Icon>
+                      <CategoryDetailTextContainer>
+                        <CategoryDetailText>오코노미야끼</CategoryDetailText>
+                        <DateAndTimeText>7월 2일 13:59</DateAndTimeText>
+                      </CategoryDetailTextContainer>
+                    </CategoryDetailContainer>
+                    <PayCostText> ￥10,000</PayCostText>
+                  </PaymentContainer>
+                  <PaymentContainer>
+                    <CategoryDetailContainer>
+                      <Icon>
+                        <Image source={TransIcon} />
+                      </Icon>
+                      <CategoryDetailTextContainer>
+                        <CategoryDetailText>신칸센</CategoryDetailText>
+                        <DateAndTimeText>7월 2일 13:59</DateAndTimeText>
+                      </CategoryDetailTextContainer>
+                    </CategoryDetailContainer>
+                    <PayCostText> ￥10,000</PayCostText>
+                  </PaymentContainer>
+                  <PaymentTotalContainer>
+                    <UsedCostText>총 ￥20,000</UsedCostText>
+                  </PaymentTotalContainer>
+                </PaymentListContainer>
+              </CategoryPaymentContainer>
+            </MainContainer>
+          )}
         </BodyMain>
       </BodyContainer>
     </RootScrollView>
