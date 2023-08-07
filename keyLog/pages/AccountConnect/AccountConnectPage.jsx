@@ -152,8 +152,7 @@ export const AccountConnectPage = ({ navigation }) => {
                 </Pressable>
               </View>
               <View style={styles.popupSubtitle}>
-                <Text style={styles.popupBank}>신한</Text>
-                <Text>302-9556-4022-11</Text>
+                <Text>{selectedItem}</Text>
               </View>
             </View>
 
@@ -360,7 +359,7 @@ const styles = StyleSheet.create({
     marginBottom: heightPercentage(20),
   },
   accountitem: {
-    // width: "83%",
+    width: "83%",
     backgroundColor: "#F9FAFB",
     margin: heightPercentage(9),
     height: heightPercentage(55),
@@ -371,7 +370,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   selectedItem: {
-    // width: "83%",
+    width: "83%",
     margin: heightPercentage(9),
     height: heightPercentage(55),
     borderRadius: 5,

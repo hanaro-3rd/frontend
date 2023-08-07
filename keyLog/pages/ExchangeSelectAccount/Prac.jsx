@@ -30,7 +30,7 @@ import {
   AccordionList,
 } from "accordion-collapse-react-native";
 
-export const CountryChoiceComponent = () => {
+export const Prac = () => {
   const list = [
     {
       name: "USD",
@@ -51,14 +51,13 @@ export const CountryChoiceComponent = () => {
 
   const handleCountryPress = (country) => {
     setExpanded(false);
-    console.log(expanded);
     setSelectedCountry(country);
   };
 
   return (
     <View>
       <TouchableOpacity onPress={() => handleCountryPress(selectedCountry)}>
-        <Collapse isCollapsed={expanded}>
+        <Collapse isCollapsed={!expanded}>
           <CollapseHeader>
             <View style={styles.countrySelect}>
               <Image
@@ -69,9 +68,6 @@ export const CountryChoiceComponent = () => {
                 }}
               />
               <Text style={styles.unitText}>{selectedCountry.name}</Text>
-              <Image
-                source={require("../../assets/exchangeImg/SelectButton.png")}
-              />
             </View>
           </CollapseHeader>
           <CollapseBody>
@@ -98,7 +94,7 @@ export const CountryChoiceComponent = () => {
     </View>
   );
 };
-export default CountryChoiceComponent;
+export default Prac;
 
 const styles = StyleSheet.create({
   countrySelect: {
