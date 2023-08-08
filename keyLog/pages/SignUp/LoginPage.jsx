@@ -18,7 +18,8 @@ const LoginPage = () => {
 
   const postSignInPasswordMutation = useMutation(postSigninPassword, {
     onSuccess: async response => {
-      await storeToken(response.headers.access_token);
+      await storeAccessToken(response.headers.access_token);
+      await storeRefreshToken(response.headers.refresh_token);
       queryClient.invalidateQueries('postSigninPassword');
       navigation.navigate('MainPage');
     },
@@ -66,8 +67,12 @@ const LoginPage = () => {
     console.log('loginError:', loginError);
   }, [loginError]);
 
-  const storeToken = async token => {
-    await AsyncStorage.setItem('token', JSON.stringify(token));
+  const storeAccessToken = async token => {
+    await AsyncStorage.setItem('access_token', JSON.stringify(token));
+  };
+
+  const storeRefreshToken = async token => {
+    await AsyncStorage.setItem('refresh_token', JSON.stringify(token));
   };
 
   return (
