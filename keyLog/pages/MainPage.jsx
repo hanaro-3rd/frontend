@@ -45,15 +45,15 @@ const MainPage = ({ navigation }) => {
   };
   const updatedMainCardContent = {
     subTitle: "계좌연결",
-    title: "어쩌구저쩌구",
+    title: "3초만에 간편하게",
     imageSource: CarouselAccountIcon,
     buttonText: "계좌연결하기",
   };
   const thirdMainCardContent = {
-    subTitle: "어디서든 쓸 수 있는",
-    title: "하나머니",
+    subTitle: "수수료 걱정없는",
+    title: "키머니",
     imageSource: CarouselHanaMoneyIcon,
-    buttonText: "하나머니 환전하기",
+    buttonText: "키머니 환전하기",
   };
 
   const [activeContentIndex, setActiveContentIndex] = useState(0);
