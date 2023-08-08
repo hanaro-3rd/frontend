@@ -15,9 +15,11 @@ import Scan from "../assets/Main/scan.png";
 import SettingButton from "../assets/Main/SettingButton.png";
 import arrow_prev from "../assets/Main/arrow_prev.png";
 import CarouselMoneyIcon from "../assets/Main/CarouselIcon.png";
-import CarouselIconKeymoney from "../assets/Main/CarouselIcon.png";
+import CarouselIconKeymoney from "../assets/Main/CarouselIconKeymoney.png";
 import CarouselAccountIcon from "../assets/Main/CarouselAccountIcon.png";
 import CarouselHanaMoneyIcon from "../assets/Main/CarouselHanaMoneyIcon.png";
+import CarouselRecordIcon from "../assets/Main/CarouselRecordIcon.png";
+import CarouselPickUpIcon from "../assets/Main/CarouselPickUpIcon.png";
 import CountryIcon from "../assets/Main/CountryIcon.png";
 import KeyPickIcon from "../assets/Main/MenuIcon1.png";
 import PlanTravelBudgetIcon from "../assets/Main/MenuIcon2.png";
@@ -32,41 +34,50 @@ import HanaLifeIcon from "../assets/Main/HanaServiceIcon4.png";
 import HanaStockIcon from "../assets/Main/HanaServiceIcon5.png";
 import HanaSavingIcon from "../assets/Main/HanaServiceIcon6.png";
 import React, { useState, useEffect } from "react";
+import Swiper from "react-native-swiper";
 
 const MainPage = ({ navigation }) => {
   {
     /* carousel 관련 */
   }
-  const originalMainCardContent = {
+  const firstMainCardContent = {
     subTitle: "어디서든 쓸 수 있는",
     title: "키머니",
     imageSource: CarouselIconKeymoney,
     buttonText: "키머니 확인하기",
   };
-  const updatedMainCardContent = {
-    subTitle: "계좌연결",
-    title: "3초만에 간편하게",
+  const secondMainCardContent = {
+    subTitle: "3초만에 간편하게",
+    title: "계좌연결",
     imageSource: CarouselAccountIcon,
     buttonText: "계좌연결하기",
   };
   const thirdMainCardContent = {
     subTitle: "수수료 걱정없는",
-    title: "키머니",
+    title: "환전하기",
     imageSource: CarouselHanaMoneyIcon,
     buttonText: "키머니 환전하기",
   };
-
-  const [activeContentIndex, setActiveContentIndex] = useState(0);
-  const contents = [
-    originalMainCardContent,
-    updatedMainCardContent,
-    thirdMainCardContent,
-  ];
-  const mainCardContent = contents[activeContentIndex];
-
-  const handleCarouselCardPress = () => {
-    setActiveContentIndex((prevIndex) => (prevIndex + 1) % contents.length);
+  const fourthMainCardContent = {
+    subTitle: "뭐하지상준아",
+    title: "여행기록",
+    imageSource: CarouselRecordIcon,
+    buttonText: "여행 기록 확인하기",
   };
+  const fifthMainCardContent = {
+    subTitle: "뭐하지상준아2",
+    title: "키줍기",
+    imageSource: CarouselPickUpIcon,
+    buttonText: "키머니 줍기",
+  };
+
+  const contents = [
+    firstMainCardContent,
+    secondMainCardContent,
+    thirdMainCardContent,
+    fourthMainCardContent,
+    fifthMainCardContent,
+  ];
 
   {
     /* styled-components */
@@ -360,6 +371,24 @@ const MainPage = ({ navigation }) => {
     flex-direction: row;
   `;
 
+  const KeyMoneyImage = styled.Image`
+    width: ${widthPercentage(80)}px;
+    height: ${heightPercentage(80)}px;
+  `;
+
+  const CustomSwiper = styled(Swiper)`
+    display: flex;
+    height: ${heightPercentage(320)}px;
+    padding-top: ${heightPercentage(20)}px;
+    padding-bottom: ${heightPercentage(30)}px;
+    margin: 0px ${widthPercentage(45)}px;
+    /* margin-bottom: ${heightPercentage(30)}px; */
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    flex-direction: row;
+  `;
+
   return (
     <Main>
       <Header>
@@ -381,16 +410,20 @@ const MainPage = ({ navigation }) => {
 
       {/*메뉴 carousel card*/}
       <BodyMain>
-        <MenuCarousels>
-          <TouchableOpacity onPress={handleCarouselCardPress}>
-            <CarouselCard />
-          </TouchableOpacity>
-          <MainCarousels content={mainCardContent}></MainCarousels>
-          <TouchableOpacity onPress={handleCarouselCardPress}>
-            <CarouselCard />
-          </TouchableOpacity>
-        </MenuCarousels>
-
+        <CustomSwiper
+          loop={true} // 무한 루프로 스와이프할 수 있도록 설정
+          autoplay={true} // 자동 재생 비활성화
+        >
+          {/* <CarouselCard /> */}
+          {contents.map((content, index) => (
+            <MainCarousels
+              key={index}
+              navigation={navigation}
+              content={content}
+              onnPress={() => handleCarouselCardPress(content.buttonText)}
+            />
+          ))}
+        </CustomSwiper>
         {/* 환율 */}
         <ExchangeRateContainer>
           <PrevOrNextButton>
@@ -424,8 +457,8 @@ const MainPage = ({ navigation }) => {
             <Image source={KeyPickIcon} />
             <MenuSubContainer>
               <MenuTextContainer>
-                <MenuTitle>하나머니 줍기</MenuTitle>
-                <MenuSubtitle>여행을 떠나서 하나머니를 주워봐용</MenuSubtitle>
+                <MenuTitle>키머니 줍기</MenuTitle>
+                <MenuSubtitle>여행을 떠나서 키머니를 주워봐용</MenuSubtitle>
               </MenuTextContainer>
               <MenuButton onPress={() => navigation.navigate("PickUpKeyPage")}>
                 <MenuButtonText>주우러 가기</MenuButtonText>
@@ -449,7 +482,7 @@ const MainPage = ({ navigation }) => {
             </MenuSubContainer>
           </MenuCard>
           <MenuCard>
-            <Image source={MoneyIcon} />
+            <KeyMoneyImage source={CarouselIconKeymoney} />
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>키머니 확인하기</MenuTitle>
