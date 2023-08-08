@@ -163,7 +163,7 @@ const MainPage = ({ navigation }) => {
   `;
   const CountryExchangeRateContainer = styled.View`
     width: ${widthPercentage(310)}px;
-    height: ${heightPercentage(70)};
+    height: ${heightPercentage(70)}px;
     display: flex;
     padding: ${heightPercentage(5)}px 0px;
     align-items: center;
@@ -410,9 +410,7 @@ const MainPage = ({ navigation }) => {
                 <MenuTitle>하나머니 줍기</MenuTitle>
                 <MenuSubtitle>여행을 떠나서 하나머니를 주워봐용</MenuSubtitle>
               </MenuTextContainer>
-              <MenuButton
-              // onPress={() =>  }
-              >
+              <MenuButton onPress={() => navigation.navigate("PickUpKeyPage")}>
                 <MenuButtonText>주우러 가기</MenuButtonText>
               </MenuButton>
             </MenuSubContainer>

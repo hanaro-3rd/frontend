@@ -4,15 +4,12 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import NumberPad from "../../components/SignUpPageComponents/NumberPad";
 import PasswordSymbol from "../../components/SignUpPageComponents/PasswordSymbol";
 import { fontPercentage, heightPercentage } from "../../utils/ResponseSize";
-
-const LoginPasswordPage = ({ route }) => {
+import { useMutation, useQueryClient } from "react-query";
+import { postSigninPassword } from "../../api/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getUniqueId } from "react-native-device-info";
+const LoginPage = () => {
   const navigation = useNavigation();
-
-  const {
-    name = "이수창",
-    phoneNumber = "01063572816",
-    personalNumber = "970917-1111111",
-  } = route?.params;
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,40 +18,42 @@ const LoginPasswordPage = ({ route }) => {
   const [alertInconsistencyPassword, setAlertInconsistencyPassword] =
     useState(false);
 
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
+  const postSignInPasswordMutation = useMutation(postSigninPassword, {
+    onSuccess: async (response) => {
+      queryClient.invalidateQueries("postSigninPassword");
+      setIsPasswordMismatch(false);
+      await AsyncStorage.setItem(
+        "token",
+        JSON.stringify(response.headers.access_token)
+      );
+      navigation.navigate("MainPage");
+    },
+  });
 
-  // const postSignupMutation = useMutation(postSignup, {
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries('postSignup');
-  //   },
-  // });
-
-  // const handlePostSignup = e => {
-  //   e.preventDefault();
-  //   postSignupMutation.mutate({
-
-  //   });
-
-  //   setModalVisible(false);
-  //   goToLoginPasswordPage();
-  // };
-
-  const handleNumPress = (num) => {
+  const handleNumPress = async (num) => {
     if (alertInconsistencyPassword) {
       resetPasswordProcess();
       setAlertInconsistencyPassword(false);
     }
 
-    if (isConfirming) {
-      if (confirmPassword.length < 6) {
-        setConfirmPassword(confirmPassword + num);
-      }
-    } else {
       if (password.length < 6) {
+        if(password.length==5) {
+            postSignInPasswordMutation.mutate({
+                deviceId: await getUniqueId(),
+                password: password+num,
+            })
+        }
         setPassword(password + num);
+        console.log(num + "num");
+      } else {
+        console.log(password)
+        postSignInPasswordMutation.mutate({
+            deviceId: await getUniqueId(),
+            password: password,
+        })
       }
     }
-  };
 
   const handleBackspacePress = () => {
     if (isConfirming) {
@@ -77,31 +76,11 @@ const LoginPasswordPage = ({ route }) => {
     }
   }, [password, confirmPassword]);
 
-  useEffect(() => {
-    console.log("password state", password);
-    if (password.length === 6 && !isConfirming) {
-      setIsConfirming(true);
-    }
+  //   useEffect(() => {
+  //     console.log("password state", password);
 
-    console.log(confirmPassword);
-
-    if (confirmPassword.length === 6) {
-      if (password === confirmPassword) {
-        console.log("Passwords match");
-        setIsPasswordMismatch(false);
-        navigation.navigate("LoginPatternPage", {
-          name,
-          phoneNumber,
-          personalNumber,
-          password,
-        });
-      } else {
-        console.log("Passwords do not match");
-        setIsPasswordMismatch(true);
-        setIsConfirming(true);
-      }
-    }
-  }, [password, confirmPassword, setIsPasswordMismatch]);
+  //     }
+  //   }, [password, confirmPassword, setIsPasswordMismatch]);
 
   useEffect(() => {
     if (isPasswordMismatch) {
@@ -128,21 +107,12 @@ const LoginPasswordPage = ({ route }) => {
       <View style={styles.body}>
         <View style={styles.bodyMain}>
           <View style={styles.textContainer}>
-            <Text style={styles.mainText}>
-              {isConfirming && !isPasswordMismatch
-                ? "확인을 위해 비밀번호를 한 번 더 입력해주세요"
-                : "잠금해제 비밀번호를 설정해주세요"}
-            </Text>
+            <Text style={styles.mainText}>잠금해제 해주세요</Text>
             <PasswordSymbol
               isConfirming={isConfirming}
               confirmPassword={confirmPassword}
               password={password}
             />
-            {isPasswordMismatch && (
-              <Text style={styles.errorText}>
-                비밀번호가 일치하지 않습니다.
-              </Text>
-            )}
           </View>
           <NumberPad
             onNumPress={handleNumPress}
@@ -162,7 +132,7 @@ const LoginPasswordPage = ({ route }) => {
   );
 };
 
-export default LoginPasswordPage;
+export default LoginPage;
 
 const styles = StyleSheet.create({
   root: {

@@ -7,31 +7,28 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useMutation, useQueryClient } from 'react-query';
+import { postVerification } from '../../api/api';
 import InfoText from '../../components/SignUpPageComponents/InfoText';
 import InputField from '../../components/SignUpPageComponents/InputField';
 import ModalContent from '../../components/SignUpPageComponents/ModalContent';
+import {
+  isValidName,
+  isValidPersonalNumber,
+} from '../../utils/CheckValidation';
+import {
+  checkPersonalNumberChange,
+  checkPhoneChange,
+} from '../../utils/Regexp';
 import {
   fontPercentage,
   heightPercentage,
   widthPercentage,
 } from '../../utils/ResponseSize';
 
-const isValidName = name => {
-  const regex = /^[가-힣]*$/;
-  return regex.test(name);
-};
+const SignUpPage = ({ navigation }) => {
+  const queryClient = useQueryClient();
 
-const isValidPersonalNumber = number => {
-  const regex = /^\d{6}-\d{7}$/;
-  return regex.test(number);
-};
-
-const isValidPhoneNumber = number => {
-  const regex = /^010-\d{4}-\d{4}$/;
-  return regex.test(number);
-};
-
-const SignUpPage = () => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [name, setName] = useState('');
   const [personalNumber, setPersonalNumber] = useState('');
@@ -44,6 +41,15 @@ const SignUpPage = () => {
   const nameInputRef = useRef(null);
   const phoneNumberInputRef = useRef(null);
   const personalNumberInputRef = useRef(null);
+
+  const validateName = inputName => {
+    const hasIncompleteCharacters = /[ㄱ-ㅎㅏ-ㅣ]/.test(inputName);
+    setIsNameValid(!hasIncompleteCharacters);
+  };
+
+  const handleNameBlur = () => {
+    validateName(name);
+  };
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -72,24 +78,17 @@ const SignUpPage = () => {
   ];
 
   const handleNameChange = text => {
-    setName(text);
-    setIsNameValid(isValidName(text));
+    if (isValidName(text) || text === '') {
+      setName(text);
+      setIsNameValid(true);
+    } else {
+      setIsNameValid(false);
+    }
   };
 
   const handlePersonalNumberChange = text => {
-    let cleaned = ('' + text).replace(/\D/g, '');
-    let match;
-
-    if (cleaned.length < 7) {
-      match = cleaned.match(/^(\d{0,6})/);
-    } else {
-      match = cleaned.match(/^(\d{6})(\d{0,7})/);
-    }
-
-    if (match) {
-      const part1 = match[1] || '',
-        part2 = match[2] || '';
-
+    const [part1, part2] = checkPersonalNumberChange(text);
+    if (part1 != null && part2 != null) {
       const newPersonalNumber = [part1, part2].filter(Boolean).join('-');
       setPersonalNumber(newPersonalNumber);
       setIsPersonalNumberValid(isValidPersonalNumber(newPersonalNumber));
@@ -97,30 +96,31 @@ const SignUpPage = () => {
   };
 
   const handlePhoneChange = number => {
-    let cleaned = ('' + number).replace(/\D/g, '');
-    let match;
-
-    if (cleaned.length < 4) {
-      match = cleaned.match(/^(\d{0,3})/);
-    } else if (cleaned.length < 7) {
-      match = cleaned.match(/^(\d{3})(\d{0,4})/);
-    } else {
-      match = cleaned.match(/^(\d{3})(\d{4})(\d{0,4})/);
-    }
-
-    if (match) {
-      const part1 = match[1] || '',
-        part2 = match[2] || '',
-        part3 = match[3] || '';
-
-      const newPhoneNumber = [part1, part2, part3].filter(Boolean).join('-');
-      setPhoneNumber(newPhoneNumber);
-      setIsPhoneNumberValid(isValidPhoneNumber(newPhoneNumber));
+    const [part1, part2, part3] = checkPhoneChange(number);
+    if (part1 != null && part2 != null && part3 != null) {
+      // const newPhoneNumber = [part1, part2, part3].filter(Boolean).join('-');
+      setPhoneNumber(part1 + part2 + part3);
+      setIsPhoneNumberValid(true);
     }
   };
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
+  };
+
+  const postVerificationMutation = useMutation(postVerification, {
+    onSuccess: data => {
+      // INvalidates cache and refetch
+      queryClient.invalidateQueries('verification');
+      console.log('Response Data:', data);
+    },
+  });
+
+  const handleVerification = e => {
+    e.preventDefault();
+    postVerificationMutation.mutate({ phonenum: phoneNumber });
+    //글자 초기화
+    setModalVisible(true);
   };
 
   return (
@@ -142,6 +142,7 @@ const SignUpPage = () => {
             placeholder='이름'
             value={name}
             onChangeText={handleNameChange}
+            onBlur={handleNameBlur}
             handlePress={() => nameInputRef.current?.focus()}
             hasError={!isNameValid}
           />
@@ -172,14 +173,14 @@ const SignUpPage = () => {
             style={[
               styles.submitButton,
               (!isNameValid ||
-                !isValidPhoneNumber(phoneNumber) ||
+                // !isValidPhoneNumber(phoneNumber) ||
                 !isValidPersonalNumber(personalNumber)) &&
                 styles.disabledButton,
             ]}
-            onPress={toggleModal}
+            onPress={e => handleVerification(e)}
             disabled={
               !isNameValid ||
-              !isValidPhoneNumber(phoneNumber) ||
+              // !isValidPhoneNumber(phoneNumber) ||
               !isValidPersonalNumber(personalNumber)
             }
           >
@@ -190,6 +191,10 @@ const SignUpPage = () => {
           modalVisible={modalVisible}
           toggleModal={toggleModal}
           phoneNumber={phoneNumber}
+          personalNumber={phoneNumber}
+          name={name}
+          setModalVisible={setModalVisible}
+          navigation={navigation}
         />
       </View>
     </ScrollView>
