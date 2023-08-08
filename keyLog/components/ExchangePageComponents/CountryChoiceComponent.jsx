@@ -85,14 +85,7 @@ export const CountryChoiceComponent = () => {
                 }}
               >
                 <View style={styles.countrySelect}>
-                  <View
-                    style={{
-                      width: 100,
-                      height: 30,
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
+                  <View style={styles.countrySelectRow}>
                     <Image
                       source={item.country_url}
                       style={{
@@ -127,6 +120,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: widthPercentage(20),
     borderRadius: 10,
+  },
+  countrySelectRow: {
+    width: 100,
+    height: 30,
+    flexDirection: "row",
+    alignItems: "center",
   },
   unitText: {
     color: "#191F29",
