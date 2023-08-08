@@ -18,6 +18,7 @@ import ExchangeFail from "./pages/ExchangeSelectAccount/ExchangeFail";
 import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
 import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
 import MainPage from "./pages/MainPage";
+import TestPaymentPage from "./pages/TestPaymentPage";
 import PickUpKeyPage from "./pages/PickUpKeyPage";
 import LoginPasswordPage from "./pages/SignUp/LoginPasswordPage";
 import LoginPatternPage from "./pages/SignUp/LoginPatternPage";
@@ -141,12 +142,17 @@ const App = () => {
         <Stack.Screen
           name="ScanPage"
           component={ScanPage}
-          // options={{ headerShown: false }}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TestPaymentPage"
+          component={TestPaymentPage}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="SettingPage"
           component={SettingPage}
-          // options={{ headerShown: false }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="AccountConnectPage"
