@@ -1,3 +1,7 @@
+import AccountConnectSuccess from "./pages/AccountConnect/AccountConnectSuccess";
+import AccountConnectFail from "./pages/AccountConnect/AccountConnectFail";
+import ChooseAccountComponent from "./components/ExchangePageComponents/ChooseAccountComponent";
+import CountryChoiceComponent from "./components/ExchangePageComponents/CountryChoiceComponent";
 import {
   NavigationContainer,
   useFocusEffect,
@@ -9,8 +13,7 @@ import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import PaymentPageInputComponent from "./components/PaymentPageComponents/PaymentPageInputComponent";
 import TravelRecordDetailComponent from "./components/TravelRecordPageComponents/TravelRecordDetailComponent";
 import TravelRecordMainComponent from "./components/TravelRecordPageComponents/TravelRecordMainComponent";
-import AccountConnectPage from "./pages/AccountConnectPage";
-import ChooseAccount from "./pages/ExchangeSelectAccount/ChooseAccount";
+import AccountConnectPage from "./pages/AccountConnect/AccountConnectPage";
 import ExchangeFail from "./pages/ExchangeSelectAccount/ExchangeFail";
 import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
 import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
@@ -37,19 +40,18 @@ const App = () => {
   const [login, setLogin] = useRecoilState(loginAtom);
   const [isLoading, setLoading] = useState(true);
   const [haveDeviceId, setHaveDeviceId] = useState(false);
-  usePermissions()
+  usePermissions();
   const checkToken = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
       await AsyncStorage.removeItem("token");
-      console.log("token"+token);
+      console.log("token" + token);
       if (token) {
         // token이 있으면 MainPage로 이동
         setLogin(true);
       } else {
         // token이 없으면 SignUpPage로 이동
         setLogin(false);
-      
       }
     } catch (error) {
       // 에러 처리
@@ -60,27 +62,24 @@ const App = () => {
     }
   };
 
-
-
   const { data } = useQuery(
     "registration",
     async () => getRegistrationDeviceId(await DeviceInfo.getUniqueId()),
     {
       //DeviceId가 존재할떄
       onSuccess: async (response) => {
-        console.log(await DeviceInfo.getUniqueId());
-        console.log(JSON.stringify(response.data));
+        console.log("success");
+        console.log(JSON.stringify(response));
         setHaveDeviceId(true);
         try {
           const token = await AsyncStorage.getItem("token");
-          console.log("token"+token);
+          console.log("token" + token);
           if (token) {
             // token이 있으면 MainPage로 이동
             setLogin(true);
           } else {
             // token이 없으면 SignUpPage로 이동
             setLogin(false);
-          
           }
         } catch (error) {
           // 에러 처리
@@ -92,13 +91,28 @@ const App = () => {
       },
       //DeviceId가 존재하지 않을 때
       onError: async (error) => {
-        console.log(await DeviceInfo.getUniqueId());
         console.log("error");
         setHaveDeviceId(false);
+        try {
+          const token = await AsyncStorage.getItem("token");
+          if (token) {
+            // token이 있으면 MainPage로 이동
+            setLogin(true);
+          } else {
+            // token이 없으면 SignUpPage로 이동
+            setLogin(false);
+          }
+        } catch (error) {
+          // 에러 처리
+          console.log("AsyncStorage error:", error);
+          setLogin(false); // 에러 발생 시 로그인을 하지 않은 상태로 설정
+        } finally {
+          setLoading(false); // 로딩 상태를 false로 설정하여 초기 렌더링이 완료
+        }
       },
     }
   );
-  console.log("74" + login);
+
   // useEffect(() => {
   //   console.log("useeffect" + "돌아가긴하니" + login);
   //   checkToken();
@@ -112,7 +126,8 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName={
-          login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
+          login ? "MainPage" : "SignUpPage"
+          // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
         }
       >
         <Stack.Screen
@@ -123,12 +138,48 @@ const App = () => {
         <Stack.Screen
           name="AccountConnectPage"
           component={AccountConnectPage}
+          options={{ headerShown: false }}
         />
-        <Stack.Screen name="ExchangePage" component={ExchangePage} />
-        <Stack.Screen name="ExchangeSuccess" component={ExchangeSuccess} />
-        <Stack.Screen name="ExchangeFail" component={ExchangeFail} />
-        <Stack.Screen name="ChooseAccount" component={ChooseAccount} />
-        <Stack.Screen name="PickUpKeyPage" component={PickUpKeyPage}   options={{ headerShown: false }} />
+        <Stack.Screen
+          name="AccountConnectSuccess"
+          component={AccountConnectSuccess}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AccountConnectFail"
+          component={AccountConnectFail}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ChooseAccountComponent"
+          component={ChooseAccountComponent}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ExchangePage"
+          component={ExchangePage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CountryChoiceComponent"
+          component={CountryChoiceComponent}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ExchangeSuccess"
+          component={ExchangeSuccess}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ExchangeFail"
+          component={ExchangeFail}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PickUpKeyPage"
+          component={PickUpKeyPage}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="SignUpPage"
           component={SignUpPage}
@@ -144,7 +195,7 @@ const App = () => {
           component={LoginPatternPage}
           options={{ headerShown: false }}
         />
-                <Stack.Screen
+        <Stack.Screen
           name="LoginPage"
           component={LoginPage}
           options={{ headerShown: false }}

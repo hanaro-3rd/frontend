@@ -1,6 +1,15 @@
-import { StyleSheet, View, Text, Image } from "react-native";
-import Close from "../../assets/accountImg/CloseButton.png";
-import FailImg from "../../assets/exchangeImg/Fail.png";
+import React, { Component, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  ScrollView,
+  Pressable,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -9,51 +18,66 @@ import {
   phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
-import DeleteHeader from "../../components/Header/DeleteHeader";
+import styled from "styled-components/native";
+import ExchangePage from "../../pages/ExchangeSelectAccount/ExchangePage";
 
-const ExchangeFail = ({ navigation }) => {
+const ChooseAccountComponent = () => {
+  const Header = styled.View`
+    width: ${phoneWidth}px;
+    height: ${heightPercentage(50)}px;
+    justify-content: center;
+    background-color: white;
+  `;
+  const HeaderImage = styled.Image`
+    margin-left: ${widthPercentage(12)}px;
+    width: ${widthPercentage(24)}px;
+    height: ${heightPercentage(24)}px;
+  `;
+  const navigation = useNavigation();
+
+  const closeChooseAccountComponent = () => {
+    navigation.navigate("ExchangePage");
+  };
+
   return (
     <View style={styles.root}>
-      <DeleteHeader navigation={navigation} to="MainPage" />
+      <View>
+        <TouchableOpacity onPress={closeChooseAccountComponent}>
+          <Header>
+            <HeaderImage source={require("../../Images/삭제.png")} />
+          </Header>
+        </TouchableOpacity>
+      </View>
       <View style={styles.body}>
-        <View style={styles.bodyHeader}>
-          <Text style={styles.title}>환전 실패</Text>
-          <Text style={styles.subtitle}>
-            환전에 실패했어요. 다시 시도해주세요.
-          </Text>
-        </View>
-        <View style={styles.bodyMain}>
-          <View style={styles.mainIconContainer}>
-            <Image source={FailImg} />
-          </View>
-          <View style={styles.exchangeInformationContainer}>
-            <View style={styles.informationContainer}>
-              <Text style={styles.informationText}>
-                계속해서 실패할 경우 아래로 문의해주세요.
-              </Text>
-              <Text style={styles.informationText2}>
-                02)5645-4651 / 02)5645-4651
-              </Text>
-            </View>
-          </View>
-        </View>
+        <Text style={styles.bodyHeader}>
+          내 계좌 목록을 가져옵니다. 아래를 읽고 동의해 주세요.
+        </Text>
+        <Text> 개인신용정보 전송요구 및 수집, 이용</Text>
+
+        <Text> 정보 제공자 </Text>
+        <Text> 하나은행, 신한은행, 토스 </Text>
+
+        <Text> 정보 수신자 </Text>
+        <Text> KeyLog </Text>
+
+        <Text> 전송 정보 </Text>
       </View>
       <View style={styles.footer}>
-        <View style={styles.submitButton}>
-          <Text style={styles.buttonText}>다시하기</Text>
-        </View>
+        <Pressable style={styles.submitButton}>
+          <Text style={styles.pressBeforeTextStyle}>동의하기</Text>
+        </Pressable>
       </View>
     </View>
   );
 };
-export default ExchangeFail;
+export default ChooseAccountComponent;
 
 const styles = StyleSheet.create({
   root: {
     flex: 1,
     flexDirection: "column",
     alignItems: "flex-start",
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
   },
   header: {
     alignItems: "flex-start",
@@ -66,11 +90,13 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#191F29",
+    fontFamily: "Inter",
     fontSize: fontPercentage(23),
     fontWeight: "700",
   },
   subtitle: {
     color: "#8B95A1",
+    fontFamily: "Inter",
     fontSize: fontPercentage(16),
     fontWeight: "400",
   },
@@ -80,21 +106,16 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 0,
     flexBasis: 0,
+    padding: 10,
     alignSelf: "stretch",
   },
   bodyHeader: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "flex-start",
-    gap: heightPercentage(10),
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    paddingVertical: heightPercentage(15),
-    paddingHorizontal: widthPercentage(20),
-  },
-  FailImg: {
-    width: 150,
-    height: 150,
+    fontSize: fontPercentage(16),
+    fontWeight: "700",
+    paddingVertical: heightPercentage(10),
   },
   bodyMain: {
     flexDirection: "column",
@@ -116,11 +137,13 @@ const styles = StyleSheet.create({
   },
   informationText: {
     color: "#4E5968",
+    fontFamily: "Inter",
     fontSize: fontPercentage(13),
     fontWeight: "400",
   },
   informationText2: {
     color: "#4E5968",
+    fontFamily: "Inter",
     fontSize: fontPercentage(13),
     fontWeight: "400",
   },
@@ -138,6 +161,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#FFF",
+    fontFamily: "Inter",
     fontSize: fontPercentage(16),
     fontWeight: "700",
   },
@@ -159,7 +183,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     backgroundColor: "#55ACEE",
     flexDirection: "row",
-    padding: 10,
+    padding: widthPercentage(10),
     borderRadius: 10,
   },
 });

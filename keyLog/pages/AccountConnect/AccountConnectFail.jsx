@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, Image } from "react-native";
 import Close from "../../assets/accountImg/CloseButton.png";
-import FailImg from "../../assets/exchangeImg/Fail.png";
+import Fail from "../../assets/accountImg/AccountFail.png";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -11,20 +11,20 @@ import {
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
 
-const ExchangeFail = ({ navigation }) => {
+const AccountConnectFail = ({ navigation }) => {
   return (
     <View style={styles.root}>
       <DeleteHeader navigation={navigation} to="MainPage" />
       <View style={styles.body}>
         <View style={styles.bodyHeader}>
-          <Text style={styles.title}>환전 실패</Text>
+          <Text style={styles.title}>연결 실패</Text>
           <Text style={styles.subtitle}>
-            환전에 실패했어요. 다시 시도해주세요.
+            연결에 실패했어요. 다시 시도해주세요.
           </Text>
         </View>
         <View style={styles.bodyMain}>
           <View style={styles.mainIconContainer}>
-            <Image source={FailImg} />
+            <Image source={Fail} />
           </View>
           <View style={styles.exchangeInformationContainer}>
             <View style={styles.informationContainer}>
@@ -46,14 +46,14 @@ const ExchangeFail = ({ navigation }) => {
     </View>
   );
 };
-export default ExchangeFail;
+export default AccountConnectFail;
 
 const styles = StyleSheet.create({
   root: {
     flex: 1,
     flexDirection: "column",
     alignItems: "flex-start",
-    backgroundColor: "#fff",
+    backgroundColor: "#F2F4F6",
   },
   header: {
     alignItems: "flex-start",
@@ -66,11 +66,13 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#191F29",
+    fontFamily: "Inter",
     fontSize: fontPercentage(23),
     fontWeight: "700",
   },
   subtitle: {
     color: "#8B95A1",
+    fontFamily: "Inter",
     fontSize: fontPercentage(16),
     fontWeight: "400",
   },
@@ -92,10 +94,6 @@ const styles = StyleSheet.create({
     paddingVertical: heightPercentage(15),
     paddingHorizontal: widthPercentage(20),
   },
-  FailImg: {
-    width: 150,
-    height: 150,
-  },
   bodyMain: {
     flexDirection: "column",
     alignItems: "center",
@@ -116,11 +114,13 @@ const styles = StyleSheet.create({
   },
   informationText: {
     color: "#4E5968",
+    fontFamily: "Inter",
     fontSize: fontPercentage(13),
     fontWeight: "400",
   },
   informationText2: {
     color: "#4E5968",
+    fontFamily: "Inter",
     fontSize: fontPercentage(13),
     fontWeight: "400",
   },
@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#FFF",
+    fontFamily: "Inter",
     fontSize: fontPercentage(16),
     fontWeight: "700",
   },
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     backgroundColor: "#55ACEE",
     flexDirection: "row",
-    padding: 10,
+    padding: widthPercentage(10),
     borderRadius: 10,
   },
 });

@@ -103,7 +103,7 @@ const PickUpKeyPage = ({ navigation }) => {
         >
           <Image source={leftArrow} />
         </TouchableOpacity>
-        <View style={{ width: "90%", height: 45 }}>
+        <View style={{ width: "90%" }}>
           <GooglePlacesAutocomplete
             placeholder="Search"
             onPress={(data, details = null) => {
