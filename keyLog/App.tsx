@@ -31,25 +31,26 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { loginAtom } from "./recoil/loginAtom";
 import usePermissions from "./hooks/usePermissions";
 import LoginPage from "./pages/SignUp/LoginPage";
+import ScanPage from "./pages/ScanPage";
+import SettingPage from "./pages/SettingPage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
   const [login, setLogin] = useRecoilState(loginAtom);
   const [isLoading, setLoading] = useState(true);
   const [haveDeviceId, setHaveDeviceId] = useState(false);
-  usePermissions()
+  usePermissions();
   const checkToken = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
       await AsyncStorage.removeItem("token");
-      console.log("token"+token);
+      console.log("token" + token);
       if (token) {
         // token이 있으면 MainPage로 이동
         setLogin(true);
       } else {
         // token이 없으면 SignUpPage로 이동
         setLogin(false);
-      
       }
     } catch (error) {
       // 에러 처리
@@ -59,8 +60,6 @@ const App = () => {
       setLoading(false); // 로딩 상태를 false로 설정하여 초기 렌더링이 완료
     }
   };
-
-
 
   const { data } = useQuery(
     "registration",
@@ -73,14 +72,13 @@ const App = () => {
         setHaveDeviceId(true);
         try {
           const token = await AsyncStorage.getItem("token");
-          console.log("token"+token);
+          console.log("token" + token);
           if (token) {
             // token이 있으면 MainPage로 이동
             setLogin(true);
           } else {
             // token이 없으면 SignUpPage로 이동
             setLogin(false);
-          
           }
         } catch (error) {
           // 에러 처리
@@ -110,15 +108,26 @@ const App = () => {
   }
   return (
     <NavigationContainer>
-      <Stack.Navigator
+      {/* <Stack.Navigator
         initialRouteName={
           login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
         }
-      >
+      > */}
+      <Stack.Navigator initialRouteName={"MainPage"}>
         <Stack.Screen
           name="MainPage"
           component={MainPage}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ScanPage"
+          component={ScanPage}
+          // options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SettingPage"
+          component={SettingPage}
+          // options={{ headerShown: false }}
         />
         <Stack.Screen
           name="AccountConnectPage"
@@ -128,7 +137,11 @@ const App = () => {
         <Stack.Screen name="ExchangeSuccess" component={ExchangeSuccess} />
         <Stack.Screen name="ExchangeFail" component={ExchangeFail} />
         <Stack.Screen name="ChooseAccount" component={ChooseAccount} />
-        <Stack.Screen name="PickUpKeyPage" component={PickUpKeyPage}   options={{ headerShown: false }} />
+        <Stack.Screen
+          name="PickUpKeyPage"
+          component={PickUpKeyPage}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="SignUpPage"
           component={SignUpPage}
@@ -144,7 +157,7 @@ const App = () => {
           component={LoginPatternPage}
           options={{ headerShown: false }}
         />
-                <Stack.Screen
+        <Stack.Screen
           name="LoginPage"
           component={LoginPage}
           options={{ headerShown: false }}
