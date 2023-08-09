@@ -84,7 +84,7 @@ const LoginPasswordPage = ({ route }) => {
     }
 
     console.log(confirmPassword);
-
+    
     if (confirmPassword.length === 6) {
       if (password === confirmPassword) {
         console.log("Passwords match");

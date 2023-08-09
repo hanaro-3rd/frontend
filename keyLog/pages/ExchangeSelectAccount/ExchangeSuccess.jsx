@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Image, Dimensions } from "react-native";
+import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity } from "react-native";
 import Close from "../../assets/accountImg/CloseButton.png";
 import Success from "../../assets/exchangeImg/Success.png";
 import Vector from "../../assets/accountImg/Vector.png";
@@ -12,7 +12,8 @@ import {
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
 
-const ExchangeSuccess = ({ navigation }) => {
+const ExchangeSuccess = ({ navigation,route }) => {
+  const {exchangeToUnit,exchangeToMoney, exchangeFromMoney,exchangeFromUnit} = route?.params
   return (
     <View style={styles.root}>
       <View>
@@ -37,13 +38,13 @@ const ExchangeSuccess = ({ navigation }) => {
                 <Text style={styles.containerTitle}>환전 금액</Text>
                 <View style={styles.exchangeMoneyBox}>
                   <View style={styles.koreaMoneyContianer}>
-                    <Text style={styles.koreaMoneyUnitText}>KRW</Text>
-                    <Text style={styles.koreaMoneyText}>1,300,000</Text>
+                    <Text style={styles.koreaMoneyUnitText}>{exchangeToUnit}</Text>
+                    <Text style={styles.koreaMoneyText}>{exchangeToMoney}</Text>
                   </View>
                   <Image source={Vector} />
                   <View style={styles.foreignMoneyContainer}>
-                    <Text style={styles.foreignMoneyUnitText}>USD</Text>
-                    <Text style={styles.foreignMoneyText}>1,000</Text>
+                    <Text style={styles.foreignMoneyUnitText}>{exchangeFromUnit}</Text>
+                    <Text style={styles.foreignMoneyText}>{exchangeFromMoney}</Text>
                   </View>
                 </View>
               </View>
@@ -65,9 +66,9 @@ const ExchangeSuccess = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.footer}>
-        <View style={styles.submitButton}>
+        <TouchableOpacity style={styles.submitButton} onPress={()=>navigation.navigate("MainPage")}>
           <Text style={styles.buttonText}>하나머니 확인하기</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

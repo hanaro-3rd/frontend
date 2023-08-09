@@ -43,6 +43,8 @@ const LoginPatternPage = ({ route }) => {
     },
   });
 
+
+
   const postSigninPasswordMutation = useMutation(postSigninPassword, {
     onSuccess: async response => {
       console.log('postSigninPassword Data: ' + JSON.stringify(response.data));

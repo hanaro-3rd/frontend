@@ -41,27 +41,6 @@ const App = () => {
   const [isLoading, setLoading] = useState(true);
   const [haveDeviceId, setHaveDeviceId] = useState(false);
   usePermissions();
-  const checkToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      await AsyncStorage.removeItem("token");
-      console.log("token" + token);
-      if (token) {
-        // token이 있으면 MainPage로 이동
-        setLogin(true);
-      } else {
-        // token이 없으면 SignUpPage로 이동
-        setLogin(false);
-      }
-    } catch (error) {
-      // 에러 처리
-      console.log("AsyncStorage error:", error);
-      setLogin(false); // 에러 발생 시 로그인을 하지 않은 상태로 설정
-    } finally {
-      setLoading(false); // 로딩 상태를 false로 설정하여 초기 렌더링이 완료
-    }
-  };
-
   const { data } = useQuery(
     "registration",
     async () => getRegistrationDeviceId(await DeviceInfo.getUniqueId()),
@@ -112,11 +91,6 @@ const App = () => {
       },
     }
   );
-
-  // useEffect(() => {
-  //   console.log("useeffect" + "돌아가긴하니" + login);
-  //   checkToken();
-  // }, [login]);
 
   if (isLoading) {
     // 로딩 상태일 동안에는 아무것도 렌더링X
