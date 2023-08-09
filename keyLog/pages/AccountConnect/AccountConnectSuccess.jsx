@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import Close from "../../assets/accountImg/CloseButton.png";
 import Success from "../../assets/accountImg/AccountSuccess.png";
 import {
@@ -11,7 +11,9 @@ import {
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
 
-const AccountConnectSuccess = ({ navigation }) => {
+const AccountConnectSuccess = ({ navigation,route }) => {
+  const {bank,balance,accountNum,page} = route?.params;
+
   return (
     <View style={styles.root}>
       <DeleteHeader navigation={navigation} to="MainPage" />
@@ -31,24 +33,24 @@ const AccountConnectSuccess = ({ navigation }) => {
             <View style={styles.exchangeInformationContainer}>
               <View style={styles.exchangeMoneyContainer}>
                 <Text style={styles.containerTitle2}>은행</Text>
-                <Text style={styles.containerTitle3}>신한은행</Text>
+                <Text style={styles.containerTitle3}>{bank}</Text>
               </View>
               <View style={styles.exchangeMoneyContainer2}>
                 <Text style={styles.containerTitle4}>계좌번호</Text>
-                <Text style={styles.containerTitle5}>302-9556-4022-11</Text>
+                <Text style={styles.containerTitle5}>{accountNum}</Text>
               </View>
               <View style={styles.exchangeRateContainer}>
                 <Text style={styles.containerTitle6}>잔액</Text>
-                <Text style={styles.containerTitle7}>1,385,123 원</Text>
+                <Text style={styles.containerTitle7}>{balance} 원</Text>
               </View>
             </View>
           </View>
         </View>
       </View>
       <View style={styles.footer}>
-        <View style={styles.submitButton}>
+        <TouchableOpacity onPress={()=>navigation.navigate(`${route.params.page ? route.params.page : "MainPage"}`)} style={styles.submitButton}>
           <Text style={styles.buttonText}>확인하기</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

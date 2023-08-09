@@ -127,7 +127,25 @@ const StoreTextinput = styled.Text`
   font-style: normal;
   font-weight: 400;
 `;
-
+const MemoTextinput = styled.TextInput`
+  display: flex;
+  width: ${widthPercentage(350)}px;
+  height: ${heightPercentage(39)}px;
+  padding: ${heightPercentage(10)}px ${widthPercentage(15)}px;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
+  align-self: stretch;
+  background-color: ${(props) => (props.hasValue ? "white;" : "#f9fafb")};
+  color: ${(props) => (props.hasValue ? "#000" : "#b0b8c1")};
+  border: 1px solid ${(props) => (props.hasValue ? "#000" : "#f9fafb")};
+  border-radius: 5px;
+  text-align: right;
+  font-family: Inter;
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
 const CostTextinput = styled.TextInput`
   width: ${widthPercentage(170)}px;
   height: ${heightPercentage(39)}px;
@@ -232,9 +250,11 @@ const TestPaymentPage = ({ navigation, route }) => {
   const postPayMutation = useMutation(postPay, {
     onSuccess: (response) => {
       console.log(response.data);
+      navigation.navigate("MainPage");
     },
     onError: (error) => {
       console.log(error);
+      // navigation.navigate("")
     },
   });
 
@@ -296,14 +316,6 @@ const TestPaymentPage = ({ navigation, route }) => {
     updateIsAllFieldsFilled();
   }, [storeTitle, memoText, category, moneyText]);
 
-  const handleNextButtonPress = () => {
-    if (isAllFieldsFilled) {
-      navigation.navigate("MainPage");
-    }
-    // else {
-
-    // }
-  };
   console.log(unit);
   return (
     <Root>
@@ -360,7 +372,6 @@ const TestPaymentPage = ({ navigation, route }) => {
                     setCategory(itemValue);
                     updateIsAllFieldsFilled();
                   }}
-                  onFocus={() => setCategory(1)}
                   style={{
                     width: widthPercentage(350),
                     color: category ? "#000" : "#b0b8c1",
@@ -399,7 +410,7 @@ const TestPaymentPage = ({ navigation, route }) => {
                       setUnit(itemValue);
                       updateIsAllFieldsFilled();
                     }}
-                    onFocus={()=>{}}
+                    onFocus={() => {}}
                     style={{
                       width: widthPercentage(110),
                       color: unit ? "#000" : "#b0b8c1",
@@ -429,7 +440,7 @@ const TestPaymentPage = ({ navigation, route }) => {
             <TitleContainer>
               <PaymentTitle>메모</PaymentTitle>
             </TitleContainer>
-            <StoreTextinput
+            <MemoTextinput
               value={memoText}
               onChangeText={handleMemoChange}
               hasValue={memoText !== ""}
@@ -439,7 +450,11 @@ const TestPaymentPage = ({ navigation, route }) => {
       </Body>
       <Footer>
         {isAllFieldsFilled ? (
-          <NextButton onPress={handleSubmitPay}>
+          <NextButton
+            onPress={() => {
+              handleSubmitPay();
+            }}
+          >
             <NextButtonText>결제하기</NextButtonText>
           </NextButton>
         ) : (

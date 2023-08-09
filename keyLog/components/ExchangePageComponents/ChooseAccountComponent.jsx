@@ -21,7 +21,7 @@ import {
 import styled from "styled-components/native";
 import ExchangePage from "../../pages/ExchangeSelectAccount/ExchangePage";
 
-const ChooseAccountComponent = () => {
+const ChooseAccountComponent = ({ navigate, route }) => {
   const Header = styled.View`
     width: ${phoneWidth}px;
     height: ${heightPercentage(50)}px;
@@ -63,7 +63,14 @@ const ChooseAccountComponent = () => {
         <Text> 전송 정보 </Text>
       </View>
       <View style={styles.footer}>
-        <Pressable style={styles.submitButton}>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("AccountConnectPage", {
+              page: route.params.page,
+            });
+          }}
+          style={styles.submitButton}
+        >
           <Text style={styles.pressBeforeTextStyle}>동의하기</Text>
         </Pressable>
       </View>

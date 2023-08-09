@@ -19,6 +19,7 @@ export const postVerification = (verificationData) => {
 export const postVerificationAuth = (verifiacationAuthData) => {
   return axiosClient.post("/verification/auth", verifiacationAuthData);
 };
+
 export const getRegistrationDeviceId = (deviceId) => {
   return axiosClient.get(`/registration/${deviceId}`);
 };
@@ -36,4 +37,21 @@ export const postPay = (payData) => {
   return axiosClient.post("/pay", payData);
 };
 
+//계좌
+export const getAccount = () => {
+  return axiosClient.get("/account");
+};
+export const getAccounExternal = () => {
+  return axiosClient.get("/account/external");
+};
+export const postAccountExternal = ({
+  externalAccountId,
+  externalAccountData,
+}) => {
+  return axiosClient.post(`/account/${externalAccountId}`, externalAccountData);
+};
 
+//환전
+export const postExchange = (exchangeData) => {
+  return axiosClient.post(`/exchange`, exchangeData);
+};

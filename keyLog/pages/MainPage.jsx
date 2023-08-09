@@ -505,7 +505,7 @@ const MainPage = ({ navigation }) => {
                 <MenuSubtitle>키머니를 환전해보아용</MenuSubtitle>
               </MenuTextContainer>
               <MenuButton
-              // onPress={() => navigation.navigate("")}
+              onPress={() => navigation.navigate("ExchangePage")}
               >
                 <MenuButtonText fontPercentage={fontPercentage}>
                   환전하러 가기
