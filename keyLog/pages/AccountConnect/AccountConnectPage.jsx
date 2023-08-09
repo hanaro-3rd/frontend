@@ -24,41 +24,41 @@ import Ellipse from "../../assets/SignUp/Ellipse.svg";
 import Vector from "../../assets/accountImg/Vector.png";
 import AccountPasswordSymbol from "../../components/AccountConnectPageComponents/AccountPasswordSymbol";
 import AccountPWNumberPad from "../../components/AccountConnectPageComponents/AccountPWNumberPad";
+import { useQueryClient, useQuery, useMutation } from "react-query";
+import { getAccounExternal, postAccountExternal } from "../../api/api";
+import { initialWindowMetrics } from "react-native-safe-area-context";
 
-export const AccountConnectPage = ({ navigation }) => {
-  const [selectedItem, setSelectedItem] = useState(null);
+export const AccountConnectPage = ({navigation,route}) => {
+  const [selectedItem, setSelectedItem] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
-
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("1234"); //계좌 비밀번호 받아오기
   const [isPasswordMismatch, setIsPasswordMismatch] = useState(false);
   const [alertInconsistencyPassword, setAlertInconsistencyPassword] =
     useState(false);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const [externalAccountList, setExternalAccountList] = useState([]);
+  //queryclient 호출
+  const queryClient = useQueryClient();
+  //useQuery를 통해 get요청
+  const { data } = useQuery(
+    "accountExternal",
+    async () => getAccounExternal(),
+    {
+      onSuccess: (response) => {
+        console.log(response.data);
+        console.log("외부계좌불러오기" + response.data.result.externalAccounts);
+        setExternalAccountList(response.data.result.externalAccounts);
+      },
+      onError: (error) => {
+        console.log(error);
+        console.log("connect에러")
+      },
+    }
+  );
 
-  const renderItem = ({ item }) => {
-    const isSelected = item.key === selectedItem;
+  //useMuttaion을 통해 post요청
 
-    return (
-      <Pressable onPress={() => setSelectedItem(item.key)}>
-        <View style={[styles.accountitem, isSelected && styles.selectedItem]}>
-          <Text
-            style={[styles.listtextBefore, isSelected && styles.listtextAfter]}
-          >
-            {item.key}
-          </Text>
-          {isSelected && (
-            <Image
-              source={require("../../assets/accountImg/check.png")}
-              style={{ marginRight: 20 }}
-              resizeMode="contain"
-              visible=""
-            />
-          )}
-        </View>
-      </Pressable>
-    );
-  };
 
   const handleNumPress = (num) => {
     if (alertInconsistencyPassword) {
@@ -80,22 +80,49 @@ export const AccountConnectPage = ({ navigation }) => {
     setPassword("");
   };
 
+  const postExtenalAccountMutation = useMutation(postAccountExternal, {
+    onSuccess: (response) => {
+      setIsPasswordMismatch(false);
+      setIsButtonEnabled(false);
+ 
+      navigation.navigate("AccountConnectSuccess", {
+        bank: response.data.result.bank,
+        balance: response.data.result.balance,
+        accountNum: response.data.result.accountNum,
+        page: route?.params?.page 
+      });
+    },
+    onError: () => {
+      setIsPasswordMismatch(true);
+      setIsButtonEnabled(false);
+      setPassword("");
+    },
+  });
   const handlePassWord = () => {
-    console.log("password state", password);
 
     if (password.length === 4) {
       setIsButtonEnabled(true);
-      if (password === confirmPassword) {
-        console.log("Passwords match");
-        setIsPasswordMismatch(false);
-        setIsButtonEnabled(false);
-        navigation.replace("MainPage");
-      } else {
-        console.log("Passwords do not match");
-        setIsPasswordMismatch(true);
-        setIsButtonEnabled(false);
-        setPassword("");
-      }
+      console.log(password)
+      const externalAccountId = selectedItem.externalId;
+      const externalAccountData = { accountPassword: password };
+      console.log(externalAccountId+"externalAccountId")
+      console.log(externalAccountData.accountPassword +"externalAccountData")
+      postExtenalAccountMutation.mutate({
+        externalAccountId,
+        externalAccountData,
+      });
+
+      // if (isSuccess) {
+      //   setIsPasswordMismatch(false);
+      //   setIsButtonEnabled(false);
+      //   navigation.navigate("AccountConnectSuccess",{
+
+      //   });
+      // } else {
+      //   setIsPasswordMismatch(true);
+      //   setIsButtonEnabled(false);
+      //   setPassword("");
+      // }
     }
   };
 
@@ -116,15 +143,41 @@ export const AccountConnectPage = ({ navigation }) => {
         <View style={styles.bodyMain}>
           <Text style={styles.containerTitle}>연결 가능한 계좌</Text>
           <View style={{ width: "100%" }}>
-            <FlatList
-              scrollEnabled={false}
-              data={[
-                { key: "신한 302-9556-4022-11" },
-                { key: "하나 302-9556-4022-12" },
-                { key: "우리 302-9556-4022-13" },
-              ]}
-              renderItem={renderItem}
-            />
+            {externalAccountList?.map((item, idx) => {
+              const isSelected = idx === selectedItem.idx;
+              return (
+                <Pressable
+                  onPress={() =>
+                    setSelectedItem({ idx, externalId: item.accountId, bank: item.bank + " " + item.accountNum })
+                  }
+                  key={idx}
+                >
+                  <View
+                    style={[
+                      styles.accountitem,
+                      isSelected && styles.selectedItem,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.listtextBefore,
+                        isSelected && styles.listtextAfter,
+                      ]}
+                    >
+                      {item.bank} {item.accountNum}
+                    </Text>
+                    {isSelected && (
+                      <Image
+                        source={require("../../assets/accountImg/check.png")}
+                        style={{ marginRight: 20 }}
+                        resizeMode="contain"
+                        visible=""
+                      />
+                    )}
+                  </View>
+                </Pressable>
+              );
+            })}
           </View>
         </View>
       </View>
@@ -163,7 +216,7 @@ export const AccountConnectPage = ({ navigation }) => {
                 </Pressable>
               </View>
               <View style={styles.popupSubtitle}>
-                <Text>{selectedItem}</Text>
+                <Text>{selectedItem.bank}</Text>
               </View>
             </View>
 

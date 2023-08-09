@@ -21,7 +21,7 @@ import {
 import styled from "styled-components/native";
 import ExchangePage from "../../pages/ExchangeSelectAccount/ExchangePage";
 
-const ChooseAccountComponent = () => {
+const ChooseAccountComponent = ({ navigate, route }) => {
   const Header = styled.View`
     width: ${phoneWidth}px;
     height: ${heightPercentage(50)}px;
@@ -48,23 +48,41 @@ const ChooseAccountComponent = () => {
           </Header>
         </TouchableOpacity>
       </View>
-      <View style={styles.body}>
-        <Text style={styles.bodyHeader}>
-          내 계좌 목록을 가져옵니다. 아래를 읽고 동의해 주세요.
+      <View style={styles.bodyHeader}>
+        <Text style={styles.title}>내 계좌를 연결합니다.</Text>
+        <Text style={styles.subtitle}>아래를 읽고 동의해 주세요</Text>
+      </View>
+      <View style={styles.bodyMain}>
+        <Text style={styles.containerTitle}>
+          개인신용정보 전송요구 및 수집 · 이용
         </Text>
-        <Text> 개인신용정보 전송요구 및 수집, 이용</Text>
-
-        <Text> 정보 제공자 </Text>
-        <Text> 하나은행, 신한은행, 토스 </Text>
-
-        <Text> 정보 수신자 </Text>
-        <Text> KeyLog </Text>
-
-        <Text> 전송 정보 </Text>
+        <View style={styles.frame145}>
+          <Text style={styles.containerTitle2}>정보 제공자</Text>
+          <Text style={styles.containerTitle3}>
+            하나은행, 국민은행, 우리은행, 신한은행 카카오뱅크, 토스
+          </Text>
+        </View>
+        <View style={styles.frame145}>
+          <Text style={styles.containerTitle2}>정보 수신자</Text>
+          <Text style={styles.containerTitle5}>키로그</Text>
+        </View>
+        <View style={styles.frame147}>
+          <Text style={styles.containerTitle2}>전송 정보</Text>
+          <View style={styles.frame148}>
+            <Text style={styles.containerTitle7}>은행 : 계좌(수신) 목록</Text>
+          </View>
+        </View>
       </View>
       <View style={styles.footer}>
-        <Pressable style={styles.submitButton}>
-          <Text style={styles.pressBeforeTextStyle}>동의하기</Text>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("AccountConnectPage", {
+              page: route.params.page,
+            });
+          }}
+          style={styles.submitButton}
+        >
+          <Text style={styles.buttonText}>동의하기</Text>
         </Pressable>
       </View>
     </View>
@@ -74,90 +92,11 @@ export default ChooseAccountComponent;
 
 const styles = StyleSheet.create({
   root: {
+    //
     flex: 1,
     flexDirection: "column",
     alignItems: "flex-start",
     backgroundColor: "#ffffff",
-  },
-  header: {
-    alignItems: "flex-start",
-    gap: heightPercentage(10),
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    flexDirection: "row",
-    paddingVertical: heightPercentage(13),
-    paddingHorizontal: widthPercentage(12),
-  },
-  title: {
-    color: "#191F29",
-    fontFamily: "Inter",
-    fontSize: fontPercentage(23),
-    fontWeight: "700",
-  },
-  subtitle: {
-    color: "#8B95A1",
-    fontFamily: "Inter",
-    fontSize: fontPercentage(16),
-    fontWeight: "400",
-  },
-  body: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    flexGrow: 1,
-    flexShrink: 0,
-    flexBasis: 0,
-    padding: 10,
-    alignSelf: "stretch",
-  },
-  bodyHeader: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    fontSize: fontPercentage(16),
-    fontWeight: "700",
-    paddingVertical: heightPercentage(10),
-  },
-  bodyMain: {
-    flexDirection: "column",
-    alignItems: "center",
-    gap: heightPercentage(20),
-    flexGrow: 1,
-    flexShrink: 0,
-    flexBasis: 0,
-    alignSelf: "stretch",
-    backgroundColor: "#FFF",
-    paddingHorizontal: widthPercentage(25),
-  },
-  mainIconContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    gap: heightPercentage(10),
-    flexDirection: "row",
-    paddingVertical: heightPercentage(29),
-  },
-  informationText: {
-    color: "#4E5968",
-    fontFamily: "Inter",
-    fontSize: fontPercentage(13),
-    fontWeight: "400",
-  },
-  informationText2: {
-    color: "#4E5968",
-    fontFamily: "Inter",
-    fontSize: fontPercentage(13),
-    fontWeight: "400",
-  },
-  exchangeInformationContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-    gap: heightPercentage(20),
-  },
-  informationContainer: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    gap: heightPercentage(10),
-    alignSelf: "stretch",
   },
   buttonText: {
     color: "#FFF",
@@ -166,6 +105,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   footer: {
+    //
     flexDirection: "column",
     justifyContent: "flex-end",
     alignItems: "center",
@@ -176,6 +116,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: widthPercentage(25),
   },
   submitButton: {
+    //
     height: heightPercentage(55),
     justifyContent: "center",
     alignItems: "center",
@@ -184,6 +125,78 @@ const styles = StyleSheet.create({
     backgroundColor: "#55ACEE",
     flexDirection: "row",
     padding: widthPercentage(10),
+    borderRadius: 10,
+  },
+
+  bodyHeader: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    gap: heightPercentage(10),
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
+    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(20),
+  },
+  containerTitle: {
+    color: "#191F29",
+    fontSize: fontPercentage(16),
+    fontWeight: "700",
+  },
+  containerTitle2: {
+    alignSelf: "stretch",
+    color: "#8B95A1",
+    fontFamily: "Inter",
+    fontSize: fontPercentage(16),
+    fontWeight: "700",
+  },
+  containerTitle3: {
+    color: "#333D4B",
+    fontFamily: "Inter",
+    fontSize: fontPercentage(14),
+    fontWeight: "400",
+  },
+  bodyMain: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: heightPercentage(30),
+    flexGrow: 1,
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
+    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(25),
+  },
+  frame145: {
+    width: widthPercentage(340),
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    gap: heightPercentage(10),
+  },
+  containerTitle5: {
+    color: "#333D4B",
+    fontSize: fontPercentage(14),
+    fontWeight: "400",
+  },
+  containerTitle7: {
+    color: "#333D4B",
+    fontFamily: "Inter",
+    fontSize: fontPercentage(14),
+    fontWeight: "400",
+  },
+  frame147: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: heightPercentage(10),
+    alignSelf: "stretch",
+  },
+  frame148: {
+    alignItems: "flex-start",
+    gap: heightPercentage(10),
+    alignSelf: "stretch",
+    backgroundColor: "#F9FAFB",
+    flexDirection: "row",
+    padding: widthPercentage(20),
     borderRadius: 10,
   },
 });

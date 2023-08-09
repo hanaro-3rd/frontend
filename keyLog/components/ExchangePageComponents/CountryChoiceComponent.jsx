@@ -17,40 +17,86 @@ import {
   fontPercentage,
   getStatusBarHeight,
   heightPercentage,
-  phoneHeight,
-  phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
 import {
   Collapse,
   CollapseHeader,
   CollapseBody,
-  AccordionList,
 } from "accordion-collapse-react-native";
+import { useQueryClient, useQuery } from "react-query";
+import { getAccount } from "../../api/api";
 
-export const CountryChoiceComponent = () => {
-  const list = [
+export const CountryChoiceComponent = ({
+  setSelectedMoney,
+  setExchangeRate,
+  setMinimumMoney,
+  setKoreaTextInput,
+  setForeignTextInput,
+  setSubKoreaText,
+  setSubForeignText,
+}) => {
+  const [JPY, setJPY] = useState({});
+  const [USD, setUSD] = useState({});
+  const [EUR, setEUR] = useState({});
+  const [list, setList] = useState([
     {
       name: "USD",
       country_url: require("../../assets/exchangeImg/USD.png"),
+      minimum: 10,
     },
     {
-      name: "Japan",
+      name: "JPY",
       country_url: require("../../assets/exchangeImg/Japan.png"),
+      minimum: 1000,
     },
     {
       name: "EUR",
       country_url: require("../../assets/exchangeImg/EUR.png"),
+      minimum: 10,
     },
-  ];
+  ]);
 
+  const queryClient = useQueryClient();
+  const { data } = useQuery("exchangeRate", async () => getAccount(), {
+    onSuccess: (response) => {
+      console.log(response.data + "국가");
+      setList([
+        {
+          name: "USD",
+          country_url: require("../../assets/exchangeImg/USD.png"),
+          exchangeRate: response.data.result.usd.exchangeRate,
+          minimum: 10,
+        },
+        {
+          name: "JPY",
+          country_url: require("../../assets/exchangeImg/Japan.png"),
+          exchangeRate: response.data.result.jpy.exchangeRate / 1000,
+          minimum: 1000,
+        },
+        {
+          name: "EUR",
+          country_url: require("../../assets/exchangeImg/EUR.png"),
+          exchangeRate: response.data.result.eur.exchangeRate,
+          minimum: 10,
+        },
+      ]);
+    },
+    onError: () => {},
+  });
   const [expanded, setExpanded] = React.useState(false);
   const [selectedCountry, setSelectedCountry] = React.useState(list[0]);
 
   const handleCountryPress = (country) => {
-    console.log(expanded);
     setSelectedCountry(country);
+    setSelectedMoney(country.name);
+    setExchangeRate(country.exchangeRate);
+    setMinimumMoney(country.minimum);
     setExpanded(false);
+    setKoreaTextInput("");
+    setForeignTextInput("");
+    setSubForeignText("");
+    setSubKoreaText("");
   };
 
   return (
@@ -63,13 +109,13 @@ export const CountryChoiceComponent = () => {
           <CollapseHeader>
             <View style={styles.countrySelect}>
               <Image
-                source={selectedCountry.country_url}
+                source={selectedCountry?.country_url}
                 style={{
                   width: widthPercentage(32),
                   height: heightPercentage(30),
                 }}
               />
-              <Text style={styles.unitText}>{selectedCountry.name}</Text>
+              <Text style={styles.unitText}>{selectedCountry?.name}</Text>
               <Image
                 source={require("../../assets/exchangeImg/SelectButton.png")}
               />
@@ -77,7 +123,7 @@ export const CountryChoiceComponent = () => {
           </CollapseHeader>
 
           <CollapseBody>
-            {list.map((item) => (
+            {list?.map((item) => (
               <TouchableOpacity
                 key={item.name}
                 onPress={() => {
@@ -87,7 +133,7 @@ export const CountryChoiceComponent = () => {
                 <View style={styles.countrySelect}>
                   <View style={styles.countrySelectRow}>
                     <Image
-                      source={item.country_url}
+                      source={item?.country_url}
                       style={{
                         width: widthPercentage(32),
                         height: heightPercentage(30),

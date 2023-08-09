@@ -38,12 +38,10 @@ export function fontPercentage(size) {
 export function phoneWidth() {
   //  전체 현재 디버깅 핸드폰 너비
   const { width } = useWindowDimensions();
-  console.log(width);
   return width;
 }
 export function phoneHeight() {
   // 전체 현재 디버깅 핸드폰 높이
   const { height } = useWindowDimensions();
-  console.log(height);
   return height;
 }

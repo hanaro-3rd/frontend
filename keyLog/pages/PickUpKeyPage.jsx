@@ -34,6 +34,7 @@ const PickUpKeyPage = ({ navigation }) => {
       console.log(JSON.stringify(response.data));
       setMarkerList(response.data.result.markers);
     },
+
     onError: async (error) => {
       console.log("error" + error);
     },
