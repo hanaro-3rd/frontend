@@ -119,7 +119,6 @@ const SignUpPage = ({ navigation }) => {
   const handleVerification = e => {
     e.preventDefault();
     postVerificationMutation.mutate({ phonenum: phoneNumber });
-    //글자 초기화
     setModalVisible(true);
   };
 
