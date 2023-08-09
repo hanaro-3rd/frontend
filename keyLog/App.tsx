@@ -23,6 +23,8 @@ import PickUpKeyPage from "./pages/PickUpKeyPage";
 import LoginPasswordPage from "./pages/SignUp/LoginPasswordPage";
 import LoginPatternPage from "./pages/SignUp/LoginPatternPage";
 import SignUpPage from "./pages/SignUp/SignUpPage";
+import ForeignPayHistoryPage from "./pages/ForeignPayHistoryPage";
+import OwnPayHistoryPage from "./pages/OwnPayHistoryPage";
 import TravelBudgetDetailPage from "./pages/TravelBudget/TravelBudgetDetailPage";
 import TravelBudgetPage from "./pages/TravelBudget/TravelBudgetPage";
 import TravelBudgetPlanPage from "./pages/TravelBudget/TravelBudgetPlanPage";
@@ -37,6 +39,7 @@ import usePermissions from "./hooks/usePermissions";
 import LoginPage from "./pages/SignUp/LoginPage";
 import ScanPage from "./pages/ScanPage";
 import SettingPage from "./pages/SettingPage";
+import TestPaymentSearchPage from "./pages/TestPaymentSearchPage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -137,6 +140,21 @@ const App = () => {
         <Stack.Screen
           name="MainPage"
           component={MainPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TestPaymentSearchPage"
+          component={TestPaymentSearchPage}
+          options={{headerShown:false}}
+        />
+        <Stack.Screen
+          name="ForeignPayHistoryPage"
+          component={ForeignPayHistoryPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="OwnPayHistoryPage"
+          component={OwnPayHistoryPage}
           options={{ headerShown: false }}
         />
         <Stack.Screen

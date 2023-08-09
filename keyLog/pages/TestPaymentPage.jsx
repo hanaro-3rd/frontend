@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { View } from "react-native";
+import { TouchableOpacity, Text, View } from "react-native";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -14,6 +14,9 @@ import SelectButtonBefore from "../assets/travelBudget/SelectButtonBefore.png";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import DeleteHeader from "../components/Header/DeleteHeader";
+import { Picker } from "@react-native-picker/picker";
+import { useMutation, useQueryClient } from "react-query";
+import { postPay } from "../api/api";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
@@ -68,7 +71,7 @@ const BodyMain = styled.View`
   align-self: stretch;
 `;
 
-const TravelTitleContainer = styled.View`
+const PaymentTitleContainer = styled.View`
   width: ${widthPercentage(350)}px;
   height: ${heightPercentage(68)}px;
   display: flex;
@@ -87,7 +90,7 @@ const TitleContainer = styled.View`
   flex-direction: row;
   align-self: stretch;
 `;
-const TravelTitle = styled.Text`
+const PaymentTitle = styled.Text`
   color: #191f29;
   text-align: center;
   font-family: Inter;
@@ -105,7 +108,7 @@ const TextSize = styled.Text`
   font-weight: 400;
 `;
 
-const TravelTextinput = styled.TextInput`
+const StoreTextinput = styled.Text`
   display: flex;
   width: ${widthPercentage(350)}px;
   height: ${heightPercentage(39)}px;
@@ -114,8 +117,9 @@ const TravelTextinput = styled.TextInput`
   align-items: center;
   gap: 15px;
   align-self: stretch;
-  background-color: #f9fafb;
-  color: #b0b8c1;
+  background-color: ${(props) => (props.hasValue ? "white;" : "#f9fafb")};
+  color: ${(props) => (props.hasValue ? "#000" : "#b0b8c1")};
+  border: 1px solid ${(props) => (props.hasValue ? "#000" : "#f9fafb")};
   border-radius: 5px;
   text-align: right;
   font-family: Inter;
@@ -124,7 +128,7 @@ const TravelTextinput = styled.TextInput`
   font-weight: 400;
 `;
 
-const TravelCountryTextinput = styled.TextInput`
+const CostTextinput = styled.TextInput`
   width: ${widthPercentage(170)}px;
   height: ${heightPercentage(39)}px;
   display: flex;
@@ -134,8 +138,9 @@ const TravelCountryTextinput = styled.TextInput`
   gap: 15px;
   flex: 1 0 0;
   align-self: stretch;
-  background-color: #f9fafb;
-  color: #b0b8c1;
+  background-color: ${(props) => (props.hasValue ? "white;" : "#f9fafb")};
+  color: ${(props) => (props.hasValue ? "#000" : "#b0b8c1")};
+  border: 1px solid ${(props) => (props.hasValue ? "#000" : "#f9fafb")};
   border-radius: 5px;
   text-align: right;
   font-family: Inter;
@@ -145,6 +150,8 @@ const TravelCountryTextinput = styled.TextInput`
 `;
 
 const SelectedFrame = styled.View`
+  width: ${widthPercentage(350)}px;
+  height: ${heightPercentage(39)}px;
   display: flex;
   align-items: flex-start;
   gap: 10px;
@@ -152,7 +159,7 @@ const SelectedFrame = styled.View`
   flex-direction: row;
 `;
 
-const Footer = styled.TouchableOpacity`
+const Footer = styled.View`
   width: 100%;
   display: flex;
   padding: ${heightPercentage(15)}px ${widthPercentage(25)}px;
@@ -174,6 +181,18 @@ const NextButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   align-self: stretch;
+  background-color: #55acee;
+`;
+
+const DisabledButton = styled.View`
+  display: flex;
+  width: ${widthPercentage(340)}px;
+  height: ${heightPercentage(55)}px;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  background-color: #f2f4f6;
 `;
 const NextButtonText = styled.Text`
   color: #fff;
@@ -183,62 +202,109 @@ const NextButtonText = styled.Text`
   font-weight: 700;
 `;
 
-const TestPaymentPage = ({ navigation }) => {
-  const [travelTitle, setTravelTitle] = useState("");
-  const [travelCountry, setTravelCountry] = useState("");
-  const [travelCountryOption, setTravelCountryOption] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+const PickerContainer = styled.View`
+  /* width: ${widthPercentage(350)}px; */
+  height: ${heightPercentage(39)}px;
+  background-color: ${(props) => (props.hasValue ? "white;" : "#f9fafb")};
+  border: 1px solid ${(props) => (props.hasValue ? "#000" : "#f9fafb")};
+  border-radius: 5px;
+`;
+
+const MAX_TITLE_LENGTH = 20;
+const MAX_MONEY_LENGTH = 10;
+
+const TestPaymentPage = ({ navigation, route }) => {
+  const [storeTitle, setStoreTitle] = useState("");
+  const [memoText, setMemoText] = useState("");
+  const [category, setCategory] = useState("");
+  const [moneyText, setMoneyText] = useState("");
+  const [unit, setUnit] = useState("");
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState(false);
+  const [isTravelCountryClick, setIsTravelCountryClick] = useState(false);
+  const [markerInformation, setMarkerInformation] = useState(false);
+  useEffect(() => {
+    if (route?.params) setMarkerInformation(route.params);
+  }, [route]);
+  console.log("setMarkerInfo", markerInformation);
+
+  const queryClient = useQueryClient();
+
+  const postPayMutation = useMutation(postPay, {
+    onSuccess: (response) => {
+      console.log(response.data);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const handleSubmitPay = () => {
+    console.log(
+      "하",
+      markerInformation.address,
+      category,
+      markerInformation.lat,
+      markerInformation.lng,
+      memoText,
+      moneyText,
+      markerInformation.store,
+      unit
+    );
+    postPayMutation.mutate({
+      address: markerInformation.address,
+      category: category,
+      lat: markerInformation.lat,
+      lng: markerInformation.lng,
+      memo: memoText,
+      price: moneyText,
+      store: markerInformation.store,
+      unit: unit,
+    });
+  };
 
   const updateIsAllFieldsFilled = () => {
+    const isMemoSelected = memoText !== "";
+
     setIsAllFieldsFilled(
-      travelTitle !== "" &&
-        travelCountry !== "" &&
-        travelCountryOption !== "" &&
-        startDate !== "" &&
-        endDate !== ""
+      markerInformation !== "" &&
+        category !== "" &&
+        moneyText !== "" &&
+        unit !== "" &&
+        !isMemoSelected
     );
   };
 
-  const handleTravelTitleChange = (text) => {
-    setTravelTitle(text);
+  const handleStoreTitleChange = (text) => {
+    if (text.length <= MAX_TITLE_LENGTH) {
+      setStoreTitle(text);
+      updateIsAllFieldsFilled();
+    }
+  };
+
+  const handleMemoChange = (text) => {
+    setMemoText(text);
     updateIsAllFieldsFilled();
   };
 
-  const handleTravelCountryChange = (text) => {
-    setTravelCountry(text);
-    updateIsAllFieldsFilled();
+  const handleMoneyChange = (text) => {
+    if (text.length <= MAX_MONEY_LENGTH) {
+      setMoneyText(text);
+      updateIsAllFieldsFilled();
+    }
   };
-
-  const handleTravelCountryOptionChange = (text) => {
-    setTravelCountryOption(text);
-    updateIsAllFieldsFilled();
-  };
-
-  const handleStartDateChange = (text) => {
-    setStartDate(text);
-    updateIsAllFieldsFilled();
-  };
-
-  const handleEndDateChange = (text) => {
-    setEndDate(text);
-    updateIsAllFieldsFilled();
-  };
-
   useEffect(() => {
     updateIsAllFieldsFilled();
-  }, [travelTitle, travelCountry, travelCountryOption, startDate, endDate]);
+  }, [storeTitle, memoText, category, moneyText]);
 
   const handleNextButtonPress = () => {
     if (isAllFieldsFilled) {
-      navigation.navigate("TravelBudgetPlanPage");
+      navigation.navigate("MainPage");
     }
     // else {
 
     // }
   };
-
+  console.log(unit);
   return (
     <Root>
       <DeleteHeader navigation={navigation} to="MainPage" />
@@ -248,77 +314,139 @@ const TestPaymentPage = ({ navigation }) => {
           <SubTitle>테스트용 결제를 하는 페이지입니다.</SubTitle>
         </BodyHeader>
         <BodyMain>
-          <TravelTitleContainer>
+          <PaymentTitleContainer>
             <TitleContainer>
-              <TravelTitle>가게</TravelTitle>
-              <TextSize>0 / 20</TextSize>
+              <PaymentTitle>가게</PaymentTitle>
+              <TextSize>
+                {storeTitle.length} / {MAX_TITLE_LENGTH}
+              </TextSize>
             </TitleContainer>
-            <TravelTextinput
-              placeholder="이름없는 여행1"
-              placeholderTextColor="#b0b8c1"
-              value={travelTitle}
-              onChangeText={handleTravelTitleChange}
-            />
-          </TravelTitleContainer>
-          <TravelTitleContainer>
+            {markerInformation ? (
+              <StoreTextinput
+                value={storeTitle}
+                onChangeText={handleStoreTitleChange}
+                maxLength={MAX_TITLE_LENGTH}
+                hasValue={storeTitle !== ""}
+              >
+                {markerInformation.store}
+              </StoreTextinput>
+            ) : (
+              <TouchableOpacity
+                onPress={() => navigation.navigate("TestPaymentSearchPage")}
+              >
+                <StoreTextinput
+                  value={storeTitle}
+                  onChangeText={handleStoreTitleChange}
+                  maxLength={MAX_TITLE_LENGTH}
+                  hasValue={storeTitle !== ""}
+                />
+              </TouchableOpacity>
+            )}
+          </PaymentTitleContainer>
+          <PaymentTitleContainer>
             <TitleContainer>
-              <TravelTitle>카테고리</TravelTitle>
+              <PaymentTitle>카테고리</PaymentTitle>
             </TitleContainer>
-            <TravelTextinput
-              placeholder="이름없는 여행1"
-              placeholderTextColor="#b0b8c1"
-              value={travelTitle}
-              onChangeText={handleTravelTitleChange}
-            />
-          </TravelTitleContainer>
-          <TravelTitleContainer>
+            <PickerContainer hasValue={category !== ""}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                }}
+              >
+                <Picker
+                  selectedValue={category}
+                  onValueChange={(itemValue, itemIndex) => {
+                    setCategory(itemValue);
+                    updateIsAllFieldsFilled();
+                  }}
+                  onFocus={() => setCategory(1)}
+                  style={{
+                    width: widthPercentage(350),
+                    color: category ? "#000" : "#b0b8c1",
+                    textAlign: "right",
+                  }}
+                >
+                  {category == "" && <Picker.Item label="선택" value="" />}
+                  <Picker.Item label="식비" value="Food" />
+                  <Picker.Item label="교통" value="Trans" />
+                  <Picker.Item label="숙박" value="House" />
+                  <Picker.Item label="쇼핑 · 편의점 · 마트" value="Shop" />
+                  <Picker.Item label="문화 · 여가" value="Leisure" />
+                  <Picker.Item label="기타" value="Etc" />
+                </Picker>
+              </View>
+            </PickerContainer>
+          </PaymentTitleContainer>
+          <PaymentTitleContainer>
             <TitleContainer>
-              <TravelTitle></TravelTitle>
-              <TextSize>0 / 10</TextSize>
+              <PaymentTitle>금액</PaymentTitle>
+              <TextSize>
+                {moneyText.length} / {MAX_MONEY_LENGTH}
+              </TextSize>
             </TitleContainer>
             <SelectedFrame>
-              <TravelCountryTextinput
-                placeholder=""
+              <PickerContainer hasValue={unit !== ""}>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                  }}
+                >
+                  <Picker
+                    selectedValue={unit}
+                    onValueChange={(itemValue, itemIndex) => {
+                      setUnit(itemValue);
+                      updateIsAllFieldsFilled();
+                    }}
+                    onFocus={()=>{}}
+                    style={{
+                      width: widthPercentage(110),
+                      color: unit ? "#000" : "#b0b8c1",
+                      textAlign: "right",
+                    }}
+                  >
+                    {unit == "" && <Picker.Item label="선택" value="" />}
+                    <Picker.Item label="KRW" value="KRW" />
+                    <Picker.Item label="USD" value="USD" />
+                    <Picker.Item label="JPY" value="JPY" />
+                    <Picker.Item label="EUR" value="EUR" />
+                  </Picker>
+                </View>
+              </PickerContainer>
+              <CostTextinput
+                placeholder="금액 입력"
+                keyboardType="numeric"
                 placeholderTextColor="#b0b8c1"
-                value={travelCountry}
-                onChangeText={handleTravelCountryChange}
-              />
-              <TravelCountryTextinput
-                placeholder="도시 (선택)"
-                placeholderTextColor="#b0b8c1"
-                value={travelCountryOption}
-                onChangeText={handleTravelCountryOptionChange}
+                value={moneyText}
+                onChangeText={handleMoneyChange}
+                maxLength={MAX_MONEY_LENGTH}
+                hasValue={moneyText !== ""}
               />
             </SelectedFrame>
-          </TravelTitleContainer>
-          <TravelTitleContainer>
+          </PaymentTitleContainer>
+          <PaymentTitleContainer>
             <TitleContainer>
-              <TravelTitle>여행기간</TravelTitle>
+              <PaymentTitle>메모</PaymentTitle>
             </TitleContainer>
-            <SelectedFrame>
-              <TravelCountryTextinput
-                placeholder=""
-                placeholderTextColor="#b0b8c1"
-                value={startDate}
-                onChangeText={handleStartDateChange}
-              />
-              <TravelCountryTextinput
-                placeholder=""
-                placeholderTextColor="#b0b8c1"
-                value={endDate}
-                onChangeText={handleEndDateChange}
-              />
-            </SelectedFrame>
-          </TravelTitleContainer>
+            <StoreTextinput
+              value={memoText}
+              onChangeText={handleMemoChange}
+              hasValue={memoText !== ""}
+            />
+          </PaymentTitleContainer>
         </BodyMain>
       </Body>
       <Footer>
-        <NextButton
-          style={{ backgroundColor: isAllFieldsFilled ? "#55acee" : "#f2f4f6" }}
-          onPress={handleNextButtonPress}
-        >
-          <NextButtonText>다음</NextButtonText>
-        </NextButton>
+        {isAllFieldsFilled ? (
+          <NextButton onPress={handleSubmitPay}>
+            <NextButtonText>결제하기</NextButtonText>
+          </NextButton>
+        ) : (
+          <DisabledButton>
+            <NextButtonText>결제하기</NextButtonText>
+          </DisabledButton>
+        )}
       </Footer>
     </Root>
   );
