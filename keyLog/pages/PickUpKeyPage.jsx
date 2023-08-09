@@ -7,7 +7,6 @@ import {
   heightPercentage,
   widthPercentage,
 } from "../utils/ResponseSize";
-import Geolocation from "react-native-geolocation-service";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getMarkers, postMarkers } from "../api/api";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -34,7 +33,8 @@ const PickUpKeyPage = ({ navigation }) => {
     onSuccess: async (response) => {
       console.log(JSON.stringify(response.data));
       setMarkerList(response.data.result.markers);
-    },
+    }, 
+   
     onError: async (error) => {
       console.log("error" + error);
     },
@@ -185,6 +185,9 @@ const PickUpKeyPage = ({ navigation }) => {
         showsMyLocationButton={true}
         region={location}
       >
+        {
+     
+        }
         {markerList?.map((marker, idx) => {
           if (
             calculateDistance(

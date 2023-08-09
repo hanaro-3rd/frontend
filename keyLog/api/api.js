@@ -1,6 +1,15 @@
 import { axiosClient } from "./axiosClient";
 
 export const postSignup = (signupData) => {
+  /*{
+    name: name,
+    phonenum: phoneNumber,
+    password: password,
+    pattern: "12346",
+    registrationNum: personalNumber,
+    deviceId: await DeviceInfo.getUniqueId(),
+  }
+  */
   return axiosClient.post("/signup", signupData);
 };
 
@@ -24,10 +33,25 @@ export const getRegistrationDeviceId = (deviceId) => {
 };
 
 export const getMarkers = () => {
-  return axiosClient.get('/marker')
-} 
+  return axiosClient.get("/marker");
+};
 
-export const postMarkers = ({markerId,markerData}) => {
-  console.log(markerId,markerData)
-  return axiosClient.post(`/marker/${markerId}`,markerData)
+export const postMarkers = ({ markerId, markerData }) => {
+  return axiosClient.post(`/marker/${markerId}`, markerData);
+};
+
+//계좌
+export const getAccount = () => {
+  return axiosClient.get('/account')
+};
+export const getAccounExternal = () => {
+  return axiosClient.get('/account/external')
+};
+export const postAccountExternal = ({externalAccountId,externalAccountData}) => {
+  return axiosClient.post(`/account/${externalAccountId}`,externalAccountData)
+}
+
+//환전
+export const postExchange = (exchangeData) => {
+  return axiosClient.post(`/exchange`,exchangeData)
 }

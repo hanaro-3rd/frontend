@@ -61,7 +61,29 @@ const App = () => {
       setLoading(false); // 로딩 상태를 false로 설정하여 초기 렌더링이 완료
     }
   };
+  /*
+   1. useQuery
+   GET요청을 할 때
+   const {data} = useQuery(
+    '쿼리의 키 값', axios함수, {
+      onSuccess: () => {},
+      onError: () => {}
+    }
+   )
+   
+   2. useMutation
+   POST,PUT,PATCH,DELETE요청 할 때
+   useMutation(axios함수, {
+    onSucess: (response) => {
 
+    },
+    onError: (error) => {
+
+    }
+   })
+   함수.mutate({넣을 키 : value})
+
+  */
   const { data } = useQuery(
     "registration",
     async () => getRegistrationDeviceId(await DeviceInfo.getUniqueId()),
@@ -125,8 +147,9 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={
-          login ? "MainPage" : "SignUpPage"
+        initialRouteName={"ExchangePage"
+          
+          // login ? "MainPage" : "SignUpPage"
           // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
         }
       >
