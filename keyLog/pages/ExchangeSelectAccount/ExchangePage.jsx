@@ -31,7 +31,6 @@ import {
 } from "accordion-collapse-react-native";
 import _ from "lodash";
 import { useDebouncedEffect } from "../../hooks/useDebouncedEffect";
-import AccountConnectPageComponents from "../../components/AccountConnectPageComponents/AccountConnectPageComponents";
 import { integerUnit, minimumUnit } from "../../utils/ExchangeSentence";
 export const ExchangePage = () => {
   const [accountList, setAccountList] = useState([]);

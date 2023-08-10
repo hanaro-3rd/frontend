@@ -98,6 +98,16 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     backgroundColor: "#ffffff",
   },
+  title: {
+    color: "#191F29",
+    fontSize: fontPercentage(23),
+    fontWeight: "700",
+  },
+  subtitle: {
+    color: "#8B95A1",
+    fontSize: fontPercentage(16),
+    fontWeight: "400",
+  },
   buttonText: {
     color: "#FFF",
     fontFamily: "Inter",
