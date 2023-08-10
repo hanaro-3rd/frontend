@@ -6,13 +6,13 @@ import {
   fontPercentage,
   heightPercentage,
   widthPercentage,
-} from "../utils/ResponseSize";
+} from "../../utils/ResponseSize";
 import Geolocation from "react-native-geolocation-service";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getMarkers, postMarkers } from "../api/api";
+import { getMarkers, postMarkers } from "../../api/api";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { calculateDistance } from "../utils/calculateDistance";
-import leftArrow from "../assets/accountImg/Vector.png";
+import { calculateDistance } from "../../utils/calculateDistance";
+import leftArrow from "../../assets/accountImg/Vector.png";
 import { NavigationContainer } from "@react-navigation/native";
 const TestPaymentSearchPage = ({ navigation }) => {
   const [location, setLocation] = useState({
@@ -101,7 +101,7 @@ const TestPaymentSearchPage = ({ navigation }) => {
             justifyContent: "center",
           }}
           onPress={() => {
-            navigation.navigate("MainPage");
+            navigation.navigate("TestPaymentPage");
           }}
         >
           <Image source={leftArrow} />

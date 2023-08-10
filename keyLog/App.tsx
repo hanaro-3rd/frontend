@@ -18,7 +18,9 @@ import ExchangeFail from "./pages/ExchangeSelectAccount/ExchangeFail";
 import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
 import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
 import MainPage from "./pages/MainPage";
-import TestPaymentPage from "./pages/TestPaymentPage";
+import TestPaymentPage from "./pages/Payment/TestPaymentPage";
+import PaymentSuccessPage from "./pages/Payment/PaymentSuccessPage";
+import PaymentFailPage from "./pages/Payment/PaymentFailPage";
 import PickUpKeyPage from "./pages/PickUpKeyPage";
 import LoginPasswordPage from "./pages/SignUp/LoginPasswordPage";
 import LoginPatternPage from "./pages/SignUp/LoginPatternPage";
@@ -37,9 +39,9 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { loginAtom } from "./recoil/loginAtom";
 import usePermissions from "./hooks/usePermissions";
 import LoginPage from "./pages/SignUp/LoginPage";
-import ScanPage from "./pages/ScanPage";
+import ScanPage from "./pages/Payment/ScanPage";
 import SettingPage from "./pages/SettingPage";
-import TestPaymentSearchPage from "./pages/TestPaymentSearchPage";
+import TestPaymentSearchPage from "./pages/Payment/TestPaymentSearchPage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -114,7 +116,7 @@ const App = () => {
           // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
         }rr
       > */}
-      <Stack.Navigator initialRouteName={"MainPage"}>
+      <Stack.Navigator initialRouteName={"PaymentFailPage"}>
         <Stack.Screen
           name="MainPage"
           component={MainPage}
@@ -143,6 +145,16 @@ const App = () => {
         <Stack.Screen
           name="TestPaymentPage"
           component={TestPaymentPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PaymentSuccessPage"
+          component={PaymentSuccessPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PaymentFailPage"
+          component={PaymentFailPage}
           options={{ headerShown: false }}
         />
         <Stack.Screen

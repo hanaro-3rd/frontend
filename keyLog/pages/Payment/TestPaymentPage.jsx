@@ -6,12 +6,12 @@ import {
   phoneHeight,
   phoneWidth,
   widthPercentage,
-} from "../utils/ResponseSize";
+} from "../../utils/ResponseSize";
 import React, { useEffect, useState } from "react";
-import DeleteHeader from "../components/Header/DeleteHeader";
+import DeleteHeader from "../../components/Header/DeleteHeader";
 import { Picker } from "@react-native-picker/picker";
 import { useMutation, useQueryClient } from "react-query";
-import { postPayment } from "../api/api";
+import { postPayment } from "../../api/api";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;

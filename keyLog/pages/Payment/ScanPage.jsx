@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 import styled from "styled-components/native";
-import DeleteHeader from "../components/Header/DeleteHeader";
+import DeleteHeader from "../../components/Header/DeleteHeader";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -9,7 +9,7 @@ import {
   phoneHeight,
   phoneWidth,
   widthPercentage,
-} from "../utils/ResponseSize";
+} from "../../utils/ResponseSize";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
