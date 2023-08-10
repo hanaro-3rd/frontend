@@ -31,7 +31,7 @@ import TravelBudgetPlanPage from "./pages/TravelBudget/TravelBudgetPlanPage";
 import TravelSchedulePage from "./pages/TravelBudget/TravelSchedulePage";
 import TravelRecordPage from "./pages/TravelRecordPage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getRegistrationDeviceId } from "./api/api";
+import { getRefresh, getRegistrationDeviceId } from "./api/api";
 import DeviceInfo, { getDeviceId } from "react-native-device-info";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { loginAtom } from "./recoil/loginAtom";
@@ -47,18 +47,20 @@ const App = () => {
   const [isLoading, setLoading] = useState(true);
   const [haveDeviceId, setHaveDeviceId] = useState(false);
   usePermissions();
+  
   const { data } = useQuery(
     "registration",
     async () => getRegistrationDeviceId(await DeviceInfo.getUniqueId()),
     {
       //DeviceId가 존재할떄
       onSuccess: async (response) => {
-        console.log("success");
-        console.log(JSON.stringify(response));
+        // console.log(JSON.stringify(response));
+
         setHaveDeviceId(true);
         try {
           const token = await AsyncStorage.getItem("access_token");
           console.log("access_token" + token);
+          console.log("refresh_token", await AsyncStorage.getItem("refresh_token"))
           if (token) {
             // token이 있으면 MainPage로 이동
             setLogin(true);
@@ -89,7 +91,6 @@ const App = () => {
           }
         } catch (error) {
           // 에러 처리
-          console.log("AsyncStorage error:", error);
           setLogin(false); // 에러 발생 시 로그인을 하지 않은 상태로 설정
         } finally {
           setLoading(false); // 로딩 상태를 false로 설정하여 초기 렌더링이 완료
@@ -97,6 +98,7 @@ const App = () => {
       },
     }
   );
+
 
   if (isLoading) {
     // 로딩 상태일 동안에는 아무것도 렌더링X
@@ -108,7 +110,7 @@ const App = () => {
         initialRouteName={
           login ? "MainPage" : "LoginPage"
           // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
-        }
+        }rr
       > */}
       <Stack.Navigator initialRouteName={"MainPage"}>
         <Stack.Screen

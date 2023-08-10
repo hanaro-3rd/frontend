@@ -63,9 +63,6 @@ const LoginPage = () => {
     if (password === '') resetPasswordProcess();
   }, [password]);
 
-  useEffect(() => {
-    console.log('loginError:', loginError);
-  }, [loginError]);
 
   const storeAccessToken = async token => {
     console.log("access_token",JSON.stringify(token))
