@@ -13,36 +13,44 @@ export const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(async (config) => {
   if ((await AsyncStorage.getItem("access_token")) && config.headers) {
+    console.log("interceptors", await AsyncStorage.getItem("access_token"));
     config.headers["Authorization"] = `Bearer ${JSON.parse(
       await AsyncStorage.getItem("access_token")
     )}`;
   }
   return config;
 });
-axiosClient.interceptors.response.use((response) => {
+axiosClient.interceptors.response.use(
+  (response) => {
   return response;
-});
+},
+ (error) => {
 
-// async function refreshAccessToken() {
-//   const refreshToken = await AsyncStorage.getItem("refresh_token");
-//   try {
-//     const response = await axiosClient.get("/refresh", {
-//       refreshToken: refreshToken,
-//     });
-//     if (response.data && response.data.access_token) {
-//       await AsyncStorage.setItem(
-//         "access_token",
-//         JSON.stringify(response.data.access_token)
-//       );
-//       return response.data.access_token;
-//     } else {
-//       throw new Error("No access token found in refresh response");
-//     }
-//   } catch (error) {
-//     console.error("Error refreshing access token", error);
-//     return null;
-//   }
-// }
+ }
+);
+
+async function refreshAccessToken() {
+  const refreshToken = await AsyncStorage.getItem("refresh_token");
+  try {
+    const response = await axiosClient.get("/refresh");
+    if (response.data && response.data.access_token) {
+      await AsyncStorage.setItem(
+        "access_token",
+        JSON.stringify(response.data.access_token)
+      );
+      await AsyncStorage.setItem(
+        "refresh_token",
+        JSON.stringify(response.data.refresh_token)
+      )
+      return response.data.access_token;
+    } else {
+      throw new Error("No access token found in refresh response");
+    }
+  } catch (error) {
+    console.error("Error refreshing access token", error);
+    return null;
+  }
+}
 
 // axiosClient.interceptors.response.use(
 //   async (response) => {
