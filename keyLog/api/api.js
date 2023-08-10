@@ -1,4 +1,4 @@
-import { axiosClient } from "./axiosClient";
+import { axiosClient, axiosRefreshClient } from "./axiosClient";
 
 export const postSignup = (signupData) => {
   return axiosClient.post("/signup", signupData);
@@ -23,7 +23,9 @@ export const postVerificationAuth = (verifiacationAuthData) => {
 export const getRegistrationDeviceId = (deviceId) => {
   return axiosClient.get(`/registration/${deviceId}`);
 };
-
+export const getRefresh = async () => {
+  return axiosRefreshClient.get("/refresh")
+}
 export const getMarkers = () => {
   return axiosClient.get("/marker");
 };
