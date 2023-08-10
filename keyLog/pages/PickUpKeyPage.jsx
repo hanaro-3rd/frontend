@@ -31,11 +31,13 @@ const PickUpKeyPage = ({ navigation }) => {
   //마커 정보 가져오기
   const { data } = useQuery("getMarkers", async () => getMarkers(), {
     onSuccess: async (response) => {
-      console.log(JSON.stringify(response.data));
-      setMarkerList(response.data.result.markers);
+      
+      console.log(response.data);
+      // setMarkerList(response.data.result.markers);
     }, 
    
     onError: async (error) => {
+      console.log("getMarkers오류")
       console.log("error" + error);
     },
   });

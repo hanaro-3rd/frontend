@@ -57,8 +57,8 @@ const App = () => {
         console.log(JSON.stringify(response));
         setHaveDeviceId(true);
         try {
-          const token = await AsyncStorage.getItem("token");
-          console.log("token" + token);
+          const token = await AsyncStorage.getItem("access_token");
+          console.log("access_token" + token);
           if (token) {
             // token이 있으면 MainPage로 이동
             setLogin(true);
@@ -106,7 +106,7 @@ const App = () => {
     <NavigationContainer>
       {/* <Stack.Navigator
         initialRouteName={
-          login ? "MainPage" : "SignUpPage"
+          login ? "MainPage" : "LoginPage"
           // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
         }
       > */}

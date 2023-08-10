@@ -1,22 +1,17 @@
 import styled from "styled-components/native";
-import { TouchableOpacity, Text, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import {
   fontPercentage,
-  getStatusBarHeight,
   heightPercentage,
   phoneHeight,
   phoneWidth,
   widthPercentage,
 } from "../utils/ResponseSize";
-import CloseButton from "../assets/travelBudget/CloseButton.png";
-import SelectButton from "../assets/travelBudget/SelectButton.png";
-import SelectButtonBefore from "../assets/travelBudget/SelectButtonBefore.png";
 import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import DeleteHeader from "../components/Header/DeleteHeader";
 import { Picker } from "@react-native-picker/picker";
 import { useMutation, useQueryClient } from "react-query";
-import { postPay } from "../api/api";
+import { postPayment } from "../api/api";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
@@ -247,7 +242,7 @@ const TestPaymentPage = ({ navigation, route }) => {
 
   const queryClient = useQueryClient();
 
-  const postPayMutation = useMutation(postPay, {
+  const postPayMutation = useMutation(postPayment, {
     onSuccess: (response) => {
       console.log(response.data);
       navigation.navigate("MainPage");
@@ -260,7 +255,7 @@ const TestPaymentPage = ({ navigation, route }) => {
 
   const handleSubmitPay = () => {
     console.log(
-      "하",
+      "들어가긴하니",
       markerInformation.address,
       category,
       markerInformation.lat,
@@ -379,11 +374,11 @@ const TestPaymentPage = ({ navigation, route }) => {
                   }}
                 >
                   {category == "" && <Picker.Item label="선택" value="" />}
-                  <Picker.Item label="식비" value="Food" />
-                  <Picker.Item label="교통" value="Trans" />
-                  <Picker.Item label="숙박" value="House" />
-                  <Picker.Item label="쇼핑 · 편의점 · 마트" value="Shop" />
-                  <Picker.Item label="문화 · 여가" value="Leisure" />
+                  <Picker.Item label="식비" value="식비" />
+                  <Picker.Item label="교통" value="교통" />
+                  <Picker.Item label="숙박" value="숙박" />
+                  <Picker.Item label="쇼핑 · 편의점 · 마트" value="쇼핑" />
+                  <Picker.Item label="문화 · 여가" value="문화" />
                   <Picker.Item label="기타" value="Etc" />
                 </Picker>
               </View>
