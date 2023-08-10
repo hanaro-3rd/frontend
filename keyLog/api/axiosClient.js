@@ -3,7 +3,7 @@ import axios from "axios";
 import AccountConnectPageComponents from "../components/AccountConnectPageComponents/AccountConnectPageComponents";
 import { getRefresh } from "./api";
 
-const BASE_URL = "http://10.0.2.2:8082";
+const BASE_URL = "http://3.38.13.139:8081";
 const HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Content-Type": "application/json",
