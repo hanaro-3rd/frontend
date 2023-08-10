@@ -49,4 +49,8 @@ export const postExchange = (exchangeData) => {
   return axiosClient.post(`/exchange`,exchangeData)
 }
 
+export const getExchange = (exchangeData) => {
+  return axiosClient.get(`/exchange`,exchangeData);
+}
+
 

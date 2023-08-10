@@ -25,7 +25,7 @@ import {
   CollapseBody,
 } from "accordion-collapse-react-native";
 import { useQueryClient, useQuery } from "react-query";
-import { getAccount } from "../../api/api";
+import { getAccount, getExchange } from "../../api/api";
 
 export const CountryChoiceComponent = ({
   setSelectedMoney,
@@ -35,10 +35,8 @@ export const CountryChoiceComponent = ({
   setForeignTextInput,
   setSubKoreaText,
   setSubForeignText,
+  setChangePrice,
 }) => {
-  const [JPY, setJPY] = useState({});
-  const [USD, setUSD] = useState({});
-  const [EUR, setEUR] = useState({});
   const [list, setList] = useState([
     {
       name: "USD",
@@ -58,26 +56,29 @@ export const CountryChoiceComponent = ({
   ]);
 
   const queryClient = useQueryClient();
-  const { data } = useQuery("exchangeRate", async () => getAccount(), {
+  const { data } = useQuery("exchangeRate", async () => getExchange(), {
     onSuccess: (response) => {
-      console.log(response.data + "국가");
+      console.log(response.data , "국가");
       setList([
         {
           name: "USD",
           country_url: require("../../assets/exchangeImg/USD.png"),
           exchangeRate: response.data.result.usd.exchangeRate,
+          changePrice: response.data.result.usd.changePrice,
           minimum: 10,
         },
         {
           name: "JPY",
           country_url: require("../../assets/exchangeImg/Japan.png"),
           exchangeRate: response.data.result.jpy.exchangeRate / 1000,
+          changePrice: response.data.result.jpy.changePrice,
           minimum: 1000,
         },
         {
           name: "EUR",
           country_url: require("../../assets/exchangeImg/EUR.png"),
           exchangeRate: response.data.result.eur.exchangeRate,
+          changePrice:response.data.result.eur.changePrice,
           minimum: 10,
         },
       ]);
@@ -97,6 +98,7 @@ export const CountryChoiceComponent = ({
     setForeignTextInput("");
     setSubForeignText("");
     setSubKoreaText("");
+    setChangePrice(country.changePrice)
   };
 
   return (
