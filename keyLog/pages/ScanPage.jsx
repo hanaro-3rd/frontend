@@ -84,9 +84,7 @@ const ScanPage = ({ navigation }) => {
           <ScanSubTitleText>결제 코드를 스캔해주세요.</ScanSubTitleText>
         </ScanTitleContainer>
         <Footer>
-          <Button
-          // onPress={}
-          >
+          <Button onPress={() => navigation.navigate("TestPaymentPage")}>
             <ButtonText>직접 입력하기</ButtonText>
           </Button>
         </Footer>

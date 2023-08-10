@@ -63,6 +63,24 @@ const TestPaymentSearchPage = ({ navigation }) => {
     console.log(markerId, markerData);
     postMarkersMutation.mutate({ markerId, markerData });
   };
+
+  const generateStarIcons = (rating) => {
+    const fullStars = Math.floor(rating);
+    const halfStar = rating - fullStars >= 0.5;
+
+    // Generate the star icons
+    const stars = Array.from({ length: 5 }, (_, index) => {
+      if (index < fullStars) {
+        return "★";
+      } else if (index === fullStars && halfStar) {
+        return "½";
+      } else {
+        return "☆";
+      }
+    });
+
+    return stars.join("");
+  };
   return (
     <View style={{ flex: 1 }}>
       <View
@@ -153,9 +171,19 @@ const TestPaymentSearchPage = ({ navigation }) => {
           <UpButtonView onPress={() => setShowElementView(!showElementView)}>
             <UpButton></UpButton>
           </UpButtonView>
-          <ModalGetMoneyButton onPress={() => {
-            navigation.navigate("TestPaymentPage", markerInformation)
-          }}>
+          <SelectStoreContainer>
+            <SelectStoreText>{markerInformation.store}</SelectStoreText>
+            <RankTextContainer>
+              <RankText>{markerInformation.rating}</RankText>
+              <StarText>{generateStarIcons(markerInformation.rating)}</StarText>
+            </RankTextContainer>
+          </SelectStoreContainer>
+
+          <ModalGetMoneyButton
+            onPress={() => {
+              navigation.navigate("TestPaymentPage", markerInformation);
+            }}
+          >
             <ModalGetMoneyText>선택하기</ModalGetMoneyText>
           </ModalGetMoneyButton>
         </MarkerList>
@@ -163,10 +191,53 @@ const TestPaymentSearchPage = ({ navigation }) => {
     </View>
   );
 };
+
+const SelectStoreContainer = styled.View`
+  display: flex;
+  padding: ${heightPercentage(5)}px ${widthPercentage(20)}px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 5px;
+  align-self: stretch;
+`;
+
+const SelectStoreText = styled.Text`
+  color: #191f29;
+  font-family: Inter;
+  font-size: ${fontPercentage(18)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const StarText = styled.Text`
+  color: #ffac33;
+  font-family: Inter;
+  font-size: ${fontPercentage(18)}px;
+  font-style: normal;
+  font-weight: 400;
+  margin-left: ${widthPercentage(5)}px;
+  margin-bottom: ${heightPercentage(5)}px;
+`;
 const ModalWrapper = styled.View`
   width: 100%;
   height: ${heightPercentage(144)}px;
   align-items: center;
+`;
+
+const RankTextContainer = styled.View`
+  display: flex;
+  padding-right: 0px;
+  align-items: center;
+  flex-direction: row;
+`;
+
+const RankText = styled.Text`
+  color: #191f29;
+  font-family: Inter;
+  font-size: ${fontPercentage(18)}px;
+  font-style: normal;
+  font-weight: 400;
 `;
 const ModalTextView = styled.View`
   flex-direction: row;
@@ -189,8 +260,8 @@ const ModalGetMoneyText = styled.Text`
   font-weight: 700;
 `;
 const ModalGetMoneyButton = styled.TouchableOpacity`
-  height: ${heightPercentage(40)}px;
-  border-radius: 5px;
+  height: ${heightPercentage(50)}px;
+  border-radius: 10px;
   background: #55acee;
   justify-content: center;
   align-items: center;
@@ -307,6 +378,8 @@ const MarkerList = styled.View`
   align-items: center;
   width: 100%;
   min-height: ${heightPercentage()}px;
+  height: ${heightPercentage(150)}px;
+  background-color: #fff;
 `;
 const UpButtonView = styled.TouchableOpacity`
   width: 100%;

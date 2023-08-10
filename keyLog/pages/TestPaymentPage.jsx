@@ -223,7 +223,6 @@ const PickerContainer = styled.View`
   border-radius: 5px;
 `;
 
-const MAX_TITLE_LENGTH = 20;
 const MAX_MONEY_LENGTH = 10;
 
 const TestPaymentPage = ({ navigation, route }) => {
@@ -233,7 +232,6 @@ const TestPaymentPage = ({ navigation, route }) => {
   const [moneyText, setMoneyText] = useState("");
   const [unit, setUnit] = useState("");
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState(false);
-  const [isTravelCountryClick, setIsTravelCountryClick] = useState(false);
   const [markerInformation, setMarkerInformation] = useState(false);
   useEffect(() => {
     if (route?.params) setMarkerInformation(route.params);
@@ -290,10 +288,8 @@ const TestPaymentPage = ({ navigation, route }) => {
   };
 
   const handleStoreTitleChange = (text) => {
-    if (text.length <= MAX_TITLE_LENGTH) {
-      setStoreTitle(text);
-      updateIsAllFieldsFilled();
-    }
+    setStoreTitle(text);
+    updateIsAllFieldsFilled();
   };
 
   const handleMemoChange = (text) => {
@@ -324,16 +320,15 @@ const TestPaymentPage = ({ navigation, route }) => {
           <PaymentTitleContainer>
             <TitleContainer>
               <PaymentTitle>가게</PaymentTitle>
-              <TextSize>
+              {/* <TextSize>
                 {storeTitle.length} / {MAX_TITLE_LENGTH}
-              </TextSize>
+              </TextSize> */}
             </TitleContainer>
             {markerInformation ? (
               <StoreTextinput
                 value={storeTitle}
                 onChangeText={handleStoreTitleChange}
-                maxLength={MAX_TITLE_LENGTH}
-                hasValue={storeTitle !== ""}
+                hasValue={markerInformation.store !== ""}
               >
                 {markerInformation.store}
               </StoreTextinput>
@@ -344,7 +339,6 @@ const TestPaymentPage = ({ navigation, route }) => {
                 <StoreTextinput
                   value={storeTitle}
                   onChangeText={handleStoreTitleChange}
-                  maxLength={MAX_TITLE_LENGTH}
                   hasValue={storeTitle !== ""}
                 />
               </TouchableOpacity>

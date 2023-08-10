@@ -47,7 +47,7 @@ const App = () => {
   const [isLoading, setLoading] = useState(true);
   const [haveDeviceId, setHaveDeviceId] = useState(false);
   usePermissions();
-  
+
   const { data } = useQuery(
     "registration",
     async () => getRegistrationDeviceId(await DeviceInfo.getUniqueId()),
@@ -60,7 +60,10 @@ const App = () => {
         try {
           const token = await AsyncStorage.getItem("access_token");
           console.log("access_token" + token);
-          console.log("refresh_token", await AsyncStorage.getItem("refresh_token"))
+          console.log(
+            "refresh_token",
+            await AsyncStorage.getItem("refresh_token")
+          );
           if (token) {
             // token이 있으면 MainPage로 이동
             setLogin(true);
@@ -98,7 +101,6 @@ const App = () => {
       },
     }
   );
-
 
   if (isLoading) {
     // 로딩 상태일 동안에는 아무것도 렌더링X
