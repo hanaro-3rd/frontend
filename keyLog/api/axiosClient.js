@@ -31,7 +31,9 @@ axiosRefreshClient.interceptors.request.use(async (config) => {
     }
 
     return config;
-  } catch {}
+  } catch {
+    
+  }
 });
 
 axiosClient.interceptors.request.use(async (config) => {
@@ -57,6 +59,10 @@ axiosClient.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const newAccessToken = await getRefresh();
+      if(newAccessToken?.data?.refresh_token) {
+        await AsyncStorage.removeItem("refresh_token")
+        await AsyncStorage.setItem("refresh_token",JSON.stringify(newAccessToken?.data?.refresh_token))
+      }
       await AsyncStorage.removeItem("access_token");
       await AsyncStorage.setItem(
         "access_token",
@@ -70,24 +76,4 @@ axiosClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-const refreshAccessToken = async () => {
-  const refreshToken = await AsyncStorage.getItem("refresh_token");
-  console.log("refreshAccessToken", refreshToken);
-  try {
-    await axios
-      .get("/refresh", {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(
-            await AsyncStorage.getItem("refresh_token")
-          )}`,
-        },
-      })
-      .then((response) => console.log("then", response));
-
-  } catch {
-    console.log(error);
-    return null;
-  }
-};
 
