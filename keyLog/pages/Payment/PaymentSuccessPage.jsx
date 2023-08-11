@@ -11,10 +11,11 @@ import {
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
 
-const PaymentSuccessPage = ({ navigation }) => {
+const PaymentSuccessPage = ({ route, navigation }) => {
+  const { storeTitle, category, moneyText, unit, memoText } = route?.params;
   return (
     <Root>
-      <DeleteHeader />
+      <DeleteHeader navigation={navigation} to="MainPage"/>
       <BodyContainer>
         <BodyHeader>
           <BodyHeaderTitle>결제 완료</BodyHeaderTitle>
@@ -30,19 +31,21 @@ const PaymentSuccessPage = ({ navigation }) => {
             <InfoTitle>결제 정보</InfoTitle>
             <InfoTextContainer>
               <InfoTextTitle>결제처</InfoTextTitle>
-              <InfoText>할매순대국 도쿄점</InfoText>
+              <InfoText>{storeTitle}</InfoText>
             </InfoTextContainer>
             <InfoTextContainer>
               <InfoTextTitle>카테고리</InfoTextTitle>
-              <InfoText>할매순대국 도쿄점</InfoText>
+              <InfoText>{category}</InfoText>
             </InfoTextContainer>
             <InfoTextContainer>
               <InfoTextTitle>금액</InfoTextTitle>
-              <InfoText>할매순대국 도쿄점</InfoText>
+              <InfoText>
+                {unit} {moneyText}
+              </InfoText>
             </InfoTextContainer>
             <InfoTextContainer>
               <InfoTextTitle>메모</InfoTextTitle>
-              <InfoText>할매순대국 도쿄점</InfoText>
+              <InfoText>{memoText}</InfoText>
             </InfoTextContainer>
           </InfoContainer>
         </BodyMainContainer>

@@ -14,7 +14,7 @@ import DeleteHeader from "../../components/Header/DeleteHeader";
 const PaymentFailPage = ({ navigation }) => {
   return (
     <Root>
-      <DeleteHeader />
+      <DeleteHeader navigation={navigation} to="MainPage"/>
       <BodyContainer>
         <BodyHeader>
           <BodyHeaderTitle>잔액 부족</BodyHeaderTitle>

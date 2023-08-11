@@ -233,6 +233,7 @@ const TestPaymentPage = ({ navigation, route }) => {
   const [unit, setUnit] = useState("");
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState(false);
   const [markerInformation, setMarkerInformation] = useState(false);
+
   useEffect(() => {
     if (route?.params) setMarkerInformation(route.params);
   }, [route]);
@@ -242,12 +243,19 @@ const TestPaymentPage = ({ navigation, route }) => {
 
   const postPayMutation = useMutation(postPayment, {
     onSuccess: (response) => {
-      console.log(response.data);
-      navigation.navigate("MainPage");
+      console.log("response들어감?", response.data);
+
+      navigation.navigate("PaymentSuccessPage", {
+        storeTitle: response.data.result.store,
+        category: response.data.result.category,
+        moneyText: response.data.result.price,
+        unit: unit,
+        memoText: response.data.result.memo,
+      });
     },
     onError: (error) => {
       console.log(error);
-      // navigation.navigate("")
+      navigation.navigate("PaymentFailPage");
     },
   });
 
@@ -263,6 +271,7 @@ const TestPaymentPage = ({ navigation, route }) => {
       markerInformation.store,
       unit
     );
+    setStoreTitle(markerInformation.store);
     postPayMutation.mutate({
       address: markerInformation.address,
       category: category,
@@ -283,7 +292,7 @@ const TestPaymentPage = ({ navigation, route }) => {
         category !== "" &&
         moneyText !== "" &&
         unit !== "" &&
-        !isMemoSelected
+        isMemoSelected !== ""
     );
   };
 
@@ -329,6 +338,7 @@ const TestPaymentPage = ({ navigation, route }) => {
                 value={storeTitle}
                 onChangeText={handleStoreTitleChange}
                 hasValue={markerInformation.store !== ""}
+                onPress={() => navigation.navigate("TestPaymentSearchPage")}
               >
                 {markerInformation.store}
               </StoreTextinput>

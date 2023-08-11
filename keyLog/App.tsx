@@ -114,9 +114,9 @@ const App = () => {
         initialRouteName={
           login ? "MainPage" : "LoginPage"
           // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
-        }rr
+        }
       > */}
-      <Stack.Navigator initialRouteName={"PaymentFailPage"}>
+      <Stack.Navigator initialRouteName={"MainPage"}>
         <Stack.Screen
           name="MainPage"
           component={MainPage}
