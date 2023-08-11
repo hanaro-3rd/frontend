@@ -18,7 +18,9 @@ import ExchangeFail from "./pages/ExchangeSelectAccount/ExchangeFail";
 import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
 import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
 import MainPage from "./pages/MainPage";
-import TestPaymentPage from "./pages/TestPaymentPage";
+import TestPaymentPage from "./pages/Payment/TestPaymentPage";
+import PaymentSuccessPage from "./pages/Payment/PaymentSuccessPage";
+import PaymentFailPage from "./pages/Payment/PaymentFailPage";
 import PickUpKeyPage from "./pages/PickUpKeyPage";
 import LoginPasswordPage from "./pages/SignUp/LoginPasswordPage";
 import LoginPatternPage from "./pages/SignUp/LoginPatternPage";
@@ -37,9 +39,9 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { loginAtom } from "./recoil/loginAtom";
 import usePermissions from "./hooks/usePermissions";
 import LoginPage from "./pages/SignUp/LoginPage";
-import ScanPage from "./pages/ScanPage";
+import ScanPage from "./pages/Payment/ScanPage";
 import SettingPage from "./pages/SettingPage";
-import TestPaymentSearchPage from "./pages/TestPaymentSearchPage";
+import TestPaymentSearchPage from "./pages/Payment/TestPaymentSearchPage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -47,7 +49,7 @@ const App = () => {
   const [isLoading, setLoading] = useState(true);
   const [haveDeviceId, setHaveDeviceId] = useState(false);
   usePermissions();
-  
+
   const { data } = useQuery(
     "registration",
     async () => getRegistrationDeviceId(await DeviceInfo.getUniqueId()),
@@ -60,7 +62,10 @@ const App = () => {
         try {
           const token = await AsyncStorage.getItem("access_token");
           console.log("access_token" + token);
-          console.log("refresh_token", await AsyncStorage.getItem("refresh_token"))
+          console.log(
+            "refresh_token",
+            await AsyncStorage.getItem("refresh_token")
+          );
           if (token) {
             // token이 있으면 MainPage로 이동
             setLogin(true);
@@ -99,7 +104,6 @@ const App = () => {
     }
   );
 
-
   if (isLoading) {
     // 로딩 상태일 동안에는 아무것도 렌더링X
     return null;
@@ -110,7 +114,7 @@ const App = () => {
         initialRouteName={
           login ? "MainPage" : "LoginPage"
           // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
-        }rr
+        }
       > */}
       <Stack.Navigator initialRouteName={"MainPage"}>
         <Stack.Screen
@@ -141,6 +145,16 @@ const App = () => {
         <Stack.Screen
           name="TestPaymentPage"
           component={TestPaymentPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PaymentSuccessPage"
+          component={PaymentSuccessPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PaymentFailPage"
+          component={PaymentFailPage}
           options={{ headerShown: false }}
         />
         <Stack.Screen

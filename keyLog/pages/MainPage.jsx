@@ -394,9 +394,7 @@ const MainPage = ({ navigation }) => {
       <Header>
         <LogoText>키로그</LogoText>
         <Setting>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("TestPaymentPage")}
-          >
+          <TouchableOpacity onPress={() => navigation.navigate("ScanPage")}>
             <SettingImage source={Scan} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("SettingPage")}>
@@ -504,9 +502,7 @@ const MainPage = ({ navigation }) => {
                 <MenuTitle>키머니 환전하기</MenuTitle>
                 <MenuSubtitle>키머니를 환전해보아용</MenuSubtitle>
               </MenuTextContainer>
-              <MenuButton
-              onPress={() => navigation.navigate("ExchangePage")}
-              >
+              <MenuButton onPress={() => navigation.navigate("ExchangePage")}>
                 <MenuButtonText fontPercentage={fontPercentage}>
                   환전하러 가기
                 </MenuButtonText>

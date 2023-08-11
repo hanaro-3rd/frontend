@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 import styled from "styled-components/native";
-import DeleteHeader from "../components/Header/DeleteHeader";
+import DeleteHeader from "../../components/Header/DeleteHeader";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -9,7 +9,7 @@ import {
   phoneHeight,
   phoneWidth,
   widthPercentage,
-} from "../utils/ResponseSize";
+} from "../../utils/ResponseSize";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
@@ -84,9 +84,7 @@ const ScanPage = ({ navigation }) => {
           <ScanSubTitleText>결제 코드를 스캔해주세요.</ScanSubTitleText>
         </ScanTitleContainer>
         <Footer>
-          <Button
-          // onPress={}
-          >
+          <Button onPress={() => navigation.navigate("TestPaymentPage")}>
             <ButtonText>직접 입력하기</ButtonText>
           </Button>
         </Footer>

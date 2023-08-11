@@ -6,12 +6,12 @@ import {
   phoneHeight,
   phoneWidth,
   widthPercentage,
-} from "../utils/ResponseSize";
+} from "../../utils/ResponseSize";
 import React, { useEffect, useState } from "react";
-import DeleteHeader from "../components/Header/DeleteHeader";
+import DeleteHeader from "../../components/Header/DeleteHeader";
 import { Picker } from "@react-native-picker/picker";
 import { useMutation, useQueryClient } from "react-query";
-import { postPayment } from "../api/api";
+import { postPayment } from "../../api/api";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
@@ -223,7 +223,6 @@ const PickerContainer = styled.View`
   border-radius: 5px;
 `;
 
-const MAX_TITLE_LENGTH = 20;
 const MAX_MONEY_LENGTH = 10;
 
 const TestPaymentPage = ({ navigation, route }) => {
@@ -233,8 +232,8 @@ const TestPaymentPage = ({ navigation, route }) => {
   const [moneyText, setMoneyText] = useState("");
   const [unit, setUnit] = useState("");
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState(false);
-  const [isTravelCountryClick, setIsTravelCountryClick] = useState(false);
   const [markerInformation, setMarkerInformation] = useState(false);
+
   useEffect(() => {
     if (route?.params) setMarkerInformation(route.params);
   }, [route]);
@@ -244,12 +243,19 @@ const TestPaymentPage = ({ navigation, route }) => {
 
   const postPayMutation = useMutation(postPayment, {
     onSuccess: (response) => {
-      console.log(response.data);
-      navigation.navigate("MainPage");
+      console.log("response들어감?", response.data);
+
+      navigation.navigate("PaymentSuccessPage", {
+        storeTitle: response.data.result.store,
+        category: response.data.result.category,
+        moneyText: response.data.result.price,
+        unit: unit,
+        memoText: response.data.result.memo,
+      });
     },
     onError: (error) => {
       console.log(error);
-      // navigation.navigate("")
+      navigation.navigate("PaymentFailPage");
     },
   });
 
@@ -265,6 +271,7 @@ const TestPaymentPage = ({ navigation, route }) => {
       markerInformation.store,
       unit
     );
+    setStoreTitle(markerInformation.store);
     postPayMutation.mutate({
       address: markerInformation.address,
       category: category,
@@ -285,15 +292,13 @@ const TestPaymentPage = ({ navigation, route }) => {
         category !== "" &&
         moneyText !== "" &&
         unit !== "" &&
-        !isMemoSelected
+        isMemoSelected !== ""
     );
   };
 
   const handleStoreTitleChange = (text) => {
-    if (text.length <= MAX_TITLE_LENGTH) {
-      setStoreTitle(text);
-      updateIsAllFieldsFilled();
-    }
+    setStoreTitle(text);
+    updateIsAllFieldsFilled();
   };
 
   const handleMemoChange = (text) => {
@@ -324,16 +329,16 @@ const TestPaymentPage = ({ navigation, route }) => {
           <PaymentTitleContainer>
             <TitleContainer>
               <PaymentTitle>가게</PaymentTitle>
-              <TextSize>
+              {/* <TextSize>
                 {storeTitle.length} / {MAX_TITLE_LENGTH}
-              </TextSize>
+              </TextSize> */}
             </TitleContainer>
             {markerInformation ? (
               <StoreTextinput
                 value={storeTitle}
                 onChangeText={handleStoreTitleChange}
-                maxLength={MAX_TITLE_LENGTH}
-                hasValue={storeTitle !== ""}
+                hasValue={markerInformation.store !== ""}
+                onPress={() => navigation.navigate("TestPaymentSearchPage")}
               >
                 {markerInformation.store}
               </StoreTextinput>
@@ -344,7 +349,6 @@ const TestPaymentPage = ({ navigation, route }) => {
                 <StoreTextinput
                   value={storeTitle}
                   onChangeText={handleStoreTitleChange}
-                  maxLength={MAX_TITLE_LENGTH}
                   hasValue={storeTitle !== ""}
                 />
               </TouchableOpacity>
