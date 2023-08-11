@@ -2,7 +2,13 @@ import { AppRegistry } from 'react-native';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import App from './App';
 import { RecoilRoot } from 'recoil';
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
 
 const RootApp = () => (
   <RecoilRoot>

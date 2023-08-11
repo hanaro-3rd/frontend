@@ -1,5 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import AccountConnectPageComponents from "../components/AccountConnectPageComponents/AccountConnectPageComponents";
+import { getRefresh } from "./api";
 
 const BASE_URL = "http://3.38.13.139:8081";
 const HEADERS = {
@@ -11,39 +13,42 @@ export const axiosClient = axios.create({
   headers: HEADERS,
 });
 
-axiosClient.interceptors.request.use(async (config) => {
-  if ((await AsyncStorage.getItem("token")) && config.headers) {
-    config.headers["Authorization"] = `Bearer ${JSON.parse(
-      await AsyncStorage.getItem("token")
-    )}`;
-  }
-  return config;
-});
-axiosClient.interceptors.response.use((response) => {
-  return response;
+export const axiosRefreshClient = axios.create({
+  baseURL: BASE_URL,
 });
 
-async function refreshAccessToken() {
-  const refreshToken = await AsyncStorage.getItem("refresh_token");
+axiosRefreshClient.interceptors.request.use(async (config) => {
+
   try {
-    const response = await axiosClient.get("/refresh", {
-      refreshToken: refreshToken,
-    });
-    if (response.data && response.data.access_token) {
-      await AsyncStorage.setItem(
-        "access_token",
-        JSON.stringify(response.data.access_token)
+    if ((await AsyncStorage.getItem("refresh_token")) && config.headers) {
+      console.log(
+        "refreshinterceptors",
+        await AsyncStorage.getItem("refresh_token")
       );
-      return response.data.access_token;
-    } else {
-      throw new Error("No access token found in refresh response");
+      config.headers["Authorization"] = `Bearer ${JSON.parse(
+        await AsyncStorage.getItem("refresh_token")
+      )}`;
     }
-  } catch (error) {
-    console.error("Error refreshing access token", error);
-    return null;
-  }
-}
 
+    return config;
+  } catch {
+    
+  }
+});
+
+axiosClient.interceptors.request.use(async (config) => {
+  try {
+    if ((await AsyncStorage.getItem("access_token")) && config.headers) {
+      console.log("interceptors", await AsyncStorage.getItem("access_token"));
+      config.headers["Authorization"] = `Bearer ${JSON.parse(
+        await AsyncStorage.getItem("access_token")
+      )}`;
+    }
+    return config;
+  } catch {
+    
+  }
+});
 axiosClient.interceptors.response.use(
   async (response) => {
     return response;
@@ -51,23 +56,24 @@ axiosClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (
-      error.response.status === 401 &&
-      !originalRequest._retry &&
-      error.response.data.errorMessage === "Access Token이 만료되었습니다."
-    ) {
+    if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-
-      const newAccessToken = await refreshAccessToken();
-      if (newAccessToken) {
-        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-        return axiosClient(originalRequest);
-      } else {
-        await AsyncStorage.removeItem("access_token");
-        await AsyncStorage.removeItem("refresh_token");
-        return Promise.reject(error);
+      const newAccessToken = await getRefresh();
+      if(newAccessToken?.data?.refresh_token) {
+        await AsyncStorage.removeItem("refresh_token")
+        await AsyncStorage.setItem("refresh_token",JSON.stringify(newAccessToken?.data?.refresh_token))
       }
+      await AsyncStorage.removeItem("access_token");
+      await AsyncStorage.setItem(
+        "access_token",
+        JSON.stringify(newAccessToken.data.access_token)
+      );
+      console.log("newAccessToken",newAccessToken.data.access_token)
+      originalRequest.headers["Authorization"] = `Bearer ${await newAccessToken
+        .data.access_token}`;
+      return axios(originalRequest);
     }
     return Promise.reject(error);
   }
 );
+

@@ -1,4 +1,4 @@
-import { axiosClient } from "./axiosClient";
+import { axiosClient, axiosRefreshClient } from "./axiosClient";
 
 export const postSignup = (signupData) => {
   return axiosClient.post("/signup", signupData);
@@ -23,7 +23,9 @@ export const postVerificationAuth = (verifiacationAuthData) => {
 export const getRegistrationDeviceId = (deviceId) => {
   return axiosClient.get(`/registration/${deviceId}`);
 };
-
+export const getRefresh = async () => {
+  return axiosRefreshClient.get("/refresh")
+}
 export const getMarkers = () => {
   return axiosClient.get("/marker");
 };
@@ -33,8 +35,8 @@ export const postMarkers = ({ markerId, markerData }) => {
   return axiosClient.post(`/marker/${markerId}`, markerData);
 };
 
-export const postPay = (payData) => {
-  return axiosClient.post("/pay", payData);
+export const postPayment = (payData) => {
+  return axiosClient.post("/payment", payData);
 };
 
 //계좌
@@ -53,5 +55,10 @@ export const postAccountExternal = ({
 
 //환전
 export const postExchange = (exchangeData) => {
-  return axiosClient.post(`/exchange`, exchangeData);
-};
+  return axiosClient.post(`/exchange`,exchangeData)
+}
+
+export const getExchange = (exchangeData) => {
+  return axiosClient.get(`/exchange`,exchangeData);
+}
+

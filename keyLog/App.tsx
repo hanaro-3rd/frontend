@@ -18,7 +18,9 @@ import ExchangeFail from "./pages/ExchangeSelectAccount/ExchangeFail";
 import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
 import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
 import MainPage from "./pages/MainPage";
-import TestPaymentPage from "./pages/TestPaymentPage";
+import TestPaymentPage from "./pages/Payment/TestPaymentPage";
+import PaymentSuccessPage from "./pages/Payment/PaymentSuccessPage";
+import PaymentFailPage from "./pages/Payment/PaymentFailPage";
 import PickUpKeyPage from "./pages/PickUpKeyPage";
 import LoginPasswordPage from "./pages/SignUp/LoginPasswordPage";
 import LoginPatternPage from "./pages/SignUp/LoginPatternPage";
@@ -31,15 +33,15 @@ import TravelBudgetPlanPage from "./pages/TravelBudget/TravelBudgetPlanPage";
 import TravelSchedulePage from "./pages/TravelBudget/TravelSchedulePage";
 import TravelRecordPage from "./pages/TravelRecordPage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getRegistrationDeviceId } from "./api/api";
+import { getRefresh, getRegistrationDeviceId } from "./api/api";
 import DeviceInfo, { getDeviceId } from "react-native-device-info";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { loginAtom } from "./recoil/loginAtom";
 import usePermissions from "./hooks/usePermissions";
 import LoginPage from "./pages/SignUp/LoginPage";
-import ScanPage from "./pages/ScanPage";
+import ScanPage from "./pages/Payment/ScanPage";
 import SettingPage from "./pages/SettingPage";
-import TestPaymentSearchPage from "./pages/TestPaymentSearchPage";
+import TestPaymentSearchPage from "./pages/Payment/TestPaymentSearchPage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -47,18 +49,23 @@ const App = () => {
   const [isLoading, setLoading] = useState(true);
   const [haveDeviceId, setHaveDeviceId] = useState(false);
   usePermissions();
+
   const { data } = useQuery(
     "registration",
     async () => getRegistrationDeviceId(await DeviceInfo.getUniqueId()),
     {
       //DeviceId가 존재할떄
       onSuccess: async (response) => {
-        console.log("success");
-        console.log(JSON.stringify(response));
+        // console.log(JSON.stringify(response));
+
         setHaveDeviceId(true);
         try {
-          const token = await AsyncStorage.getItem("token");
-          console.log("token" + token);
+          const token = await AsyncStorage.getItem("access_token");
+          console.log("access_token" + token);
+          console.log(
+            "refresh_token",
+            await AsyncStorage.getItem("refresh_token")
+          );
           if (token) {
             // token이 있으면 MainPage로 이동
             setLogin(true);
@@ -89,7 +96,6 @@ const App = () => {
           }
         } catch (error) {
           // 에러 처리
-          console.log("AsyncStorage error:", error);
           setLogin(false); // 에러 발생 시 로그인을 하지 않은 상태로 설정
         } finally {
           setLoading(false); // 로딩 상태를 false로 설정하여 초기 렌더링이 완료
@@ -106,7 +112,7 @@ const App = () => {
     <NavigationContainer>
       {/* <Stack.Navigator
         initialRouteName={
-          login ? "MainPage" : "SignUpPage"
+          login ? "MainPage" : "LoginPage"
           // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
         }
       > */}
@@ -139,6 +145,16 @@ const App = () => {
         <Stack.Screen
           name="TestPaymentPage"
           component={TestPaymentPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PaymentSuccessPage"
+          component={PaymentSuccessPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PaymentFailPage"
+          component={PaymentFailPage}
           options={{ headerShown: false }}
         />
         <Stack.Screen

@@ -1,4 +1,11 @@
-import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import Close from "../../assets/accountImg/CloseButton.png";
 import Success from "../../assets/exchangeImg/Success.png";
 import Vector from "../../assets/accountImg/Vector.png";
@@ -12,8 +19,16 @@ import {
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
 
-const ExchangeSuccess = ({ navigation,route }) => {
-  const {exchangeToUnit,exchangeToMoney, exchangeFromMoney,exchangeFromUnit} = route?.params
+const ExchangeSuccess = ({ navigation, route }) => {
+  const {
+    exchangeToUnit,
+    exchangeToMoney,
+    exchangeFromMoney,
+    exchangeFromUnit,
+    exchangeUnitResult,
+    exchangeRateResult,
+    exchangeChangePrice,
+  } = route?.params;
   return (
     <View style={styles.root}>
       <View>
@@ -38,13 +53,19 @@ const ExchangeSuccess = ({ navigation,route }) => {
                 <Text style={styles.containerTitle}>환전 금액</Text>
                 <View style={styles.exchangeMoneyBox}>
                   <View style={styles.koreaMoneyContianer}>
-                    <Text style={styles.koreaMoneyUnitText}>{exchangeToUnit}</Text>
+                    <Text style={styles.koreaMoneyUnitText}>
+                      {exchangeToUnit}
+                    </Text>
                     <Text style={styles.koreaMoneyText}>{exchangeToMoney}</Text>
                   </View>
                   <Image source={Vector} />
                   <View style={styles.foreignMoneyContainer}>
-                    <Text style={styles.foreignMoneyUnitText}>{exchangeFromUnit}</Text>
-                    <Text style={styles.foreignMoneyText}>{exchangeFromMoney}</Text>
+                    <Text style={styles.foreignMoneyUnitText}>
+                      {exchangeFromUnit}
+                    </Text>
+                    <Text style={styles.foreignMoneyText}>
+                      {exchangeFromMoney}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -52,12 +73,29 @@ const ExchangeSuccess = ({ navigation,route }) => {
                 <Text style={styles.containerTitle2}>적용 환율</Text>
                 <View style={styles.currentExchangeRateContainer}>
                   <View style={styles.countryInformationContainer}>
-                    <Text style={styles.countryText}>미국</Text>
-                    <Text style={styles.unitText}>USD</Text>
+                    <Text style={styles.countryText}>
+                      {exchangeUnitResult == "USD"
+                        ? "미국"
+                        : exchangeUnitResult == "JPY"
+                        ? "일본"
+                        : "유럽"}
+                    </Text>
+                    <Text style={styles.unitText}>{exchangeUnitResult}</Text>
                   </View>
                   <View style={styles.currentExchangeRateTextContainer}>
-                    <Text style={styles.exchangeRateText}>1,294.50</Text>
-                    <Text style={styles.changeRateText}>▼ 12.00</Text>
+                    <Text style={styles.exchangeRateText}>
+                      {exchangeRateResult}
+                    </Text>
+                    <Text
+                      style={
+                        exchangeChangePrice > 0
+                          ? styles.changeRateUp
+                          : styles.changeRateDown
+                      }
+                    >
+                      {exchangeChangePrice > 0 ? "▲" : "▼"}
+                      {exchangeChangePrice}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -66,7 +104,10 @@ const ExchangeSuccess = ({ navigation,route }) => {
         </View>
       </View>
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.submitButton} onPress={()=>navigation.navigate("MainPage")}>
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={() => navigation.navigate("MainPage")}
+        >
           <Text style={styles.buttonText}>하나머니 확인하기</Text>
         </TouchableOpacity>
       </View>
@@ -253,10 +294,14 @@ export const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "700",
   },
-  changeRateText: {
+  changeRateUp: {
+    color: "#f20a0a",
+    fontSize: fontPercentage(12),
+    fontWeight: "700",
+  },
+  changeRateDown: {
     color: "#0A7DF2",
     fontSize: fontPercentage(12),
-    fontStyle: "normal",
     fontWeight: "700",
   },
   currentExchangeRateTextContainer: {

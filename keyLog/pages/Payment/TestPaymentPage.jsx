@@ -1,22 +1,17 @@
 import styled from "styled-components/native";
-import { TouchableOpacity, Text, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import {
   fontPercentage,
-  getStatusBarHeight,
   heightPercentage,
   phoneHeight,
   phoneWidth,
   widthPercentage,
-} from "../utils/ResponseSize";
-import CloseButton from "../assets/travelBudget/CloseButton.png";
-import SelectButton from "../assets/travelBudget/SelectButton.png";
-import SelectButtonBefore from "../assets/travelBudget/SelectButtonBefore.png";
+} from "../../utils/ResponseSize";
 import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import DeleteHeader from "../components/Header/DeleteHeader";
+import DeleteHeader from "../../components/Header/DeleteHeader";
 import { Picker } from "@react-native-picker/picker";
 import { useMutation, useQueryClient } from "react-query";
-import { postPay } from "../api/api";
+import { postPayment } from "../../api/api";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
@@ -228,7 +223,6 @@ const PickerContainer = styled.View`
   border-radius: 5px;
 `;
 
-const MAX_TITLE_LENGTH = 20;
 const MAX_MONEY_LENGTH = 10;
 
 const TestPaymentPage = ({ navigation, route }) => {
@@ -238,8 +232,8 @@ const TestPaymentPage = ({ navigation, route }) => {
   const [moneyText, setMoneyText] = useState("");
   const [unit, setUnit] = useState("");
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState(false);
-  const [isTravelCountryClick, setIsTravelCountryClick] = useState(false);
   const [markerInformation, setMarkerInformation] = useState(false);
+
   useEffect(() => {
     if (route?.params) setMarkerInformation(route.params);
   }, [route]);
@@ -247,20 +241,27 @@ const TestPaymentPage = ({ navigation, route }) => {
 
   const queryClient = useQueryClient();
 
-  const postPayMutation = useMutation(postPay, {
+  const postPayMutation = useMutation(postPayment, {
     onSuccess: (response) => {
-      console.log(response.data);
-      navigation.navigate("MainPage");
+      console.log("response들어감?", response.data);
+
+      navigation.navigate("PaymentSuccessPage", {
+        storeTitle: response.data.result.store,
+        category: response.data.result.category,
+        moneyText: response.data.result.price,
+        unit: unit,
+        memoText: response.data.result.memo,
+      });
     },
     onError: (error) => {
       console.log(error);
-      // navigation.navigate("")
+      navigation.navigate("PaymentFailPage");
     },
   });
 
   const handleSubmitPay = () => {
     console.log(
-      "하",
+      "들어가긴하니",
       markerInformation.address,
       category,
       markerInformation.lat,
@@ -270,6 +271,7 @@ const TestPaymentPage = ({ navigation, route }) => {
       markerInformation.store,
       unit
     );
+    setStoreTitle(markerInformation.store);
     postPayMutation.mutate({
       address: markerInformation.address,
       category: category,
@@ -290,15 +292,13 @@ const TestPaymentPage = ({ navigation, route }) => {
         category !== "" &&
         moneyText !== "" &&
         unit !== "" &&
-        !isMemoSelected
+        isMemoSelected !== ""
     );
   };
 
   const handleStoreTitleChange = (text) => {
-    if (text.length <= MAX_TITLE_LENGTH) {
-      setStoreTitle(text);
-      updateIsAllFieldsFilled();
-    }
+    setStoreTitle(text);
+    updateIsAllFieldsFilled();
   };
 
   const handleMemoChange = (text) => {
@@ -329,16 +329,16 @@ const TestPaymentPage = ({ navigation, route }) => {
           <PaymentTitleContainer>
             <TitleContainer>
               <PaymentTitle>가게</PaymentTitle>
-              <TextSize>
+              {/* <TextSize>
                 {storeTitle.length} / {MAX_TITLE_LENGTH}
-              </TextSize>
+              </TextSize> */}
             </TitleContainer>
             {markerInformation ? (
               <StoreTextinput
                 value={storeTitle}
                 onChangeText={handleStoreTitleChange}
-                maxLength={MAX_TITLE_LENGTH}
-                hasValue={storeTitle !== ""}
+                hasValue={markerInformation.store !== ""}
+                onPress={() => navigation.navigate("TestPaymentSearchPage")}
               >
                 {markerInformation.store}
               </StoreTextinput>
@@ -349,7 +349,6 @@ const TestPaymentPage = ({ navigation, route }) => {
                 <StoreTextinput
                   value={storeTitle}
                   onChangeText={handleStoreTitleChange}
-                  maxLength={MAX_TITLE_LENGTH}
                   hasValue={storeTitle !== ""}
                 />
               </TouchableOpacity>
@@ -379,11 +378,11 @@ const TestPaymentPage = ({ navigation, route }) => {
                   }}
                 >
                   {category == "" && <Picker.Item label="선택" value="" />}
-                  <Picker.Item label="식비" value="Food" />
-                  <Picker.Item label="교통" value="Trans" />
-                  <Picker.Item label="숙박" value="House" />
-                  <Picker.Item label="쇼핑 · 편의점 · 마트" value="Shop" />
-                  <Picker.Item label="문화 · 여가" value="Leisure" />
+                  <Picker.Item label="식비" value="식비" />
+                  <Picker.Item label="교통" value="교통" />
+                  <Picker.Item label="숙박" value="숙박" />
+                  <Picker.Item label="쇼핑 · 편의점 · 마트" value="쇼핑" />
+                  <Picker.Item label="문화 · 여가" value="문화" />
                   <Picker.Item label="기타" value="Etc" />
                 </Picker>
               </View>

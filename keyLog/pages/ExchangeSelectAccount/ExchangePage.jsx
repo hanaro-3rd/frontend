@@ -23,7 +23,7 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getAccount, postExchange } from "../../api/api";
+import { getAccount, getExchange, postExchange } from "../../api/api";
 import {
   Collapse,
   CollapseHeader,
@@ -34,17 +34,17 @@ import { useDebouncedEffect } from "../../hooks/useDebouncedEffect";
 import { integerUnit, minimumUnit } from "../../utils/ExchangeSentence";
 export const ExchangePage = () => {
   const [accountList, setAccountList] = useState([]);
-  const [JPY, setJPY] = useState({});
-  const [USD, setUSD] = useState({});
-  const [EUR, setEUR] = useState({});
   const inputRef = useRef(null);
-
+  const [eur, setEur] = useState({});
+  const [usd, setUsd] = useState({});
+  const [jpy, setJpy] = useState({});
   const [expanded, setExpanded] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState();
   const [accountId, setAccountId] = useState();
   const [accountBalance, setAccountBalance] = useState(false);
   const [selectedMoney, setSelectedMoney] = useState("USD");
   const [exchangeRate, setExchangeRate] = useState();
+  const [changePrice, setChangePrice] = useState();
   const [minimumMoney, setMinimumMoney] = useState(10);
   const [koreaTextInput, setKoreaTextInput] = useState();
   const [subKoreaText, setSubKoreaText] = useState("");
@@ -61,16 +61,25 @@ export const ExchangePage = () => {
   const { data } = useQuery("account", async () => getAccount(), {
     onSuccess: (response) => {
       setAccountList(response.data.result.accounts);
-      setJPY(response.data.result.jpy);
-      setUSD(response.data.result.usd);
-      setEUR(response.data.result.eur);
-      setExchangeRate(response.data.result.usd.exchangeRate);
     },
     onError: (error) => {
       console.log("connect에러" + error);
     },
   });
 
+  const { exchangeData } = useQuery("exchange", async () => getExchange(), {
+    onSuccess: (response) => {
+      console.log("exchangePage", response.data);
+      setJpy(response.data.result.jpy);
+      setEur(response.data.result.eur);
+      setUsd(response.data.result.usd);
+      setExchangeRate(response.data.result.usd.exchangeRate);
+      setChangePrice(response.data.result.usd.changePrice);
+    },
+    onError: (error) => {
+      console.log("exchangePage,exchangeApi에러", error);
+    },
+  });
   const handleCountryPress = (account) => {
     setSelectedAccount(account);
     setExpanded(false);
@@ -80,9 +89,7 @@ export const ExchangePage = () => {
   // 3. 잔액보다 값이 높으면 잔액으로 리턴 => 소수점 걸리면 내림으로 가야함
   const foreignInputChange = (text) => {
     setForeignTextInput(String(text));
-
     const exchangeKoreaMoney = Math.floor(text * exchangeRate);
-
     setKoreaTextInput(String(exchangeKoreaMoney));
     if (minimumMoney == 1000) {
       //일본 환전할 시
@@ -145,15 +152,20 @@ export const ExchangePage = () => {
 
   const postExchangeMutation = useMutation(postExchange, {
     onSuccess: (response) => {
+      console.log(response.data);
       navigation.navigate("ExchangeSuccess", {
-        exchangeFromUnit: "KRW",
-        exchangeFromMoney: response.data.result.won,
-        exchangeToUnit: response.data.result.unit,
-        exchangeToMoney: response.data.result.key,
+        exchangeFromUnit: response.data.result.exchangeFromUnit,
+        exchangeFromMoney: response.data.result.exchangeFromMoney,
+        exchangeToUnit: response.data.result.exchangeToUnit,
+        exchangeToMoney: response.data.result.exchangeToMoney,
+        exchangeUnitResult: selectedMoney,
+        exchangeRateResult: exchangeRate,
+        exchangeChangePrice: changePrice,
       });
     },
     onError: (error) => {
-      console.log(error);
+      console.log(error); //실패 페이지로 이동
+      navigation.navigate("ExchangeFail");
     },
   });
 
@@ -298,6 +310,7 @@ export const ExchangePage = () => {
                   setForeignTextInput={setForeignTextInput}
                   setSubForeignText={setSubForeignText}
                   setSubKoreaText={setSubKoreaText}
+                  setChangePrice={setChangePrice}
                 />
                 <View style={styles.foreignCurrencyInput}>
                   <TextInput
@@ -330,12 +343,27 @@ export const ExchangePage = () => {
               </View>
               <View style={styles.currentExchangeRateContainer}>
                 <View style={styles.countryInformationContainer}>
-                  <Text style={styles.countryText}>미국</Text>
-                  <Text style={styles.unitText3}>USD</Text>
+                  <Text style={styles.countryText}>
+                    {selectedMoney == "USD"
+                      ? "미국"
+                      : selectedMoney == "JPY"
+                      ? "일본"
+                      : "유럽"}
+                  </Text>
+                  <Text style={styles.unitText3}>{selectedMoney}</Text>
                 </View>
                 <View style={styles.currentExchangeRateTextContainer}>
-                  <Text style={styles.exchangeRateText}>1,294.50</Text>
-                  <Text style={styles.changeRateText}>▼ 12.00</Text>
+                  <Text style={styles.exchangeRateText}>{exchangeRate}</Text>
+                  <Text
+                    style={
+                      changePrice > 0
+                        ? styles.changeRateUp
+                        : styles.changeRateDown
+                    }
+                  >
+                    {changePrice > 0 ? "▲" : "▼"}
+                    {changePrice}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -595,7 +623,12 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(16),
     fontWeight: "700",
   },
-  changeRateText: {
+  changeRateUp: {
+    color: "#f20a0a",
+    fontSize: fontPercentage(12),
+    fontWeight: "700",
+  },
+  changeRateDown: {
     color: "#0A7DF2",
     fontSize: fontPercentage(12),
     fontWeight: "700",
