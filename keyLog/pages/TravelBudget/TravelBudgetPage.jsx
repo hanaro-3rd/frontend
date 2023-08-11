@@ -6,6 +6,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import {
   fontPercentage,
@@ -19,10 +20,10 @@ import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
 import CloseButton from "../../assets/travelBudget/CloseButton.png";
 import AddButton from "../../assets/travelBudget/add.png";
-import Header from "../../components/Header/Header";
+import Delete from "../../assets/travelBudget/delete.png";
 
 const RootScrollView = styled.ScrollView`
-  margin-top: ${getStatusBarHeight}px;
+  /* margin-top: ${getStatusBarHeight}px; */
   min-height: ${phoneHeight}px;
   width: 100%;
   flex-direction: column;
@@ -30,15 +31,28 @@ const RootScrollView = styled.ScrollView`
   background-color: #f2f4f6;
 `;
 
-const HeaderContainer = styled.View`
+// const HeaderContainer = styled.View`
+//   justify-content: space-between;
+//   align-items: flex-start;
+//   align-self: stretch;
+//   background-color: #fff;
+//   flex-direction: row;
+//   padding: ${heightPercentage(13)}px ${widthPercentage(12)}px;
+// `;
+
+const Header = styled.View`
+  width: 100%;
+  height: ${heightPercentage(50)}px;
   justify-content: space-between;
-  align-items: flex-start;
-  align-self: stretch;
-  background-color: #fff;
+  background-color: white;
   flex-direction: row;
   padding: ${heightPercentage(13)}px ${widthPercentage(12)}px;
 `;
-
+const HeaderRight = styled.View`
+  align-items: flex-start;
+  gap: 10px;
+  flex-direction: row;
+`;
 const TitleText = styled.Text`
   color: #191f29;
   font-family: "Inter";
@@ -162,16 +176,86 @@ const TravelBudgetPage = () => {
     });
   };
 
+  const handleDeleteImageClick = () => {
+    Alert.alert(
+      "경비 계획 삭제하기",
+      "경비 계획을 삭제하면  여행 계획과 카테고리별 경비 계획이 모두 삭제됩니다.",
+      [
+        {
+          text: "취소",
+          style: "cancel",
+        },
+        {
+          text: "삭제하기",
+          onPress: () => {},
+          style: "destructive",
+        },
+      ]
+    );
+  };
+  /*yarn add react-native-dialog 
+
+  import React, { useState } from "react";
+import { View, TouchableOpacity, Text } from "react-native";
+import Dialog from "react-native-dialog";
+
+const CustomAlertDialog = ({ visible, onCancel, onDelete }) => {
+  return (
+    <Dialog.Container visible={visible}>
+      <Dialog.Title>경비 계획 삭제하기</Dialog.Title>
+      <Dialog.Description>
+        경비 계획을 삭제하면 여행 계획과 카테고리별 경비 계획이 모두 삭제됩니다.
+      </Dialog.Description>
+      <Dialog.Button label="취소" onPress={onCancel} />
+      <Dialog.Button label="삭제하기" onPress={onDelete} />
+    </Dialog.Container>
+  );
+};
+
+export default CustomAlertDialog;
+
+import CustomAlertDialog from "../../components/travelBudgetPageComponent/CustomAlertDialog";
+
+const TravelBudgetPage = () => {
+  const [isDialogVisible, setDialogVisible] = useState(false);
+
+  const handleDeleteImageClick = () => {
+    setDialogVisible(true);
+  };
+
+  const handleCancel = () => {
+    setDialogVisible(false);
+  };
+
+  const handleDelete = () => {
+    // 실제 삭제 동작 수행
+    setDialogVisible(false);
+  };
+
+   <TouchableOpacity onPress={handleDeleteImageClick}>
+        <Image source={Delete} />
+      </TouchableOpacity>
+      <CustomAlertDialog
+        visible={isDialogVisible}
+        onCancel={handleCancel}
+        onDelete={handleDelete}
+      />
+*/
   return (
     <RootScrollView>
-      <HeaderContainer>
+      <Header>
         <TouchableOpacity onPress={handleGoBackToMainPage}>
           <Image source={CloseButton} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleGoToTravelSchedule}>
-          <Image source={AddButton} />
-        </TouchableOpacity>
-      </HeaderContainer>
+        <HeaderRight>
+          <TouchableOpacity onPress={handleDeleteImageClick}>
+            <Image source={Delete} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleGoToTravelSchedule}>
+            <Image source={AddButton} />
+          </TouchableOpacity>
+        </HeaderRight>
+      </Header>
       {/* <Header type="DELETE" navigation={navigation} to="MainPage" /> */}
       <BodyContainer>
         <BodyHeader>

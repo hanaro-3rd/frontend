@@ -18,10 +18,13 @@ import ExchangeFail from "./pages/ExchangeSelectAccount/ExchangeFail";
 import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
 import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
 import MainPage from "./pages/MainPage";
+import TestPaymentPage from "./pages/TestPaymentPage";
 import PickUpKeyPage from "./pages/PickUpKeyPage";
 import LoginPasswordPage from "./pages/SignUp/LoginPasswordPage";
 import LoginPatternPage from "./pages/SignUp/LoginPatternPage";
 import SignUpPage from "./pages/SignUp/SignUpPage";
+import ForeignPayHistoryPage from "./pages/ForeignPayHistoryPage";
+import OwnPayHistoryPage from "./pages/OwnPayHistoryPage";
 import TravelBudgetDetailPage from "./pages/TravelBudget/TravelBudgetDetailPage";
 import TravelBudgetPage from "./pages/TravelBudget/TravelBudgetPage";
 import TravelBudgetPlanPage from "./pages/TravelBudget/TravelBudgetPlanPage";
@@ -34,6 +37,9 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { loginAtom } from "./recoil/loginAtom";
 import usePermissions from "./hooks/usePermissions";
 import LoginPage from "./pages/SignUp/LoginPage";
+import ScanPage from "./pages/ScanPage";
+import SettingPage from "./pages/SettingPage";
+import TestPaymentSearchPage from "./pages/TestPaymentSearchPage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -98,15 +104,46 @@ const App = () => {
   }
   return (
     <NavigationContainer>
-      <Stack.Navigator
+      {/* <Stack.Navigator
         initialRouteName={
           login ? "MainPage" : "SignUpPage"
           // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
         }
-      >
+      > */}
+      <Stack.Navigator initialRouteName={"MainPage"}>
         <Stack.Screen
           name="MainPage"
           component={MainPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TestPaymentSearchPage"
+          component={TestPaymentSearchPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ForeignPayHistoryPage"
+          component={ForeignPayHistoryPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="OwnPayHistoryPage"
+          component={OwnPayHistoryPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ScanPage"
+          component={ScanPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TestPaymentPage"
+          component={TestPaymentPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SettingPage"
+          component={SettingPage}
           options={{ headerShown: false }}
         />
         <Stack.Screen

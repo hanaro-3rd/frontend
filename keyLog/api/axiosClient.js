@@ -12,9 +12,9 @@ export const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(async (config) => {
-  if ((await AsyncStorage.getItem("access_token")) && config.headers) {
+  if ((await AsyncStorage.getItem("token")) && config.headers) {
     config.headers["Authorization"] = `Bearer ${JSON.parse(
-      await AsyncStorage.getItem("access_token")
+      await AsyncStorage.getItem("token")
     )}`;
   }
   return config;

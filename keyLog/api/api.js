@@ -1,27 +1,26 @@
-import { axiosClient } from './axiosClient';
+import { axiosClient } from "./axiosClient";
 
-
-export const postSignup = signupData => {
-  return axiosClient.post('/signup', signupData);
+export const postSignup = (signupData) => {
+  return axiosClient.post("/signup", signupData);
 };
 
-export const postSigninPattern = signInPatternData => {
-  return axiosClient.post('/signin/pattern', signInPatternData);
+export const postSigninPattern = (signInPatternData) => {
+  return axiosClient.post("/signin/pattern", signInPatternData);
 };
 
-export const postSigninPassword = signInPasswordData => {
-  return axiosClient.post('/signin/password', signInPasswordData);
+export const postSigninPassword = (signInPasswordData) => {
+  return axiosClient.post("/signin/password", signInPasswordData);
 };
 
-export const postVerification = verificationData => {
-  return axiosClient.post('/verification', verificationData);
+export const postVerification = (verificationData) => {
+  return axiosClient.post("/verification", verificationData);
 };
 
-export const postVerificationAuth = verifiacationAuthData => {
-  return axiosClient.post('/verification/auth', verifiacationAuthData);
+export const postVerificationAuth = (verifiacationAuthData) => {
+  return axiosClient.post("/verification/auth", verifiacationAuthData);
 };
 
-export const getRegistrationDeviceId = deviceId => {
+export const getRegistrationDeviceId = (deviceId) => {
   return axiosClient.get(`/registration/${deviceId}`);
 };
 
@@ -30,23 +29,29 @@ export const getMarkers = () => {
 };
 
 export const postMarkers = ({ markerId, markerData }) => {
+  console.log(markerId, markerData);
   return axiosClient.post(`/marker/${markerId}`, markerData);
+};
+
+export const postPay = (payData) => {
+  return axiosClient.post("/pay", payData);
 };
 
 //계좌
 export const getAccount = () => {
-  return axiosClient.get('/account')
+  return axiosClient.get("/account");
 };
 export const getAccounExternal = () => {
-  return axiosClient.get('/account/external')
+  return axiosClient.get("/account/external");
 };
-export const postAccountExternal = ({externalAccountId,externalAccountData}) => {
-  return axiosClient.post(`/account/${externalAccountId}`,externalAccountData)
-}
+export const postAccountExternal = ({
+  externalAccountId,
+  externalAccountData,
+}) => {
+  return axiosClient.post(`/account/${externalAccountId}`, externalAccountData);
+};
 
 //환전
 export const postExchange = (exchangeData) => {
-  return axiosClient.post(`/exchange`,exchangeData)
-}
-
-
+  return axiosClient.post(`/exchange`, exchangeData);
+};
