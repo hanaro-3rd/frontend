@@ -110,13 +110,8 @@ const App = () => {
   }
   return (
     <NavigationContainer>
-      {/* <Stack.Navigator
-        initialRouteName={
-          login ? "MainPage" : "LoginPage"
-          // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
-        }
-      > */}
-      <Stack.Navigator initialRouteName={"MainPage"}>
+      <Stack.Navigator initialRouteName={login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"}>
+
         <Stack.Screen
           name="MainPage"
           component={MainPage}

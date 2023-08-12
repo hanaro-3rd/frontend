@@ -1,6 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { createTestScheduler } from "jest";
+import { useRecoilState } from "recoil";
 import AccountConnectPageComponents from "../components/AccountConnectPageComponents/AccountConnectPageComponents";
+import { loginAtom } from "../recoil/loginAtom";
+import { navigateToLoginPage } from "../utils/NavigateToLoginPage";
 import { getRefresh } from "./api";
 
 const BASE_URL = "http://3.38.13.139:8081";
@@ -32,9 +36,18 @@ axiosRefreshClient.interceptors.request.use(async (config) => {
 
     return config;
   } catch {
-    
+    console.log("refrest Error")
   }
 });
+
+axiosRefreshClient.interceptors.request.use(async (response) => {
+ return response
+},
+async(error) => {
+ console.log("리프레쉬클라이언트",error)
+ return error
+}
+)
 
 axiosClient.interceptors.request.use(async (config) => {
   try {
@@ -55,22 +68,35 @@ axiosClient.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-
-    if (error.response.status === 401 && !originalRequest._retry) {
+    console.log("에러가 오긴 하니")
+    console.log(error.response.status)
+    if (error.response.status === 400 || error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      const newAccessToken = await getRefresh();
-      if(newAccessToken?.data?.refresh_token) {
-        await AsyncStorage.removeItem("refresh_token")
-        await AsyncStorage.setItem("refresh_token",JSON.stringify(newAccessToken?.data?.refresh_token))
+ 
+      try{
+        const newAccessToken = await getRefresh();
+        console.log("어세스토큰",newAccessToken)
+        if(newAccessToken?.data?.refresh_token) {
+          await AsyncStorage.removeItem("refresh_token")
+          await AsyncStorage.setItem("refresh_token",JSON.stringify(newAccessToken?.data?.refresh_token))
+        }
+        await AsyncStorage.removeItem("access_token");
+        await AsyncStorage.setItem(
+          "access_token",
+          JSON.stringify(newAccessToken.data.access_token)
+        );
+        console.log("newAccessToken",newAccessToken.data.access_token)
+        originalRequest.headers["Authorization"] = `Bearer ${await newAccessToken
+          .data.access_token}`;
+      } catch(err) {
+        console.log("err",err.response.data)
+        console.log("status",err.response.data.code)
+        if(err.response.data.code==400||err.response.data?.status==500) {
+          await AsyncStorage?.removeItem("refresh_token")
+          await AsyncStorage?.removeItem("access_token");
+        }
       }
-      await AsyncStorage.removeItem("access_token");
-      await AsyncStorage.setItem(
-        "access_token",
-        JSON.stringify(newAccessToken.data.access_token)
-      );
-      console.log("newAccessToken",newAccessToken.data.access_token)
-      originalRequest.headers["Authorization"] = `Bearer ${await newAccessToken
-        .data.access_token}`;
+    
       return axios(originalRequest);
     }
     return Promise.reject(error);
