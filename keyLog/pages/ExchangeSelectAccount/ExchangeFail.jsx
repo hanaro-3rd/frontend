@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import Close from "../../assets/accountImg/CloseButton.png";
 import FailImg from "../../assets/exchangeImg/Fail.png";
 import {
@@ -12,6 +12,10 @@ import {
 import DeleteHeader from "../../components/Header/DeleteHeader";
 
 const ExchangeFail = ({ navigation }) => {
+  const handleAgain = () => {
+    navigation.navigate("ExchangePage");
+  };
+
   return (
     <View style={styles.root}>
       <DeleteHeader navigation={navigation} to="MainPage" />
@@ -39,9 +43,9 @@ const ExchangeFail = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.footer}>
-        <View style={styles.submitButton}>
+        <TouchableOpacity onPress={handleAgain} style={styles.submitButton}>
           <Text style={styles.buttonText}>다시하기</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

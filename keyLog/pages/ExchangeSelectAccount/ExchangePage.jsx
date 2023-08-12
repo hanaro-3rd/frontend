@@ -117,6 +117,7 @@ export const ExchangePage = () => {
       return;
     }
     if (numericValue > 1000000) {
+      //한국돈 100만원보다 클때
       let exchangeMoney = Math.floor(1000000 / exchangeRate);
       console.log("exchangeRate", exchangeRate);
       console.log(exchangeMoney, "exchangeMoney1000000");
@@ -131,6 +132,7 @@ export const ExchangePage = () => {
       return;
     }
     if (numericValue / exchangeRate < minimumMoney) {
+      //입력값이 최소 환전 금액보다 작을 때
       const exchangeValue = minimumMoney;
       setForeignTextInput(`${exchangeValue}`);
       const koreaValue = Math.floor(exchangeValue * exchangeRate);
@@ -287,7 +289,6 @@ export const ExchangePage = () => {
                   keyboardType="numeric"
                   style={{ textAlign: "right" }}
                 />
-                {/* <Text style={styles.koreaMoneyText}>10,000 ~ 10,000,000</Text> */}
               </View>
               <View style={{ width: "100%" }}>
                 <Text
