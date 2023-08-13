@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import { View, Text } from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import React from "react";
-=======
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useEffect, useState, useRef } from "react";
@@ -33,19 +28,17 @@ const PickUpKeyPage = ({ navigation }) => {
   const queryClient = useQueryClient();
   const mapRef = useRef(null);
   const placesRef = useRef();
->>>>>>> 184cc0628ada441c547a8a17a85480e03c5f52de
 
   //마커 정보 가져오기
   const { data } = useQuery("getMarkers", async () => getMarkers(), {
     onSuccess: async (response) => {
-      
       console.log(response.data);
       // setMarkerList(response.data.result.markers);
-    }, 
-   
+    },
+
     onError: async (error) => {
-      console.log(error)
-      navigation.navigate("LoginPage")
+      console.log(error);
+      navigation.navigate("LoginPage");
     },
   });
 
@@ -89,8 +82,6 @@ const PickUpKeyPage = ({ navigation }) => {
   // }, []);
   return (
     <View style={{ flex: 1 }}>
-<<<<<<< HEAD
-=======
       <View
         style={{
           position: "absolute",
@@ -183,19 +174,10 @@ const PickUpKeyPage = ({ navigation }) => {
         </View>
       )}
 
->>>>>>> 184cc0628ada441c547a8a17a85480e03c5f52de
       <MapView
         style={{ flex: 1 }}
         provider={PROVIDER_GOOGLE}
         initialRegion={{
-<<<<<<< HEAD
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      />
-=======
           latitude: 37.545315,
           longitude: 127.057088,
           latitudeDelta: 0.001,
@@ -205,9 +187,7 @@ const PickUpKeyPage = ({ navigation }) => {
         showsMyLocationButton={true}
         region={location}
       >
-        {
-     
-        }
+        {}
         {markerList?.map((marker, idx) => {
           if (
             calculateDistance(
@@ -374,7 +354,6 @@ const PickUpKeyPage = ({ navigation }) => {
           <ElementView></ElementView>
         )}
       </MarkerList>
->>>>>>> 184cc0628ada441c547a8a17a85480e03c5f52de
     </View>
   );
 };
