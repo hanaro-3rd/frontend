@@ -1,3 +1,7 @@
+import AccountConnectSuccess from "./pages/AccountConnect/AccountConnectSuccess";
+import AccountConnectFail from "./pages/AccountConnect/AccountConnectFail";
+import ChooseAccountComponent from "./components/ExchangePageComponents/ChooseAccountComponent";
+import CountryChoiceComponent from "./components/ExchangePageComponents/CountryChoiceComponent";
 import {
   NavigationContainer,
   useFocusEffect,
@@ -9,52 +13,42 @@ import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import PaymentPageInputComponent from "./components/PaymentPageComponents/PaymentPageInputComponent";
 import TravelRecordDetailComponent from "./components/TravelRecordPageComponents/TravelRecordDetailComponent";
 import TravelRecordMainComponent from "./components/TravelRecordPageComponents/TravelRecordMainComponent";
-import AccountConnectPage from "./pages/AccountConnectPage";
-import ChooseAccount from "./pages/ExchangeSelectAccount/ChooseAccount";
+import AccountConnectPage from "./pages/AccountConnect/AccountConnectPage";
 import ExchangeFail from "./pages/ExchangeSelectAccount/ExchangeFail";
 import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
 import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
 import MainPage from "./pages/MainPage";
+import TestPaymentPage from "./pages/Payment/TestPaymentPage";
+import PaymentSuccessPage from "./pages/Payment/PaymentSuccessPage";
+import PaymentFailPage from "./pages/Payment/PaymentFailPage";
 import PickUpKeyPage from "./pages/PickUpKeyPage";
 import LoginPasswordPage from "./pages/SignUp/LoginPasswordPage";
 import LoginPatternPage from "./pages/SignUp/LoginPatternPage";
 import SignUpPage from "./pages/SignUp/SignUpPage";
+import ForeignPayHistoryPage from "./pages/ForeignPayHistoryPage";
+import OwnPayHistoryPage from "./pages/OwnPayHistoryPage";
 import TravelBudgetDetailPage from "./pages/TravelBudget/TravelBudgetDetailPage";
 import TravelBudgetPage from "./pages/TravelBudget/TravelBudgetPage";
 import TravelBudgetPlanPage from "./pages/TravelBudget/TravelBudgetPlanPage";
 import TravelSchedulePage from "./pages/TravelBudget/TravelSchedulePage";
 import TravelRecordPage from "./pages/TravelRecordPage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getRegistrationDeviceId } from "./api/api";
+import { getRefresh, getRegistrationDeviceId } from "./api/api";
 import DeviceInfo, { getDeviceId } from "react-native-device-info";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { loginAtom } from "./recoil/loginAtom";
+import usePermissions from "./hooks/usePermissions";
+import LoginPage from "./pages/SignUp/LoginPage";
+import ScanPage from "./pages/Payment/ScanPage";
+import SettingPage from "./pages/SettingPage";
+import TestPaymentSearchPage from "./pages/Payment/TestPaymentSearchPage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
   const [login, setLogin] = useRecoilState(loginAtom);
   const [isLoading, setLoading] = useState(true);
   const [haveDeviceId, setHaveDeviceId] = useState(false);
-
-  const checkToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      console.log(token);
-      if (token) {
-        // token이 있으면 MainPage로 이동
-        setLogin(true);
-      } else {
-        // token이 없으면 SignUpPage로 이동
-        setLogin(false);
-      }
-    } catch (error) {
-      // 에러 처리
-      console.log("AsyncStorage error:", error);
-      setLogin(false); // 에러 발생 시 로그인을 하지 않은 상태로 설정
-    } finally {
-      setLoading(false); // 로딩 상태를 false로 설정하여 초기 렌더링이 완료
-    }
-  };
+  usePermissions();
 
   const { data } = useQuery(
     "registration",
@@ -62,23 +56,53 @@ const App = () => {
     {
       //DeviceId가 존재할떄
       onSuccess: async (response) => {
-        console.log(await DeviceInfo.getUniqueId());
-        console.log(JSON.stringify(response.data));
+        // console.log(JSON.stringify(response));
+
         setHaveDeviceId(true);
+        try {
+          const token = await AsyncStorage.getItem("access_token");
+          console.log("access_token" + token);
+          console.log(
+            "refresh_token",
+            await AsyncStorage.getItem("refresh_token")
+          );
+          if (token) {
+            // token이 있으면 MainPage로 이동
+            setLogin(true);
+          } else {
+            // token이 없으면 SignUpPage로 이동
+            setLogin(false);
+          }
+        } catch (error) {
+          // 에러 처리
+          console.log("AsyncStorage error:", error);
+          setLogin(false); // 에러 발생 시 로그인을 하지 않은 상태로 설정
+        } finally {
+          setLoading(false); // 로딩 상태를 false로 설정하여 초기 렌더링이 완료
+        }
       },
       //DeviceId가 존재하지 않을 때
       onError: async (error) => {
-        console.log(await DeviceInfo.getUniqueId());
         console.log("error");
         setHaveDeviceId(false);
+        try {
+          const token = await AsyncStorage.getItem("token");
+          if (token) {
+            // token이 있으면 MainPage로 이동
+            setLogin(true);
+          } else {
+            // token이 없으면 SignUpPage로 이동
+            setLogin(false);
+          }
+        } catch (error) {
+          // 에러 처리
+          setLogin(false); // 에러 발생 시 로그인을 하지 않은 상태로 설정
+        } finally {
+          setLoading(false); // 로딩 상태를 false로 설정하여 초기 렌더링이 완료
+        }
       },
     }
   );
-  console.log("74" + login);
-  useEffect(() => {
-    console.log("useeffect" + "돌아가긴하니" + login);
-    checkToken();
-  }, [login]);
 
   if (isLoading) {
     // 로딩 상태일 동안에는 아무것도 렌더링X
@@ -86,26 +110,98 @@ const App = () => {
   }
   return (
     <NavigationContainer>
-      {/* <Stack.Navigator
-        initialRouteName={
-          login ? "MainPage" : haveDeviceId ? "LoginPasswordPage" : "SignUpPage"
-        }
-      > */}
-      <Stack.Navigator initialRouteName="TravelBudgetPage">
+      <Stack.Navigator initialRouteName={login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"}>
+
         <Stack.Screen
           name="MainPage"
           component={MainPage}
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="TestPaymentSearchPage"
+          component={TestPaymentSearchPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ForeignPayHistoryPage"
+          component={ForeignPayHistoryPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="OwnPayHistoryPage"
+          component={OwnPayHistoryPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ScanPage"
+          component={ScanPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TestPaymentPage"
+          component={TestPaymentPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PaymentSuccessPage"
+          component={PaymentSuccessPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PaymentFailPage"
+          component={PaymentFailPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SettingPage"
+          component={SettingPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="AccountConnectPage"
           component={AccountConnectPage}
+          options={{ headerShown: false }}
         />
-        <Stack.Screen name="ExchangePage" component={ExchangePage} />
-        <Stack.Screen name="ExchangeSuccess" component={ExchangeSuccess} />
-        <Stack.Screen name="ExchangeFail" component={ExchangeFail} />
-        <Stack.Screen name="ChooseAccount" component={ChooseAccount} />
-        <Stack.Screen name="PickUpKeyPage" component={PickUpKeyPage} />
+        <Stack.Screen
+          name="AccountConnectSuccess"
+          component={AccountConnectSuccess}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AccountConnectFail"
+          component={AccountConnectFail}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ChooseAccountComponent"
+          component={ChooseAccountComponent}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ExchangePage"
+          component={ExchangePage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CountryChoiceComponent"
+          component={CountryChoiceComponent}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ExchangeSuccess"
+          component={ExchangeSuccess}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ExchangeFail"
+          component={ExchangeFail}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PickUpKeyPage"
+          component={PickUpKeyPage}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="SignUpPage"
           component={SignUpPage}
@@ -119,6 +215,11 @@ const App = () => {
         <Stack.Screen
           name="LoginPatternPage"
           component={LoginPatternPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="LoginPage"
+          component={LoginPage}
           options={{ headerShown: false }}
         />
         <Stack.Screen

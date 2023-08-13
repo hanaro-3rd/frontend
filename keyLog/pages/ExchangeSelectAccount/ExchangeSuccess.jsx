@@ -1,16 +1,23 @@
-import { StyleSheet, View, Text, Image, Dimensions } from "react-native";
+import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity } from "react-native";
 import Close from "../../assets/accountImg/CloseButton.png";
 import Success from "../../assets/exchangeImg/Success.png";
 import Vector from "../../assets/accountImg/Vector.png";
-// import theme from "../../theme";
+import {
+  fontPercentage,
+  getStatusBarHeight,
+  heightPercentage,
+  phoneHeight,
+  phoneWidth,
+  widthPercentage,
+} from "../../utils/ResponseSize";
+import DeleteHeader from "../../components/Header/DeleteHeader";
 
-const ExchangeSuccess = () => {
+const ExchangeSuccess = ({ navigation,route }) => {
+  const {exchangeToUnit,exchangeToMoney, exchangeFromMoney,exchangeFromUnit} = route?.params
   return (
     <View style={styles.root}>
       <View>
-        <View style={styles.header}>
-          <Image source={Close} />
-        </View>
+        <DeleteHeader navigation={navigation} to="MainPage" />
         <View style={styles.body}>
           <View style={styles.bodyHeader}>
             <Text style={styles.title}>환전 완료</Text>
@@ -31,13 +38,13 @@ const ExchangeSuccess = () => {
                 <Text style={styles.containerTitle}>환전 금액</Text>
                 <View style={styles.exchangeMoneyBox}>
                   <View style={styles.koreaMoneyContianer}>
-                    <Text style={styles.koreaMoneyUnitText}>KRW</Text>
-                    <Text style={styles.koreaMoneyText}>1,300,000</Text>
+                    <Text style={styles.koreaMoneyUnitText}>{exchangeToUnit}</Text>
+                    <Text style={styles.koreaMoneyText}>{exchangeToMoney}</Text>
                   </View>
                   <Image source={Vector} />
                   <View style={styles.foreignMoneyContainer}>
-                    <Text style={styles.foreignMoneyUnitText}>USD</Text>
-                    <Text style={styles.foreignMoneyText}>1,000</Text>
+                    <Text style={styles.foreignMoneyUnitText}>{exchangeFromUnit}</Text>
+                    <Text style={styles.foreignMoneyText}>{exchangeFromMoney}</Text>
                   </View>
                 </View>
               </View>
@@ -59,16 +66,14 @@ const ExchangeSuccess = () => {
         </View>
       </View>
       <View style={styles.footer}>
-        <View style={styles.submitButton}>
+        <TouchableOpacity style={styles.submitButton} onPress={()=>navigation.navigate("MainPage")}>
           <Text style={styles.buttonText}>하나머니 확인하기</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
 export default ExchangeSuccess;
-
-const { height } = Dimensions.get("window");
 
 export const styles = StyleSheet.create({
   root: {
@@ -80,24 +85,24 @@ export const styles = StyleSheet.create({
   },
   header: {
     alignItems: "flex-start",
-    gap: 10,
+    gap: heightPercentage(10),
     alignSelf: "stretch",
     backgroundColor: "#FFF",
     flexDirection: "row",
-    paddingVertical: 13,
-    paddingHorizontal: 12,
+    paddingVertical: heightPercentage(13),
+    paddingHorizontal: widthPercentage(12),
   },
   title: {
     color: "#191F29",
     fontFamily: "Inter",
-    fontSize: 23,
+    fontSize: fontPercentage(23),
     fontStyle: "normal",
     fontWeight: "700",
   },
   subtitle: {
     color: "#8B95A1",
     fontFamily: "Inter",
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontStyle: "normal",
     fontWeight: "400",
   },
@@ -108,122 +113,122 @@ export const styles = StyleSheet.create({
   },
   bodyHeader: {
     flexDirection: "column",
-    gap: 10,
+    gap: heightPercentage(10),
     alignSelf: "stretch",
     backgroundColor: "#FFF",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(20),
   },
   bodyMain: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 20,
+    gap: heightPercentage(20),
     flexGrow: 1,
     alignSelf: "stretch",
     backgroundColor: "#FFF",
-    paddingHorizontal: 25,
+    paddingHorizontal: widthPercentage(25),
   },
   mainIconContainer: {
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    paddingVertical: 10,
+    paddingVertical: heightPercentage(10),
   },
   containerTitle: {
     alignSelf: "stretch",
     color: "#191F29",
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontWeight: "700",
   },
   koreaMoneyUnitText: {
     color: "#191F29",
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontWeight: "700",
   },
   koreaMoneyText: {
     color: "#191F29",
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontWeight: "400",
   },
   exchangeInformationContainer: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 20,
+    gap: heightPercentage(20),
   },
   exchangeMoneyContainer: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
+    gap: heightPercentage(10),
     alignSelf: "stretch",
   },
   exchangeMoneyBox: {
-    width: 350,
-    height: 65,
+    width: widthPercentage(350),
+    height: heightPercentage(65),
     justifyContent: "space-between",
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#8B95A1",
     borderStyle: "solid",
     flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 25,
+    paddingVertical: heightPercentage(10),
+    paddingHorizontal: widthPercentage(25),
     borderRadius: 5,
   },
   koreaMoneyContianer: {
-    width: 130,
+    width: widthPercentage(130),
     alignItems: "center",
-    gap: 10,
+    gap: widthPercentage(10),
     flexDirection: "row",
   },
   foreignMoneyUnitText: {
     color: "#191F29",
     fontFamily: "Inter",
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontStyle: "normal",
     fontWeight: "700",
   },
   foreignMoneyText: {
     color: "#191F29",
     fontFamily: "Inter",
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontStyle: "normal",
     fontWeight: "400",
   },
   foreignMoneyContainer: {
-    width: 130,
+    width: widthPercentage(130),
     alignItems: "center",
-    gap: 10,
+    gap: widthPercentage(10),
     flexDirection: "row",
   },
   containerTitle2: {
     alignSelf: "stretch",
     color: "#191F29",
     fontFamily: "Inter",
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontStyle: "normal",
     fontWeight: "700",
   },
   countryText: {
     color: "#191F29",
-    fontSize: 18,
+    fontSize: fontPercentage(18),
     fontStyle: "normal",
     fontWeight: "700",
   },
   unitText: {
     color: "#191F29",
-    fontSize: 12,
+    fontSize: fontPercentage(12),
     fontStyle: "normal",
     fontWeight: "400",
   },
   exchangeRateContainer: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 10,
+    gap: heightPercentage(10),
     alignSelf: "stretch",
   },
   currentExchangeRateContainer: {
-    height: 65,
+    height: heightPercentage(65),
     justifyContent: "space-between",
     alignItems: "center",
     alignSelf: "stretch",
@@ -232,38 +237,38 @@ export const styles = StyleSheet.create({
     borderStyle: "solid",
     backgroundColor: "#FFF",
     flexDirection: "row",
-    paddingVertical: 5,
-    paddingHorizontal: 20,
+    paddingVertical: heightPercentage(5),
+    paddingHorizontal: widthPercentage(20),
     borderRadius: 5,
   },
   countryInformationContainer: {
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
+    gap: widthPercentage(10),
     flexDirection: "row",
   },
   exchangeRateText: {
     color: "#191F29",
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontStyle: "normal",
     fontWeight: "700",
   },
   changeRateText: {
     color: "#0A7DF2",
-    fontSize: 12,
+    fontSize: fontPercentage(12),
     fontStyle: "normal",
     fontWeight: "700",
   },
   currentExchangeRateTextContainer: {
     justifyContent: "flex-end",
     alignItems: "center",
-    gap: 10,
+    gap: widthPercentage(10),
     flexDirection: "row",
   },
   buttonText: {
     color: "#FFF",
     fontFamily: "Inter",
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontStyle: "normal",
     fontWeight: "700",
   },
@@ -271,21 +276,21 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-end",
     alignItems: "center",
-    gap: 20,
+    gap: heightPercentage(20),
     alignSelf: "stretch",
     backgroundColor: "#FFF",
-    paddingVertical: 15,
-    paddingHorizontal: 25,
+    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(25),
   },
   submitButton: {
-    height: 55,
+    height: heightPercentage(55),
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
+    gap: heightPercentage(10),
     alignSelf: "stretch",
     backgroundColor: "#55ACEE",
     flexDirection: "row",
-    padding: 10,
+    padding: widthPercentage(10),
     borderRadius: 10,
   },
 });

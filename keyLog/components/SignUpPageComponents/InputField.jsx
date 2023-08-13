@@ -51,7 +51,10 @@ const styles = StyleSheet.create({
 });
 
 const InputField = React.forwardRef(
-  ({ placeholder, handlePress, value, onChangeText, hasError }, ref) => (
+  (
+    { placeholder, handlePress, value, onChangeText, hasError, onBlur },
+    ref
+  ) => (
     <View style={styles.inputFieldWrapper}>
       <TouchableOpacity
         style={[styles.inputFieldContainer, hasError && styles.errorInputField]}
@@ -59,6 +62,7 @@ const InputField = React.forwardRef(
       >
         <TextInput
           ref={ref}
+          onBlur={onBlur}
           style={styles.inputField}
           placeholder={placeholder}
           value={value}

@@ -11,11 +11,15 @@ import styled from "styled-components/native";
 
 import MainCarousels from "../components/MainPageComponents/MainCarousels";
 import arrow_next from "../assets/Main/arrow_next.png";
+import Scan from "../assets/Main/scan.png";
 import SettingButton from "../assets/Main/SettingButton.png";
 import arrow_prev from "../assets/Main/arrow_prev.png";
 import CarouselMoneyIcon from "../assets/Main/CarouselIcon.png";
+import CarouselIconKeymoney from "../assets/Main/CarouselIconKeymoney.png";
 import CarouselAccountIcon from "../assets/Main/CarouselAccountIcon.png";
 import CarouselHanaMoneyIcon from "../assets/Main/CarouselHanaMoneyIcon.png";
+import CarouselRecordIcon from "../assets/Main/CarouselRecordIcon.png";
+import CarouselPickUpIcon from "../assets/Main/CarouselPickUpIcon.png";
 import CountryIcon from "../assets/Main/CountryIcon.png";
 import KeyPickIcon from "../assets/Main/MenuIcon1.png";
 import PlanTravelBudgetIcon from "../assets/Main/MenuIcon2.png";
@@ -30,47 +34,56 @@ import HanaLifeIcon from "../assets/Main/HanaServiceIcon4.png";
 import HanaStockIcon from "../assets/Main/HanaServiceIcon5.png";
 import HanaSavingIcon from "../assets/Main/HanaServiceIcon6.png";
 import React, { useState, useEffect } from "react";
+import Swiper from "react-native-swiper";
 
 const MainPage = ({ navigation }) => {
   {
     /* carousel 관련 */
   }
-  const originalMainCardContent = {
+  const firstMainCardContent = {
     subTitle: "어디서든 쓸 수 있는",
-    title: "하나머니",
-    imageSource: CarouselMoneyIcon,
-    buttonText: "하나머니 확인하기",
+    title: "키머니",
+    imageSource: CarouselIconKeymoney,
+    buttonText: "키머니 확인하기",
   };
-  const updatedMainCardContent = {
-    subTitle: "계좌연결",
-    title: "어쩌구저쩌구",
+  const secondMainCardContent = {
+    subTitle: "3초만에 간편하게",
+    title: "계좌연결",
     imageSource: CarouselAccountIcon,
     buttonText: "계좌연결하기",
   };
   const thirdMainCardContent = {
-    subTitle: "어디서든 쓸 수 있는",
-    title: "하나머니",
+    subTitle: "수수료 걱정없는",
+    title: "환전하기",
     imageSource: CarouselHanaMoneyIcon,
-    buttonText: "하나머니 환전하기",
+    buttonText: "키머니 환전하기",
+  };
+  const fourthMainCardContent = {
+    subTitle: "뭐하지상준아",
+    title: "여행기록",
+    imageSource: CarouselRecordIcon,
+    buttonText: "여행 기록 확인하기",
+  };
+  const fifthMainCardContent = {
+    subTitle: "뭐하지상준아2",
+    title: "키줍기",
+    imageSource: CarouselPickUpIcon,
+    buttonText: "키머니 줍기",
   };
 
-  const [activeContentIndex, setActiveContentIndex] = useState(0);
   const contents = [
-    originalMainCardContent,
-    updatedMainCardContent,
+    firstMainCardContent,
+    secondMainCardContent,
     thirdMainCardContent,
+    fourthMainCardContent,
+    fifthMainCardContent,
   ];
-  const mainCardContent = contents[activeContentIndex];
-
-  const handleCarouselCardPress = () => {
-    setActiveContentIndex((prevIndex) => (prevIndex + 1) % contents.length);
-  };
 
   {
     /* styled-components */
   }
   const Main = styled.ScrollView`
-    margin-top: ${getStatusBarHeight}px;
+    /* margin-top: ${getStatusBarHeight}px; */
     min-height: ${phoneHeight}px;
     width: 100%;
     background-color: #f2f4f6;
@@ -83,6 +96,7 @@ const MainPage = ({ navigation }) => {
     align-items: center;
     flex-direction: row;
     align-self: stretch;
+    padding: ${heightPercentage(13)}px ${widthPercentage(12)}px;
   `;
   const LogoText = styled.Text`
     color: #191f29;
@@ -93,7 +107,9 @@ const MainPage = ({ navigation }) => {
     font-weight: 400;
   `;
   const SettingImage = styled.Image`
-    margin-right: ${widthPercentage(13)}px;
+    width: ${widthPercentage(24)}px;
+    height: ${heightPercentage(24)}px;
+    /* margin-right: ${widthPercentage(13)}px; */
   `;
   const BodyHeader = styled.View`
     padding: ${heightPercentage(10)}px ${widthPercentage(20)}px;
@@ -163,7 +179,7 @@ const MainPage = ({ navigation }) => {
   `;
   const CountryExchangeRateContainer = styled.View`
     width: ${widthPercentage(310)}px;
-    height: ${heightPercentage(70)};
+    height: ${heightPercentage(70)}px;
     display: flex;
     padding: ${heightPercentage(5)}px 0px;
     align-items: center;
@@ -245,7 +261,7 @@ const MainPage = ({ navigation }) => {
 
   const MenuContainer = styled.View`
     width: ${widthPercentage(390)}px;
-    height: ${heightPercentage(1000)}px;
+    height: ${heightPercentage(840)}px;
     padding: ${heightPercentage(30)}px ${widthPercentage(20)}px;
     flex-direction: column;
     align-items: center;
@@ -348,13 +364,43 @@ const MainPage = ({ navigation }) => {
     border-radius: 5px;
   `;
 
+  const Setting = styled.View`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-direction: row;
+  `;
+
+  const KeyMoneyImage = styled.Image`
+    width: ${widthPercentage(80)}px;
+    height: ${heightPercentage(80)}px;
+  `;
+
+  const CustomSwiper = styled(Swiper)`
+    display: flex;
+    height: ${heightPercentage(320)}px;
+    padding-top: ${heightPercentage(20)}px;
+    padding-bottom: ${heightPercentage(30)}px;
+    margin: 0px ${widthPercentage(45)}px;
+    /* margin-bottom: ${heightPercentage(30)}px; */
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    flex-direction: row;
+  `;
+
   return (
     <Main>
       <Header>
-        <LogoText>트래블 하나로</LogoText>
-        <TouchableOpacity onPress={() => navigation.navigate("SignUpPage")}>
-          <SettingImage source={SettingButton} />
-        </TouchableOpacity>
+        <LogoText>키로그</LogoText>
+        <Setting>
+          <TouchableOpacity onPress={() => navigation.navigate("ScanPage")}>
+            <SettingImage source={Scan} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("SettingPage")}>
+            <SettingImage source={SettingButton} />
+          </TouchableOpacity>
+        </Setting>
       </Header>
 
       {/*사용자*/}
@@ -364,16 +410,20 @@ const MainPage = ({ navigation }) => {
 
       {/*메뉴 carousel card*/}
       <BodyMain>
-        <MenuCarousels>
-          <TouchableOpacity onPress={handleCarouselCardPress}>
-            <CarouselCard />
-          </TouchableOpacity>
-          <MainCarousels content={mainCardContent}></MainCarousels>
-          <TouchableOpacity onPress={handleCarouselCardPress}>
-            <CarouselCard />
-          </TouchableOpacity>
-        </MenuCarousels>
-
+        <CustomSwiper
+          loop={true} // 무한 루프로 스와이프할 수 있도록 설정
+          autoplay={true} // 자동 재생 비활성화
+        >
+          {/* <CarouselCard /> */}
+          {contents.map((content, index) => (
+            <MainCarousels
+              key={index}
+              navigation={navigation}
+              content={content}
+              onnPress={() => handleCarouselCardPress(content.buttonText)}
+            />
+          ))}
+        </CustomSwiper>
         {/* 환율 */}
         <ExchangeRateContainer>
           <PrevOrNextButton>
@@ -407,25 +457,11 @@ const MainPage = ({ navigation }) => {
             <Image source={KeyPickIcon} />
             <MenuSubContainer>
               <MenuTextContainer>
-                <MenuTitle>하나머니 줍기</MenuTitle>
-                <MenuSubtitle>여행을 떠나서 하나머니를 주워봐용</MenuSubtitle>
+                <MenuTitle>키머니 줍기</MenuTitle>
+                <MenuSubtitle>여행을 떠나서 키머니를 주워봐용</MenuSubtitle>
               </MenuTextContainer>
               <MenuButton onPress={() => navigation.navigate("PickUpKeyPage")}>
                 <MenuButtonText>주우러 가기</MenuButtonText>
-              </MenuButton>
-            </MenuSubContainer>
-          </MenuCard>
-          <MenuCard>
-            <Image source={PlanTravelBudgetIcon} />
-            <MenuSubContainer>
-              <MenuTextContainer>
-                <MenuTitle>여행 경비 계획하기</MenuTitle>
-                <MenuSubtitle>여행 경비를 계획해보아용</MenuSubtitle>
-              </MenuTextContainer>
-              <MenuButton
-                onPress={() => navigation.navigate("TravelBudgetPage")}
-              >
-                <MenuButtonText>계획하러 가기</MenuButtonText>
               </MenuButton>
             </MenuSubContainer>
           </MenuCard>
@@ -437,7 +473,7 @@ const MainPage = ({ navigation }) => {
                 <MenuSubtitle>여행 기록을 확인해보아용</MenuSubtitle>
               </MenuTextContainer>
               <MenuButton
-                onPress={() => navigation.navigate("TravelRecordMainComponent")}
+                onPress={() => navigation.navigate("TravelBudgetPage")}
               >
                 <MenuButtonText fontPercentage={fontPercentage}>
                   확인하러 가기
@@ -446,11 +482,11 @@ const MainPage = ({ navigation }) => {
             </MenuSubContainer>
           </MenuCard>
           <MenuCard>
-            <Image source={MoneyIcon} />
+            <KeyMoneyImage source={CarouselIconKeymoney} />
             <MenuSubContainer>
               <MenuTextContainer>
-                <MenuTitle>하나머니 확인하기</MenuTitle>
-                <MenuSubtitle>내 하나머니를 확인해보아용</MenuSubtitle>
+                <MenuTitle>키머니 확인하기</MenuTitle>
+                <MenuSubtitle>내 키머니를 확인해보아용</MenuSubtitle>
               </MenuTextContainer>
               <MenuButton
               // onPress={() => }
@@ -463,12 +499,10 @@ const MainPage = ({ navigation }) => {
             <Image source={ExchangeIcon} />
             <MenuSubContainer>
               <MenuTextContainer>
-                <MenuTitle>하나머니 환전하기</MenuTitle>
-                <MenuSubtitle>하나머니를 환전해보아용</MenuSubtitle>
+                <MenuTitle>키머니 환전하기</MenuTitle>
+                <MenuSubtitle>키머니를 환전해보아용</MenuSubtitle>
               </MenuTextContainer>
-              <MenuButton
-              // onPress={() => navigation.navigate("")}
-              >
+              <MenuButton onPress={() => navigation.navigate("ExchangePage")}>
                 <MenuButtonText fontPercentage={fontPercentage}>
                   환전하러 가기
                 </MenuButtonText>

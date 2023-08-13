@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useMutation, useQueryClient } from 'react-query';
-import { postVerificationAuth } from '../../api/api';
+import { postVerification, postVerificationAuth } from '../../api/api';
 import CloseButton from '../../assets/SignUp/CloseButton.svg';
 import {
   fontPercentage,
@@ -28,22 +28,26 @@ const ModalContent = ({
   const queryClient = useQueryClient();
 
   const postVerificationAuthMutation = useMutation(postVerificationAuth, {
-    onSuccess: (data) => {
+    onSuccess: data => {
       queryClient.invalidateQueries('verificationAuth');
-      console.log("postverificationAuthMutation"+data)
+      console.log('postverificationAuthMutation' + data);
     },
-    onError:(error) =>{
-      console.log(error+"verificationAuth")
-    }
+    onError: error => {
+      console.log(error.message);
+      console.log(error + 'verificationAuth');
+    },
   });
 
-  const handleVerificationAuth = e => {
+  const handleVerificationAuth = async e => {
     e.preventDefault();
+    console.log(phoneNumber);
+    console.log(inputText);
     postVerificationAuthMutation.mutate({
       code: inputText,
+      phonenum: phoneNumber,
     });
-    //글자 초기화
-    setModalVisible(false);
+
+    await setModalVisible(false);
     goToLoginPasswordPage();
   };
 
@@ -62,7 +66,7 @@ const ModalContent = ({
   const [buttonEnabled, setButtonEnabled] = useState(true);
 
   const inputRef = useRef(null);
- // acceess,refresh 둘 다 발급 
+  // TODO: acceess,refresh 둘 다 발급
   useEffect(() => {
     if (!modalVisible) {
       setRemainTime(180);
@@ -109,9 +113,16 @@ const ModalContent = ({
     }
   };
 
-  const resendCode = () => {
-    console.log('Resend code clicked');
-    // 여기에 인증 코드를 재전송하는 로직을 작성하세요.
+  const postVerificationMutation = useMutation(postVerification, {
+    onSuccess: data => {
+      queryClient.invalidateQueries('verification');
+      console.log('Response Data:', data);
+    },
+  });
+
+  const resendCode = e => {
+    e.preventDefault();
+    postVerificationMutation.mutate({ phonenum: phoneNumber });
   };
 
   return (

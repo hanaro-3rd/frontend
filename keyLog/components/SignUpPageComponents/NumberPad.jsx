@@ -1,16 +1,16 @@
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import BackSpace from '../../assets/SignUp/BackSpace.svg';
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import BackSpace from "../../assets/SignUp/BackSpace.svg";
 import {
   fontPercentage,
   heightPercentage,
   widthPercentage,
-} from '../../utils/ResponseSize';
+} from "../../utils/ResponseSize";
 
 const NumberPad = ({ onNumPress, onBackspacePress }) => {
   return (
     <View style={styles.numberPad}>
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
         <TouchableOpacity key={num} onPress={() => onNumPress(num.toString())}>
           <View style={styles.number}>
             <Text style={styles.num}>{num}</Text>
@@ -20,7 +20,7 @@ const NumberPad = ({ onNumPress, onBackspacePress }) => {
       <View style={styles.number}>
         <Text style={styles.num}></Text>
       </View>
-      <TouchableOpacity onPress={() => onNumPress('0')}>
+      <TouchableOpacity onPress={() => onNumPress("0")}>
         <View style={styles.number}>
           <Text style={styles.num}>0</Text>
         </View>
@@ -40,26 +40,26 @@ export default NumberPad;
 
 const styles = StyleSheet.create({
   numberPad: {
-    alignItems: 'center',
-    alignContent: 'center',
-    alignSelf: 'stretch',
-    flexWrap: 'wrap',
-    backgroundColor: '#FFF',
-    flexDirection: 'row',
+    alignItems: "center",
+    alignContent: "center",
+    alignSelf: "stretch",
+    flexWrap: "wrap",
+    backgroundColor: "#FFF",
+    flexDirection: "row",
   },
   number: {
     width: widthPercentage(130),
     height: heightPercentage(60),
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
   },
   num: {
-    color: '#191F29',
-    textAlign: 'center',
-    fontFamily: 'Inter',
+    color: "#191F29",
+    textAlign: "center",
+    fontFamily: "Inter",
     fontSize: fontPercentage(24),
-    fontStyle: 'normal',
-    fontWeight: '400',
+    fontStyle: "normal",
+    fontWeight: "400",
   },
 });

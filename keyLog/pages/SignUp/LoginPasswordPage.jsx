@@ -1,17 +1,21 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import NumberPad from '../../components/SignUpPageComponents/NumberPad';
-import PasswordSymbol from '../../components/SignUpPageComponents/PasswordSymbol';
-import { fontPercentage, heightPercentage } from '../../utils/ResponseSize';
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import NumberPad from "../../components/SignUpPageComponents/NumberPad";
+import PasswordSymbol from "../../components/SignUpPageComponents/PasswordSymbol";
+import { fontPercentage, heightPercentage } from "../../utils/ResponseSize";
 
 const LoginPasswordPage = ({ route }) => {
   const navigation = useNavigation();
 
-  const { name, phoneNumber, personalNumber } = route.params;
+  const {
+    name = "이수창",
+    phoneNumber = "01063572816",
+    personalNumber = "970917-1111111",
+  } = route?.params;
 
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isConfirming, setIsConfirming] = useState(false);
   const [isPasswordMismatch, setIsPasswordMismatch] = useState(false);
   const [alertInconsistencyPassword, setAlertInconsistencyPassword] =
@@ -35,7 +39,7 @@ const LoginPasswordPage = ({ route }) => {
   //   goToLoginPasswordPage();
   // };
 
-  const handleNumPress = num => {
+  const handleNumPress = (num) => {
     if (alertInconsistencyPassword) {
       resetPasswordProcess();
       setAlertInconsistencyPassword(false);
@@ -63,36 +67,36 @@ const LoginPasswordPage = ({ route }) => {
   const resetPasswordProcess = () => {
     setIsConfirming(false);
     setIsPasswordMismatch(false);
-    setConfirmPassword('');
-    setPassword('');
+    setConfirmPassword("");
+    setPassword("");
   };
 
   useEffect(() => {
-    if (password === '' && confirmPassword === '') {
+    if (password === "" && confirmPassword === "") {
       setAlertInconsistencyPassword(true);
     }
   }, [password, confirmPassword]);
 
   useEffect(() => {
-    console.log('password state', password);
+    console.log("password state", password);
     if (password.length === 6 && !isConfirming) {
       setIsConfirming(true);
     }
 
     console.log(confirmPassword);
-
+    
     if (confirmPassword.length === 6) {
       if (password === confirmPassword) {
-        console.log('Passwords match');
+        console.log("Passwords match");
         setIsPasswordMismatch(false);
-        navigation.navigate('LoginPatternPage', {
+        navigation.navigate("LoginPatternPage", {
           name,
           phoneNumber,
           personalNumber,
           password,
         });
       } else {
-        console.log('Passwords do not match');
+        console.log("Passwords do not match");
         setIsPasswordMismatch(true);
         setIsConfirming(true);
       }
@@ -106,11 +110,11 @@ const LoginPasswordPage = ({ route }) => {
   }, [isPasswordMismatch]);
 
   const goToMainPage = () => {
-    navigation.replace('MainPage');
+    navigation.replace("MainPage");
   };
 
   const goToLoginPatternPage = () => {
-    navigation.navigate('LoginPatternPage', {
+    navigation.navigate("LoginPatternPage", {
       name,
       phoneNumber,
       personalNumber,
@@ -126,8 +130,8 @@ const LoginPasswordPage = ({ route }) => {
           <View style={styles.textContainer}>
             <Text style={styles.mainText}>
               {isConfirming && !isPasswordMismatch
-                ? '확인을 위해 비밀번호를 한 번 더 입력해주세요'
-                : '잠금해제 비밀번호를 설정해주세요'}
+                ? "확인을 위해 비밀번호를 한 번 더 입력해주세요"
+                : "잠금해제 비밀번호를 설정해주세요"}
             </Text>
             <PasswordSymbol
               isConfirming={isConfirming}
@@ -163,58 +167,58 @@ export default LoginPasswordPage;
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    backgroundColor: '#F2F4F6',
+    flexDirection: "column",
+    alignItems: "flex-start",
+    backgroundColor: "#F2F4F6",
   },
   header: {
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
     flexShrink: 0,
-    alignSelf: 'stretch',
-    backgroundColor: '#FFF',
-    flexDirection: 'row',
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
+    flexDirection: "row",
     paddingVertical: heightPercentage(13),
   },
   mainText: {
-    color: '#191F29',
-    textAlign: 'center',
-    fontFamily: 'Inter',
+    color: "#191F29",
+    textAlign: "center",
+    fontFamily: "Inter",
     fontSize: fontPercentage(20),
-    fontStyle: 'normal',
-    fontWeight: '700',
+    fontStyle: "normal",
+    fontWeight: "700",
   },
   body: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
+    flexDirection: "column",
+    alignItems: "flex-start",
     flexGrow: 1,
     flexShrink: 0,
     flexBasis: 0,
-    alignSelf: 'stretch',
-    backgroundColor: '#FFF',
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
   },
   bodyMain: {
     flex: 1,
     paddingTop: heightPercentage(150),
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    alignSelf: 'stretch',
-    backgroundColor: '#FFF',
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
   },
   textContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
     gap: heightPercentage(30),
   },
   bodyFooter: {
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    alignItems: "center",
     gap: heightPercentage(10),
     height: heightPercentage(71),
-    alignSelf: 'stretch',
-    backgroundColor: '#FFF',
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
     paddingVertical: heightPercentage(15),
   },
 });

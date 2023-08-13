@@ -1,13 +1,20 @@
 import { StyleSheet, View, Text, Image } from "react-native";
 import Close from "../../assets/accountImg/CloseButton.png";
 import FailImg from "../../assets/exchangeImg/Fail.png";
+import {
+  fontPercentage,
+  getStatusBarHeight,
+  heightPercentage,
+  phoneHeight,
+  phoneWidth,
+  widthPercentage,
+} from "../../utils/ResponseSize";
+import DeleteHeader from "../../components/Header/DeleteHeader";
 
-const ExchangeFail = () => {
+const ExchangeFail = ({ navigation }) => {
   return (
     <View style={styles.root}>
-      <View style={styles.header}>
-        <Image source={Close} />
-      </View>
+      <DeleteHeader navigation={navigation} to="MainPage" />
       <View style={styles.body}>
         <View style={styles.bodyHeader}>
           <Text style={styles.title}>환전 실패</Text>
@@ -50,21 +57,21 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "flex-start",
-    gap: 10,
+    gap: heightPercentage(10),
     alignSelf: "stretch",
     backgroundColor: "#FFF",
     flexDirection: "row",
-    paddingVertical: 13,
-    paddingHorizontal: 12,
+    paddingVertical: heightPercentage(13),
+    paddingHorizontal: widthPercentage(12),
   },
   title: {
     color: "#191F29",
-    fontSize: 23,
+    fontSize: fontPercentage(23),
     fontWeight: "700",
   },
   subtitle: {
     color: "#8B95A1",
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontWeight: "400",
   },
   body: {
@@ -79,11 +86,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "flex-start",
-    gap: 10,
+    gap: heightPercentage(10),
     alignSelf: "stretch",
     backgroundColor: "#FFF",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(20),
   },
   FailImg: {
     width: 150,
@@ -92,65 +99,63 @@ const styles = StyleSheet.create({
   bodyMain: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 20,
+    gap: heightPercentage(20),
     flexGrow: 1,
     flexShrink: 0,
     flexBasis: 0,
     alignSelf: "stretch",
     backgroundColor: "#FFF",
-    paddingVertical: 0,
-    paddingHorizontal: 25,
+    paddingHorizontal: widthPercentage(25),
   },
   mainIconContainer: {
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
+    gap: heightPercentage(10),
     flexDirection: "row",
-    paddingVertical: 29,
-    paddingHorizontal: 0,
+    paddingVertical: heightPercentage(29),
   },
   informationText: {
     color: "#4E5968",
-    fontSize: 13,
+    fontSize: fontPercentage(13),
     fontWeight: "400",
   },
   informationText2: {
     color: "#4E5968",
-    fontSize: 13,
+    fontSize: fontPercentage(13),
     fontWeight: "400",
   },
   exchangeInformationContainer: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 20,
+    gap: heightPercentage(20),
   },
   informationContainer: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "flex-start",
-    gap: 10,
+    gap: heightPercentage(10),
     alignSelf: "stretch",
   },
   buttonText: {
     color: "#FFF",
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontWeight: "700",
   },
   footer: {
     flexDirection: "column",
     justifyContent: "flex-end",
     alignItems: "center",
-    gap: 20,
+    gap: heightPercentage(20),
     alignSelf: "stretch",
     backgroundColor: "#FFF",
-    paddingVertical: 15,
-    paddingHorizontal: 25,
+    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(25),
   },
   submitButton: {
-    height: 55,
+    height: heightPercentage(55),
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
+    gap: heightPercentage(10),
     alignSelf: "stretch",
     backgroundColor: "#55ACEE",
     flexDirection: "row",
