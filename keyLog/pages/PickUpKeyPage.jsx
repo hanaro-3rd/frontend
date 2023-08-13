@@ -32,14 +32,13 @@ const PickUpKeyPage = ({ navigation }) => {
   //마커 정보 가져오기
   const { data } = useQuery("getMarkers", async () => getMarkers(), {
     onSuccess: async (response) => {
-      
       console.log(response.data);
       // setMarkerList(response.data.result.markers);
-    }, 
-   
+    },
+
     onError: async (error) => {
-      console.log(error)
-      navigation.navigate("LoginPage")
+      console.log(error);
+      navigation.navigate("LoginPage");
     },
   });
 
@@ -188,9 +187,7 @@ const PickUpKeyPage = ({ navigation }) => {
         showsMyLocationButton={true}
         region={location}
       >
-        {
-     
-        }
+        {}
         {markerList?.map((marker, idx) => {
           if (
             calculateDistance(
