@@ -1,4 +1,4 @@
-import { Image, TouchableOpacity } from "react-native";
+import { Image, TouchableOpacity, ScrollView } from "react-native";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -20,7 +20,9 @@ import CarouselAccountIcon from "../assets/Main/CarouselAccountIcon.png";
 import CarouselHanaMoneyIcon from "../assets/Main/CarouselHanaMoneyIcon.png";
 import CarouselRecordIcon from "../assets/Main/CarouselRecordIcon.png";
 import CarouselPickUpIcon from "../assets/Main/CarouselPickUpIcon.png";
-import CountryIcon from "../assets/Main/CountryIcon.png";
+import USIcon from "../assets/Main/CountryIcon.png";
+import JapanIcon from "../assets/Setting/JapanCountryIcon.png";
+import EuroIcon from "../assets/exchangeImg/EUR.png";
 import KeyPickIcon from "../assets/Main/MenuIcon1.png";
 import PlanTravelBudgetIcon from "../assets/Main/MenuIcon2.png";
 import RecordTravleIcon from "../assets/Main/MenuIcon3.png";
@@ -35,11 +37,17 @@ import HanaStockIcon from "../assets/Main/HanaServiceIcon5.png";
 import HanaSavingIcon from "../assets/Main/HanaServiceIcon6.png";
 import React, { useState, useEffect } from "react";
 import Swiper from "react-native-swiper";
+import { useRecoilState } from "recoil";
+import { usernameAtom } from "../recoil/usernameAtom";
+import { useQuery, useQueryClient } from "react-query";
+import { getExchange } from "../api/api";
 
 const MainPage = ({ navigation }) => {
-  {
-    /* carousel 관련 */
-  }
+  const [username, setUsername] = useRecoilState(usernameAtom);
+  const [USD, setUSD] = useState();
+  const [EUR, setEUR] = useState();
+  const [JPY, setJPY] = useState();
+  const [exchangeDate, setExchangeDate] = useState();
   const firstMainCardContent = {
     subTitle: "어디서든 쓸 수 있는",
     title: "키머니",
@@ -79,9 +87,6 @@ const MainPage = ({ navigation }) => {
     fifthMainCardContent,
   ];
 
-  {
-    /* styled-components */
-  }
   const Main = styled.ScrollView`
     /* margin-top: ${getStatusBarHeight}px; */
     min-height: ${phoneHeight}px;
@@ -120,9 +125,8 @@ const MainPage = ({ navigation }) => {
     font-size: ${fontPercentage(24)}px;
     font-weight: 700;
   `;
-  const BodyMain = styled.View`
+  const BodyMain = styled.ScrollView`
     flex-direction: column;
-    align-items: center;
     align-self: stretch;
   `;
   const MenuCarousels = styled.View`
@@ -188,7 +192,7 @@ const MainPage = ({ navigation }) => {
     flex: 1 0 0;
   `;
   const CountryTextContainer = styled.View`
-    width: ${widthPercentage(65)}px;
+    width: ${widthPercentage(100)}px;
     height: ${heightPercentage(40)}px;
     display: flex;
     flex-direction: column;
@@ -238,6 +242,13 @@ const MainPage = ({ navigation }) => {
   `;
   const ChangeRate = styled.Text`
     color: #0a7df2;
+    font-family: Inter;
+    font-size: ${fontPercentage(12)}px;
+    font-style: normal;
+    font-weight: 700;
+  `;
+  const ChangeUpRate = styled.Text`
+    color: #ee3739;
     font-family: Inter;
     font-size: ${fontPercentage(12)}px;
     font-style: normal;
@@ -389,6 +400,30 @@ const MainPage = ({ navigation }) => {
     flex-direction: row;
   `;
 
+  const queryClient = useQueryClient();
+  const { exchangeData } = useQuery("exchange", async () => getExchange(), {
+    onSuccess: (response) => {
+      console.log(response.data, "메인환율");
+      setUSD(response.data.result.usd);
+      setEUR(response.data.result.eur);
+      setJPY(response.data.result.jpy);
+      let today = new Date(); // today 객체에 Date()의 결과를 넣어줬다
+      let time = {
+        year: today.getFullYear(), //현재 년도
+        month: today.getMonth() + 1, // 현재 월
+        date: today.getDate(), // 현제 날짜
+        hours: today.getHours(), //현재 시간
+        minutes: today.getMinutes(), //현재 분
+      };
+      setExchangeDate(
+        `${time.year}/${time.month}/${time.date} ${time.hours}:${time.minutes}`
+      );
+    },
+    onError: (error) => {
+      console.log(error.response.data);
+    },
+  });
+
   return (
     <Main>
       <Header>
@@ -405,7 +440,7 @@ const MainPage = ({ navigation }) => {
 
       {/*사용자*/}
       <BodyHeader>
-        <TitleText>안녕하세요, 이상준님!</TitleText>
+        <TitleText>안녕하세요, {username}님!</TitleText>
       </BodyHeader>
 
       {/*메뉴 carousel card*/}
@@ -420,36 +455,61 @@ const MainPage = ({ navigation }) => {
               key={index}
               navigation={navigation}
               content={content}
-              onnPress={() => handleCarouselCardPress(content.buttonText)}
             />
           ))}
         </CustomSwiper>
         {/* 환율 */}
-        <ExchangeRateContainer>
-          <PrevOrNextButton>
-            <Image source={arrow_prev} />
-          </PrevOrNextButton>
-          <CountryExchangeRateContainer>
-            <Image source={CountryIcon} />
-            <TextContainer>
-              <CountryTextContainer>
-                <CountryContainer>
-                  <Country>미국</Country>
-                  <MoneytaryUnit>USD</MoneytaryUnit>
-                </CountryContainer>
-                <DateTime>07.11. 18:19</DateTime>
-              </CountryTextContainer>
+        <Swiper
+          loop={true} // 무한 루프로 스와이프할 수 있도록 설정
+          autoplay={true} // 자동 재생 비활성화
+          width={`100%`}
+          height={100}
+          showsButtons={false}
+          showsPagination={false}
+        >
+          {[USD, JPY, EUR].map((e, idx) => {
+            return (
+              <ExchangeRateContainer key={idx}>
+                <PrevOrNextButton>
+                  <Image source={arrow_prev} />
+                </PrevOrNextButton>
+                <CountryExchangeRateContainer>
+                  {idx == 0 && <Image source={USIcon} />}
+                  {idx == 1 && <Image source={JapanIcon} />}
+                  {idx == 2 && <Image source={EuroIcon} />}
+                  <TextContainer>
+                    <CountryTextContainer>
+                      <CountryContainer>
+                        {idx == 0 && <Country>미국</Country>}
+                        {idx == 1 && <Country>일본</Country>}
+                        {idx == 2 && <Country>유럽</Country>}
 
-              <RateTextContainer>
-                <ExchangeRate>1,294.50</ExchangeRate>
-                <ChangeRate>▼ 12.00</ChangeRate>
-              </RateTextContainer>
-            </TextContainer>
-          </CountryExchangeRateContainer>
-          <PrevOrNextButton>
-            <Image source={arrow_next} />
-          </PrevOrNextButton>
-        </ExchangeRateContainer>
+                        {idx == 0 && <MoneytaryUnit>USD</MoneytaryUnit>}
+                        {idx == 1 && <MoneytaryUnit>JPY</MoneytaryUnit>}
+                        {idx == 2 && <MoneytaryUnit>EUR</MoneytaryUnit>}
+                      </CountryContainer>
+                      {exchangeDate && <DateTime>{exchangeDate}</DateTime>}
+                    </CountryTextContainer>
+
+                    {USD && (
+                      <RateTextContainer>
+                        <ExchangeRate>{e.exchangeRate}</ExchangeRate>
+                        {e.exchangeRate > 0 ? (
+                          <ChangeUpRate>▲ {e.changePrice}</ChangeUpRate>
+                        ) : (
+                          <ChangeRate>▼ {e.changePrice}</ChangeRate>
+                        )}
+                      </RateTextContainer>
+                    )}
+                  </TextContainer>
+                </CountryExchangeRateContainer>
+                <PrevOrNextButton>
+                  <Image source={arrow_next} />
+                </PrevOrNextButton>
+              </ExchangeRateContainer>
+            );
+          })}
+        </Swiper>
 
         {/* 메뉴들 */}
         <MenuContainer>
@@ -561,3 +621,4 @@ const MainPage = ({ navigation }) => {
 };
 
 export default MainPage;
+
