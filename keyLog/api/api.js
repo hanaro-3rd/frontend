@@ -24,8 +24,8 @@ export const getRegistrationDeviceId = (deviceId) => {
   return axiosClient.get(`/registration/${deviceId}`);
 };
 export const getRefresh = async () => {
-  return axiosRefreshClient.get("/refresh")
-}
+  return axiosRefreshClient.get("/refresh");
+};
 export const getMarkers = () => {
   return axiosClient.get("/marker");
 };
@@ -55,10 +55,17 @@ export const postAccountExternal = ({
 
 //환전
 export const postExchange = (exchangeData) => {
-  return axiosClient.post(`/exchange`,exchangeData)
-}
+  return axiosClient.post(`/exchange`, exchangeData);
+};
 
 export const getExchange = (exchangeData) => {
-  return axiosClient.get(`/exchange`,exchangeData);
-}
+  return axiosClient.get(`/exchange`, exchangeData);
+};
 
+export const getMyKeymoney = () => {
+  return axiosClient.get("/keymoney");
+};
+
+export const getMyKeymoneyUnit = (unit, filter) => {
+  return axiosClient.get(`/keymoney/${unit}?filter=${filter}`);
+};

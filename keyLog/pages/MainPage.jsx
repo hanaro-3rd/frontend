@@ -549,7 +549,7 @@ const MainPage = ({ navigation }) => {
                 <MenuSubtitle>내 키머니를 확인해보아용</MenuSubtitle>
               </MenuTextContainer>
               <MenuButton
-              // onPress={() => }
+                onPress={() => navigation.navigate("KeyMoneyHistoryPage")}
               >
                 <MenuButtonText>확인하러 가기</MenuButtonText>
               </MenuButton>
@@ -621,4 +621,3 @@ const MainPage = ({ navigation }) => {
 };
 
 export default MainPage;
-

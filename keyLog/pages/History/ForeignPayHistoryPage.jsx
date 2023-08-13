@@ -14,10 +14,11 @@ import {
   phoneHeight,
   phoneWidth,
   widthPercentage,
-} from "../utils/ResponseSize";
+} from "../../utils/ResponseSize";
 import React, { useState, useEffect } from "react";
-import PrevHeader from "../components/Header/PrevHeader";
-
+import PrevHeader from "../../components/Header/PrevHeader";
+import { useQuery, useQueryClient } from "react-query";
+import { getMyKeymoneyUnit } from "../../api/api";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
@@ -36,6 +37,7 @@ const BodyContainer = styled.View`
   align-items: flex-start;
   flex: 1 0 0;
   align-self: stretch;
+  background-color: #fff;
 `;
 
 const BodyHeaderContainer = styled.View`
@@ -281,7 +283,7 @@ const CategoryListContainer = styled.View`
   height: ${heightPercentage(112)}px;
   margin: ${heightPercentage(20)}px 0px;
 `;
-const CategoryList = styled.View`
+const CategoryList = styled.TouchableOpacity`
   width: ${widthPercentage(350)}px;
   flex-direction: row;
   height: ${heightPercentage(24)}px;
@@ -339,211 +341,209 @@ const SelectButtonText = styled.Text`
   font-style: normal;
   font-weight: 700;
 `;
-const ForeignPayHistoryPage = ({ navigation }) => {
+const CountrySelectedImage = styled.Image`
+width: ${widthPercentage(60)}px;
+height: ${heightPercentage(64.615)}px;
+`;
+
+const ForeignPayHistoryPage = ({ route, navigation }) => {
+  const { unit, balance } = route?.params;
+  const [filter, setFilter] = useState("all");
+  const [historyList, setHistoryList] = useState([]);
+
+  const queryClient = useQueryClient();
+  const { unitdata } = useQuery(
+    "unitdata",
+    async () => getMyKeymoneyUnit(unit, filter),
+    {
+      onSuccess: (response) => {
+        console.log(response.data);
+        console.log(response.data.result.keymoneyHistory);
+        console.log(filter);
+        setHistoryList(response.data.result.keymoneyHistory);
+      },
+      onError: () => { },
+    }
+  );
+
+  const handleReloadQuery = () => {
+    queryClient.invalidateQueries("unitdata");
+  };
   StatusBar.setTranslucent(true);
   const [openSelect, setOpenSelect] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("전체");
 
-  useEffect(() => {
-    setSelectedCategory("전체");
-  }, []);
+  // useEffect(() => {
+  //   setSelectedCategory("전체");
+  // }, []);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
+    console.log(selectedCategory);
   };
-  return (
-    <Root categoryMode={openSelect}>
-      <PrevHeader navigation={navigation} to="MainPage" />
-      <BodyContainer>
-        <BodyHeaderContainer>
-          <TitleText>입출금 내역</TitleText>
-          <CountryContainer>
-            <Image source={require("../assets/Setting/JapanCountryIcon.png")} />
-            <TotalPayCostText>32,000 JPY</TotalPayCostText>
-          </CountryContainer>
-          <ButtonContainer>
-            <RevertToWonButton>
-              <Image source={require("../assets/Setting/loop.png")} />
-              <ButtonText>원화</ButtonText>
-            </RevertToWonButton>
-            <ExchangeButton>
-              <ExchangeButtonText>충전하기</ExchangeButtonText>
-            </ExchangeButton>
-          </ButtonContainer>
-        </BodyHeaderContainer>
-        <SelectContainer>
-          <SelectTextContainer onPress={() => setOpenSelect(true)}>
-            <SelectText>전체</SelectText>
-            <SelectImage
-              source={require("../assets/travelBudget/SelectButtonBefore.png")}
-            />
-          </SelectTextContainer>
-        </SelectContainer>
-        <HistoryContainer>
-          <DateText>7월 28일</DateText>
-          <ListContainer>
-            <Image source={require("../assets/travelBudget/ShopIcon.png")} />
-            <ListInfoContainer>
-              <ListTextContainer>
-                <ListText>기념품</ListText>
-                <TimeText>11:58</TimeText>
-              </ListTextContainer>
-              <CostTextContainer>
-                <CostText>-2,000 JPY</CostText>
-                <RemainCostText>54,000 JPY</RemainCostText>
-              </CostTextContainer>
-            </ListInfoContainer>
-          </ListContainer>
-          <ListContainer>
-            <Image source={require("../assets/travelBudget/TransIcon.png")} />
-            <ListInfoContainer>
-              <ListTextContainer>
-                <ListText>신칸센</ListText>
-                <TimeText>09:58</TimeText>
-              </ListTextContainer>
-              <CostTextContainer>
-                <CostText>-10,000 JPY</CostText>
-                <RemainCostText>56,000 JPY</RemainCostText>
-              </CostTextContainer>
-            </ListInfoContainer>
-          </ListContainer>
-          <ListContainer>
-            <Image source={require("../assets/travelBudget/FoodIcon.png")} />
-            <ListInfoContainer>
-              <ListTextContainer>
-                <ListText>할매순대국 시부야점</ListText>
-                <TimeText>08:58</TimeText>
-              </ListTextContainer>
-              <CostTextContainer>
-                <CostText>-1,000 JPY</CostText>
-                <RemainCostText>66,000 JPY</RemainCostText>
-              </CostTextContainer>
-            </ListInfoContainer>
-          </ListContainer>
-        </HistoryContainer>
-        <HistoryContainer>
-          <DateText>7월 27일</DateText>
-          <ListContainer>
-            <Image source={require("../assets/travelBudget/ShopIcon.png")} />
-            <ListInfoContainer>
-              <ListTextContainer>
-                <ListText>기념품</ListText>
-                <TimeText>11:58</TimeText>
-              </ListTextContainer>
-              <CostTextContainer>
-                <CostText>-2,000 JPY</CostText>
-                <RemainCostText>67,000 JPY</RemainCostText>
-              </CostTextContainer>
-            </ListInfoContainer>
-          </ListContainer>
-          <ListContainer>
-            <Image source={require("../assets/travelBudget/TransIcon.png")} />
-            <ListInfoContainer>
-              <ListTextContainer>
-                <ListText>신칸센</ListText>
-                <TimeText>09:58</TimeText>
-              </ListTextContainer>
-              <CostTextContainer>
-                <CostText>-10,000 JPY</CostText>
-                <RemainCostText>69,000 JPY</RemainCostText>
-              </CostTextContainer>
-            </ListInfoContainer>
-          </ListContainer>
-          <ListContainer>
-            <Image source={require("../assets/travelBudget/FoodIcon.png")} />
-            <ListInfoContainer>
-              <ListTextContainer>
-                <ListText>할매순대국 시부야점</ListText>
-                <TimeText>08:58</TimeText>
-              </ListTextContainer>
-              <CostTextContainer>
-                <CostText>-1,000 JPY</CostText>
-                <RemainCostText>79,000 JPY</RemainCostText>
-              </CostTextContainer>
-            </ListInfoContainer>
-          </ListContainer>
-        </HistoryContainer>
-        <HistoryContainer>
-          <DateText>7월 20일</DateText>
-          <ListContainer>
-            <Image source={require("../assets/Setting/환전.png")} />
-            <ListInfoContainer>
-              <ListTextContainer>
-                <ListText>엔화 환전</ListText>
-                <TimeText>08:58</TimeText>
-              </ListTextContainer>
-              <CostTextContainer>
-                <CostPlusText>+80,000 JPY</CostPlusText>
-                <RemainCostText>80,000 JPY</RemainCostText>
-              </CostTextContainer>
-            </ListInfoContainer>
-          </ListContainer>
-        </HistoryContainer>
-      </BodyContainer>
-      {openSelect && (
-        <CategoryComponent>
-          <CategoryTitleList>
-            <CategoryTitleText>내역 선택</CategoryTitleText>
-            <TouchableOpacity
-              onPress={() => {
-                setOpenSelect(false);
-                setSelectedCategory("전체");
-              }}
-            >
-              <DeleteImage source={require("../Images/삭제.png")} />
-            </TouchableOpacity>
-          </CategoryTitleList>
-          <CategoryListContainer>
-            <CategoryList>
-              <TouchableOpacity onPress={() => handleCategorySelect("전체")}>
+
+  const handleSelectCategory = () => {
+    if (selectedCategory == "전체") {
+      setFilter("all");
+    } else if (selectedCategory == "입금") {
+      setFilter("exchange");
+    } else {
+      setFilter("payment");
+    }
+    setOpenSelect(false);
+    handleReloadQuery();
+  };
+
+  const UnitImageMap = {
+    'KRW': require("../../assets/Setting/KoreaCountryIcon.png"),
+    'USD': require("../../assets/History/USD.png"),
+    'JPY': require("../../assets/Setting/JapanCountryIcon.png"),
+    'EUR': require("../../assets/History/EUR.png"),
+  }
+  
+  const selectedImage = UnitImageMap[unit];
+  
+    return (
+      <Root categoryMode={openSelect}>
+        <PrevHeader navigation={navigation} to="KeyMoneyHistoryPage" />
+        <BodyContainer>
+          <BodyHeaderContainer>
+            <TitleText>입출금 내역</TitleText>
+            <CountryContainer>
+              <CountrySelectedImage
+                source={selectedImage}
+              />
+              <TotalPayCostText>
+                {balance} {unit}
+              </TotalPayCostText>
+            </CountryContainer>
+            <ButtonContainer>
+              <RevertToWonButton>
+                <Image source={require("../../assets/Setting/loop.png")} />
+                <ButtonText>원화</ButtonText>
+              </RevertToWonButton>
+              <ExchangeButton>
+                <ExchangeButtonText>충전하기</ExchangeButtonText>
+              </ExchangeButton>
+            </ButtonContainer>
+          </BodyHeaderContainer>
+          <SelectContainer>
+            <SelectTextContainer onPress={() => setOpenSelect(true)}>
+              <SelectText>전체</SelectText>
+              <SelectImage
+                source={require("../../assets/travelBudget/SelectButtonBefore.png")}
+              />
+            </SelectTextContainer>
+          </SelectContainer>
+          <HistoryContainer>
+            {historyList?.map((item, idx) => {
+              const createdAt = new Date(item.createdAt);
+              const formattedDate = `${createdAt.getFullYear()}년 ${String(
+                createdAt.getMonth() + 1
+              ).padStart(2, "0")}월 ${String(createdAt.getDate()).padStart(
+                2,
+                "0"
+              )}일`;
+              const formattedTime = `${String(createdAt.getHours()).padStart(
+                2,
+                "0"
+              )}:${String(createdAt.getMinutes()).padStart(2, "0")}:${String(
+                createdAt.getSeconds()
+              ).padStart(2, "0")}`;
+
+              const type = item.type === "payment" ? "-" : "+";
+              const textColor = item.type === "payment" ? "black" : "#55ACEE";
+              const categoryIconMap = {
+                식비: require("../../assets/travelBudget/FoodIcon.png"),
+                교통: require("../../assets/travelBudget/TransIcon.png"),
+                숙박: require("../../assets/travelBudget/HouseIcon.png"),
+                "쇼핑 · 편의점 · 마트": require("../../assets/travelBudget/ShopIcon.png"),
+                "문화 · 여가": require("../../assets/travelBudget/PlayIcon.png"),
+                기타: require("../../assets/travelBudget/EtcIcon.png"),
+              };
+
+              const categoryIcon =
+                categoryIconMap[item.category] ||
+                require("../../assets/travelBudget/환전.png");
+
+              return (
+                <>
+                  <DateText>{formattedDate}</DateText>
+                  <ListContainer>
+                    <Image source={categoryIcon} />
+                    <ListInfoContainer>
+                      <ListTextContainer>
+                        <ListText>{item.subject}</ListText>
+                        <TimeText>{formattedTime}</TimeText>
+                      </ListTextContainer>
+                      <CostTextContainer>
+                        <CostText
+                          style={{ color: textColor }}
+                        >{`${type}${item.keymoney} ${item.unit}`}</CostText>
+                        <RemainCostText>
+                          {item.balance} {item.unit}
+                        </RemainCostText>
+                      </CostTextContainer>
+                    </ListInfoContainer>
+                  </ListContainer>
+                </>
+              );
+            })}
+          </HistoryContainer>
+        </BodyContainer>
+        {openSelect && (
+          <CategoryComponent>
+            <CategoryTitleList>
+              <CategoryTitleText>내역 선택</CategoryTitleText>
+              <TouchableOpacity
+                onPress={() => {
+                  setOpenSelect(false);
+                  setSelectedCategory("전체");
+                }}
+              >
+                <DeleteImage source={require("../../Images/삭제.png")} />
+              </TouchableOpacity>
+            </CategoryTitleList>
+            <CategoryListContainer>
+              <CategoryList onPress={() => handleCategorySelect("전체")}>
                 <CategoryText
-                  style={
-                    selectedCategory === "전체" ? { color: "#55acee" } : {}
-                  }
+                  style={selectedCategory === "전체" ? { color: "#55acee" } : {}}
                 >
                   전체
                 </CategoryText>
-              </TouchableOpacity>
-              {selectedCategory === "전체" && (
-                <Image source={require("../assets/Setting/check.png")} />
-              )}
-            </CategoryList>
-            <CategoryList>
-              <TouchableOpacity onPress={() => handleCategorySelect("입금")}>
+                {selectedCategory === "전체" && (
+                  <Image source={require("../../assets/Setting/check.png")} />
+                )}
+              </CategoryList>
+              <CategoryList onPress={() => handleCategorySelect("입금")}>
                 <CategoryText
-                  style={
-                    selectedCategory === "입금" ? { color: "#55acee" } : {}
-                  }
+                  style={selectedCategory === "입금" ? { color: "#55acee" } : {}}
                 >
                   입금
                 </CategoryText>
-              </TouchableOpacity>
-              {selectedCategory === "입금" && (
-                <Image source={require("../assets/Setting/check.png")} />
-              )}
-            </CategoryList>
-            <CategoryList>
-              <TouchableOpacity onPress={() => handleCategorySelect("출금")}>
+                {selectedCategory === "입금" && (
+                  <Image source={require("../../assets/Setting/check.png")} />
+                )}
+              </CategoryList>
+              <CategoryList onPress={() => handleCategorySelect("출금")}>
                 <CategoryText
-                  style={
-                    selectedCategory === "출금" ? { color: "#55acee" } : {}
-                  }
+                  style={selectedCategory === "출금" ? { color: "#55acee" } : {}}
                 >
                   출금
                 </CategoryText>
-              </TouchableOpacity>
-              {selectedCategory === "출금" && (
-                <Image source={require("../assets/Setting/check.png")} />
-              )}
-            </CategoryList>
-          </CategoryListContainer>
-          <SelectButton>
-            <SelectButtonText>확인</SelectButtonText>
-          </SelectButton>
-        </CategoryComponent>
-      )}
-    </Root>
-  );
-};
+                {selectedCategory === "출금" && (
+                  <Image source={require("../../assets/Setting/check.png")} />
+                )}
+              </CategoryList>
+            </CategoryListContainer>
+            <SelectButton onPress={() => handleSelectCategory()}>
+              <SelectButtonText>확인</SelectButtonText>
+            </SelectButton>
+          </CategoryComponent>
+        )}
+      </Root>
+    );
+  };
 
-export default ForeignPayHistoryPage;
+
+  export default ForeignPayHistoryPage;
