@@ -19,7 +19,7 @@ import ShopIcon from "../../assets/travelBudget/ShopIcon.png";
 import SelectButton from "../../assets/travelBudget/SelectButton.png";
 import DeleteHeader from "../../components/Header/DeleteHeader";
 import HeaderBack from "../../assets/travelBudget/Header-Back.png";
-import symbolicateStackTrace from "react-native/Libraries/Core/Devtools/symbolicateStackTrace";
+
 import { he } from "date-fns/locale";
 
 const RootScrollView = styled.ScrollView`
