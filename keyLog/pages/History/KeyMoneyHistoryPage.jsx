@@ -61,13 +61,14 @@ const KeyMoneyHistoryPage = ({ route, navigation }) => {
         </BodyHeader>
         <BodyMainContainer>
           <AccountConatiner>
-            {KeyMoneyAccountList?.map((item, idx) => {
-              return (
+            {KeyMoneyAccountList.length > 0 ? (
+              KeyMoneyAccountList.map((item, idx) => (
                 <AccountInfoContainer
                   key={idx}
                   onPress={() => {
                     navigation.navigate("ForeignPayHistoryPage", {
-                      balance: item.balance, unit: item.unit,
+                      balance: item.balance,
+                      unit: item.unit,
                     });
                   }}
                 >
@@ -82,8 +83,13 @@ const KeyMoneyHistoryPage = ({ route, navigation }) => {
                     source={require("../../assets/History/SelectButton.png")}
                   />
                 </AccountInfoContainer>
-              );
-            })}
+              ))
+            ) : (
+              <NoAccountMessageContainer>
+                <Image source={require("../../assets/History/Exchange.png")} />
+                <NoAccountMessage>보유중인 키머니가 없습니다.</NoAccountMessage>
+              </NoAccountMessageContainer>
+            )}
           </AccountConatiner>
           <ExchangeText onPress={() => navigation.navigate("ExchangePage")}>
             키머니 환전하러 가기
@@ -93,6 +99,23 @@ const KeyMoneyHistoryPage = ({ route, navigation }) => {
     </Root>
   );
 };
+
+const NoAccountMessageContainer = styled.View`
+  display: flex;
+  padding-top: ${heightPercentage(30)}px;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  align-self: stretch;
+`;
+
+const NoAccountMessage = styled.Text`
+  color: #191f29;
+  font-family: Inter;
+  font-size: ${fontPercentage(18)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
 
 const Root = styled.View`
   width: ${phoneWidth}px;

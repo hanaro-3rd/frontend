@@ -59,13 +59,16 @@ export const postExchange = (exchangeData) => {
 };
 
 export const getExchange = (exchangeData) => {
-  return axiosClient.get(`/exchange`, exchangeData);
+  return axiosClient.get(
+    `http://3.38.13.139:8081/exchange/getFromRedis`,
+    exchangeData
+  );
 };
 
 export const getMyKeymoney = () => {
   return axiosClient.get("/keymoney");
 };
 
-export const getMyKeymoneyUnit = (unit, filter) => {
+export const getMyKeymoneyUnit = ({ unit, filter }) => {
   return axiosClient.get(`/keymoney/${unit}?filter=${filter}`);
 };

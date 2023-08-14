@@ -258,13 +258,14 @@ const CostPlusText = styled.Text`
 
 const CategoryComponent = styled.View`
   background-color: white;
-  height: ${heightPercentage(275)}px;
+  height: ${heightPercentage(210)}px;
   padding: ${heightPercentage(20)}px ${widthPercentage(20)}px;
   width: 100%;
   bottom: 0;
   position: absolute;
   align-items: center;
   border-radius: 10px 10px 0px 0px;
+  z-index: 9999;
 `;
 const CategoryTitleList = styled.View`
   align-self: stretch;
@@ -342,8 +343,22 @@ const SelectButtonText = styled.Text`
   font-weight: 700;
 `;
 const CountrySelectedImage = styled.Image`
-width: ${widthPercentage(60)}px;
-height: ${heightPercentage(64.615)}px;
+  width: ${widthPercentage(60)}px;
+  height: ${heightPercentage(64.615)}px;
+`;
+
+const ModalBackground = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998; /* CategoryComponent보다 낮은 z-index 설정 */
+`;
+
+const ContentContainer = styled.View`
+  position: relative; /* 반드시 필요합니다! */
 `;
 
 const ForeignPayHistoryPage = ({ route, navigation }) => {
@@ -354,15 +369,47 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
   const queryClient = useQueryClient();
   const { unitdata } = useQuery(
     "unitdata",
-    async () => getMyKeymoneyUnit(unit, filter),
+    async () => getMyKeymoneyUnit({ unit, filter }),
     {
       onSuccess: (response) => {
         console.log(response.data);
+        console.log("filter제대로 있니", filter);
         console.log(response.data.result.keymoneyHistory);
-        console.log(filter);
-        setHistoryList(response.data.result.keymoneyHistory);
+        let keymoneyHistoryArr = response?.data?.result?.keymoneyHistory;
+        // let obj = {};
+        // for (let i = 0; i < keymoneyHistoryArr.length; i++) {
+        //   if (
+        //     !obj[
+        //       `${keymoneyHistoryArr[i].createdAt[1]}월${keymoneyHistoryArr[i].createdAt[2]}일`
+        //     ]
+        //   ) {
+        //     obj[
+        //       `${keymoneyHistoryArr[i].createdAt[1]}월${keymoneyHistoryArr[i].createdAt[2]}일`
+        //     ] = [keymoneyHistoryArr[i]];
+        //   } else {
+        //     obj[
+        //       `${keymoneyHistoryArr[i].createdAt[1]}월${keymoneyHistoryArr[i].createdAt[2]}일`
+        //     ].push(keymoneyHistoryArr[i]);
+        //   }
+        // }
+        const historyDateList = keymoneyHistoryArr.reduce((acc, item) => {
+          const formattedDate = `${item.createdAt[0]}년 ${String(
+            item.createdAt[1]
+          ).padStart(2, "0")}월 ${String(item.createdAt[2]).padStart(
+            2,
+            "0"
+          )}일`;
+
+          if (!acc[formattedDate]) {
+            acc[formattedDate] = [];
+          }
+          acc[formattedDate].push(item);
+          return acc;
+        }, {});
+
+        setHistoryList(historyDateList);
       },
-      onError: () => { },
+      onError: () => {},
     }
   );
 
@@ -379,119 +426,151 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
-    console.log(selectedCategory);
-  };
-
-  const handleSelectCategory = () => {
-    if (selectedCategory == "전체") {
+    if (category === "전체") {
       setFilter("all");
-    } else if (selectedCategory == "입금") {
+    } else if (category === "입금") {
       setFilter("exchange");
-    } else {
+    } else if (category === "출금") {
       setFilter("payment");
     }
     setOpenSelect(false);
     handleReloadQuery();
   };
 
+  // const handleSelectCategory = () => {
+  //   if (selectedCategory == "전체") {
+  //     setFilter("all");
+  //   } else if (selectedCategory == "입금") {
+  //     setFilter("exchange");
+  //   } else {
+  //     setFilter("payment");
+  //   }
+  //   setOpenSelect(false);
+  //   handleReloadQuery();
+  // };
+
   const UnitImageMap = {
-    'KRW': require("../../assets/Setting/KoreaCountryIcon.png"),
-    'USD': require("../../assets/History/USD.png"),
-    'JPY': require("../../assets/Setting/JapanCountryIcon.png"),
-    'EUR': require("../../assets/History/EUR.png"),
-  }
-  
+    KRW: require("../../assets/Setting/KoreaCountryIcon.png"),
+    USD: require("../../assets/History/USD.png"),
+    JPY: require("../../assets/Setting/JapanCountryIcon.png"),
+    EUR: require("../../assets/History/EUR.png"),
+  };
+
   const selectedImage = UnitImageMap[unit];
-  
-    return (
-      <Root categoryMode={openSelect}>
-        <PrevHeader navigation={navigation} to="KeyMoneyHistoryPage" />
-        <BodyContainer>
-          <BodyHeaderContainer>
-            <TitleText>입출금 내역</TitleText>
-            <CountryContainer>
-              <CountrySelectedImage
-                source={selectedImage}
-              />
-              <TotalPayCostText>
-                {balance} {unit}
-              </TotalPayCostText>
-            </CountryContainer>
-            <ButtonContainer>
-              <RevertToWonButton>
-                <Image source={require("../../assets/Setting/loop.png")} />
-                <ButtonText>원화</ButtonText>
-              </RevertToWonButton>
-              <ExchangeButton>
-                <ExchangeButtonText>충전하기</ExchangeButtonText>
-              </ExchangeButton>
-            </ButtonContainer>
-          </BodyHeaderContainer>
-          <SelectContainer>
-            <SelectTextContainer onPress={() => setOpenSelect(true)}>
-              <SelectText>전체</SelectText>
-              <SelectImage
-                source={require("../../assets/travelBudget/SelectButtonBefore.png")}
-              />
-            </SelectTextContainer>
-          </SelectContainer>
-          <HistoryContainer>
-            {historyList?.map((item, idx) => {
-              const createdAt = new Date(item.createdAt);
-              const formattedDate = `${createdAt.getFullYear()}년 ${String(
-                createdAt.getMonth() + 1
-              ).padStart(2, "0")}월 ${String(createdAt.getDate()).padStart(
-                2,
-                "0"
-              )}일`;
-              const formattedTime = `${String(createdAt.getHours()).padStart(
-                2,
-                "0"
-              )}:${String(createdAt.getMinutes()).padStart(2, "0")}:${String(
-                createdAt.getSeconds()
-              ).padStart(2, "0")}`;
 
-              const type = item.type === "payment" ? "-" : "+";
-              const textColor = item.type === "payment" ? "black" : "#55ACEE";
-              const categoryIconMap = {
-                식비: require("../../assets/travelBudget/FoodIcon.png"),
-                교통: require("../../assets/travelBudget/TransIcon.png"),
-                숙박: require("../../assets/travelBudget/HouseIcon.png"),
-                "쇼핑 · 편의점 · 마트": require("../../assets/travelBudget/ShopIcon.png"),
-                "문화 · 여가": require("../../assets/travelBudget/PlayIcon.png"),
-                기타: require("../../assets/travelBudget/EtcIcon.png"),
-              };
-
-              const categoryIcon =
-                categoryIconMap[item.category] ||
-                require("../../assets/travelBudget/환전.png");
-
-              return (
+  return (
+    <Root categoryMode={openSelect}>
+      <PrevHeader navigation={navigation} to="KeyMoneyHistoryPage" />
+      <BodyContainer>
+        <BodyHeaderContainer>
+          <TitleText>입출금 내역</TitleText>
+          <CountryContainer>
+            <CountrySelectedImage source={selectedImage} />
+            <TotalPayCostText>
+              {balance} {unit}
+            </TotalPayCostText>
+          </CountryContainer>
+          <ButtonContainer>
+            <RevertToWonButton>
+              <Image source={require("../../assets/Setting/loop.png")} />
+              <ButtonText>원화</ButtonText>
+            </RevertToWonButton>
+            <ExchangeButton>
+              <ExchangeButtonText
+                onPress={() => {
+                  navigation.navigate("ExchangePage");
+                }}
+              >
+                충전하기
+              </ExchangeButtonText>
+            </ExchangeButton>
+          </ButtonContainer>
+        </BodyHeaderContainer>
+        <SelectContainer>
+          <SelectTextContainer onPress={() => setOpenSelect(true)}>
+            <SelectText>{selectedCategory}</SelectText>
+            <SelectImage
+              source={require("../../assets/travelBudget/SelectButtonBefore.png")}
+            />
+          </SelectTextContainer>
+        </SelectContainer>
+        <HistoryContainer>
+          {Object.entries(historyList).map(([formattedDate, items]) => (
+            <React.Fragment key={formattedDate}>
+              {items.filter(
+                (item) =>
+                  filter === "all" ||
+                  (filter === "payment" && item.type === "payment") ||
+                  (filter === "exchange" && item.type === "exchange")
+              ).length > 0 && (
                 <>
                   <DateText>{formattedDate}</DateText>
-                  <ListContainer>
-                    <Image source={categoryIcon} />
-                    <ListInfoContainer>
-                      <ListTextContainer>
-                        <ListText>{item.subject}</ListText>
-                        <TimeText>{formattedTime}</TimeText>
-                      </ListTextContainer>
-                      <CostTextContainer>
-                        <CostText
-                          style={{ color: textColor }}
-                        >{`${type}${item.keymoney} ${item.unit}`}</CostText>
-                        <RemainCostText>
-                          {item.balance} {item.unit}
-                        </RemainCostText>
-                      </CostTextContainer>
-                    </ListInfoContainer>
-                  </ListContainer>
+                  {items.map((item, idx) => {
+                    if (
+                      (filter === "payment" && item.type === "exchange") ||
+                      (filter === "exchange" && item.type === "payment")
+                    ) {
+                      return null;
+                    }
+                    const createdAt = item.createdAt;
+                    const hour = createdAt[3];
+                    const minute = createdAt[4];
+                    const formattedTime = `${String(hour).padStart(
+                      2,
+                      "0"
+                    )}:${String(minute).padStart(2, "0")}`;
+
+                    const type = item.type === "payment" ? "-" : "+";
+                    const textColor =
+                      item.type === "payment" ? "black" : "#55ACEE";
+                    const categoryIconMap = {
+                      식비: require("../../assets/travelBudget/FoodIcon.png"),
+                      교통: require("../../assets/travelBudget/TransIcon.png"),
+                      숙박: require("../../assets/travelBudget/HouseIcon.png"),
+                      "쇼핑 · 편의점 · 마트": require("../../assets/travelBudget/ShopIcon.png"),
+                      "문화 · 여가": require("../../assets/travelBudget/PlayIcon.png"),
+                      기타: require("../../assets/travelBudget/EtcIcon.png"),
+                    };
+
+                    const categoryIcon =
+                      categoryIconMap[item.category] ||
+                      require("../../assets/travelBudget/환전.png");
+
+                    return (
+                      <ListContainer key={idx}>
+                        <Image source={categoryIcon} />
+                        <ListInfoContainer>
+                          <ListTextContainer>
+                            <ListText>{item.subject}</ListText>
+                            <TimeText>{formattedTime}</TimeText>
+                          </ListTextContainer>
+                          <CostTextContainer>
+                            <CostText
+                              style={{ color: textColor }}
+                            >{`${type}${item.keymoney} ${item.unit}`}</CostText>
+                            <RemainCostText>
+                              {item.balance} {item.unit}
+                            </RemainCostText>
+                          </CostTextContainer>
+                        </ListInfoContainer>
+                      </ListContainer>
+                    );
+                  })}
                 </>
-              );
-            })}
-          </HistoryContainer>
-        </BodyContainer>
-        {openSelect && (
+              )}
+              {items.filter(
+                (item) =>
+                  filter === "all" ||
+                  (filter === "payment" && item.type === "payment") ||
+                  (filter === "exchange" && item.type === "exchange")
+              ).length === 0 && <Text>내역이 없습니다.</Text>}
+            </React.Fragment>
+          ))}
+        </HistoryContainer>
+      </BodyContainer>
+      {openSelect && (
+        <>
+          <ModalBackground onPress={() => setOpenSelect(false)} />
           <CategoryComponent>
             <CategoryTitleList>
               <CategoryTitleText>내역 선택</CategoryTitleText>
@@ -507,7 +586,9 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
             <CategoryListContainer>
               <CategoryList onPress={() => handleCategorySelect("전체")}>
                 <CategoryText
-                  style={selectedCategory === "전체" ? { color: "#55acee" } : {}}
+                  style={
+                    selectedCategory === "전체" ? { color: "#55acee" } : {}
+                  }
                 >
                   전체
                 </CategoryText>
@@ -517,7 +598,9 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
               </CategoryList>
               <CategoryList onPress={() => handleCategorySelect("입금")}>
                 <CategoryText
-                  style={selectedCategory === "입금" ? { color: "#55acee" } : {}}
+                  style={
+                    selectedCategory === "입금" ? { color: "#55acee" } : {}
+                  }
                 >
                   입금
                 </CategoryText>
@@ -527,7 +610,9 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
               </CategoryList>
               <CategoryList onPress={() => handleCategorySelect("출금")}>
                 <CategoryText
-                  style={selectedCategory === "출금" ? { color: "#55acee" } : {}}
+                  style={
+                    selectedCategory === "출금" ? { color: "#55acee" } : {}
+                  }
                 >
                   출금
                 </CategoryText>
@@ -536,14 +621,14 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                 )}
               </CategoryList>
             </CategoryListContainer>
-            <SelectButton onPress={() => handleSelectCategory()}>
-              <SelectButtonText>확인</SelectButtonText>
-            </SelectButton>
+            {/* <SelectButton onPress={() => handleSelectCategory()}>
+            <SelectButtonText>확인</SelectButtonText>
+          </SelectButton> */}
           </CategoryComponent>
-        )}
-      </Root>
-    );
-  };
+        </>
+      )}
+    </Root>
+  );
+};
 
-
-  export default ForeignPayHistoryPage;
+export default ForeignPayHistoryPage;
