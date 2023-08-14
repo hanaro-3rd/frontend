@@ -186,7 +186,7 @@ const DateText = styled.Text`
   font-weight: 400;
 `;
 
-const ListContainer = styled.View`
+const ListContainer = styled.TouchableOpacity`
   width: ${widthPercentage(350)}px;
   display: flex;
   align-items: center;
@@ -537,7 +537,20 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                       require("../../assets/travelBudget/환전.png");
 
                     return (
-                      <ListContainer key={idx}>
+                      <ListContainer
+                        key={idx}
+                        onPress={() => {
+                          navigation.navigate("PaymentPageInputComponent", {
+                            category: item.category,
+                            keymoney: item.keymoney,
+                            unit: item.unit,
+                            formattedDate: formattedDate,
+                            formattedTime: formattedTime,
+                            subject: item.subject,
+                            categoryImage: categoryIconMap[item.category],
+                          });
+                        }}
+                      >
                         <Image source={categoryIcon} />
                         <ListInfoContainer>
                           <ListTextContainer>

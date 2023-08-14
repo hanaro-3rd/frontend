@@ -1,4 +1,4 @@
-import { Image, TouchableOpacity, ScrollView } from "react-native";
+import { Image, TouchableOpacity, ScrollView, Linking } from "react-native";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -424,6 +424,38 @@ const MainPage = ({ navigation }) => {
     },
   });
 
+  const handleHanaServiceLink = (serviceName) => {
+    let url;
+
+    switch (serviceName) {
+      case "하나은행":
+        url = "https://www.kebhana.com/";
+        break;
+      case "하나카드":
+        url = "https://www.hanacard.co.kr/";
+        break;
+      case "하나캐피탈":
+        url = "https://www.hanacapital.co.kr/";
+        break;
+      case "하나생명":
+        url = "https://hanalife.co.kr/";
+        break;
+      case "하나증권":
+        url = "https://www.hanaw.com/";
+        break;
+      case "하나저축은행":
+        url = "https://www.hanasavings.com/";
+        break;
+
+      default:
+        return;
+    }
+
+    Linking.openURL(url).catch((error) =>
+      console.error("An error occurred:", error)
+    );
+  };
+  
   return (
     <Main>
       <Header>
@@ -589,27 +621,39 @@ const MainPage = ({ navigation }) => {
         <HanaServiceContainer>
           <MenuTitle>하나금융그룹 서비스</MenuTitle>
           <ButtonContainer>
-            <HanaServiceButton>
+            <HanaServiceButton
+              onPress={() => handleHanaServiceLink("하나은행")}
+            >
               <Image source={HanaBankIcon} />
               <HanaServiceText>하나은행</HanaServiceText>
             </HanaServiceButton>
-            <HanaServiceButton>
+            <HanaServiceButton
+              onPress={() => handleHanaServiceLink("하나카드")}
+            >
               <Image source={HanaCardIcon} />
               <HanaServiceText>하나카드</HanaServiceText>
             </HanaServiceButton>
-            <HanaServiceButton>
+            <HanaServiceButton
+              onPress={() => handleHanaServiceLink("하나캐피탈")}
+            >
               <Image source={HanaCapitalIcon} />
               <HanaServiceText>하나캐피탈</HanaServiceText>
             </HanaServiceButton>
-            <HanaServiceButton>
+            <HanaServiceButton
+              onPress={() => handleHanaServiceLink("하나생명")}
+            >
               <Image source={HanaLifeIcon} />
               <HanaServiceText>하나생명</HanaServiceText>
             </HanaServiceButton>
-            <HanaServiceButton>
+            <HanaServiceButton
+              onPress={() => handleHanaServiceLink("하나증권")}
+            >
               <Image source={HanaStockIcon} />
               <HanaServiceText>하나증권</HanaServiceText>
             </HanaServiceButton>
-            <HanaServiceButton>
+            <HanaServiceButton
+              onPress={() => handleHanaServiceLink("하나저축은행")}
+            >
               <Image source={HanaSavingIcon} />
               <HanaServiceText>하나저축은행</HanaServiceText>
             </HanaServiceButton>

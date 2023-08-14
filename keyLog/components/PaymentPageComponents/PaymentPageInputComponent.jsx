@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   StatusBar,
+  Text,
 } from "react-native";
 import styled from "styled-components/native";
 import React, { useState } from "react";
@@ -59,7 +60,7 @@ const TitleText = styled.Text`
   font-weight: 700;
 `;
 const MainComponent = styled.View`
-  height: ${heightPercentage(300)}px;
+  height: ${heightPercentage(250)}px;
   width: 100%;
   align-items: center;
   justify-content: center;
@@ -129,33 +130,57 @@ const MemoTextInput = styled.TextInput`
   margin-top: ${heightPercentage(10)}px;
 `;
 
-const PaymentPageInputComponent = ({ navigation }) => {
+const CategoryTitleImage = styled.Image`
+  width: ${widthPercentage(40)}px;
+  height: ${heightPercentage(40)}px;
+`;
+const CategoryButtonImage = styled.Image`
+  width: ${widthPercentage(14)}px;
+  height: ${heightPercentage(14)}px;
+  margin-top: ${heightPercentage(5)}px;
+`;
+const CategoryView = styled.View`
+  flex-direction: row;
+`;
+const PaymentPageInputComponent = ({ route, navigation }) => {
+  const {
+    category,
+    keymoney,
+    unit,
+    formattedDate,
+    formattedTime,
+    subject,
+    categoryImage,
+  } = route.params;
   StatusBar.setTranslucent(true);
   const [openCategory, setOpenCategory] = useState(false);
   return (
     <Main categoryMode={openCategory}>
       <View>
-        <DeleteHeader navigation={navigation} to="TravelRecordMainComponent" />
+        <DeleteHeader navigation={navigation} to="KeyMoneyHistoryPage"  />
         <TitleView>
           <TitleText>결제내역</TitleText>
         </TitleView>
-
         <MainComponent>
-          <Image
-            source={require("../../Images/세븐일레븐.png")}
-            style={{ opacity: 0.3 }}
-          />
-          <NameText>세븐일레븐</NameText>
+          <CategoryTitleImage source={categoryImage} style={{ opacity: 0.3 }} />
+          <NameText>{subject}</NameText>
           <PriceText>결제금액</PriceText>
-          <CostText>￥10,000</CostText>
-          <DateText>2023.07.01 13:59</DateText>
+          <CostText>
+            {unit} {keymoney}
+          </CostText>
+          <DateText>
+            {formattedDate} {formattedTime}
+          </DateText>
         </MainComponent>
         <CategoryWrapper>
           <CategoryWord>카테고리</CategoryWord>
           <TouchableOpacity onPress={() => setOpenCategory(true)}>
-            <View>
-              <CategoryPickWord>쇼핑 · 편의점 · 마트</CategoryPickWord>
-            </View>
+            <CategoryView>
+              <CategoryPickWord>{category}</CategoryPickWord>
+              <CategoryButtonImage
+                source={require("../../assets/Main/arrow_next.png")}
+              />
+            </CategoryView>
           </TouchableOpacity>
         </CategoryWrapper>
         <MemoWrapper>
