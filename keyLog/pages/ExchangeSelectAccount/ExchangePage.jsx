@@ -23,7 +23,12 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getAccount, getExchange, postExchange } from "../../api/api";
+import {
+  getAccount,
+  getExchange,
+  postExchange,
+  getExchangeFromRedis,
+} from "../../api/api";
 import {
   Collapse,
   CollapseHeader,
@@ -50,6 +55,7 @@ export const ExchangePage = () => {
   const [subKoreaText, setSubKoreaText] = useState("");
   const [foreignTextInput, setForeignTextInput] = useState();
   const [subForeignText, setSubForeignText] = useState();
+  const [apiTime, setApiTime] = useState();
   const navigation = useNavigation();
   const handleChooseAccountComponent = () => {
     navigation.navigate("ChooseAccountComponent", {
@@ -67,19 +73,37 @@ export const ExchangePage = () => {
     },
   });
 
-  const { exchangeData } = useQuery("exchange", async () => getExchange(), {
-    onSuccess: (response) => {
-      console.log("exchangePage", response.data);
-      setJpy(response.data.result.jpy);
-      setEur(response.data.result.eur);
-      setUsd(response.data.result.usd);
-      setExchangeRate(response.data.result.usd.exchangeRate);
-      setChangePrice(response.data.result.usd.changePrice);
-    },
-    onError: (error) => {
-      console.log("exchangePage,exchangeApi에러", error);
-    },
-  });
+  // const { exchangeData } = useQuery("exchange", async () => getExchange(), {
+  //   onSuccess: (response) => {
+  //     console.log("exchangePage", response.data);
+  //     setJpy(response.data.result.jpy);
+  //     setEur(response.data.result.eur);
+  //     setUsd(response.data.result.usd);
+  //     setExchangeRate(response.data.result.usd.exchangeRate);
+  //     setChangePrice(response.data.result.usd.changePrice);
+  //   },
+  //   onError: (error) => {
+  //     console.log("exchangePage,exchangeApi에러", error);
+  //   },
+  // });
+  const { exchangeFromRedisData } = useQuery(
+    "exchangefromredis",
+    async () => getExchangeFromRedis(),
+    {
+      onSuccess: (response) => {
+        console.log("exchangePageFromRedis", response.data);
+        setJpy(response.data.result.jpy);
+        setEur(response.data.result.eur);
+        setUsd(response.data.result.usd);
+        setExchangeRate(response.data.result.usd.exchangeRate);
+        setChangePrice(response.data.result.usd.changePrice);
+        setApiTime(response.data.result.updatedAt);
+      },
+      onError: (error) => {
+        console.log("exchangePage,exchangeApi에러2", error);
+      },
+    }
+  );
   const handleCountryPress = (account) => {
     setSelectedAccount(account);
     setExpanded(false);
@@ -340,7 +364,9 @@ export const ExchangePage = () => {
             <View style={styles.exchangeRateContainer}>
               <View style={styles.titleContainer2}>
                 <Text style={styles.containerTitle3}>현재 환율</Text>
-                <Text style={styles.containerSubtitle2}>07.11. 18:19 기준</Text>
+                <Text style={styles.containerSubtitle2}>
+                  {apiTime[1]}.{apiTime[2]}. {apiTime[3]}:{apiTime[4]} 기준
+                </Text>
               </View>
               <View style={styles.currentExchangeRateContainer}>
                 <View style={styles.countryInformationContainer}>
