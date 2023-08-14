@@ -17,7 +17,7 @@ import {
 } from "../utils/ResponseSize";
 import React, { useState, useEffect } from "react";
 import PrevHeader from "../components/Header/PrevHeader";
-import symbolicateStackTrace from "react-native/Libraries/Core/Devtools/symbolicateStackTrace";
+
 
 const Root = styled.View`
   width: ${phoneWidth}px;

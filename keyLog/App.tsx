@@ -42,12 +42,15 @@ import LoginPage from "./pages/SignUp/LoginPage";
 import ScanPage from "./pages/Payment/ScanPage";
 import SettingPage from "./pages/SettingPage";
 import TestPaymentSearchPage from "./pages/Payment/TestPaymentSearchPage";
+import AccountConnectPageComponents from "./components/AccountConnectPageComponents/AccountConnectPageComponents";
+import { usernameAtom } from "./recoil/usernameAtom";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
   const [login, setLogin] = useRecoilState(loginAtom);
   const [isLoading, setLoading] = useState(true);
   const [haveDeviceId, setHaveDeviceId] = useState(false);
+  const [username,setUsername] = useRecoilState(usernameAtom);
   usePermissions();
 
   const { data } = useQuery(
@@ -57,8 +60,11 @@ const App = () => {
       //DeviceId가 존재할떄
       onSuccess: async (response) => {
         // console.log(JSON.stringify(response));
-
+        console.log(response.data)
+        setUsername(response.data?.result?.name)
         setHaveDeviceId(true);
+        console.log(response?.data?.errorCode)
+        if(response?.data?.errorCode==500) setHaveDeviceId(false)
         try {
           const token = await AsyncStorage.getItem("access_token");
           console.log("access_token" + token);
@@ -66,6 +72,7 @@ const App = () => {
             "refresh_token",
             await AsyncStorage.getItem("refresh_token")
           );
+          console.log(response.data);
           if (token) {
             // token이 있으면 MainPage로 이동
             setLogin(true);
@@ -83,18 +90,14 @@ const App = () => {
       },
       //DeviceId가 존재하지 않을 때
       onError: async (error) => {
-        console.log("error");
-        setHaveDeviceId(false);
-        try {
-          const token = await AsyncStorage.getItem("token");
-          if (token) {
-            // token이 있으면 MainPage로 이동
-            setLogin(true);
-          } else {
-            // token이 없으면 SignUpPage로 이동
-            setLogin(false);
-          }
-        } catch (error) {
+        try{
+          console.log("error");
+          setHaveDeviceId(false);
+          setLogin(false)
+          console.log("뭐가문제야")
+        }
+
+         catch (error) {
           // 에러 처리
           setLogin(false); // 에러 발생 시 로그인을 하지 않은 상태로 설정
         } finally {
@@ -110,13 +113,11 @@ const App = () => {
   }
   return (
     <NavigationContainer>
-      {/* <Stack.Navigator
+      <Stack.Navigator
         initialRouteName={
-          login ? "MainPage" : "LoginPage"
-          // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
+          login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
         }
-      > */}
-      <Stack.Navigator initialRouteName={"MainPage"}>
+      >
         <Stack.Screen
           name="MainPage"
           component={MainPage}

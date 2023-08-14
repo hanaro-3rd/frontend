@@ -45,3 +45,18 @@ export function phoneHeight() {
   const { height } = useWindowDimensions();
   return height;
 }
+
+export function getMoneyUnit(country) {
+  switch (country) {
+    case "Korea":
+      return "₩";
+    case "USA":
+      return "$";
+    case "Japan":
+      return "¥";
+    case "Europe":
+      return "€";
+    default:
+      return "₩";
+  }
+}

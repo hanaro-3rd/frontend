@@ -13,6 +13,7 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { calculateDistance } from "../utils/calculateDistance";
 import leftArrow from "../assets/accountImg/Vector.png";
 import { NavigationContainer } from "@react-navigation/native";
+import { navigateToLoginPage } from "../utils/NavigateToLoginPage";
 const PickUpKeyPage = ({ navigation }) => {
   const [location, setLocation] = useState({
     latitude: 37.545315,
@@ -36,8 +37,8 @@ const PickUpKeyPage = ({ navigation }) => {
     },
 
     onError: async (error) => {
-      console.log("getMarkers오류");
-      console.log("error" + error);
+      console.log(error);
+      navigation.navigate("LoginPage");
     },
   });
 

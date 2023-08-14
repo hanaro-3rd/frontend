@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { View } from "react-native";
+import { TouchableOpacity, Text, View } from "react-native";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -14,6 +14,8 @@ import SelectButtonBefore from "../../assets/travelBudget/SelectButtonBefore.png
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import DeleteHeader from "../../components/Header/DeleteHeader";
+import TravelDateComponent from "../../components/TravelBudgetPageComponents/TravelDateComponent";
+import { Picker } from "@react-native-picker/picker";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
@@ -114,8 +116,9 @@ const TravelTextinput = styled.TextInput`
   align-items: center;
   gap: 15px;
   align-self: stretch;
-  background-color: #f9fafb;
-  color: #b0b8c1;
+  background-color: ${(props) => (props.hasValue ? "white;" : "#f9fafb")};
+  color: ${(props) => (props.hasValue ? "#000" : "#b0b8c1")};
+  border: 1px solid ${(props) => (props.hasValue ? "#000" : "#f9fafb")};
   border-radius: 5px;
   text-align: right;
   font-family: Inter;
@@ -134,8 +137,9 @@ const TravelCountryTextinput = styled.TextInput`
   gap: 15px;
   flex: 1 0 0;
   align-self: stretch;
-  background-color: #f9fafb;
-  color: #b0b8c1;
+  background-color: ${(props) => (props.hasValue ? "white;" : "#f9fafb")};
+  color: ${(props) => (props.hasValue ? "#000" : "#b0b8c1")};
+  border: 1px solid ${(props) => (props.hasValue ? "#000" : "#f9fafb")};
   border-radius: 5px;
   text-align: right;
   font-family: Inter;
@@ -145,6 +149,8 @@ const TravelCountryTextinput = styled.TextInput`
 `;
 
 const SelectedFrame = styled.View`
+  width: ${widthPercentage(350)}px;
+  height: ${heightPercentage(39)}px;
   display: flex;
   align-items: flex-start;
   gap: 10px;
@@ -183,27 +189,46 @@ const NextButtonText = styled.Text`
   font-weight: 700;
 `;
 
+const PickerContainer = styled.View`
+  width: ${widthPercentage(170)}px;
+  height: ${heightPercentage(39)}px;
+  background-color: ${(props) => (props.hasValue ? "white;" : "#f9fafb")};
+  border: 1px solid ${(props) => (props.hasValue ? "#000" : "#f9fafb")};
+  border-radius: 5px;
+`;
+
+const MAX_TITLE_LENGTH = 20;
+const MAX_COUNTRY_LENGTH = 10;
+
 const TravelSchedulePage = ({ navigation }) => {
   const [travelTitle, setTravelTitle] = useState("");
   const [travelCountry, setTravelCountry] = useState("");
   const [travelCountryOption, setTravelCountryOption] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState(false);
-
+  const [isTravelCountryClick, setIsTravelCountryClick] = useState(false);
   const updateIsAllFieldsFilled = () => {
+    const isStartDateSelected = startDate !== null;
+    const isEndDateSelected = endDate !== null;
+    const isTravelCountryOptionSelected = travelCountryOption !== "";
+
     setIsAllFieldsFilled(
-      travelTitle !== "" &&
+      (travelTitle !== "" &&
         travelCountry !== "" &&
-        travelCountryOption !== "" &&
-        startDate !== "" &&
-        endDate !== ""
+        isStartDateSelected &&
+        isEndDateSelected) ||
+        (isTravelCountryOptionSelected &&
+          isStartDateSelected &&
+          isEndDateSelected)
     );
   };
 
   const handleTravelTitleChange = (text) => {
-    setTravelTitle(text);
-    updateIsAllFieldsFilled();
+    if (text.length <= MAX_TITLE_LENGTH) {
+      setTravelTitle(text);
+      updateIsAllFieldsFilled();
+    }
   };
 
   const handleTravelCountryChange = (text) => {
@@ -212,17 +237,21 @@ const TravelSchedulePage = ({ navigation }) => {
   };
 
   const handleTravelCountryOptionChange = (text) => {
-    setTravelCountryOption(text);
-    updateIsAllFieldsFilled();
+    if (text.length <= MAX_COUNTRY_LENGTH) {
+      setTravelCountryOption(text);
+      updateIsAllFieldsFilled();
+    }
   };
 
   const handleStartDateChange = (text) => {
-    setStartDate(text);
+    const selectedDate = new Date(text);
+    setStartDate(selectedDate);
     updateIsAllFieldsFilled();
   };
 
   const handleEndDateChange = (text) => {
-    setEndDate(text);
+    const selectedDate = new Date(text);
+    setEndDate(selectedDate);
     updateIsAllFieldsFilled();
   };
 
@@ -232,7 +261,9 @@ const TravelSchedulePage = ({ navigation }) => {
 
   const handleNextButtonPress = () => {
     if (isAllFieldsFilled) {
-      navigation.navigate("TravelBudgetPlanPage");
+      navigation.navigate("TravelBudgetPlanPage", {
+        travelCountry: travelCountry,
+      });
     }
     // else {
 
@@ -251,32 +282,64 @@ const TravelSchedulePage = ({ navigation }) => {
           <TravelTitleContainer>
             <TitleContainer>
               <TravelTitle>여행제목</TravelTitle>
-              <TextSize>0 / 20</TextSize>
+              <TextSize>
+                {travelTitle.length} / {MAX_TITLE_LENGTH}
+              </TextSize>
             </TitleContainer>
             <TravelTextinput
               placeholder="이름없는 여행1"
               placeholderTextColor="#b0b8c1"
               value={travelTitle}
               onChangeText={handleTravelTitleChange}
+              maxLength={MAX_TITLE_LENGTH}
+              hasValue={travelTitle !== ""}
             />
           </TravelTitleContainer>
           <TravelTitleContainer>
             <TitleContainer>
               <TravelTitle>여행지</TravelTitle>
-              <TextSize>0 / 10</TextSize>
+              <TextSize>
+                {travelCountryOption.length} / {MAX_TITLE_LENGTH}
+              </TextSize>
             </TitleContainer>
             <SelectedFrame>
-              <TravelCountryTextinput
-                placeholder=""
-                placeholderTextColor="#b0b8c1"
-                value={travelCountry}
-                onChangeText={handleTravelCountryChange}
-              />
+              <PickerContainer hasValue={travelCountry !== ""}>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                  }}
+                >
+                  <Picker
+                    selectedValue={travelCountry}
+                    onValueChange={(itemValue, itemIndex) => {
+                      setTravelCountry(itemValue);
+                      updateIsAllFieldsFilled();
+                    }}
+                    onFocus={() => setTravelCountry(1)}
+                    style={{
+                      width: widthPercentage(170),
+                      color: travelCountry ? "#000" : "#b0b8c1",
+                      textAlign: "right",
+                    }}
+                  >
+                    {travelCountry == "" && (
+                      <Picker.Item label="나라" value="" />
+                    )}
+                    <Picker.Item label="한국" value="Korea" />
+                    <Picker.Item label="미국" value="USA" />
+                    <Picker.Item label="일본" value="Japan" />
+                    <Picker.Item label="유럽" value="Europe" />
+                  </Picker>
+                </View>
+              </PickerContainer>
               <TravelCountryTextinput
                 placeholder="도시 (선택)"
                 placeholderTextColor="#b0b8c1"
                 value={travelCountryOption}
                 onChangeText={handleTravelCountryOptionChange}
+                maxLength={MAX_TITLE_LENGTH}
+                hasValue={travelCountryOption !== ""}
               />
             </SelectedFrame>
           </TravelTitleContainer>
@@ -284,20 +347,12 @@ const TravelSchedulePage = ({ navigation }) => {
             <TitleContainer>
               <TravelTitle>여행기간</TravelTitle>
             </TitleContainer>
-            <SelectedFrame>
-              <TravelCountryTextinput
-                placeholder=""
-                placeholderTextColor="#b0b8c1"
-                value={startDate}
-                onChangeText={handleStartDateChange}
-              />
-              <TravelCountryTextinput
-                placeholder=""
-                placeholderTextColor="#b0b8c1"
-                value={endDate}
-                onChangeText={handleEndDateChange}
-              />
-            </SelectedFrame>
+            <TravelDateComponent
+              startDate={startDate}
+              setStartDate={handleStartDateChange}
+              endDate={endDate}
+              setEndDate={handleEndDateChange}
+            />
           </TravelTitleContainer>
         </BodyMain>
       </Body>
