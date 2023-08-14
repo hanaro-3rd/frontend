@@ -17,6 +17,9 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../Header/DeleteHeader";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { getDetailKeymoneyHistory, updatepayment } from "../../api/api";
+
 const CategoryComponent = styled.View`
   background-color: white;
   height: ${heightPercentage(384)}px;
@@ -33,7 +36,7 @@ const CategoryTitleList = styled.View`
   align-items: center;
   margin-top: 10px;
 `;
-const CategoryList = styled.View`
+const CategoryList = styled.TouchableOpacity`
   width: ${widthPercentage(350)}px;
   flex-direction: row;
   align-items: center;
@@ -45,7 +48,7 @@ const CategoryText = styled.Text`
   color: black;
 `;
 const CategoryImage = styled.Image`
-  margin-right: 15px;
+  margin-right: ${widthPercentage(15)}px;
   width: ${widthPercentage(30)};
 `;
 const TitleView = styled.View`
@@ -151,13 +154,62 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
     formattedTime,
     subject,
     categoryImage,
+    historyId,
+    type,
   } = route.params;
   StatusBar.setTranslucent(true);
   const [openCategory, setOpenCategory] = useState(false);
+  const [selectedChangeCategory, setSelectedChangeCategory] =
+    useState(category);
+  const [changeMemo, setChangeMemo] = useState("");
+
+  const handleChangeCategory = (category) => {
+    setSelectedChangeCategory(category);
+    setOpenCategory(false);
+  };
+
+  const handleChangeMemo = (memo) => {
+    setChangeMemo(memo);
+    console.log(memo);
+  };
+
+  const queryClient = useQueryClient();
+
+  const { data } = useQuery(
+    "detailKeymoneyHistory",
+    async () => getDetailKeymoneyHistory({ historyId, type }),
+    {
+      onSuccess: (response) => {
+        console.log(response.data);
+        console.log("제대로 있니", historyId, type);
+        console.log(response.data.result.memo);
+        setChangeMemo(response.data.result.memo);
+      },
+      onError: () => {},
+    }
+  );
+
+  const patchKeymoneyHistoryMutation = useMutation(updatepayment, {
+    onSuccess: (response) => {
+      console.log(response.data);
+    },
+    onError: () => {},
+  });
+
+  const handlePatchKeymoneyHistory = () => {
+    console.log(selectedChangeCategory, changeMemo);
+    const updatePaymentData = {
+      category: selectedChangeCategory,
+      memo: changeMemo,
+    };
+    console.log(updatePaymentData);
+    patchKeymoneyHistoryMutation.mutate({ historyId, updatePaymentData });
+  };
+
   return (
     <Main categoryMode={openCategory}>
       <View>
-        <DeleteHeader navigation={navigation} to="KeyMoneyHistoryPage"  />
+        <DeleteHeader navigation={navigation} to="KeyMoneyHistoryPage" />
         <TitleView>
           <TitleText>결제내역</TitleText>
         </TitleView>
@@ -176,7 +228,7 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
           <CategoryWord>카테고리</CategoryWord>
           <TouchableOpacity onPress={() => setOpenCategory(true)}>
             <CategoryView>
-              <CategoryPickWord>{category}</CategoryPickWord>
+              <CategoryPickWord>{selectedChangeCategory}</CategoryPickWord>
               <CategoryButtonImage
                 source={require("../../assets/Main/arrow_next.png")}
               />
@@ -185,10 +237,21 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
         </CategoryWrapper>
         <MemoWrapper>
           <MemoText>메모</MemoText>
-          <MemoTextInput placeholder="메모를 작성해보세요" />
+          <MemoTextInput
+            value={changeMemo === "string" ? "" : changeMemo}
+            onChangeText={handleChangeMemo}
+            placeholder={
+              changeMemo === "string" ? "메모를 작성해보세요" : changeMemo
+            }
+          />
         </MemoWrapper>
       </View>
-      <SubmitButton>
+      <SubmitButton
+        onPress={() => {
+          handlePatchKeymoneyHistory(),
+            navigation.navigate("ForeignPayHistoryPage", { unit });
+        }}
+      >
         <SubmitView>
           <SubmitText>저장하기</SubmitText>
         </SubmitView>
@@ -204,30 +267,54 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
               />
             </TouchableOpacity>
           </CategoryTitleList>
-          <CategoryList>
+          <CategoryList
+            onPress={() => {
+              handleChangeCategory("식비");
+            }}
+          >
             <CategoryImage
               source={require("../../Images/식비.png")}
               resizeMode="contain"
             />
             <CategoryText>식비</CategoryText>
           </CategoryList>
-          <CategoryList>
+          <CategoryList
+            onPress={() => {
+              handleChangeCategory("교통");
+            }}
+          >
             <CategoryImage source={require("../../Images/교통.png")} />
             <CategoryText>교통</CategoryText>
           </CategoryList>
-          <CategoryList>
+          <CategoryList
+            onPress={() => {
+              handleChangeCategory("숙박");
+            }}
+          >
             <CategoryImage source={require("../../Images/숙박.png")} />
             <CategoryText>숙박</CategoryText>
           </CategoryList>
-          <CategoryList>
+          <CategoryList
+            onPress={() => {
+              handleChangeCategory("쇼핑 · 편의점 · 마트");
+            }}
+          >
             <CategoryImage source={require("../../Images/쇼핑.png")} />
             <CategoryText>쇼핑 · 편의점 · 마트</CategoryText>
           </CategoryList>
-          <CategoryList>
+          <CategoryList
+            onPress={() => {
+              handleChangeCategory("문화 · 여가");
+            }}
+          >
             <CategoryImage source={require("../../Images/문화.png")} />
             <CategoryText>문화 · 여가</CategoryText>
           </CategoryList>
-          <CategoryList>
+          <CategoryList
+            onPress={() => {
+              handleChangeCategory("기타");
+            }}
+          >
             <CategoryImage source={require("../../Images/기타.png")} />
             <CategoryText>기타</CategoryText>
           </CategoryList>

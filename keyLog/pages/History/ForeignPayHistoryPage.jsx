@@ -548,6 +548,8 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                             formattedTime: formattedTime,
                             subject: item.subject,
                             categoryImage: categoryIconMap[item.category],
+                            historyId: item.historyId,
+                            type: item.type,
                           });
                         }}
                       >

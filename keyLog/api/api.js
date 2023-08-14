@@ -39,6 +39,10 @@ export const postPayment = (payData) => {
   return axiosClient.post("/payment", payData);
 };
 
+export const updatepayment = ({ historyId, updatePaymentData }) => {
+  return axiosClient.patch(`/payment/${historyId}/update`, updatePaymentData);
+};
+
 //계좌
 export const getAccount = () => {
   return axiosClient.get("/account");
@@ -71,4 +75,10 @@ export const getMyKeymoney = () => {
 
 export const getMyKeymoneyUnit = ({ unit, filter }) => {
   return axiosClient.get(`/keymoney/${unit}?filter=${filter}`);
+};
+
+export const getDetailKeymoneyHistory = ({ historyId, type }) => {
+  return axiosClient.get(
+    `/keymoney/detail?historyId=${historyId}&type=${type}`
+  );
 };

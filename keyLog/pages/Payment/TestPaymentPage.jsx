@@ -1,5 +1,12 @@
 import styled from "styled-components/native";
-import { Button, Modal, Text, TouchableOpacity, View } from "react-native";
+import {
+  Button,
+  Modal,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+} from "react-native";
 import {
   fontPercentage,
   heightPercentage,
@@ -271,7 +278,7 @@ const TestPaymentPage = ({ navigation, route }) => {
       onSuccess: (response) => {
         console.log(response.data.result);
 
-        const units = response.data.result.map((item) => item.unit);
+        // const units = response.data.result.map((item) => item.unit);
         console.log("외환 계좌" + units);
         setUnits(units);
 
@@ -280,8 +287,20 @@ const TestPaymentPage = ({ navigation, route }) => {
           setTimeout(() => {
             setShowModal(false);
             navigation.navigate("ExchangePage");
-          }, 3000);
+          }, 1000);
         }
+
+        // if (units.length === 0) {
+        //   Alert.alert("키머니 계좌가 없어요", "환전하기 페이지로 이동합니다.", {
+        //     text: "1초후 이동",
+        //     onPress: () => {
+        //       setTimeout(() => {
+        //         setShowModal(false);
+        //         navigation.navigate("ExchangePage");
+        //       }, 1000);
+        //     },
+        //   });
+        // }
       },
       onError: (error) => {
         console.log(error);
@@ -341,6 +360,7 @@ const TestPaymentPage = ({ navigation, route }) => {
       updateIsAllFieldsFilled();
     }
   };
+
   useEffect(() => {
     updateIsAllFieldsFilled();
   }, [storeTitle, memoText, category, moneyText]);
@@ -529,13 +549,6 @@ const TestPaymentPage = ({ navigation, route }) => {
                 }}
               >
                 <ModalText>연결된 외환 계좌가 없습니다.</ModalText>
-                {/* <Button
-                  title="환전하러 가기"
-                  onPress={() => {
-                    setShowModal(false);
-                    navigation.navigate("ExchangePage");
-                  }}
-                /> */}
               </ModalTextContainer>
             </View>
           </View>
