@@ -14,10 +14,9 @@ import {
   phoneHeight,
   phoneWidth,
   widthPercentage,
-} from "../utils/ResponseSize";
+} from "../../utils/ResponseSize";
 import React, { useState, useEffect } from "react";
-import PrevHeader from "../components/Header/PrevHeader";
-
+import PrevHeader from "../../components/Header/PrevHeader";
 
 const Root = styled.View`
   width: ${phoneWidth}px;
@@ -372,12 +371,12 @@ const OwnPayHistoryPage = ({ navigation }) => {
           <CountryContainer>
             {openSelect ? (
               <Image
-                source={require("../assets/Setting/KoreaCountryIcon.png")}
+                source={require("../../assets/Setting/KoreaCountryIcon.png")}
                 style={{ opacity: 0.3 }}
               />
             ) : (
               <Image
-                source={require("../assets/Setting/KoreaCountryIcon.png")}
+                source={require("../../assets/Setting/KoreaCountryIcon.png")}
               />
             )}
 
@@ -385,7 +384,7 @@ const OwnPayHistoryPage = ({ navigation }) => {
           </CountryContainer>
           <ButtonContainer>
             <RevertToWonButton>
-              <Image source={require("../assets/Setting/loop.png")} />
+              <Image source={require("../../assets/Setting/loop.png")} />
               <ButtonText>원화</ButtonText>
             </RevertToWonButton>
             <ExchangeButton>
@@ -397,7 +396,7 @@ const OwnPayHistoryPage = ({ navigation }) => {
           <SelectTextContainer onPress={() => setOpenSelect(true)}>
             <SelectText>전체</SelectText>
             <SelectImage
-              source={require("../assets/travelBudget/SelectButtonBefore.png")}
+              source={require("../../assets/travelBudget/SelectButtonBefore.png")}
             />
           </SelectTextContainer>
         </SelectContainer>
@@ -405,7 +404,7 @@ const OwnPayHistoryPage = ({ navigation }) => {
         <HistoryContainer>
           <DateText>7월 30일</DateText>
           <ListContainer>
-            <Image source={require("../assets/Setting/환전.png")} />
+            <Image source={require("../../assets/Setting/환전.png")} />
             <ListInfoContainer>
               <ListTextContainer>
                 <ListText>엔화 환전</ListText>
@@ -429,7 +428,7 @@ const OwnPayHistoryPage = ({ navigation }) => {
                 setSelectedCategory("전체");
               }}
             >
-              <DeleteImage source={require("../Images/삭제.png")} />
+              <DeleteImage source={require("../../Images/삭제.png")} />
             </TouchableOpacity>
           </CategoryTitleList>
           <CategoryListContainer>
@@ -444,7 +443,7 @@ const OwnPayHistoryPage = ({ navigation }) => {
                 </CategoryText>
               </TouchableOpacity>
               {selectedCategory === "전체" && (
-                <Image source={require("../assets/Setting/check.png")} />
+                <Image source={require("../../assets/Setting/check.png")} />
               )}
             </CategoryList>
             <CategoryList>
@@ -458,7 +457,7 @@ const OwnPayHistoryPage = ({ navigation }) => {
                 </CategoryText>
               </TouchableOpacity>
               {selectedCategory === "입금" && (
-                <Image source={require("../assets/Setting/check.png")} />
+                <Image source={require("../../assets/Setting/check.png")} />
               )}
             </CategoryList>
             <CategoryList>
@@ -472,7 +471,7 @@ const OwnPayHistoryPage = ({ navigation }) => {
                 </CategoryText>
               </TouchableOpacity>
               {selectedCategory === "출금" && (
-                <Image source={require("../assets/Setting/check.png")} />
+                <Image source={require("../../assets/Setting/check.png")} />
               )}
             </CategoryList>
           </CategoryListContainer>
