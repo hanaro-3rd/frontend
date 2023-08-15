@@ -7,7 +7,7 @@ import {
   phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
-import { Image, TouchableOpacity } from "react-native";
+import { Image, ScrollView, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import CloseButton from "../../assets/travelBudget/CloseButton.png";
 import DeleteButton from "../../assets/travelBudget/delete.png";
@@ -19,10 +19,11 @@ import ShopIcon from "../../assets/travelBudget/ShopIcon.png";
 import SelectButton from "../../assets/travelBudget/SelectButton.png";
 import DeleteHeader from "../../components/Header/DeleteHeader";
 import HeaderBack from "../../assets/travelBudget/Header-Back.png";
+import { useQuery, useQueryClient } from "react-query";
+import { getTravelBudgetCategory, getTravelBudgetDetail } from "../../api/api";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
-import { he } from "date-fns/locale";
-
-const RootScrollView = styled.ScrollView`
+const RootScrollView = styled.View`
   /* margin-top: ${getStatusBarHeight}px; */
   min-height: ${phoneHeight}px;
   width: 100%;
@@ -33,13 +34,12 @@ const RootScrollView = styled.ScrollView`
 const BodyContainer = styled.View`
   flex-direction: column;
   align-items: flex-start;
-  flex: 1 0 0;
-  align-self: stretch;
+  flex: 1;
 `;
 
-const BodyMain = styled.View`
+const BodyMain = styled.ScrollView`
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   /* gap: 20px; */
   align-self: stretch;
   background-color: #fff;
@@ -49,6 +49,7 @@ const MainContainer = styled.View`
   flex-direction: column;
   align-items: center;
   align-self: stretch;
+  margin-bottom: ${heightPercentage(20)}px;
 `;
 
 const CategoryPaymentContainer = styled.View`
@@ -86,7 +87,7 @@ const Icon = styled.View`
 
 const CategoryText = styled.Text`
   height: ${heightPercentage(24)}px;
-  width: ${widthPercentage(51)}px;
+  width: ${widthPercentage(151)}px;
   color: #191f29;
   font-family: "Inter";
   font-size: ${fontPercentage(16)}px;
@@ -184,7 +185,23 @@ const UsedCostText = styled.Text`
   font-weight: 400;
 `;
 
-const MapImage = styled.Image`
+const UsedPlusCostText = styled.Text`
+  color: #55acee;
+  text-align: right;
+  font-family: "Inter";
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+const UsedMinusCostText = styled.Text`
+  color: red;
+  text-align: right;
+  font-family: "Inter";
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+const MapImage = styled.View`
   width: ${widthPercentage(390)}px;
   height: ${heightPercentage(300)}px;
 `;
@@ -288,10 +305,72 @@ const PaymentTotalContainer = styled.View`
   align-self: stretch;
 `;
 
-const TravelBudgetDetailPage = ({ navigation }) => {
+const TravelBudgetDetailPage = ({ navigation, route }) => {
   const handleGoBackToBudgetPage = () => {
     navigation.goBack();
   };
+  const { planId } = route.params;
+  const [category, setCategory] = useState([]);
+  const [foodCategory, setFoodCategory] = useState([]);
+  const [transCategory, setTransCategory] = useState([]);
+  const [sleepCategory, setSleepCategory] = useState([]);
+  const [shoppingCategory, setShoppingCategory] = useState([]);
+  const [cultureCategory, setCultureCategory] = useState([]);
+  const [etcCategory, setEtcCategory] = useState([]);
+  const [foodMarker, setFoodMarker] = useState([]);
+  const [transMarker, setTransMarker] = useState([]);
+  const [sleepMarker, setSleepMarker] = useState([]);
+  const [shoppingMarker, setShoppingMarker] = useState([]);
+  const [cultureMarker, setCultureMarker] = useState([]);
+  const [etcMarker, setEtcMarker] = useState([]);
+  const queryClient = useQueryClient();
+  const [isMarker, setIsMarker] = useState(false);
+  const [initialMarker, setInitialMarker] = useState();
+  const { categoryData } = useQuery(
+    "getDetailCategoryPlan",
+    () => getTravelBudgetCategory(planId),
+    {
+      onSuccess: (response) => {
+        console.log(response.data, "getDetailPlanCategory");
+        setCategory(response.data.category);
+        console.log(response.data.categoryPaymentHistory["교통"]);
+
+        if (response.data.categoryPaymentHistory) {
+          const obj = response.data.categoryPaymentHistory;
+          for (key in obj) {
+            if (obj[key].length > 0) {
+              setInitialMarker(obj[key][0]);
+              setIsMarker(true);
+              break;
+            }
+          }
+          for (key in obj) {
+            switch (key) {
+              case "교통":
+                setTransCategory(obj[key]);
+                break;
+              case "식비":
+                setFoodCategory(obj[key]);
+                break;
+              case "숙박":
+                setSleepCategory(obj[key]);
+                break;
+              case "쇼핑":
+                setShoppingCategory(obj[key]);
+                break;
+              case "문화":
+                setCultureCategory(obj[key]);
+                break;
+              default:
+                setEtcCategory(obj[key]);
+                break;
+            }
+          }
+        }
+      },
+      onError: () => {},
+    }
+  );
 
   const [selectedTab, setSelectedTab] = useState("category");
 
@@ -299,7 +378,38 @@ const TravelBudgetDetailPage = ({ navigation }) => {
     <RootScrollView>
       <DeleteHeader navigation={navigation} to="TravelBudgetPage" />
       <BodyContainer>
-        <MapImage source={require("../../Images/지도.png")} />
+        <MapImage>
+          {isMarker && (
+            <MapView
+              style={{ flex: 1 }}
+              provider={PROVIDER_GOOGLE}
+              initialRegion={{
+                latitude: initialMarker.lat,
+                longitude: initialMarker.lng,
+                latitudeDelta: 0.1,
+                longitudeDelta: 0.1,
+              }}
+              showsUserLocation={true}
+              showsMyLocationButton={true}
+              // region={location}
+            >
+              {foodCategory.length > 0 &&
+                foodCategory?.map((e, idx) => {
+                  console.log(foodMarker);
+                  return (
+                    <Marker
+                      key={idx}
+                      opacity={1.5}
+                      coordinate={{
+                        latitude: e.lat,
+                        longitude: e.lng,
+                      }}
+                    ></Marker>
+                  );
+                })}
+            </MapView>
+          )}
+        </MapImage>
         <DropImage
           source={require("../../assets/travelBudget/Header-Back.png")}
         />
@@ -330,88 +440,407 @@ const TravelBudgetDetailPage = ({ navigation }) => {
           </SelectMenuContainer>
           {selectedTab === "category" ? (
             <MainContainer>
-              <CategoryPaymentContainer>
-                <CategoryCardContainer>
-                  <CategoryContainer>
-                    <CategoryText>식비</CategoryText>
-                  </CategoryContainer>
-                  <RemainCostContainer>
-                    <RemainText>계획한 비용</RemainText>
-                    <CostText>￥80,000</CostText>
-                    <SelectButtonImage source={SelectButton} />
-                  </RemainCostContainer>
-                </CategoryCardContainer>
-                <PaymentListContainer>
-                  <PaymentContainer>
-                    <CategoryDetailContainer>
-                      <Icon>
-                        <Image source={FoodIcon} />
-                      </Icon>
-                      <CategoryDetailTextContainer>
-                        <CategoryDetailText>스테이크</CategoryDetailText>
-                        <DateAndTimeText>7월 1일 13:59</DateAndTimeText>
-                      </CategoryDetailTextContainer>
-                    </CategoryDetailContainer>
-                    <PayCostText> ￥10,000</PayCostText>
-                  </PaymentContainer>
-                  <PaymentContainer>
-                    <CategoryDetailContainer>
-                      <Icon>
-                        <Image source={FoodIcon} />
-                      </Icon>
-                      <CategoryDetailTextContainer>
-                        <CategoryDetailText>오코노미야끼</CategoryDetailText>
-                        <DateAndTimeText>7월 2일 13:59</DateAndTimeText>
-                      </CategoryDetailTextContainer>
-                    </CategoryDetailContainer>
-                    <PayCostText> ￥10,000</PayCostText>
-                  </PaymentContainer>
-                  <PaymentTotalContainer>
-                    <UsedCostText>총 ￥20,000</UsedCostText>
-                  </PaymentTotalContainer>
-                </PaymentListContainer>
-              </CategoryPaymentContainer>
-              <CategoryPaymentContainer>
-                <CategoryCardContainer>
-                  <CategoryContainer>
-                    <CategoryText>교통</CategoryText>
-                  </CategoryContainer>
-                  <RemainCostContainer>
-                    <RemainText>계획한 비용</RemainText>
-                    <CostText>￥80,000</CostText>
-                    <SelectButtonImage source={SelectButton} />
-                  </RemainCostContainer>
-                </CategoryCardContainer>
-                <PaymentListContainer>
-                  <PaymentContainer>
-                    <CategoryDetailContainer>
-                      <Icon>
-                        <Image source={TransIcon} />
-                      </Icon>
-                      <CategoryDetailTextContainer>
-                        <CategoryDetailText>지하철</CategoryDetailText>
-                        <DateAndTimeText>7월 1일 13:59</DateAndTimeText>
-                      </CategoryDetailTextContainer>
-                    </CategoryDetailContainer>
-                    <PayCostText> ￥10,000</PayCostText>
-                  </PaymentContainer>
-                  <PaymentContainer>
-                    <CategoryDetailContainer>
-                      <Icon>
-                        <Image source={TransIcon} />
-                      </Icon>
-                      <CategoryDetailTextContainer>
-                        <CategoryDetailText>신칸센</CategoryDetailText>
-                        <DateAndTimeText>7월 2일 13:59</DateAndTimeText>
-                      </CategoryDetailTextContainer>
-                    </CategoryDetailContainer>
-                    <PayCostText> ￥10,000</PayCostText>
-                  </PaymentContainer>
-                  <PaymentTotalContainer>
-                    <UsedCostText>총 ￥20,000</UsedCostText>
-                  </PaymentTotalContainer>
-                </PaymentListContainer>
-              </CategoryPaymentContainer>
+              {
+                //categoryId=1, 식비
+                category.length > 0 && (
+                  <CategoryPaymentContainer>
+                    <CategoryCardContainer>
+                      <CategoryContainer>
+                        <CategoryText>식비</CategoryText>
+                      </CategoryContainer>
+                      <RemainCostContainer>
+                        <RemainText>계획한 비용</RemainText>
+                        <CostText>￥{category[0].categoryBudget}</CostText>
+                        <SelectButtonImage source={SelectButton} />
+                      </RemainCostContainer>
+                    </CategoryCardContainer>
+                    <PaymentListContainer>
+                      {foodCategory?.map((e, idx) => {
+                        return (
+                          <PaymentContainer key={idx}>
+                            <CategoryDetailContainer>
+                              <Icon>
+                                <Image source={FoodIcon} />
+                              </Icon>
+                              <CategoryDetailTextContainer>
+                                <CategoryDetailText>
+                                  {e.store}
+                                </CategoryDetailText>
+                                <DateAndTimeText>
+                                  {e.createdAt[1]}월 {e.createdAt[2]}일{" "}
+                                  {e.createdAt[3]}:{e.createdAt[4]}
+                                </DateAndTimeText>
+                              </CategoryDetailTextContainer>
+                            </CategoryDetailContainer>
+                            <PayCostText> ￥{e.price}</PayCostText>
+                          </PaymentContainer>
+                        );
+                      })}
+
+                      <PaymentTotalContainer>
+                        <UsedCostText>
+                          결제금액 ￥
+                          {foodCategory.reduce((acc, cur) => {
+                            return (acc += cur.price);
+                          }, 0)}
+                        </UsedCostText>
+                      </PaymentTotalContainer>
+                      <PaymentTotalContainer>
+                        {category[0].categoryBudget >
+                        foodCategory.reduce((acc, cur) => {
+                          return (acc += cur.price);
+                        }, 0) ? (
+                          <UsedPlusCostText>
+                            경비잔액 ￥
+                            {category[0].categoryBudget -
+                              foodCategory.reduce((acc, cur) => {
+                                return (acc += cur.price);
+                              }, 0)}
+                          </UsedPlusCostText>
+                        ) : (
+                          <UsedMinusCostText>
+                            경비잔액 ￥
+                            {category[0].categoryBudget -
+                              foodCategory.reduce((acc, cur) => {
+                                return (acc += cur.price);
+                              }, 0)}
+                          </UsedMinusCostText>
+                        )}
+                      </PaymentTotalContainer>
+                    </PaymentListContainer>
+                  </CategoryPaymentContainer>
+                )
+              }
+              {category.length > 0 && ( //카테고리명 교통, 카테고리아이디 2
+                <CategoryPaymentContainer>
+                  <CategoryCardContainer>
+                    <CategoryContainer>
+                      <CategoryText>교통</CategoryText>
+                    </CategoryContainer>
+                    <RemainCostContainer>
+                      <RemainText>계획한 비용</RemainText>
+                      <CostText>￥{category[1].categoryBudget}</CostText>
+                      <SelectButtonImage source={SelectButton} />
+                    </RemainCostContainer>
+                  </CategoryCardContainer>
+                  <PaymentListContainer>
+                    {transCategory?.map((e, idx) => {
+                      return (
+                        <PaymentContainer key={idx}>
+                          <CategoryDetailContainer>
+                            <Icon>
+                              <Image source={FoodIcon} />
+                            </Icon>
+                            <CategoryDetailTextContainer>
+                              <CategoryDetailText>{e.store}</CategoryDetailText>
+                              <DateAndTimeText>
+                                {e.createdAt[1]}월 {e.createdAt[2]}일{" "}
+                                {e.createdAt[3]}:{e.createdAt[4]}
+                              </DateAndTimeText>
+                            </CategoryDetailTextContainer>
+                          </CategoryDetailContainer>
+                          <PayCostText> ￥{e.price}</PayCostText>
+                        </PaymentContainer>
+                      );
+                    })}
+
+                    <PaymentTotalContainer>
+                      <UsedCostText>
+                        결제금액 ￥
+                        {transCategory.reduce((acc, cur) => {
+                          return (acc += cur.price);
+                        }, 0)}
+                      </UsedCostText>
+                    </PaymentTotalContainer>
+                    <PaymentTotalContainer>
+                      {category[1].categoryBudget >
+                      transCategory.reduce((acc, cur) => {
+                        return (acc += cur.price);
+                      }, 0) ? (
+                        <UsedPlusCostText>
+                          경비잔액 ￥
+                          {category[1].categoryBudget -
+                            transCategory.reduce((acc, cur) => {
+                              return (acc += cur.price);
+                            }, 0)}
+                        </UsedPlusCostText>
+                      ) : (
+                        <UsedMinusCostText>
+                          경비잔액 ￥
+                          {category[1].categoryBudget -
+                            transCategory.reduce((acc, cur) => {
+                              return (acc += cur.price);
+                            }, 0)}
+                        </UsedMinusCostText>
+                      )}
+                    </PaymentTotalContainer>
+                  </PaymentListContainer>
+                </CategoryPaymentContainer>
+              )}
+              {category.length > 0 && ( //카테고리명 숙박, 카테고리아이디 3
+                <CategoryPaymentContainer>
+                  <CategoryCardContainer>
+                    <CategoryContainer>
+                      <CategoryText>숙박</CategoryText>
+                    </CategoryContainer>
+                    <RemainCostContainer>
+                      <RemainText>계획한 비용</RemainText>
+                      <CostText>￥{category[2].categoryBudget}</CostText>
+                      <SelectButtonImage source={SelectButton} />
+                    </RemainCostContainer>
+                  </CategoryCardContainer>
+                  <PaymentListContainer>
+                    {sleepCategory?.map((e, idx) => {
+                      return (
+                        <PaymentContainer key={idx}>
+                          <CategoryDetailContainer>
+                            <Icon>
+                              <Image source={FoodIcon} />
+                            </Icon>
+                            <CategoryDetailTextContainer>
+                              <CategoryDetailText>{e.store}</CategoryDetailText>
+                              <DateAndTimeText>
+                                {e.createdAt[1]}월 {e.createdAt[2]}일{" "}
+                                {e.createdAt[3]}:{e.createdAt[4]}
+                              </DateAndTimeText>
+                            </CategoryDetailTextContainer>
+                          </CategoryDetailContainer>
+                          <PayCostText> ￥{e.price}</PayCostText>
+                        </PaymentContainer>
+                      );
+                    })}
+
+                    <PaymentTotalContainer>
+                      <UsedCostText>
+                        결제금액 ￥
+                        {sleepCategory.reduce((acc, cur) => {
+                          return (acc += cur.price);
+                        }, 0)}
+                      </UsedCostText>
+                    </PaymentTotalContainer>
+                    <PaymentTotalContainer>
+                      {category[2].categoryBudget >=
+                      sleepCategory.reduce((acc, cur) => {
+                        return (acc += cur.price);
+                      }, 0) ? (
+                        <UsedPlusCostText>
+                          경비잔액 ￥
+                          {category[2].categoryBudget -
+                            sleepCategory.reduce((acc, cur) => {
+                              return (acc += cur.price);
+                            }, 0)}
+                        </UsedPlusCostText>
+                      ) : (
+                        <UsedMinusCostText>
+                          경비잔액 ￥
+                          {category[2].categoryBudget -
+                            sleepCategory.reduce((acc, cur) => {
+                              return (acc += cur.price);
+                            }, 0)}
+                        </UsedMinusCostText>
+                      )}
+                    </PaymentTotalContainer>
+                  </PaymentListContainer>
+                </CategoryPaymentContainer>
+              )}
+              {category.length > 0 && ( //카테고리명 교통, 카테고리아이디 4
+                <CategoryPaymentContainer>
+                  <CategoryCardContainer>
+                    <CategoryContainer>
+                      <CategoryText>쇼핑 · 편의점 · 마트</CategoryText>
+                    </CategoryContainer>
+                    <RemainCostContainer>
+                      <RemainText>계획한 비용</RemainText>
+                      <CostText>￥{category[3].categoryBudget}</CostText>
+                      <SelectButtonImage source={SelectButton} />
+                    </RemainCostContainer>
+                  </CategoryCardContainer>
+                  <PaymentListContainer>
+                    {shoppingCategory?.map((e, idx) => {
+                      return (
+                        <PaymentContainer key={idx}>
+                          <CategoryDetailContainer>
+                            <Icon>
+                              <Image source={FoodIcon} />
+                            </Icon>
+                            <CategoryDetailTextContainer>
+                              <CategoryDetailText>{e.store}</CategoryDetailText>
+                              <DateAndTimeText>
+                                {e.createdAt[1]}월 {e.createdAt[2]}일{" "}
+                                {e.createdAt[3]}:{e.createdAt[4]}
+                              </DateAndTimeText>
+                            </CategoryDetailTextContainer>
+                          </CategoryDetailContainer>
+                          <PayCostText> ￥{e.price}</PayCostText>
+                        </PaymentContainer>
+                      );
+                    })}
+
+                    <PaymentTotalContainer>
+                      <UsedCostText>
+                        결제금액 ￥
+                        {shoppingCategory.reduce((acc, cur) => {
+                          return (acc += cur.price);
+                        }, 0)}
+                      </UsedCostText>
+                    </PaymentTotalContainer>
+                    <PaymentTotalContainer>
+                      {category[3].categoryBudget >=
+                      shoppingCategory.reduce((acc, cur) => {
+                        return (acc += cur.price);
+                      }, 0) ? (
+                        <UsedPlusCostText>
+                          경비잔액 ￥
+                          {category[3].categoryBudget -
+                            shoppingCategory.reduce((acc, cur) => {
+                              return (acc += cur.price);
+                            }, 0)}
+                        </UsedPlusCostText>
+                      ) : (
+                        <UsedMinusCostText>
+                          경비잔액 ￥
+                          {category[3].categoryBudget -
+                            shoppingCategory.reduce((acc, cur) => {
+                              return (acc += cur.price);
+                            }, 0)}
+                        </UsedMinusCostText>
+                      )}
+                    </PaymentTotalContainer>
+                  </PaymentListContainer>
+                </CategoryPaymentContainer>
+              )}
+              {category.length > 0 && ( //카테고리명 문화 · 여가, 카테고리아이디 5
+                <CategoryPaymentContainer>
+                  <CategoryCardContainer>
+                    <CategoryContainer>
+                      <CategoryText>문화 · 여가</CategoryText>
+                    </CategoryContainer>
+                    <RemainCostContainer>
+                      <RemainText>계획한 비용</RemainText>
+                      <CostText>￥{category[4].categoryBudget}</CostText>
+                      <SelectButtonImage source={SelectButton} />
+                    </RemainCostContainer>
+                  </CategoryCardContainer>
+                  <PaymentListContainer>
+                    {cultureCategory?.map((e, idx) => {
+                      return (
+                        <PaymentContainer key={idx}>
+                          <CategoryDetailContainer>
+                            <Icon>
+                              <Image source={FoodIcon} />
+                            </Icon>
+                            <CategoryDetailTextContainer>
+                              <CategoryDetailText>{e.store}</CategoryDetailText>
+                              <DateAndTimeText>
+                                {e.createdAt[1]}월 {e.createdAt[2]}일{" "}
+                                {e.createdAt[3]}:{e.createdAt[4]}
+                              </DateAndTimeText>
+                            </CategoryDetailTextContainer>
+                          </CategoryDetailContainer>
+                          <PayCostText> ￥{e.price}</PayCostText>
+                        </PaymentContainer>
+                      );
+                    })}
+
+                    <PaymentTotalContainer>
+                      <UsedCostText>
+                        결제금액 ￥
+                        {cultureCategory.reduce((acc, cur) => {
+                          return (acc += cur.price);
+                        }, 0)}
+                      </UsedCostText>
+                    </PaymentTotalContainer>
+                    <PaymentTotalContainer>
+                      {category[4].categoryBudget >=
+                      cultureCategory.reduce((acc, cur) => {
+                        return (acc += cur.price);
+                      }, 0) ? (
+                        <UsedPlusCostText>
+                          경비잔액 ￥
+                          {category[4].categoryBudget -
+                            cultureCategory.reduce((acc, cur) => {
+                              return (acc += cur.price);
+                            }, 0)}
+                        </UsedPlusCostText>
+                      ) : (
+                        <UsedMinusCostText>
+                          경비잔액 ￥
+                          {category[4].categoryBudget -
+                            cultureCategory.reduce((acc, cur) => {
+                              return (acc += cur.price);
+                            }, 0)}
+                        </UsedMinusCostText>
+                      )}
+                    </PaymentTotalContainer>
+                  </PaymentListContainer>
+                </CategoryPaymentContainer>
+              )}
+              {category.length > 0 && ( //카테고리명 문화 · 여가, 카테고리아이디 5
+                <CategoryPaymentContainer>
+                  <CategoryCardContainer>
+                    <CategoryContainer>
+                      <CategoryText>기타</CategoryText>
+                    </CategoryContainer>
+                    <RemainCostContainer>
+                      <RemainText>계획한 비용</RemainText>
+                      <CostText>￥{category[5].categoryBudget}</CostText>
+                      <SelectButtonImage source={SelectButton} />
+                    </RemainCostContainer>
+                  </CategoryCardContainer>
+                  <PaymentListContainer>
+                    {etcCategory?.map((e, idx) => {
+                      return (
+                        <PaymentContainer key={idx}>
+                          <CategoryDetailContainer>
+                            <Icon>
+                              <Image source={FoodIcon} />
+                            </Icon>
+                            <CategoryDetailTextContainer>
+                              <CategoryDetailText>{e.store}</CategoryDetailText>
+                              <DateAndTimeText>
+                                {e.createdAt[1]}월 {e.createdAt[2]}일{" "}
+                                {e.createdAt[3]}:{e.createdAt[4]}
+                              </DateAndTimeText>
+                            </CategoryDetailTextContainer>
+                          </CategoryDetailContainer>
+                          <PayCostText> ￥{e.price}</PayCostText>
+                        </PaymentContainer>
+                      );
+                    })}
+
+                    <PaymentTotalContainer>
+                      <UsedCostText>
+                        결제금액 ￥
+                        {etcCategory.reduce((acc, cur) => {
+                          return (acc += cur.price);
+                        }, 0)}
+                      </UsedCostText>
+                    </PaymentTotalContainer>
+                    <PaymentTotalContainer>
+                      {category[5].categoryBudget >=
+                      etcCategory.reduce((acc, cur) => {
+                        return (acc += cur.price);
+                      }, 0) ? (
+                        <UsedPlusCostText>
+                          경비잔액 ￥
+                          {category[5].categoryBudget -
+                            etcCategory.reduce((acc, cur) => {
+                              return (acc += cur.price);
+                            }, 0)}
+                        </UsedPlusCostText>
+                      ) : (
+                        <UsedMinusCostText>
+                          경비잔액 ￥
+                          {category[5].categoryBudget -
+                            etcCategory.reduce((acc, cur) => {
+                              return (acc += cur.price);
+                            }, 0)}
+                        </UsedMinusCostText>
+                      )}
+                    </PaymentTotalContainer>
+                  </PaymentListContainer>
+                </CategoryPaymentContainer>
+              )}
             </MainContainer>
           ) : (
             <MainContainer>

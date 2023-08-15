@@ -135,7 +135,7 @@ const TestPaymentSearchPage = ({ navigation }) => {
             onFail={(err) => console.log(err)}
             fetchDetails={true}
             query={{
-              key: "AIzaSyB3FylnsAH0okgewFANqscAn6J0q2td0MY",
+              key: "AIzaSyB_nxmsBL4iSwU9dniKHw4GWOXONVfCUZw",
               language: "ko",
             }}
             ref={placesRef}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -21,6 +21,8 @@ import styled from "styled-components/native";
 import CloseButton from "../../assets/travelBudget/CloseButton.png";
 import AddButton from "../../assets/travelBudget/add.png";
 import Delete from "../../assets/travelBudget/delete.png";
+import { useQuery, useQueryClient } from "react-query";
+import { getTravelBudget } from "../../api/api";
 
 const RootScrollView = styled.ScrollView`
   /* margin-top: ${getStatusBarHeight}px; */
@@ -157,8 +159,8 @@ const RemainCostText = styled.Text`
 const TravelBudgetPage = () => {
   const navigation = useNavigation();
 
-  const handleTravelCardPress = () => {
-    navigation.navigate("TravelBudgetDetailPage");
+  const handleTravelCardPress = (planId) => {
+    navigation.navigate("TravelBudgetDetailPage",{planId});
   };
 
   const handleGoBack = () => {
@@ -241,6 +243,34 @@ const TravelBudgetPage = () => {
         onDelete={handleDelete}
       />
 */
+  const queryClient = useQueryClient();
+  const [data, setData] = useState({});
+  const { travelBudgetData } = useQuery(
+    "travelBudgetData",
+    () => getTravelBudget(),
+    {
+      onSuccess: (response) => {
+        let dataArray = response.data.result;;
+        console.log(dataArray)
+        let obj = {};
+        for (let i = 0; i < dataArray.length; i++) {
+          if (obj[dataArray[i].startDate[0]] == undefined) {
+            obj[dataArray[i].startDate[0]] = [dataArray[i]];
+          } else {
+            obj[dataArray[i].startDate[0]].push(dataArray[i]);
+          }
+        }
+        console.log(obj)
+      obj = Object.fromEntries(
+        Object.entries(obj).sort(([a],[b]) => b > a? -1: 1 )
+      );
+      console.log(obj)
+        setData(obj);
+        console.log(obj);
+      },
+      onError: () => {},
+    }
+  );
   return (
     <RootScrollView>
       <Header>
@@ -262,66 +292,34 @@ const TravelBudgetPage = () => {
           <TitleText>내 경비 계획</TitleText>
         </BodyHeader>
         <BodyMain>
-          <YearContainer>
-            <YearText>2023</YearText>
-            <TouchableOpacity onPress={handleTravelCardPress}>
-              <TravelCard>
-                <TitleTextContainer>
-                  <PeriodText>2023.07.01 ~ 2023.07.10</PeriodText>
-                  <View>
-                    <TravelTitle>첫 도쿄 여행</TravelTitle>
-                    <CityText>일본, 도쿄</CityText>
-                  </View>
-                </TitleTextContainer>
-                <View>
-                  <RemainCostText>총 비용 ￥100,000</RemainCostText>
-                  <RemainCostText>남은 비용 ￥100,000</RemainCostText>
-                </View>
-              </TravelCard>
-            </TouchableOpacity>
-            <TravelCard>
-              <TitleTextContainer>
-                <PeriodText>2023.02.01 ~ 2023.02.10</PeriodText>
-                <View>
-                  <TravelTitle>친구들이랑 부산 여행</TravelTitle>
-                  <CityText>대한민국, 부산</CityText>
-                </View>
-              </TitleTextContainer>
-              <View>
-                <RemainCostText>총 비용 ￦100,000</RemainCostText>
-                <RemainCostText>남은 비용 ￦100,000</RemainCostText>
-              </View>
-            </TravelCard>
-          </YearContainer>
-          <YearContainer>
-            <YearText>2022</YearText>
-            <TravelCard>
-              <TitleTextContainer>
-                <PeriodText>2023.07.01 ~ 2023.07.10</PeriodText>
-                <View>
-                  <TravelTitle>첫 도쿄 여행</TravelTitle>
-                  <CityText>일본, 도쿄</CityText>
-                </View>
-              </TitleTextContainer>
-              <View>
-                <RemainCostText>총 비용 ￥100,000</RemainCostText>
-                <RemainCostText>남은 비용 ￥100,000</RemainCostText>
-              </View>
-            </TravelCard>
-            <TravelCard>
-              <TitleTextContainer>
-                <PeriodText>2023.02.01 ~ 2023.02.10</PeriodText>
-                <View>
-                  <TravelTitle>친구들이랑 부산 여행</TravelTitle>
-                  <CityText>대한민국, 부산</CityText>
-                </View>
-              </TitleTextContainer>
-              <View>
-                <RemainCostText>총 비용 ￦100,000</RemainCostText>
-                <RemainCostText>남은 비용 ￦100,000</RemainCostText>
-              </View>
-            </TravelCard>
-          </YearContainer>
+          {Object.keys(data).length !== 0 &&
+            Object?.keys(data).map((key, idx) => {
+              return (
+                <YearContainer key={idx}>
+                  <YearText>{key}</YearText>
+                  {data[key]?.map((e, idx) => {
+                    return (
+                      <TouchableOpacity key={idx} onPress={()=>handleTravelCardPress(e.planId)}>
+                        <TravelCard>
+                          <TitleTextContainer>
+                            <PeriodText>{e.startDate.slice(0,3).join(".")} ~ {e.endDate.slice(0,3).join(".")}</PeriodText>
+                            <View>
+                              <TravelTitle>{e.title}</TravelTitle>
+                              <CityText>{e.country}, {e.city}</CityText>
+                            </View>
+                          </TitleTextContainer>
+                          <View>
+                            <RemainCostText>총 비용 ￥{e.totalBudget}</RemainCostText>
+                            <RemainCostText>남은 비용 ￥{e.totalBalance}</RemainCostText>
+                          </View>
+                        </TravelCard>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </YearContainer>
+              );
+            })}
+
         </BodyMain>
       </BodyContainer>
     </RootScrollView>

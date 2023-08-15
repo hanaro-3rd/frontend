@@ -1,3 +1,4 @@
+import axios from "axios";
 import { axiosClient, axiosRefreshClient } from "./axiosClient";
 
 export const postSignup = (signupData) => {
@@ -62,3 +63,30 @@ export const getExchange = (exchangeData) => {
   return axiosClient.get(`/exchange`,exchangeData);
 }
 
+export const getTravelBudget = () => {
+  return axiosClient.get('/travelbudget')
+}
+
+export const postTravelBudget = (travelbudgetData) => {
+  return axiosClient.post('/travelbudget',travelbudgetData)
+}
+
+export const patchTravelBudget = (patchTravelBudgetData) => {
+  return axiosClient.patch('/travelbudget',patchTravelBudgetData)
+}
+
+export const getTravelBudgetDetail = (plan_id) => {
+  return axiosClient.get(`/travelbudget/${plan_id}`)
+}
+
+export const deleteTravelBudget = (plan_id) => {
+  return axiosClient.delete(`/travelbudget/${plan_id}`)
+} 
+
+export const patchTravelBudgetDetail = ({plan_id,patchTravelBudgetDetailData}) => {
+  return axiosClient.patch(`/travelbudget/${plan_id}`,patchTravelBudgetDetailData)
+}
+
+export const getTravelBudgetCategory = (plan_id) => {
+  return axiosClient.get(`/travelbudget/${plan_id}/category`)
+}

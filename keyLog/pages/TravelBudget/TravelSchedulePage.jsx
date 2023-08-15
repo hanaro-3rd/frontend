@@ -262,7 +262,7 @@ const TravelSchedulePage = ({ navigation }) => {
   const handleNextButtonPress = () => {
     if (isAllFieldsFilled) {
       navigation.navigate("TravelBudgetPlanPage", {
-        travelCountry: travelCountry,
+        travelCountry,travelTitle,travelCountryOption,startDate,endDate
       });
     }
     // else {
