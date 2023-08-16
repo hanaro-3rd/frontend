@@ -208,6 +208,7 @@ export const AccountConnectPage = ({navigation,route}) => {
             <View style={styles.popupHeader}>
               <View style={styles.popupHeaderTitle}>
                 <Text style={styles.popupHeaderText}>계좌 비밀번호 입력</Text>
+                
                 <Pressable onPress={() => setModalVisible(!modalVisible)}>
                   <Image
                     source={require("../../assets/accountImg/CloseButton.png")}
@@ -215,6 +216,7 @@ export const AccountConnectPage = ({navigation,route}) => {
                   />
                 </Pressable>
               </View>
+              <Text style={styles.popupRedHeaderText}>(가상 계좌이므로 비밀번호는 1234입니다.)</Text>
               <View style={styles.popupSubtitle}>
                 <Text>{selectedItem.bank}</Text>
               </View>
@@ -421,6 +423,11 @@ const styles = StyleSheet.create({
   },
   popupHeaderText: {
     color: "#191F29",
+    fontSize: fontPercentage(16),
+    fontWeight: "700",
+  },
+  popupRedHeaderText: {
+    color: "red",
     fontSize: fontPercentage(16),
     fontWeight: "700",
   },

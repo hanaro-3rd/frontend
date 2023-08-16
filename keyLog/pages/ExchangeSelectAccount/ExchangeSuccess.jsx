@@ -18,16 +18,15 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
-
+import { styled } from "styled-components/native";
 const ExchangeSuccess = ({ navigation, route }) => {
   const {
     exchangeToUnit,
     exchangeToMoney,
     exchangeFromMoney,
     exchangeFromUnit,
-    exchangeUnitResult,
-    exchangeRateResult,
-    exchangeChangePrice,
+    exchangeRate,
+    changePrice,
   } = route?.params;
   return (
     <View style={styles.root}>
@@ -74,28 +73,19 @@ const ExchangeSuccess = ({ navigation, route }) => {
                 <View style={styles.currentExchangeRateContainer}>
                   <View style={styles.countryInformationContainer}>
                     <Text style={styles.countryText}>
-                      {exchangeUnitResult == "USD"
-                        ? "미국"
-                        : exchangeUnitResult == "JPY"
-                        ? "일본"
-                        : "유럽"}
+                      {(exchangeToUnit == "USD" && "미국") ||
+                        (exchangeToUnit == "EUR" && "유럽") ||
+                        (exchangeToUnit == "JPY" && "일본")}
                     </Text>
-                    <Text style={styles.unitText}>{exchangeUnitResult}</Text>
+                    <Text style={styles.unitText}>{exchangeToUnit}</Text>
                   </View>
                   <View style={styles.currentExchangeRateTextContainer}>
-                    <Text style={styles.exchangeRateText}>
-                      {exchangeRateResult}
-                    </Text>
-                    <Text
-                      style={
-                        exchangeChangePrice > 0
-                          ? styles.changeRateUp
-                          : styles.changeRateDown
-                      }
-                    >
-                      {exchangeChangePrice > 0 ? "▲" : "▼"}
-                      {exchangeChangePrice}
-                    </Text>
+                    <Text style={styles.exchangeRateText}>{exchangeRate}</Text>
+                    {changePrice > 0 ? (
+                      <ChangeUpRate>▲ {changePrice}</ChangeUpRate>
+                    ) : (
+                      <ChangeRate>▼ {changePrice}</ChangeRate>
+                    )}
                   </View>
                 </View>
               </View>
@@ -339,3 +329,17 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
+const ChangeRate = styled.Text`
+  color: #0a7df2;
+  font-family: Inter;
+  font-size: ${fontPercentage(12)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
+const ChangeUpRate = styled.Text`
+  color: #ee3739;
+  font-family: Inter;
+  font-size: ${fontPercentage(12)}px;
+  font-style: normal;
+  font-weight: 700;
+`;

@@ -70,7 +70,7 @@ export const CountryChoiceComponent = ({
         {
           name: "JPY",
           country_url: require("../../assets/exchangeImg/Japan.png"),
-          exchangeRate: response.data.result.jpy.exchangeRate / 1000,
+          exchangeRate: response.data.result.jpy.exchangeRate / 100,
           changePrice: response.data.result.jpy.changePrice,
           minimum: 1000,
         },

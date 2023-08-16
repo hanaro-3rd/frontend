@@ -74,6 +74,12 @@ const App = () => {
             await AsyncStorage.getItem("refresh_token")
           );
           console.log(response.data);
+          if(response.data?.errorCode==500) {
+            setLogin(false)
+            setHaveDeviceId(false)
+            setLoading(false)
+            return;
+          }
           if (token) {
             // token이 있으면 MainPage로 이동
             setLogin(true);
@@ -114,7 +120,8 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName={
-          login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
+          "SignUpPage"
+          // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
         }
       >
         <Stack.Screen

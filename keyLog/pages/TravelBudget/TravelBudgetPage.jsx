@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -21,6 +21,10 @@ import styled from "styled-components/native";
 import CloseButton from "../../assets/travelBudget/CloseButton.png";
 import AddButton from "../../assets/travelBudget/add.png";
 import Delete from "../../assets/travelBudget/delete.png";
+import { useQuery, useQueryClient } from "react-query";
+import { getTravelBudget } from "../../api/api";
+
+//gesture
 
 const RootScrollView = styled.ScrollView`
   /* margin-top: ${getStatusBarHeight}px; */
@@ -157,8 +161,8 @@ const RemainCostText = styled.Text`
 const TravelBudgetPage = () => {
   const navigation = useNavigation();
 
-  const handleTravelCardPress = () => {
-    navigation.navigate("TravelBudgetDetailPage");
+  const handleTravelCardPress = (planId) => {
+    navigation.navigate("TravelBudgetDetailPage",{planId});
   };
 
   const handleGoBack = () => {
@@ -193,54 +197,34 @@ const TravelBudgetPage = () => {
       ]
     );
   };
-  /*yarn add react-native-dialog 
-
-  import React, { useState } from "react";
-import { View, TouchableOpacity, Text } from "react-native";
-import Dialog from "react-native-dialog";
-
-const CustomAlertDialog = ({ visible, onCancel, onDelete }) => {
-  return (
-    <Dialog.Container visible={visible}>
-      <Dialog.Title>경비 계획 삭제하기</Dialog.Title>
-      <Dialog.Description>
-        경비 계획을 삭제하면 여행 계획과 카테고리별 경비 계획이 모두 삭제됩니다.
-      </Dialog.Description>
-      <Dialog.Button label="취소" onPress={onCancel} />
-      <Dialog.Button label="삭제하기" onPress={onDelete} />
-    </Dialog.Container>
+  const queryClient = useQueryClient();
+  const [data, setData] = useState({});
+  const { travelBudgetData } = useQuery(
+    "travelBudgetData",
+    () => getTravelBudget(),
+    {
+      onSuccess: (response) => {
+        let dataArray = response.data.result;;
+        console.log(dataArray)
+        let obj = {};
+        for (let i = 0; i < dataArray.length; i++) {
+          if (obj[dataArray[i].startDate[0]] == undefined) {
+            obj[dataArray[i].startDate[0]] = [dataArray[i]];
+          } else {
+            obj[dataArray[i].startDate[0]].push(dataArray[i]);
+          }
+        }
+        console.log(obj)
+      obj = Object.fromEntries(
+        Object.entries(obj).sort(([a],[b]) => b > a? -1: 1 )
+      );
+      console.log(obj)
+        setData(obj);
+        console.log(obj);
+      },
+      onError: () => {},
+    }
   );
-};
-
-export default CustomAlertDialog;
-
-import CustomAlertDialog from "../../components/travelBudgetPageComponent/CustomAlertDialog";
-
-const TravelBudgetPage = () => {
-  const [isDialogVisible, setDialogVisible] = useState(false);
-
-  const handleDeleteImageClick = () => {
-    setDialogVisible(true);
-  };
-
-  const handleCancel = () => {
-    setDialogVisible(false);
-  };
-
-  const handleDelete = () => {
-    // 실제 삭제 동작 수행
-    setDialogVisible(false);
-  };
-
-   <TouchableOpacity onPress={handleDeleteImageClick}>
-        <Image source={Delete} />
-      </TouchableOpacity>
-      <CustomAlertDialog
-        visible={isDialogVisible}
-        onCancel={handleCancel}
-        onDelete={handleDelete}
-      />
-*/
   return (
     <RootScrollView>
       <Header>
@@ -262,66 +246,38 @@ const TravelBudgetPage = () => {
           <TitleText>내 경비 계획</TitleText>
         </BodyHeader>
         <BodyMain>
-          <YearContainer>
-            <YearText>2023</YearText>
-            <TouchableOpacity onPress={handleTravelCardPress}>
-              <TravelCard>
-                <TitleTextContainer>
-                  <PeriodText>2023.07.01 ~ 2023.07.10</PeriodText>
-                  <View>
-                    <TravelTitle>첫 도쿄 여행</TravelTitle>
-                    <CityText>일본, 도쿄</CityText>
-                  </View>
-                </TitleTextContainer>
-                <View>
-                  <RemainCostText>총 비용 ￥100,000</RemainCostText>
-                  <RemainCostText>남은 비용 ￥100,000</RemainCostText>
-                </View>
-              </TravelCard>
-            </TouchableOpacity>
-            <TravelCard>
-              <TitleTextContainer>
-                <PeriodText>2023.02.01 ~ 2023.02.10</PeriodText>
-                <View>
-                  <TravelTitle>친구들이랑 부산 여행</TravelTitle>
-                  <CityText>대한민국, 부산</CityText>
-                </View>
-              </TitleTextContainer>
-              <View>
-                <RemainCostText>총 비용 ￦100,000</RemainCostText>
-                <RemainCostText>남은 비용 ￦100,000</RemainCostText>
-              </View>
-            </TravelCard>
-          </YearContainer>
-          <YearContainer>
-            <YearText>2022</YearText>
-            <TravelCard>
-              <TitleTextContainer>
-                <PeriodText>2023.07.01 ~ 2023.07.10</PeriodText>
-                <View>
-                  <TravelTitle>첫 도쿄 여행</TravelTitle>
-                  <CityText>일본, 도쿄</CityText>
-                </View>
-              </TitleTextContainer>
-              <View>
-                <RemainCostText>총 비용 ￥100,000</RemainCostText>
-                <RemainCostText>남은 비용 ￥100,000</RemainCostText>
-              </View>
-            </TravelCard>
-            <TravelCard>
-              <TitleTextContainer>
-                <PeriodText>2023.02.01 ~ 2023.02.10</PeriodText>
-                <View>
-                  <TravelTitle>친구들이랑 부산 여행</TravelTitle>
-                  <CityText>대한민국, 부산</CityText>
-                </View>
-              </TitleTextContainer>
-              <View>
-                <RemainCostText>총 비용 ￦100,000</RemainCostText>
-                <RemainCostText>남은 비용 ￦100,000</RemainCostText>
-              </View>
-            </TravelCard>
-          </YearContainer>
+          {Object.keys(data).length !== 0 ?
+            Object?.keys(data).map((key, idx) => {
+              return (
+                <YearContainer key={idx}>
+                  <YearText>{key}</YearText>
+                  {data[key]?.map((e, idx) => {
+                    return (
+               
+                      <TouchableOpacity key={idx} onPress={()=>handleTravelCardPress(e.planId)}>
+                        <TravelCard>
+                          <TitleTextContainer>
+                            <PeriodText>{e.startDate.slice(0,3).join(".")} ~ {e.endDate.slice(0,3).join(".")}</PeriodText>
+                            <View>
+                              <TravelTitle>{e.title}</TravelTitle>
+                              <CityText>{e.country}, {e.city}</CityText>
+                            </View>
+                          </TitleTextContainer>
+                          <View>
+                            <RemainCostText>총 비용 ￥{e.totalBudget}</RemainCostText>
+                            <RemainCostText>남은 비용 ￥{e.totalBalance}</RemainCostText>
+                          </View>
+                        </TravelCard>
+                      </TouchableOpacity>
+                 
+                    );
+                  })}
+                </YearContainer>
+              );
+            })
+          :<Text>아직 생성된 경비계획이 없습니다.</Text>
+          }
+
         </BodyMain>
       </BodyContainer>
     </RootScrollView>

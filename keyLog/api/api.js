@@ -1,3 +1,4 @@
+import axios from "axios";
 import { axiosClient, axiosRefreshClient } from "./axiosClient";
 
 export const postSignup = (signupData) => {
@@ -64,10 +65,38 @@ export const postExchange = (exchangeData) => {
 
 export const getExchange = (exchangeData) => {
   return axiosClient.get(
-    `http://3.38.13.139:8081/exchange/getFromRedis`,
+    `/exchange/getFromRedis`,
     exchangeData
   );
 };
+
+export const getTravelBudget = () => {
+  return axiosClient.get('/plan')
+}
+
+export const postTravelBudget = (travelbudgetData) => {
+  return axiosClient.post('/plan',travelbudgetData)
+}
+
+export const patchTravelBudget = ({planId,patchTravelBudgetData}) => {
+  return axiosClient.patch(`/plan${planId}`,patchTravelBudgetData)
+}
+
+export const getTravelBudgetDetail = (plan_id) => {
+  return axiosClient.get(`/plan/${plan_id}`)
+}
+
+export const deleteTravelBudget = (plan_id) => {
+  return axiosClient.delete(`/plan/${plan_id}`)
+} 
+
+export const patchTravelBudgetDetail = ({plan_id,patchTravelBudgetDetailData}) => {
+  return axiosClient.patch(`/plan/${plan_id}/category`,patchTravelBudgetDetailData)
+}
+
+export const getTravelBudgetCategory = (plan_id) => {
+  return axiosClient.get(`/plan/${plan_id}/category`)
+}
 
 export const getMyKeymoney = () => {
   return axiosClient.get("/keymoney");
@@ -82,3 +111,4 @@ export const getDetailKeymoneyHistory = ({ historyId, type }) => {
     `/keymoney/detail?historyId=${historyId}&type=${type}`
   );
 };
+

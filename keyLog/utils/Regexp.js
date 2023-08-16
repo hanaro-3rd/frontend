@@ -5,17 +5,10 @@ export const checkPersonalNumberChange = text => {
   if (cleaned.length < 7) {
     match = cleaned.match(/^(\d{0,6})/);
   } else {
-    match = cleaned.match(/^(\d{6})(\d{0,7})/);
+    match = cleaned.match(/^(\d{6})(\d{0,1})/);
   }
 
-  if (match) {
-    const part1 = match[1] || '',
-      part2 = match[2] || '';
-
-    return [part1, part2];
-  } else {
-    return [null, null];
-  }
+  return match
 };
 
 export const checkPhoneChange = number => {

@@ -17,6 +17,8 @@ import ShopIcon from "../../assets/travelBudget/ShopIcon.png";
 import PlayIcon from "../../assets/travelBudget/PlayIcon.png";
 import EtcIcon from "../../assets/travelBudget/EtcIcon.png";
 import arrow_back from "../../assets/travelBudget/arrow_back.png";
+import { useMutation, useQueryClient } from "react-query";
+import { postTravelBudget } from "../../api/api";
 
 const RootScrollView = styled.ScrollView`
   margin-top: ${getStatusBarHeight}px;
@@ -175,7 +177,7 @@ const BudgetTotalText = styled.Text`
   color: #191f29;
   font-family: "Inter";
   font-size: ${fontPercentage(24)}px;
-  font-weight: 70;
+  font-weight: 700;
   height: ${heightPercentage(29)}px;
   /* padding-bottom: ${heightPercentage(3)}px; */
 `;
@@ -234,11 +236,61 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
   const handleGoBackToSchedulePage = () => {
     navigation.goBack();
   };
-  const { travelCountry } = route.params;
+
+  const postTravelBudgetMutation = useMutation(postTravelBudget, {
+    onSuccess: (response) => {
+      console.log(response.data);
+      queryClient.invalidateQueries("travelBudgetData");
+      navigation.navigate("TravelBudgetPage")
+    },
+    onError: (error) => {
+      console.log(error.response);
+    },
+  });
+  console.log(route.params);
+  const queryClient = useQueryClient();
+  const {
+    travelTitle,
+    travelCountry,
+    travelCountryOption,
+    startDate,
+    endDate,
+  } = route.params;
   const handleSaveButtonPress = () => {
-    if (isAnyBudgetInputFilled) {
-      navigation.navigate("TravelBudgetPage");
-    }
+    postTravelBudgetMutation.mutate({
+      category: [
+        {
+          categoryBudget: foodBudget,
+          categoryId: 1,
+        },
+        {
+          categoryBudget: transBudget,
+          categoryId: 2,
+        },
+        {
+          categoryBudget: houseBudget,
+          categoryId: 3,
+        },
+        {
+          categoryBudget: shopBudget,
+          categoryId: 4,
+        },
+        {
+          categoryBudget: playBudget,
+          categoryId: 5,
+        },
+        {
+          categoryBudget: etcBudget,
+          categoryId: 6,
+        },
+      ],
+      title: travelTitle,
+      totalBudget: totalBudget,
+      startDate: startDate,
+      endDate: endDate,
+      city: travelCountryOption,
+      country: travelCountry,
+    });
   };
 
   const [foodBudget, setFoodBudget] = useState(0);

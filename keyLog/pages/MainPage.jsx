@@ -461,7 +461,7 @@ const MainPage = ({ navigation }) => {
       <Header>
         <LogoText>키로그</LogoText>
         <Setting>
-          <TouchableOpacity onPress={() => navigation.navigate("ScanPage")}>
+          <TouchableOpacity onPress={() => navigation.navigate("TestPaymentPage")}>
             <SettingImage source={Scan} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("SettingPage")}>

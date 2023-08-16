@@ -24,10 +24,6 @@ export const axiosRefreshClient = axios.create({
 axiosRefreshClient.interceptors.request.use(async (config) => {
   try {
     if ((await AsyncStorage.getItem("refresh_token")) && config.headers) {
-      console.log(
-        "refreshinterceptors",
-        await AsyncStorage.getItem("refresh_token")
-      );
       config.headers["Authorization"] = `Bearer ${JSON.parse(
         await AsyncStorage.getItem("refresh_token")
       )}`;
