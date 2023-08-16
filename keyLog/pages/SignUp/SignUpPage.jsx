@@ -87,11 +87,14 @@ const SignUpPage = ({ navigation }) => {
   };
 
   const handlePersonalNumberChange = text => {
-    const [part1, part2] = checkPersonalNumberChange(text);
+    const isSuccessPer = checkPersonalNumberChange(text);
     if (part1 != null && part2 != null) {
-      const newPersonalNumber = [part1, part2].filter(Boolean).join('-');
+      const newPersonalNumber = part1 + part2
       setPersonalNumber(newPersonalNumber);
-      setIsPersonalNumberValid(isValidPersonalNumber(newPersonalNumber));
+      checkPersonalNumberChange
+    }
+    else{
+      
     }
   };
 
@@ -190,7 +193,7 @@ const SignUpPage = ({ navigation }) => {
           modalVisible={modalVisible}
           toggleModal={toggleModal}
           phoneNumber={phoneNumber}
-          personalNumber={phoneNumber}
+          personalNumber={personalNumber}
           name={name}
           setModalVisible={setModalVisible}
           navigation={navigation}

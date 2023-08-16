@@ -59,6 +59,8 @@ const PickUpKeyPage = ({ navigation }) => {
     console.log(markerId, markerData);
     postMarkersMutation.mutate({ markerId, markerData });
   };
+
+  const [isSearched,setIsSearched] = useState(false)
   //현재 위치 표시
   // useEffect(() => {
   //   Geolocation.getCurrentPosition(
@@ -107,13 +109,13 @@ const PickUpKeyPage = ({ navigation }) => {
         </TouchableOpacity>
         <View style={{ width: "90%" }}>
           <GooglePlacesAutocomplete
-            placeholder="Search"
+            placeholder="장소명을 검색해보세요"
             onPress={(data, details = null) => {
               // 'details' is provided when fetchDetails = true
 
               // console.log(data, details);
               // console.log(data)
-
+              setIsSearched(true)
               console.log(details);
               console.log(data);
               console.log(details.geometry.location.lat);
@@ -187,7 +189,15 @@ const PickUpKeyPage = ({ navigation }) => {
         showsMyLocationButton={true}
         region={location}
       >
-        {}
+                {isSearched && (
+          <Marker
+            opacity={1.5}
+            coordinate={{
+              latitude: location.latitude,
+              longitude: location.longitude,
+            }}
+          ></Marker>
+        )}
         {markerList?.map((marker, idx) => {
           if (
             calculateDistance(
@@ -216,6 +226,7 @@ const PickUpKeyPage = ({ navigation }) => {
                     lng: marker.lng,
                   });
                 }}
+            
               >
                 <MarkerView>
                   <MarkerTitleText>{marker.place}</MarkerTitleText>
@@ -254,6 +265,7 @@ const PickUpKeyPage = ({ navigation }) => {
                     lng: marker.lng,
                   });
                 }}
+                style={{ zIndex: isSearched === idx ? 2 : 1 }}
               >
                 <CantGoMarkerView>
                   <MarkerTitleText>{marker.place}</MarkerTitleText>

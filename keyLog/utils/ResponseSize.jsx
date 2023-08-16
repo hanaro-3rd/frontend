@@ -60,3 +60,18 @@ export function getMoneyUnit(country) {
       return "₩";
   }
 }
+
+export function getCountryUnit(country) {
+  switch (country) {
+    case "KRW":
+      return "₩";
+    case "USA":
+      return "$";
+    case "JPY":
+      return "¥";
+    case "EUR":
+      return "€";
+    default:
+      return "₩";
+  }
+}

@@ -25,8 +25,8 @@ export const getRegistrationDeviceId = (deviceId) => {
   return axiosClient.get(`/registration/${deviceId}`);
 };
 export const getRefresh = async () => {
-  return axiosRefreshClient.get("/refresh")
-}
+  return axiosRefreshClient.get("/refresh");
+};
 export const getMarkers = () => {
   return axiosClient.get("/marker");
 };
@@ -38,6 +38,10 @@ export const postMarkers = ({ markerId, markerData }) => {
 
 export const postPayment = (payData) => {
   return axiosClient.post("/payment", payData);
+};
+
+export const updatepayment = ({ historyId, updatePaymentData }) => {
+  return axiosClient.patch(`/payment/${historyId}/update`, updatePaymentData);
 };
 
 //계좌
@@ -56,37 +60,55 @@ export const postAccountExternal = ({
 
 //환전
 export const postExchange = (exchangeData) => {
-  return axiosClient.post(`/exchange`,exchangeData)
-}
+  return axiosClient.post(`/exchange`, exchangeData);
+};
 
 export const getExchange = (exchangeData) => {
-  return axiosClient.get(`/exchange`,exchangeData);
-}
+  return axiosClient.get(
+    `/exchange/getFromRedis`,
+    exchangeData
+  );
+};
 
 export const getTravelBudget = () => {
-  return axiosClient.get('/travelbudget')
+  return axiosClient.get('/plan')
 }
 
 export const postTravelBudget = (travelbudgetData) => {
-  return axiosClient.post('/travelbudget',travelbudgetData)
+  return axiosClient.post('/plan',travelbudgetData)
 }
 
-export const patchTravelBudget = (patchTravelBudgetData) => {
-  return axiosClient.patch('/travelbudget',patchTravelBudgetData)
+export const patchTravelBudget = ({planId,patchTravelBudgetData}) => {
+  return axiosClient.patch(`/plan${planId}`,patchTravelBudgetData)
 }
 
 export const getTravelBudgetDetail = (plan_id) => {
-  return axiosClient.get(`/travelbudget/${plan_id}`)
+  return axiosClient.get(`/plan/${plan_id}`)
 }
 
 export const deleteTravelBudget = (plan_id) => {
-  return axiosClient.delete(`/travelbudget/${plan_id}`)
+  return axiosClient.delete(`/plan/${plan_id}`)
 } 
 
 export const patchTravelBudgetDetail = ({plan_id,patchTravelBudgetDetailData}) => {
-  return axiosClient.patch(`/travelbudget/${plan_id}`,patchTravelBudgetDetailData)
+  return axiosClient.patch(`/plan/${plan_id}/category`,patchTravelBudgetDetailData)
 }
 
 export const getTravelBudgetCategory = (plan_id) => {
-  return axiosClient.get(`/travelbudget/${plan_id}/category`)
+  return axiosClient.get(`/plan/${plan_id}/category`)
 }
+
+export const getMyKeymoney = () => {
+  return axiosClient.get("/keymoney");
+};
+
+export const getMyKeymoneyUnit = ({ unit, filter }) => {
+  return axiosClient.get(`/keymoney/${unit}?filter=${filter}`);
+};
+
+export const getDetailKeymoneyHistory = ({ historyId, type }) => {
+  return axiosClient.get(
+    `/keymoney/detail?historyId=${historyId}&type=${type}`
+  );
+};
+

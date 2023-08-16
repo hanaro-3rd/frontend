@@ -108,7 +108,7 @@ const TestPaymentSearchPage = ({ navigation }) => {
         </TouchableOpacity>
         <View style={{ width: "90%" }}>
           <GooglePlacesAutocomplete
-            placeholder="Search"
+            placeholder="장소명을 검색하여 등록해주세요!"
             onPress={(data, details = null) => {
               console.log(details);
               console.log(data);

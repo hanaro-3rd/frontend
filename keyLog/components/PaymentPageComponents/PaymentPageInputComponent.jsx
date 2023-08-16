@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   StatusBar,
+  Text,
 } from "react-native";
 import styled from "styled-components/native";
 import React, { useState } from "react";
@@ -16,6 +17,9 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../Header/DeleteHeader";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { getDetailKeymoneyHistory, updatepayment } from "../../api/api";
+
 const CategoryComponent = styled.View`
   background-color: white;
   height: ${heightPercentage(384)}px;
@@ -32,7 +36,7 @@ const CategoryTitleList = styled.View`
   align-items: center;
   margin-top: 10px;
 `;
-const CategoryList = styled.View`
+const CategoryList = styled.TouchableOpacity`
   width: ${widthPercentage(350)}px;
   flex-direction: row;
   align-items: center;
@@ -44,7 +48,7 @@ const CategoryText = styled.Text`
   color: black;
 `;
 const CategoryImage = styled.Image`
-  margin-right: 15px;
+  margin-right: ${widthPercentage(15)}px;
   width: ${widthPercentage(30)};
 `;
 const TitleView = styled.View`
@@ -59,7 +63,7 @@ const TitleText = styled.Text`
   font-weight: 700;
 `;
 const MainComponent = styled.View`
-  height: ${heightPercentage(300)}px;
+  height: ${heightPercentage(250)}px;
   width: 100%;
   align-items: center;
   justify-content: center;
@@ -129,41 +133,125 @@ const MemoTextInput = styled.TextInput`
   margin-top: ${heightPercentage(10)}px;
 `;
 
-const PaymentPageInputComponent = ({ navigation }) => {
+const CategoryTitleImage = styled.Image`
+  width: ${widthPercentage(40)}px;
+  height: ${heightPercentage(40)}px;
+`;
+const CategoryButtonImage = styled.Image`
+  width: ${widthPercentage(14)}px;
+  height: ${heightPercentage(14)}px;
+  margin-top: ${heightPercentage(5)}px;
+`;
+const CategoryView = styled.View`
+  flex-direction: row;
+`;
+const PaymentPageInputComponent = ({ route, navigation }) => {
+  const {
+    category,
+    keymoney,
+    unit,
+    formattedDate,
+    formattedTime,
+    subject,
+    categoryImage,
+    historyId,
+    type,
+  } = route.params;
   StatusBar.setTranslucent(true);
   const [openCategory, setOpenCategory] = useState(false);
+  const [selectedChangeCategory, setSelectedChangeCategory] =
+    useState(category);
+  const [changeMemo, setChangeMemo] = useState("");
+
+  const handleChangeCategory = (category) => {
+    setSelectedChangeCategory(category);
+    setOpenCategory(false);
+  };
+
+  const handleChangeMemo = (memo) => {
+    setChangeMemo(memo);
+    console.log(memo);
+  };
+
+  const queryClient = useQueryClient();
+
+  const { data } = useQuery(
+    "detailKeymoneyHistory",
+    async () => getDetailKeymoneyHistory({ historyId, type }),
+    {
+      onSuccess: (response) => {
+        console.log(response.data);
+        console.log("제대로 있니", historyId, type);
+        console.log(response.data.result.memo);
+        setChangeMemo(response.data.result.memo);
+      },
+      onError: () => {},
+    }
+  );
+
+  const patchKeymoneyHistoryMutation = useMutation(updatepayment, {
+    onSuccess: (response) => {
+      console.log(response.data);
+    },
+    onError: () => {},
+  });
+
+  const handlePatchKeymoneyHistory = () => {
+    console.log(selectedChangeCategory, changeMemo);
+    const updatePaymentData = {
+      category: selectedChangeCategory,
+      memo: changeMemo,
+    };
+    console.log(updatePaymentData);
+    patchKeymoneyHistoryMutation.mutate({ historyId, updatePaymentData });
+  };
+
   return (
     <Main categoryMode={openCategory}>
       <View>
-        <DeleteHeader navigation={navigation} to="TravelRecordMainComponent" />
+        <DeleteHeader navigation={navigation} to="KeyMoneyHistoryPage" />
         <TitleView>
           <TitleText>결제내역</TitleText>
         </TitleView>
-
         <MainComponent>
-          <Image
-            source={require("../../Images/세븐일레븐.png")}
-            style={{ opacity: 0.3 }}
-          />
-          <NameText>세븐일레븐</NameText>
+          <CategoryTitleImage source={categoryImage} style={{ opacity: 0.3 }} />
+          <NameText>{subject}</NameText>
           <PriceText>결제금액</PriceText>
-          <CostText>￥10,000</CostText>
-          <DateText>2023.07.01 13:59</DateText>
+          <CostText>
+            {unit} {keymoney}
+          </CostText>
+          <DateText>
+            {formattedDate} {formattedTime}
+          </DateText>
         </MainComponent>
         <CategoryWrapper>
           <CategoryWord>카테고리</CategoryWord>
           <TouchableOpacity onPress={() => setOpenCategory(true)}>
-            <View>
-              <CategoryPickWord>쇼핑 · 편의점 · 마트</CategoryPickWord>
-            </View>
+            <CategoryView>
+              <CategoryPickWord>{selectedChangeCategory}</CategoryPickWord>
+              <CategoryButtonImage
+                source={require("../../assets/Main/arrow_next.png")}
+              />
+            </CategoryView>
           </TouchableOpacity>
         </CategoryWrapper>
         <MemoWrapper>
           <MemoText>메모</MemoText>
-          <MemoTextInput placeholder="메모를 작성해보세요" />
+          <MemoTextInput
+            value={changeMemo === "string" ? "" : changeMemo}
+            onChangeText={handleChangeMemo}
+            placeholder={
+              changeMemo === "string" ? "메모를 작성해보세요" : changeMemo
+            }
+          />
         </MemoWrapper>
       </View>
-      <SubmitButton>
+      <SubmitButton
+        onPress={() => {
+          handlePatchKeymoneyHistory(),
+            navigation.navigate("ForeignPayHistoryPage", { unit });
+        }}
+      >
         <SubmitView>
           <SubmitText>저장하기</SubmitText>
         </SubmitView>
@@ -179,30 +267,54 @@ const PaymentPageInputComponent = ({ navigation }) => {
               />
             </TouchableOpacity>
           </CategoryTitleList>
-          <CategoryList>
+          <CategoryList
+            onPress={() => {
+              handleChangeCategory("식비");
+            }}
+          >
             <CategoryImage
               source={require("../../Images/식비.png")}
               resizeMode="contain"
             />
             <CategoryText>식비</CategoryText>
           </CategoryList>
-          <CategoryList>
+          <CategoryList
+            onPress={() => {
+              handleChangeCategory("교통");
+            }}
+          >
             <CategoryImage source={require("../../Images/교통.png")} />
             <CategoryText>교통</CategoryText>
           </CategoryList>
-          <CategoryList>
+          <CategoryList
+            onPress={() => {
+              handleChangeCategory("숙박");
+            }}
+          >
             <CategoryImage source={require("../../Images/숙박.png")} />
             <CategoryText>숙박</CategoryText>
           </CategoryList>
-          <CategoryList>
+          <CategoryList
+            onPress={() => {
+              handleChangeCategory("쇼핑 · 편의점 · 마트");
+            }}
+          >
             <CategoryImage source={require("../../Images/쇼핑.png")} />
             <CategoryText>쇼핑 · 편의점 · 마트</CategoryText>
           </CategoryList>
-          <CategoryList>
+          <CategoryList
+            onPress={() => {
+              handleChangeCategory("문화 · 여가");
+            }}
+          >
             <CategoryImage source={require("../../Images/문화.png")} />
             <CategoryText>문화 · 여가</CategoryText>
           </CategoryList>
-          <CategoryList>
+          <CategoryList
+            onPress={() => {
+              handleChangeCategory("기타");
+            }}
+          >
             <CategoryImage source={require("../../Images/기타.png")} />
             <CategoryText>기타</CategoryText>
           </CategoryList>

@@ -1,5 +1,12 @@
 import styled from "styled-components/native";
-import { TouchableOpacity, View } from "react-native";
+import {
+  Button,
+  Modal,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+} from "react-native";
 import {
   fontPercentage,
   heightPercentage,
@@ -10,13 +17,16 @@ import {
 import React, { useEffect, useState } from "react";
 import DeleteHeader from "../../components/Header/DeleteHeader";
 import { Picker } from "@react-native-picker/picker";
-import { useMutation, useQueryClient } from "react-query";
-import { postPayment } from "../../api/api";
+import { useQueryClient, useQuery, useMutation } from "react-query";
+import { postPayment, getMyKeymoney } from "../../api/api";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
   height: ${phoneHeight}px;
   justify-content: space-between;
+  flex: 1;
+  background-color: ${(props) =>
+    props.showModal ? "rgba(0, 0, 0, 0.5)" : "transparent"};
 `;
 
 const Body = styled.SafeAreaView`
@@ -66,7 +76,7 @@ const BodyMain = styled.View`
   align-self: stretch;
 `;
 
-const PaymentTitleContainer = styled.View`
+const PaymentTitleContainer = styled.KeyboardAvoidingView`
   width: ${widthPercentage(350)}px;
   height: ${heightPercentage(68)}px;
   display: flex;
@@ -183,8 +193,8 @@ const Footer = styled.View`
   gap: 20px;
   align-self: stretch;
   margin-bottom: ${heightPercentage(25)}px;
-  position: absolute;
-  bottom: 0;
+  position:relative;
+  bottom: 80px;
 `;
 const NextButton = styled.TouchableOpacity`
   display: flex;
@@ -233,6 +243,8 @@ const TestPaymentPage = ({ navigation, route }) => {
   const [unit, setUnit] = useState("");
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState(false);
   const [markerInformation, setMarkerInformation] = useState(false);
+  const [units, setUnits] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (route?.params) setMarkerInformation(route.params);
@@ -259,6 +271,42 @@ const TestPaymentPage = ({ navigation, route }) => {
     },
   });
 
+  const { data: keyMoneyData } = useQuery(
+    "keymoney",
+    async () => getMyKeymoney(),
+    {
+      onSuccess: (response) => {
+        console.log(response.data.result);
+
+        const units = response.data.result
+        console.log("외환 계좌" + units);
+        setUnits(units);
+        
+        if (units.length === 0) {
+          setShowModal(true);
+          setTimeout(() => {
+            setShowModal(false);
+            navigation.navigate("ExchangePage");
+          }, 1000);
+        }
+
+        // if (units.length === 0) {
+        //   Alert.alert("키머니 계좌가 없어요", "환전하기 페이지로 이동합니다.", {
+        //     text: "1초후 이동",
+        //     onPress: () => {
+        //       setTimeout(() => {
+        //         setShowModal(false);
+        //         navigation.navigate("ExchangePage");
+        //       }, 1000);
+        //     },
+        //   });
+        // }
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    }
+  );
   const handleSubmitPay = () => {
     console.log(
       "들어가긴하니",
@@ -312,13 +360,15 @@ const TestPaymentPage = ({ navigation, route }) => {
       updateIsAllFieldsFilled();
     }
   };
+
   useEffect(() => {
     updateIsAllFieldsFilled();
   }, [storeTitle, memoText, category, moneyText]);
-
+  
+  const [balance,setBalance] = useState("금액 입력")
   console.log(unit);
   return (
-    <Root>
+    <Root showModal={showModal}>
       <DeleteHeader navigation={navigation} to="MainPage" />
       <Body>
         <BodyHeader>
@@ -407,6 +457,23 @@ const TestPaymentPage = ({ navigation, route }) => {
                     selectedValue={unit}
                     onValueChange={(itemValue, itemIndex) => {
                       setUnit(itemValue);
+                      console.log(itemValue,"itemValue")
+                      if(itemValue=="USD") {
+                        for(x of units) {
+                          console.log("ss")
+                          if(x.unit=="USD")  setBalance("잔액: " + String(x.balance)+"USD")
+                        }
+                      }
+                      else if(itemValue=="JPY") {
+                        for(x of units) {
+                          if(x.unit=="JPY") setBalance("잔액: " + String(x.balance)+"JPY")
+                        }
+                      }
+                      else {
+                        for(x of units) {
+                          if(x.unit=="EUR")setBalance("잔액: " + String(x.balance)+"EUR")
+                        }
+                      }
                       updateIsAllFieldsFilled();
                     }}
                     onFocus={() => {}}
@@ -417,15 +484,30 @@ const TestPaymentPage = ({ navigation, route }) => {
                     }}
                   >
                     {unit == "" && <Picker.Item label="선택" value="" />}
-                    <Picker.Item label="KRW" value="KRW" />
-                    <Picker.Item label="USD" value="USD" />
-                    <Picker.Item label="JPY" value="JPY" />
-                    <Picker.Item label="EUR" value="EUR" />
+                    {
+                      units.length > 0 && units.map((e,idx)=>{
+                        return(
+                          <Picker.Item label = {e.unit} value={e.unit} key={idx}/>
+                        )
+                      })
+                    }
+                    {/* {units.includes("KRW") && (
+                      <Picker.Item label="KRW" value="KRW" />
+                    )}
+                    {units.includes("USD") && (
+                      <Picker.Item label="USD" value="USD" />
+                    )}
+                    {units.includes("JPY") && (
+                      <Picker.Item label="JPY" value="JPY" />
+                    )}
+                    {units.includes("EUR") && (
+                      <Picker.Item label="EUR" value="EUR" />
+                    )} */}
                   </Picker>
                 </View>
               </PickerContainer>
               <CostTextinput
-                placeholder="금액 입력"
+                placeholder={balance}
                 keyboardType="numeric"
                 placeholderTextColor="#b0b8c1"
                 value={moneyText}
@@ -439,15 +521,15 @@ const TestPaymentPage = ({ navigation, route }) => {
             <TitleContainer>
               <PaymentTitle>메모</PaymentTitle>
             </TitleContainer>
-            <MemoTextinput
+            <MemoTextinput 
+   
               value={memoText}
               onChangeText={handleMemoChange}
               hasValue={memoText !== ""}
             />
           </PaymentTitleContainer>
         </BodyMain>
-      </Body>
-      <Footer>
+        <Footer>
         {isAllFieldsFilled ? (
           <NextButton
             onPress={() => {
@@ -462,8 +544,56 @@ const TestPaymentPage = ({ navigation, route }) => {
           </DisabledButton>
         )}
       </Footer>
+      </Body>
+
+      {showModal && (
+        <Modal visible={showModal} animationType="slide">
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: showModal ? "rgba(0, 0, 0, 0.5)" : "transparent",
+            }}
+          >
+            <View
+              style={{
+                width: 300,
+                height: 200,
+                backgroundColor: "white",
+                padding: 20,
+                borderWidth: 1,
+                borderColor: "#e5e8eb",
+                borderRadius: 20,
+                elevation: 7,
+              }}
+            >
+              <ModalTextContainer
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <ModalText>연결된 외환 계좌가 없습니다.</ModalText>
+              </ModalTextContainer>
+            </View>
+          </View>
+        </Modal>
+      )}
     </Root>
   );
 };
 
+const ModalTextContainer = styled.View`
+  align-items: center;
+`;
+
+const ModalText = styled.Text`
+  color: #6b7684;
+  font-family: Inter;
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
 export default TestPaymentPage;

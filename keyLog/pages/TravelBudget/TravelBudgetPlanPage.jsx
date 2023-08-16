@@ -244,7 +244,7 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
       navigation.navigate("TravelBudgetPage")
     },
     onError: (error) => {
-      console.log(error);
+      console.log(error.response);
     },
   });
   console.log(route.params);

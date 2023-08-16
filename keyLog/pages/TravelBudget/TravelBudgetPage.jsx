@@ -24,6 +24,8 @@ import Delete from "../../assets/travelBudget/delete.png";
 import { useQuery, useQueryClient } from "react-query";
 import { getTravelBudget } from "../../api/api";
 
+//gesture
+
 const RootScrollView = styled.ScrollView`
   /* margin-top: ${getStatusBarHeight}px; */
   min-height: ${phoneHeight}px;
@@ -195,54 +197,6 @@ const TravelBudgetPage = () => {
       ]
     );
   };
-  /*yarn add react-native-dialog 
-
-  import React, { useState } from "react";
-import { View, TouchableOpacity, Text } from "react-native";
-import Dialog from "react-native-dialog";
-
-const CustomAlertDialog = ({ visible, onCancel, onDelete }) => {
-  return (
-    <Dialog.Container visible={visible}>
-      <Dialog.Title>경비 계획 삭제하기</Dialog.Title>
-      <Dialog.Description>
-        경비 계획을 삭제하면 여행 계획과 카테고리별 경비 계획이 모두 삭제됩니다.
-      </Dialog.Description>
-      <Dialog.Button label="취소" onPress={onCancel} />
-      <Dialog.Button label="삭제하기" onPress={onDelete} />
-    </Dialog.Container>
-  );
-};
-
-export default CustomAlertDialog;
-
-import CustomAlertDialog from "../../components/travelBudgetPageComponent/CustomAlertDialog";
-
-const TravelBudgetPage = () => {
-  const [isDialogVisible, setDialogVisible] = useState(false);
-
-  const handleDeleteImageClick = () => {
-    setDialogVisible(true);
-  };
-
-  const handleCancel = () => {
-    setDialogVisible(false);
-  };
-
-  const handleDelete = () => {
-    // 실제 삭제 동작 수행
-    setDialogVisible(false);
-  };
-
-   <TouchableOpacity onPress={handleDeleteImageClick}>
-        <Image source={Delete} />
-      </TouchableOpacity>
-      <CustomAlertDialog
-        visible={isDialogVisible}
-        onCancel={handleCancel}
-        onDelete={handleDelete}
-      />
-*/
   const queryClient = useQueryClient();
   const [data, setData] = useState({});
   const { travelBudgetData } = useQuery(
@@ -292,13 +246,14 @@ const TravelBudgetPage = () => {
           <TitleText>내 경비 계획</TitleText>
         </BodyHeader>
         <BodyMain>
-          {Object.keys(data).length !== 0 &&
+          {Object.keys(data).length !== 0 ?
             Object?.keys(data).map((key, idx) => {
               return (
                 <YearContainer key={idx}>
                   <YearText>{key}</YearText>
                   {data[key]?.map((e, idx) => {
                     return (
+               
                       <TouchableOpacity key={idx} onPress={()=>handleTravelCardPress(e.planId)}>
                         <TravelCard>
                           <TitleTextContainer>
@@ -314,11 +269,14 @@ const TravelBudgetPage = () => {
                           </View>
                         </TravelCard>
                       </TouchableOpacity>
+                 
                     );
                   })}
                 </YearContainer>
               );
-            })}
+            })
+          :<Text>아직 생성된 경비계획이 없습니다.</Text>
+          }
 
         </BodyMain>
       </BodyContainer>

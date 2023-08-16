@@ -260,6 +260,7 @@ const TravelSchedulePage = ({ navigation }) => {
   }, [travelTitle, travelCountry, travelCountryOption, startDate, endDate]);
 
   const handleNextButtonPress = () => {
+
     if (isAllFieldsFilled) {
       navigation.navigate("TravelBudgetPlanPage", {
         travelCountry,travelTitle,travelCountryOption,startDate,endDate
@@ -326,10 +327,10 @@ const TravelSchedulePage = ({ navigation }) => {
                     {travelCountry == "" && (
                       <Picker.Item label="나라" value="" />
                     )}
-                    <Picker.Item label="한국" value="Korea" />
+                    <Picker.Item label="한국" value="KRW" />
                     <Picker.Item label="미국" value="USA" />
-                    <Picker.Item label="일본" value="Japan" />
-                    <Picker.Item label="유럽" value="Europe" />
+                    <Picker.Item label="일본" value="JPY" />
+                    <Picker.Item label="유럽" value="EUR" />
                   </Picker>
                 </View>
               </PickerContainer>

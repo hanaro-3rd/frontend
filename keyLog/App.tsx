@@ -25,8 +25,9 @@ import PickUpKeyPage from "./pages/PickUpKeyPage";
 import LoginPasswordPage from "./pages/SignUp/LoginPasswordPage";
 import LoginPatternPage from "./pages/SignUp/LoginPatternPage";
 import SignUpPage from "./pages/SignUp/SignUpPage";
-import ForeignPayHistoryPage from "./pages/ForeignPayHistoryPage";
-import OwnPayHistoryPage from "./pages/OwnPayHistoryPage";
+import ForeignPayHistoryPage from "./pages/History/ForeignPayHistoryPage";
+import OwnPayHistoryPage from "./pages/History/OwnPayHistoryPage";
+import KeyMoneyHistoryPage from "./pages/History/KeyMoneyHistoryPage";
 import TravelBudgetDetailPage from "./pages/TravelBudget/TravelBudgetDetailPage";
 import TravelBudgetPage from "./pages/TravelBudget/TravelBudgetPage";
 import TravelBudgetPlanPage from "./pages/TravelBudget/TravelBudgetPlanPage";
@@ -50,8 +51,8 @@ const App = () => {
   const [login, setLogin] = useRecoilState(loginAtom);
   const [isLoading, setLoading] = useState(true);
   const [haveDeviceId, setHaveDeviceId] = useState(false);
-  const [username,setUsername] = useRecoilState(usernameAtom);
-  usePermissions();
+  const [username, setUsername] = useRecoilState(usernameAtom);
+  // usePermissions();
 
   const { data } = useQuery(
     "registration",
@@ -60,11 +61,11 @@ const App = () => {
       //DeviceId가 존재할떄
       onSuccess: async (response) => {
         // console.log(JSON.stringify(response));
-        console.log(response.data)
-        setUsername(response.data?.result?.name)
+        console.log(response.data);
+        setUsername(response.data?.result?.name);
         setHaveDeviceId(true);
-        console.log(response?.data?.errorCode)
-        if(response?.data?.errorCode==500) setHaveDeviceId(false)
+        console.log(response?.data?.errorCode);
+        if (response?.data?.errorCode == 500) setHaveDeviceId(false);
         try {
           const token = await AsyncStorage.getItem("access_token");
           console.log("access_token" + token);
@@ -96,14 +97,12 @@ const App = () => {
       },
       //DeviceId가 존재하지 않을 때
       onError: async (error) => {
-        try{
+        try {
           console.log("error");
           setHaveDeviceId(false);
-          setLogin(false)
-          console.log("뭐가문제야")
-        }
-
-         catch (error) {
+          setLogin(false);
+          console.log("뭐가문제야");
+        } catch (error) {
           // 에러 처리
           setLogin(false); // 에러 발생 시 로그인을 하지 않은 상태로 설정
         } finally {
@@ -121,8 +120,8 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName={
-          // "SignUpPage"
-          login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
+          "SignUpPage"
+          // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
         }
       >
         <Stack.Screen
@@ -163,6 +162,11 @@ const App = () => {
         <Stack.Screen
           name="PaymentFailPage"
           component={PaymentFailPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="KeyMoneyHistoryPage"
+          component={KeyMoneyHistoryPage}
           options={{ headerShown: false }}
         />
         <Stack.Screen
