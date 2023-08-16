@@ -183,9 +183,9 @@ export const ExchangePage = () => {
         exchangeFromMoney: response.data.result.exchangeFromMoney,
         exchangeToUnit: response.data.result.exchangeToUnit,
         exchangeToMoney: response.data.result.exchangeToMoney,
-        exchangeUnitResult: selectedMoney,
-        exchangeRateResult: exchangeRate,
-        exchangeChangePrice: changePrice,
+        exchangeUnit: selectedMoney,
+        exchangeRate: exchangeRate,
+        changePrice: changePrice,
       });
     },
     onError: (error) => {
@@ -226,9 +226,7 @@ export const ExchangePage = () => {
             <View style={styles.accountContainer}>
               <Text style={styles.containerTitle}>계좌 선택</Text>
               {accountList.length > 0 ? (
-                <TouchableOpacity
-                  onPress={() => handleCountryPress(e.bank + e.accountNum)}
-                >
+                <TouchableOpacity>
                   <Collapse
                     isExpanded={expanded}
                     onToggle={(isExpanded) =>
@@ -253,7 +251,7 @@ export const ExchangePage = () => {
                           <TouchableOpacity
                             key={idx}
                             onPress={() => {
-                              handleCountryPress(e.bank + e.accountNum);
+                              handleCountryPress(e.bank + " " + e.accountNum);
                               setAccountId(e.accountId);
                               setAccountBalance(e.balance);
                             }}
@@ -261,7 +259,7 @@ export const ExchangePage = () => {
                             <View style={styles.countrySelect}>
                               <View style={styles.countrySelectRow}>
                                 <Text style={styles.unitText}>
-                                  {e.bank} {e.accountNum}
+                                  {e.bank + " "} {e.accountNum}
                                 </Text>
                               </View>
                             </View>
