@@ -1,18 +1,25 @@
-export const checkPersonalNumberChange = text => {
-  let cleaned = ('' + text).replace(/\D/g, '');
+export const checkPersonalNumberChange = (text) => {
+  let cleaned = ("" + text).replace(/\D/g, "");
   let match;
 
   if (cleaned.length < 7) {
     match = cleaned.match(/^(\d{0,6})/);
   } else {
-    match = cleaned.match(/^(\d{6})(\d{0,1})/);
+    match = cleaned.match(/^(\d{6})(\d{0,7})/);
   }
 
-  return match
+  if (match) {
+    const part1 = match[1] || "",
+      part2 = match[2] || "";
+
+    return [part1, part2];
+  } else {
+    return [null, null];
+  }
 };
 
-export const checkPhoneChange = number => {
-  let cleaned = ('' + number).replace(/\D/g, '');
+export const checkPhoneChange = (number) => {
+  let cleaned = ("" + number).replace(/\D/g, "");
   let match;
 
   if (cleaned.length < 4) {
@@ -24,9 +31,9 @@ export const checkPhoneChange = number => {
   }
 
   if (match) {
-    const part1 = match[1] || '',
-      part2 = match[2] || '',
-      part3 = match[3] || '';
+    const part1 = match[1] || "",
+      part2 = match[2] || "",
+      part3 = match[3] || "";
     return [part1, part2, part3];
   } else {
     return [null, null, null];
