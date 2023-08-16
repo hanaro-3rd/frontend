@@ -292,7 +292,7 @@ export const ExchangePage = () => {
               <View style={styles.titleContainer}>
                 <Text style={styles.containerTitle2}>환전 금액</Text>
                 <Text style={styles.containerSubtitle}>
-                  휴일 수수료 10%가 적용됩니다
+                  휴일 수수료 원화 20원이 적용됩니다
                 </Text>
               </View>
 
