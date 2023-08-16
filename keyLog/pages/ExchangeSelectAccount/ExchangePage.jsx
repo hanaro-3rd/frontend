@@ -230,7 +230,7 @@ export const ExchangePage = () => {
               <Text style={styles.containerTitle}>계좌 선택</Text>
               {accountList.length > 0 ? (
                 <TouchableOpacity
-                  onPress={() => handleCountryPress(e.bank + e.accountNum)}
+                 
                 >
                   <Collapse
                     isExpanded={expanded}

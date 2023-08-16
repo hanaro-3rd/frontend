@@ -74,10 +74,10 @@ const App = () => {
             await AsyncStorage.getItem("refresh_token")
           );
           console.log(response.data);
-          if(response.data?.errorCode==500) {
-            setLogin(false)
-            setHaveDeviceId(false)
-            setLoading(false)
+          if (response.data?.errorCode == 500) {
+            setLogin(false);
+            setHaveDeviceId(false);
+            setLoading(false);
             return;
           }
           if (token) {
@@ -120,8 +120,7 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName={
-          "SignUpPage"
-          // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
+          login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
         }
       >
         <Stack.Screen
