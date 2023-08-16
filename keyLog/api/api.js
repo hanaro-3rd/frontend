@@ -39,6 +39,10 @@ export const postPayment = (payData) => {
   return axiosClient.post("/payment", payData);
 };
 
+export const updatepayment = ({ historyId, updatePaymentData }) => {
+  return axiosClient.patch(`/payment/${historyId}/update`, updatePaymentData);
+};
+
 //계좌
 export const getAccount = () => {
   return axiosClient.get("/account");
@@ -59,9 +63,22 @@ export const postExchange = (exchangeData) => {
 };
 
 export const getExchange = (exchangeData) => {
-  return axiosClient.get(`/exchange/getFromApi`, exchangeData);
+  return axiosClient.get(
+    `http://3.38.13.139:8081/exchange/getFromRedis`,
+    exchangeData
+  );
 };
 
-export const getExchangeFromRedis = (exchangeFromRedisData) => {
-  return axiosClient.get(`/exchange/getFromRedis`, exchangeFromRedisData);
+export const getMyKeymoney = () => {
+  return axiosClient.get("/keymoney");
+};
+
+export const getMyKeymoneyUnit = ({ unit, filter }) => {
+  return axiosClient.get(`/keymoney/${unit}?filter=${filter}`);
+};
+
+export const getDetailKeymoneyHistory = ({ historyId, type }) => {
+  return axiosClient.get(
+    `/keymoney/detail?historyId=${historyId}&type=${type}`
+  );
 };

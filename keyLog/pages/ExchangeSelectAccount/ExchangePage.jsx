@@ -86,9 +86,9 @@ export const ExchangePage = () => {
   //     console.log("exchangePage,exchangeApi에러", error);
   //   },
   // });
-  const { exchangeFromRedisData } = useQuery(
+  const { exchangeData } = useQuery(
     "exchangefromredis",
-    async () => getExchangeFromRedis(),
+    async () => getExchange(),
     {
       onSuccess: (response) => {
         console.log("exchangePageFromRedis", response.data);
@@ -366,7 +366,7 @@ export const ExchangePage = () => {
                 <Text style={styles.containerTitle3}>현재 환율</Text>
                 <Text style={styles.containerSubtitle2}>
                   {apiTime != null
-                    ? `${apiTime[1]}.${apiTime[2]}. ${apiTime[3]}:${apiTime[4]} 기준 : `
+                    ? `${apiTime[1]}.${apiTime[2]}. ${apiTime[3]}:${apiTime[4]} 기준`
                     : ""}
                 </Text>
               </View>
