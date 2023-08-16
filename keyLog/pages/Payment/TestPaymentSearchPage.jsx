@@ -108,7 +108,7 @@ const TestPaymentSearchPage = ({ navigation }) => {
         </TouchableOpacity>
         <View style={{ width: "90%" }}>
           <GooglePlacesAutocomplete
-            placeholder="Search"
+            placeholder="장소명을 검색하여 등록해주세요!"
             onPress={(data, details = null) => {
               console.log(details);
               console.log(data);
@@ -135,7 +135,7 @@ const TestPaymentSearchPage = ({ navigation }) => {
             onFail={(err) => console.log(err)}
             fetchDetails={true}
             query={{
-              key: "AIzaSyB3FylnsAH0okgewFANqscAn6J0q2td0MY",
+              key: "AIzaSyB_nxmsBL4iSwU9dniKHw4GWOXONVfCUZw",
               language: "ko",
             }}
             ref={placesRef}

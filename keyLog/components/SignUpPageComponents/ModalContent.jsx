@@ -28,9 +28,13 @@ const ModalContent = ({
   const queryClient = useQueryClient();
 
   const postVerificationAuthMutation = useMutation(postVerificationAuth, {
-    onSuccess: data => {
+    onSuccess: (response) => {
       queryClient.invalidateQueries('verificationAuth');
-      console.log('postverificationAuthMutation' + data);
+      console.log('postverificationAuthMutation' , response.data);
+      if(response.data?.errorCode) {
+        return;
+      }
+      goToLoginPasswordPage();
     },
     onError: error => {
       console.log(error.message);
@@ -40,15 +44,13 @@ const ModalContent = ({
 
   const handleVerificationAuth = async e => {
     e.preventDefault();
-    console.log(phoneNumber);
-    console.log(inputText);
     postVerificationAuthMutation.mutate({
       code: inputText,
       phonenum: phoneNumber,
     });
 
     await setModalVisible(false);
-    goToLoginPasswordPage();
+
   };
 
   const navigation = useNavigation();

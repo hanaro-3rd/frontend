@@ -4,41 +4,82 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import NumberPad from "../../components/SignUpPageComponents/NumberPad";
 import PasswordSymbol from "../../components/SignUpPageComponents/PasswordSymbol";
 import { fontPercentage, heightPercentage } from "../../utils/ResponseSize";
-
+import { useMutation, useQueryClient } from 'react-query';
+import DeviceInfo from "react-native-device-info";
+import { postSigninPassword, postSignup } from "../../api/api";
+import { usernameAtom } from "../../recoil/usernameAtom";
+import { useRecoilState } from "recoil";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const LoginPasswordPage = ({ route }) => {
   const navigation = useNavigation();
 
   const {
-    name = "이수창",
-    phoneNumber = "01063572816",
-    personalNumber = "970917-1111111",
+    name ,
+    phoneNumber,
+    personalNumber,
   } = route?.params;
-
+  console.log("routeParams",route.params)
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isConfirming, setIsConfirming] = useState(false);
   const [isPasswordMismatch, setIsPasswordMismatch] = useState(false);
   const [alertInconsistencyPassword, setAlertInconsistencyPassword] =
     useState(false);
+  const [username,setUsername] = useRecoilState(usernameAtom);
+  const queryClient = useQueryClient();
 
-  // const queryClient = useQueryClient();
+  const postSignupMutation = useMutation(postSignup, {
+    onSuccess: async response => {
+      console.log(response.data);
+      postSigninPasswordMutation.mutate({
+        deviceId: await DeviceInfo.getUniqueId(),
+        password,
+      });
+    },
+    onError: error => {
+      console.log('signup' + error);
+    },
+  });
+ 
 
-  // const postSignupMutation = useMutation(postSignup, {
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries('postSignup');
-  //   },
-  // });
 
-  // const handlePostSignup = e => {
-  //   e.preventDefault();
-  //   postSignupMutation.mutate({
+  const postSigninPasswordMutation = useMutation(postSigninPassword, {
+    onSuccess: async response => {
+      console.log('postSigninPassword Data: ' + JSON.stringify(response.data));
+      console.log('Response Headers: ' + JSON.stringify(response.headers));
 
-  //   });
+      queryClient.invalidateQueries('postSigninPassword');
+      // 결과 데이터 및 헤더 정보 처리 로직
 
-  //   setModalVisible(false);
-  //   goToLoginPasswordPage();
-  // };
+      // AsyncStorage에 데이터 저장 예시
 
+      await AsyncStorage.setItem(
+        'access_token',
+        JSON.stringify(response.headers.access_token)
+      );
+      await AsyncStorage.setItem(
+        'refresh_token',
+        JSON.stringify(response.headers.refresh_token)
+      );
+      setUsername(name)
+    },
+    onError: error => {
+      console.log('signin' + error);
+    },
+  });
+
+  const handlePostSignup = async () => {
+    // console.log(await DeviceInfo.getUniqueId() )
+    postSignupMutation.mutate({
+      name: name,
+      phonenum: phoneNumber,
+      password: password,
+      pattern: '12346',
+      registrationNum: personalNumber,
+      deviceId: await DeviceInfo.getUniqueId(),
+    });
+    goToMainPage();
+  };
   const handleNumPress = (num) => {
     if (alertInconsistencyPassword) {
       resetPasswordProcess();
@@ -89,12 +130,7 @@ const LoginPasswordPage = ({ route }) => {
       if (password === confirmPassword) {
         console.log("Passwords match");
         setIsPasswordMismatch(false);
-        navigation.navigate("LoginPatternPage", {
-          name,
-          phoneNumber,
-          personalNumber,
-          password,
-        });
+        handlePostSignup();
       } else {
         console.log("Passwords do not match");
         setIsPasswordMismatch(true);
@@ -150,12 +186,12 @@ const LoginPasswordPage = ({ route }) => {
           />
         </View>
         <View style={styles.bodyFooter}>
-          <TouchableOpacity onPress={goToLoginPatternPage}>
+          {/* <TouchableOpacity onPress={goToLoginPatternPage}>
             <Text>Go to Login Pattern Page</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={goToLoginPatternPage}>
             <Text>Go to Main Page</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </View>

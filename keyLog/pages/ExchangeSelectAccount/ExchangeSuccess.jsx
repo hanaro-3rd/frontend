@@ -1,4 +1,11 @@
-import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import Close from "../../assets/accountImg/CloseButton.png";
 import Success from "../../assets/exchangeImg/Success.png";
 import Vector from "../../assets/accountImg/Vector.png";
@@ -11,9 +18,16 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
-
-const ExchangeSuccess = ({ navigation,route }) => {
-  const {exchangeToUnit,exchangeToMoney, exchangeFromMoney,exchangeFromUnit} = route?.params
+import { styled } from "styled-components/native";
+const ExchangeSuccess = ({ navigation, route }) => {
+  const {
+    exchangeToUnit,
+    exchangeToMoney,
+    exchangeFromMoney,
+    exchangeFromUnit,
+    exchangeRate,
+    changePrice,
+  } = route?.params;
   return (
     <View style={styles.root}>
       <View>
@@ -38,13 +52,19 @@ const ExchangeSuccess = ({ navigation,route }) => {
                 <Text style={styles.containerTitle}>환전 금액</Text>
                 <View style={styles.exchangeMoneyBox}>
                   <View style={styles.koreaMoneyContianer}>
-                    <Text style={styles.koreaMoneyUnitText}>{exchangeToUnit}</Text>
+                    <Text style={styles.koreaMoneyUnitText}>
+                      {exchangeToUnit}
+                    </Text>
                     <Text style={styles.koreaMoneyText}>{exchangeToMoney}</Text>
                   </View>
                   <Image source={Vector} />
                   <View style={styles.foreignMoneyContainer}>
-                    <Text style={styles.foreignMoneyUnitText}>{exchangeFromUnit}</Text>
-                    <Text style={styles.foreignMoneyText}>{exchangeFromMoney}</Text>
+                    <Text style={styles.foreignMoneyUnitText}>
+                      {exchangeFromUnit}
+                    </Text>
+                    <Text style={styles.foreignMoneyText}>
+                      {exchangeFromMoney}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -52,12 +72,20 @@ const ExchangeSuccess = ({ navigation,route }) => {
                 <Text style={styles.containerTitle2}>적용 환율</Text>
                 <View style={styles.currentExchangeRateContainer}>
                   <View style={styles.countryInformationContainer}>
-                    <Text style={styles.countryText}>미국</Text>
-                    <Text style={styles.unitText}>USD</Text>
+                    <Text style={styles.countryText}>
+                      {(exchangeToUnit == "USD" && "미국") ||
+                        (exchangeToUnit == "EUR" && "유럽") ||
+                        (exchangeToUnit == "JPY" && "일본")}
+                    </Text>
+                    <Text style={styles.unitText}>{exchangeToUnit}</Text>
                   </View>
                   <View style={styles.currentExchangeRateTextContainer}>
-                    <Text style={styles.exchangeRateText}>1,294.50</Text>
-                    <Text style={styles.changeRateText}>▼ 12.00</Text>
+                    <Text style={styles.exchangeRateText}>{exchangeRate}</Text>
+                    {changePrice > 0 ? (
+                      <ChangeUpRate>▲ {changePrice}</ChangeUpRate>
+                    ) : (
+                      <ChangeRate>▼ {changePrice}</ChangeRate>
+                    )}
                   </View>
                 </View>
               </View>
@@ -66,7 +94,10 @@ const ExchangeSuccess = ({ navigation,route }) => {
         </View>
       </View>
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.submitButton} onPress={()=>navigation.navigate("MainPage")}>
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={() => navigation.navigate("MainPage")}
+        >
           <Text style={styles.buttonText}>하나머니 확인하기</Text>
         </TouchableOpacity>
       </View>
@@ -294,3 +325,17 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
+const ChangeRate = styled.Text`
+  color: #0a7df2;
+  font-family: Inter;
+  font-size: ${fontPercentage(12)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
+const ChangeUpRate = styled.Text`
+  color: #ee3739;
+  font-family: Inter;
+  font-size: ${fontPercentage(12)}px;
+  font-style: normal;
+  font-weight: 700;
+`;

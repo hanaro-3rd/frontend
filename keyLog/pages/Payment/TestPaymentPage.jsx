@@ -76,7 +76,7 @@ const BodyMain = styled.View`
   align-self: stretch;
 `;
 
-const PaymentTitleContainer = styled.View`
+const PaymentTitleContainer = styled.KeyboardAvoidingView`
   width: ${widthPercentage(350)}px;
   height: ${heightPercentage(68)}px;
   display: flex;
@@ -193,8 +193,8 @@ const Footer = styled.View`
   gap: 20px;
   align-self: stretch;
   margin-bottom: ${heightPercentage(25)}px;
-  position: absolute;
-  bottom: 0;
+  position:relative;
+  bottom: 80px;
 `;
 const NextButton = styled.TouchableOpacity`
   display: flex;
@@ -278,10 +278,10 @@ const TestPaymentPage = ({ navigation, route }) => {
       onSuccess: (response) => {
         console.log(response.data.result);
 
-        // const units = response.data.result.map((item) => item.unit);
+        const units = response.data.result
         console.log("외환 계좌" + units);
         setUnits(units);
-
+        
         if (units.length === 0) {
           setShowModal(true);
           setTimeout(() => {
@@ -364,7 +364,8 @@ const TestPaymentPage = ({ navigation, route }) => {
   useEffect(() => {
     updateIsAllFieldsFilled();
   }, [storeTitle, memoText, category, moneyText]);
-
+  
+  const [balance,setBalance] = useState("금액 입력")
   console.log(unit);
   return (
     <Root showModal={showModal}>
@@ -456,6 +457,23 @@ const TestPaymentPage = ({ navigation, route }) => {
                     selectedValue={unit}
                     onValueChange={(itemValue, itemIndex) => {
                       setUnit(itemValue);
+                      console.log(itemValue,"itemValue")
+                      if(itemValue=="USD") {
+                        for(x of units) {
+                          console.log("ss")
+                          if(x.unit=="USD")  setBalance("잔액: " + String(x.balance)+"USD")
+                        }
+                      }
+                      else if(itemValue=="JPY") {
+                        for(x of units) {
+                          if(x.unit=="JPY") setBalance("잔액: " + String(x.balance)+"JPY")
+                        }
+                      }
+                      else {
+                        for(x of units) {
+                          if(x.unit=="EUR")setBalance("잔액: " + String(x.balance)+"EUR")
+                        }
+                      }
                       updateIsAllFieldsFilled();
                     }}
                     onFocus={() => {}}
@@ -466,7 +484,14 @@ const TestPaymentPage = ({ navigation, route }) => {
                     }}
                   >
                     {unit == "" && <Picker.Item label="선택" value="" />}
-                    {units.includes("KRW") && (
+                    {
+                      units.length > 0 && units.map((e,idx)=>{
+                        return(
+                          <Picker.Item label = {e.unit} value={e.unit} key={idx}/>
+                        )
+                      })
+                    }
+                    {/* {units.includes("KRW") && (
                       <Picker.Item label="KRW" value="KRW" />
                     )}
                     {units.includes("USD") && (
@@ -477,12 +502,12 @@ const TestPaymentPage = ({ navigation, route }) => {
                     )}
                     {units.includes("EUR") && (
                       <Picker.Item label="EUR" value="EUR" />
-                    )}
+                    )} */}
                   </Picker>
                 </View>
               </PickerContainer>
               <CostTextinput
-                placeholder="금액 입력"
+                placeholder={balance}
                 keyboardType="numeric"
                 placeholderTextColor="#b0b8c1"
                 value={moneyText}
@@ -496,15 +521,15 @@ const TestPaymentPage = ({ navigation, route }) => {
             <TitleContainer>
               <PaymentTitle>메모</PaymentTitle>
             </TitleContainer>
-            <MemoTextinput
+            <MemoTextinput 
+   
               value={memoText}
               onChangeText={handleMemoChange}
               hasValue={memoText !== ""}
             />
           </PaymentTitleContainer>
         </BodyMain>
-      </Body>
-      <Footer>
+        <Footer>
         {isAllFieldsFilled ? (
           <NextButton
             onPress={() => {
@@ -519,6 +544,8 @@ const TestPaymentPage = ({ navigation, route }) => {
           </DisabledButton>
         )}
       </Footer>
+      </Body>
+
       {showModal && (
         <Modal visible={showModal} animationType="slide">
           <View
