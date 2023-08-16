@@ -62,7 +62,6 @@ export const ExchangePage = () => {
       page: "ExchangePage",
     });
   };
-
   const queryClient = useQueryClient();
   const { data } = useQuery("account", async () => getAccount(), {
     onSuccess: (response) => {
@@ -412,7 +411,7 @@ export const ExchangePage = () => {
           </View>
           {koreaTextInput > 0 &&
           foreignTextInput > 0 &&
-          selectedAccount != "" ? (
+          selectedAccount !== undefined ? (
             <TouchableOpacity
               onPress={handleExchangeSubmit}
               style={styles.submitButton}

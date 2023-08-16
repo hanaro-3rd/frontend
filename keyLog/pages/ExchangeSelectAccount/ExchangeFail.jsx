@@ -23,8 +23,7 @@ const ExchangeFail = ({ navigation }) => {
         <View style={styles.bodyHeader}>
           <Text style={styles.title}>환전 실패</Text>
           <Text style={styles.subtitle}>
-            정보를 모두 입력하지 않았거나 계좌 잔액이 부족해 환전에 실패했어요.
-            다시 시도해주세요.
+            계좌 잔액이 부족해 환전에 실패했어요. 다시 시도해주세요.
           </Text>
         </View>
         <View style={styles.bodyMain}>
