@@ -55,7 +55,7 @@ export const ExchangePage = () => {
   const [subKoreaText, setSubKoreaText] = useState("");
   const [foreignTextInput, setForeignTextInput] = useState();
   const [subForeignText, setSubForeignText] = useState();
-  const [apiTime, setApiTime] = useState();
+  const [apiTime, setApiTime] = useState([]);
   const navigation = useNavigation();
   const handleChooseAccountComponent = () => {
     navigation.navigate("ChooseAccountComponent", {
@@ -178,7 +178,7 @@ export const ExchangePage = () => {
 
   const postExchangeMutation = useMutation(postExchange, {
     onSuccess: (response) => {
-      console.log(response.data);
+      console.log("postExchange", response.data);
       navigation.navigate("ExchangeSuccess", {
         exchangeFromUnit: response.data.result.exchangeFromUnit,
         exchangeFromMoney: response.data.result.exchangeFromMoney,
@@ -365,7 +365,9 @@ export const ExchangePage = () => {
               <View style={styles.titleContainer2}>
                 <Text style={styles.containerTitle3}>현재 환율</Text>
                 <Text style={styles.containerSubtitle2}>
-                  {apiTime[1]}.{apiTime[2]}. {apiTime[3]}:{apiTime[4]} 기준
+                  {apiTime != null
+                    ? `${apiTime[1]}.${apiTime[2]}. ${apiTime[3]}:${apiTime[4]} 기준 : `
+                    : ""}
                 </Text>
               </View>
               <View style={styles.currentExchangeRateContainer}>
