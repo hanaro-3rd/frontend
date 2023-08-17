@@ -25,20 +25,24 @@ const ModalContent = ({
   name,
   setModalVisible,
 }) => {
+  const [errorCode,setErrorCode] = useState()
   const queryClient = useQueryClient();
-
   const postVerificationAuthMutation = useMutation(postVerificationAuth, {
     onSuccess: (response) => {
       queryClient.invalidateQueries('verificationAuth');
+   
       console.log('postverificationAuthMutation' , response.data);
       if(response.data?.errorCode) {
+        setErrorCode(response.data?.errorMessage)
         return;
       }
+      setModalVisible(false);
       goToLoginPasswordPage();
     },
     onError: error => {
-      console.log(error.message);
+      console.log(error.response);
       console.log(error + 'verificationAuth');
+      
     },
   });
 
@@ -49,7 +53,7 @@ const ModalContent = ({
       phonenum: phoneNumber,
     });
 
-    await setModalVisible(false);
+   
 
   };
 
@@ -182,7 +186,9 @@ const ModalContent = ({
                 </View>
               </TouchableOpacity>
             </View>
+  
           </View>
+          <Text style={styles.errorMessage}>{errorCode}</Text>
           <View style={styles.popupFooter}>
             <TouchableOpacity
               onPress={handleVerificationAuth}
@@ -374,6 +380,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: widthPercentage(10),
     borderRadius: 10,
+  },
+  errorMessage: {
+    color: '#E90061',
+    fontSize: fontPercentage(12),
   },
 });
 

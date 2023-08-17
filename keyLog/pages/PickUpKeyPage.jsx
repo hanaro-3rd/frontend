@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components/native";
 import {
   fontPercentage,
+  getStatusBarHeight,
   heightPercentage,
   widthPercentage,
 } from "../utils/ResponseSize";
@@ -83,7 +84,7 @@ const PickUpKeyPage = ({ navigation }) => {
   //   console.log("location" + location);
   // }, []);
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, marginTop:`${getStatusBarHeight()}` }}>
       <View
         style={{
           position: "absolute",
@@ -91,7 +92,9 @@ const PickUpKeyPage = ({ navigation }) => {
           minHeight: 40,
           zIndex: 1111,
           width: "100%",
-          flexDirection: "row",
+          flexDirection: "row",   
+          marginTop:`${getStatusBarHeight()}`
+          
         }}
       >
         <TouchableOpacity

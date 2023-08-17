@@ -45,6 +45,7 @@ import SettingPage from "./pages/SettingPage";
 import TestPaymentSearchPage from "./pages/Payment/TestPaymentSearchPage";
 import AccountConnectPageComponents from "./components/AccountConnectPageComponents/AccountConnectPageComponents";
 import { usernameAtom } from "./recoil/usernameAtom";
+import { SafeAreaView } from "react-native-safe-area-context";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -117,12 +118,18 @@ const App = () => {
     return null;
   }
   return (
+    <SafeAreaView style={{flex:1}}>
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName={
-          "SignUpPage"
-          // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
+          // "SignUpPage"
+          login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
         }
+        screenOptions={{
+          headerStyle: {          // 헤더 높이 설정
+            backgroundColor: 'transparent', // 투명한 배경 설정
+          },
+        }}
       >
         <Stack.Screen
           name="MainPage"
@@ -281,6 +288,7 @@ const App = () => {
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </SafeAreaView>
   );
 };
 

@@ -42,22 +42,30 @@ const styles = StyleSheet.create({
     borderColor: '#E90061',
     borderWidth: 1,
   },
+  successInputField: {
+    borderColor: '#55acee',
+    borderWidth: 1,
+  },
   errorMessage: {
     color: '#E90061',
+    fontSize: fontPercentage(12),
+  },
+  successMessage:{
+    color: '#55acee',
     marginTop: heightPercentage(10),
     paddingVertical: heightPercentage(15),
     fontSize: fontPercentage(12),
-  },
+  }
 });
 
 const InputField = React.forwardRef(
   (
-    { placeholder, handlePress, value, onChangeText, hasError, onBlur },
+    { placeholder, handlePress, value, onChangeText, hasError, onBlur,hasSuccess,maxLength },
     ref
   ) => (
     <View style={styles.inputFieldWrapper}>
       <TouchableOpacity
-        style={[styles.inputFieldContainer, hasError && styles.errorInputField]}
+        style={[styles.inputFieldContainer, hasError && styles.errorInputField,hasSuccess&&styles.successInputField]}
         onPress={handlePress}
       >
         <TextInput
@@ -68,11 +76,15 @@ const InputField = React.forwardRef(
           value={value}
           onChangeText={onChangeText}
           placeholderTextColor='#B0B8C1'
+          maxLength={maxLength}
         />
       </TouchableOpacity>
       {hasError && (
         <Text style={styles.errorMessage}>입력하신 정보를 확인해주세요.</Text>
       )}
+            {/* {hasSuccess && (
+        <Text style={styles.successMessage}>입력하신 정보를 확인해주세요.</Text>
+      )} */}
     </View>
   )
 );
