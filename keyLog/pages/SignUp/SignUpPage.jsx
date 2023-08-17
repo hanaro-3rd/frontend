@@ -224,6 +224,7 @@ const SignUpPage = ({ navigation }) => {
                   paddingHorizontal: widthPercentage(20),
                   fontSize: fontPercentage(16),
                   fontWeight: "700",
+                  borderRadius:10,
                 }}
                 value={personalNumber}
                 onChangeText={handlePersonalNumberChange}
@@ -232,7 +233,7 @@ const SignUpPage = ({ navigation }) => {
                 maxLength={6}
               />
             </TouchableOpacity>
-            <Text style={{ fontSize: 50, fontWeight: 700, marginBottom: 6 }}>
+            <Text style={{ fontSize: 50, fontWeight: 200, marginBottom: 6 }}>
               -
             </Text>
             <View
@@ -253,6 +254,7 @@ const SignUpPage = ({ navigation }) => {
                     width: "100%",
                     height: heightPercentage(65),
                     backgroundColor: "#F9FAFB",
+                    borderRadius:10,
                   
                     fontSize: fontPercentage(16),
                     fontWeight: "700",
@@ -265,22 +267,22 @@ const SignUpPage = ({ navigation }) => {
               </TouchableOpacity>
 
               {/* <Image source={phoneNumberIcon}/> */}
-              <Text style={{ fontSize: 30, fontWeight: 400, marginTop: 9 }}>
+              <Text style={{ fontSize: 25, fontWeight: 400, marginTop: 9}}>
                 *
               </Text>
-              <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 9 }}>
+              <Text style={{ fontSize: 25, fontWeight: 700, marginTop: 9 }}>
                 *
               </Text>
-              <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 9 }}>
+              <Text style={{ fontSize: 25, fontWeight: 700, marginTop: 9 }}>
                 *
               </Text>
-              <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 9 }}>
+              <Text style={{ fontSize: 25, fontWeight: 700, marginTop: 9 }}>
                 *
               </Text>
-              <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 9 }}>
+              <Text style={{ fontSize: 25, fontWeight: 700, marginTop: 9 }}>
                 *
               </Text>
-              <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 9 }}>
+              <Text style={{ fontSize: 25, fontWeight: 700, marginTop: 9 }}>
                 *
               </Text>
             </View>
