@@ -111,7 +111,6 @@ const SignUpPage = ({ navigation }) => {
     }
   };
 
-<<<<<<< HEAD
   const handleNumberChange = (text) => {
     setOneNumber(text);
   };
@@ -127,15 +126,6 @@ const SignUpPage = ({ navigation }) => {
 
   const handlePhoneChange = (number) => {
     setPhoneNumber(number);
-=======
-  const handlePersonalNumberChange = text => {
-    const [part1, part2] = checkPersonalNumberChange(text);
-    if (part1 != null && part2 != null) {
-      const newPersonalNumber = [part1, part2].filter(Boolean).join('-');
-      setPersonalNumber(newPersonalNumber);
-      setIsPersonalNumberValid(isValidPersonalNumber(newPersonalNumber));
-    }
->>>>>>> main
   };
 
   const handleDebouncedPhoneChange = () => {
