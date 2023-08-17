@@ -398,13 +398,7 @@ export const ExchangePage = () => {
         <View style={styles.footer}>
           <View style={styles.informationContainer}>
             <Text style={styles.informationText}>
-              주말 및 공휴일은 수수료가 붙습니다..
-            </Text>
-            <Text style={styles.informationText}>
-              주말 및 공휴일은 수수료가 붙습니다..
-            </Text>
-            <Text style={styles.informationText}>
-              주말 및 공휴일은 수수료가 붙습니다..
+              * 주말 및 공휴일은 수수료가 붙습니다
             </Text>
           </View>
           {koreaTextInput > 0 &&
