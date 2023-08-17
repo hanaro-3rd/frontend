@@ -1,41 +1,33 @@
-export const checkPersonalNumberChange = (text) => {
-  let cleaned = ("" + text).replace(/\D/g, "");
+export const checkKoreanName = name => {
+  const cleaned = name.replace(/\s/g, ''); // 공백 제거
+  const match = cleaned.match(/^[가-힣]*$/); // 이름이 한글로만 이루어져 있는지 확인
+
+  return !!match; // match가 존재하면 true, 그렇지 않으면 false 반환
+};
+
+
+export const checkPhoneChange = number => {
+  let cleaned = ('' + number).replace(/\D/g, '');
   let match;
 
-  if (cleaned.length < 7) {
-    match = cleaned.match(/^(\d{0,6})/);
-  } else {
-    match = cleaned.match(/^(\d{6})(\d{0,7})/);
-  }
+  match = cleaned.match(/^010(\d{4})(\d{4})$/);
 
   if (match) {
-    const part1 = match[1] || "",
-      part2 = match[2] || "";
-
-    return [part1, part2];
+    return true;
   } else {
-    return [null, null];
+    return false;
   }
 };
 
-export const checkPhoneChange = (number) => {
-  let cleaned = ("" + number).replace(/\D/g, "");
-  let match;
+export const checkResidentNumber = number => {
+  const cleaned = ('' + number).replace(/\D/g, ''); // 숫자 이외의 문자 제거
+  const match = cleaned.match(/^\d{6}$/); // 첫 6자리에 정확히 6자리의 숫자인지 확인
 
-  if (cleaned.length < 4) {
-    match = cleaned.match(/^(\d{0,3})/);
-  } else if (cleaned.length < 7) {
-    match = cleaned.match(/^(\d{3})(\d{0,4})/);
-  } else {
-    match = cleaned.match(/^(\d{3})(\d{4})(\d{0,4})/);
-  }
+  return !!match; // match가 존재하면 true, 그렇지 않으면 false 반환
+};
 
-  if (match) {
-    const part1 = match[1] || "",
-      part2 = match[2] || "",
-      part3 = match[3] || "";
-    return [part1, part2, part3];
-  } else {
-    return [null, null, null];
-  }
+export const checkNumberSet = number => {
+  const match = /^[1-4]$/.test(number); // 숫자가 1, 2, 3, 4 중 하나인지 확인
+
+  return match; // true 또는 false 반환
 };

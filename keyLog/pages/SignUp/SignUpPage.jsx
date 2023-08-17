@@ -1,40 +1,59 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 import {
+  Image,
   Keyboard,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
-import { useMutation, useQueryClient } from 'react-query';
-import { postVerification } from '../../api/api';
-import InfoText from '../../components/SignUpPageComponents/InfoText';
-import InputField from '../../components/SignUpPageComponents/InputField';
-import ModalContent from '../../components/SignUpPageComponents/ModalContent';
+} from "react-native";
+import { useMutation, useQueryClient } from "react-query";
+import { postVerification } from "../../api/api";
+import InfoText from "../../components/SignUpPageComponents/InfoText";
+import InputField from "../../components/SignUpPageComponents/InputField";
+import ModalContent from "../../components/SignUpPageComponents/ModalContent";
+import { useDebouncedEffect } from "../../hooks/useDebouncedEffect";
+import phoneNumberIcon from "../../Images/phoneNumber.png";
 import {
   isValidName,
   isValidPersonalNumber,
-} from '../../utils/CheckValidation';
+} from "../../utils/CheckValidation";
 import {
+  checkKoreanName,
+  checkNumberSet,
   checkPersonalNumberChange,
   checkPhoneChange,
-} from '../../utils/Regexp';
+  checkResidentNumber,
+} from "../../utils/Regexp";
 import {
   fontPercentage,
   heightPercentage,
   widthPercentage,
-} from '../../utils/ResponseSize';
+} from "../../utils/ResponseSize";
 
 const SignUpPage = ({ navigation }) => {
   const queryClient = useQueryClient();
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  const [name, setName] = useState('');
-  const [personalNumber, setPersonalNumber] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [name, setName] = useState("");
+
+  const [oneNumber, setOneNumber] = useState("");
+  const [isOneNumberValid, setIsOneNumberValid] = useState("");
+
+  const [personalNumber, setPersonalNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
   const [isNameValid, setIsNameValid] = useState(true);
+  const [isNameValidSuccess, setIsNameValidSuccess] = useState(false);
+
+  const [isPersonalNumberValidSuccess, setIsPersonalNumberValidSuccess] =
+    useState(false);
   const [isPersonalNumberValid, setIsPersonalNumberValid] = useState(true);
+
+  const [isPhoneNumberValidSuccess, setIsPhoneNumberValidSucess] =
+    useState(false);
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -42,7 +61,7 @@ const SignUpPage = ({ navigation }) => {
   const phoneNumberInputRef = useRef(null);
   const personalNumberInputRef = useRef(null);
 
-  const validateName = inputName => {
+  const validateName = (inputName) => {
     const hasIncompleteCharacters = /[ㄱ-ㅎㅏ-ㅣ]/.test(inputName);
     setIsNameValid(!hasIncompleteCharacters);
   };
@@ -53,13 +72,13 @@ const SignUpPage = ({ navigation }) => {
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
+      "keyboardDidShow",
       () => {
         setKeyboardVisible(true);
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
+      "keyboardDidHide",
       () => {
         setKeyboardVisible(false);
       }
@@ -72,20 +91,43 @@ const SignUpPage = ({ navigation }) => {
   }, []);
 
   const infoTexts = [
-    '주말 및 공휴일은 수수료가 붙습니다.. 어쩌구',
-    '주말 및 공휴일은 수수료가 붙습니다.. 어쩌구',
-    '주말 및 공휴일은 수수료가 붙습니다.. 어쩌구',
+    // "주말 및 공휴일은 수수료가 붙습니다.. 어쩌구",
+    // "주말 및 공휴일은 수수료가 붙습니다.. 어쩌구",
+    // "주말 및 공휴일은 수수료가 붙습니다.. 어쩌구",
   ];
 
-  const handleNameChange = text => {
-    if (isValidName(text) || text === '') {
-      setName(text);
-      setIsNameValid(true);
+  const handlePersonalNumberChange = (text) => {
+    setPersonalNumber(text);
+  };
+
+  const handleDebouncedPersonalNumberChange = () => {
+    if (checkResidentNumber(personalNumber)&&checkNumberSet(oneNumber)) {
+      setIsPersonalNumberValid(true);
+      setIsPersonalNumberValidSuccess(true);
     } else {
-      setIsNameValid(false);
+      if (personalNumber == "" && oneNumber=="") return;
+      setIsPersonalNumberValid(false);
+      setIsPersonalNumberValidSuccess(false);
     }
   };
 
+<<<<<<< HEAD
+  const handleNumberChange = (text) => {
+    setOneNumber(text);
+  };
+  // const handleDebouncedNumberChange = () => {
+  //   const match = checkNumberSet(oneNumber);
+  //   if (match && oneNumber != "") {
+  //     setOneNumber(true);
+  //   }
+  // };
+  useDebouncedEffect(handleDebouncedPersonalNumberChange, 1000, [
+    personalNumber,oneNumber
+  ]);
+
+  const handlePhoneChange = (number) => {
+    setPhoneNumber(number);
+=======
   const handlePersonalNumberChange = text => {
     const [part1, part2] = checkPersonalNumberChange(text);
     if (part1 != null && part2 != null) {
@@ -93,30 +135,52 @@ const SignUpPage = ({ navigation }) => {
       setPersonalNumber(newPersonalNumber);
       setIsPersonalNumberValid(isValidPersonalNumber(newPersonalNumber));
     }
+>>>>>>> main
   };
 
-  const handlePhoneChange = number => {
-    const [part1, part2, part3] = checkPhoneChange(number);
-    if (part1 != null && part2 != null && part3 != null) {
-      // const newPhoneNumber = [part1, part2, part3].filter(Boolean).join('-');
-      setPhoneNumber(part1 + part2 + part3);
+  const handleDebouncedPhoneChange = () => {
+    const match = checkPhoneChange(phoneNumber);
+    if (match && phoneNumber != "") {
       setIsPhoneNumberValid(true);
+      setIsPhoneNumberValidSucess(true);
+    } else {
+      if (phoneNumber == "") return;
+      setIsPhoneNumberValid(false);
+      setIsPhoneNumberValidSucess(false);
     }
   };
+
+  useDebouncedEffect(handleDebouncedPhoneChange, 1000, [phoneNumber]);
+  //이름
+  const handleNameChange = (text) => {
+    setName(text);
+  };
+
+  const handleDebouncedNameChange = () => {
+    if (checkKoreanName(name) && name != "") {
+      setIsNameValid(true);
+      setIsNameValidSuccess(true);
+    } else {
+      if (name == "") return;
+      setIsNameValid(false);
+      setIsNameValidSuccess(false);
+    }
+  };
+  useDebouncedEffect(handleDebouncedNameChange, 1000, [name]);
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
 
   const postVerificationMutation = useMutation(postVerification, {
-    onSuccess: data => {
+    onSuccess: (data) => {
       // INvalidates cache and refetch
-      queryClient.invalidateQueries('verification');
-      console.log('Response Data:', data);
+      queryClient.invalidateQueries("verification");
+      console.log("Response Data:", data);
     },
   });
 
-  const handleVerification = e => {
+  const handleVerification = (e) => {
     e.preventDefault();
     postVerificationMutation.mutate({ phonenum: phoneNumber });
     setModalVisible(true);
@@ -125,7 +189,7 @@ const SignUpPage = ({ navigation }) => {
   return (
     <ScrollView
       contentContainerStyle={styles.root}
-      keyboardShouldPersistTaps='handled'
+      keyboardShouldPersistTaps="handled"
     >
       <View style={styles.header}></View>
       <View style={styles.body}>
@@ -138,28 +202,131 @@ const SignUpPage = ({ navigation }) => {
         <View style={styles.bodyMain}>
           <InputField
             ref={nameInputRef}
-            placeholder='이름'
+            placeholder="이름"
             value={name}
             onChangeText={handleNameChange}
             onBlur={handleNameBlur}
             handlePress={() => nameInputRef.current?.focus()}
             hasError={!isNameValid}
+            hasSuccess={isNameValidSuccess}
+            maxLength={5}
           />
-          <InputField
-            ref={personalNumberInputRef}
-            placeholder='주민번호'
-            value={personalNumber}
-            onChangeText={handlePersonalNumberChange}
-            handlePress={() => personalNumberInputRef.current?.focus()}
-            hasError={!isPersonalNumberValid}
-          />
+          <View
+            style={{
+              flexDirection: "row",
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "space-between",
+              height: heightPercentage(65),
+            }}
+          >
+            <TouchableOpacity
+              style={[
+                !isPersonalNumberValid && styles.errorInputField,
+                isPersonalNumberValidSuccess && styles.successInputField,
+              ]}
+            >
+              <TextInput
+                style={{
+                  width: "100%",
+                  height: heightPercentage(65),
+                  backgroundColor: "#F9FAFB",
+                  paddingHorizontal: widthPercentage(20),
+                  fontSize: fontPercentage(16),
+                  fontWeight: "700",
+                }}
+                value={personalNumber}
+                onChangeText={handlePersonalNumberChange}
+                placeholder="주민번호6자리"
+                placeholderTextColor="#B0B8C1"
+                maxLength={6}
+              />
+            </TouchableOpacity>
+            <Text style={{ fontSize: 50, fontWeight: 700, marginBottom: 6 }}>
+              -
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                width: "45%",
+                alignItems: "center",
+              }}
+            >
+              <TouchableOpacity
+                style={[
+                  !isPersonalNumberValid && styles.errorInputField,
+                  isPersonalNumberValidSuccess && styles.successInputField,
+                ]}
+              >
+                <TextInput
+                  style={{
+                    width: "100%",
+                    height: heightPercentage(65),
+                    backgroundColor: "#F9FAFB",
+                  
+                    fontSize: fontPercentage(16),
+                    fontWeight: "700",
+                  }}
+                  placeholderTextColor="#B0B8C1"
+                  value={oneNumber}
+                  onChangeText={handleNumberChange}
+                  maxLength={2}
+                />
+              </TouchableOpacity>
+
+              {/* <Image source={phoneNumberIcon}/> */}
+              <Text style={{ fontSize: 30, fontWeight: 400, marginTop: 9 }}>
+                *
+              </Text>
+              <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 9 }}>
+                *
+              </Text>
+              <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 9 }}>
+                *
+              </Text>
+              <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 9 }}>
+                *
+              </Text>
+              <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 9 }}>
+                *
+              </Text>
+              <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 9 }}>
+                *
+              </Text>
+            </View>
+          </View>
+          {!isPersonalNumberValid ? (
+            <View style={{ width: "100%" }}>
+              <Text
+                style={{
+                  textAlign: "left",
+                  color: "red",
+                  fontSize: fontPercentage(12),
+                }}
+              >
+                입력하신 정보를 확인해주세요.
+              </Text>
+            </View>
+          ) : (
+            <View style={{ width: "100%" }}>
+              <Text
+                style={{
+                  textAlign: "left",
+                  color: "red",
+                  fontSize: fontPercentage(12),
+                }}
+              ></Text>
+            </View>
+          )}
           <InputField
             ref={phoneNumberInputRef}
-            placeholder='휴대폰번호'
+            placeholder="휴대폰번호"
             value={phoneNumber}
             onChangeText={handlePhoneChange}
             handlePress={() => phoneNumberInputRef.current?.focus()}
             hasError={!isPhoneNumberValid}
+            hasSuccess={isPhoneNumberValidSuccess}
+            maxLength={11}
           />
         </View>
         <View style={styles.bodyFooter}>
@@ -171,16 +338,16 @@ const SignUpPage = ({ navigation }) => {
           <TouchableOpacity
             style={[
               styles.submitButton,
-              (!isNameValid ||
-                // !isValidPhoneNumber(phoneNumber) ||
-                !isValidPersonalNumber(personalNumber)) &&
+              (!checkKoreanName(name) ||
+                ! checkResidentNumber(personalNumber) ||
+                ! checkPhoneChange(phoneNumber) )&&
                 styles.disabledButton,
             ]}
-            onPress={e => handleVerification(e)}
+            onPress={(e) => handleVerification(e)}
             disabled={
               !isNameValid ||
-              // !isValidPhoneNumber(phoneNumber) ||
-              !isValidPersonalNumber(personalNumber)
+                ! isPersonalNumberValid ||
+                ! isPhoneNumberValid
             }
           >
             <Text style={styles.buttonText}>인증 요청</Text>
@@ -190,7 +357,7 @@ const SignUpPage = ({ navigation }) => {
           modalVisible={modalVisible}
           toggleModal={toggleModal}
           phoneNumber={phoneNumber}
-          personalNumber={phoneNumber}
+          personalNumber={personalNumber+oneNumber}
           name={name}
           setModalVisible={setModalVisible}
           navigation={navigation}
@@ -201,100 +368,108 @@ const SignUpPage = ({ navigation }) => {
 };
 
 const commonTextStyle = {
-  fontFamily: 'Inter',
-  fontStyle: 'normal',
+  fontFamily: "Inter",
+  fontStyle: "normal",
 };
 
 const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    backgroundColor: '#F2F4F6',
+    flexDirection: "column",
+    alignItems: "flex-start",
+    backgroundColor: "#F2F4F6",
   },
   header: {
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
     flexShrink: 0,
-    alignSelf: 'stretch',
-    backgroundColor: '#FFF',
-    flexDirection: 'row',
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
+    flexDirection: "row",
     paddingVertical: heightPercentage(13),
   },
   title: {
     ...commonTextStyle,
-    color: '#191F29',
+    color: "#191F29",
     fontSize: fontPercentage(23),
-    fontWeight: '700',
+    fontWeight: "700",
   },
   subtitle: {
     ...commonTextStyle,
-    color: '#8B95A1',
+    color: "#8B95A1",
     fontSize: fontPercentage(16),
-    fontWeight: '400',
+    fontWeight: "400",
   },
   body: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
+    flexDirection: "column",
+    alignItems: "flex-start",
     flexGrow: 1,
     flexShrink: 0,
     flexBasis: 0,
-    alignSelf: 'stretch',
+    alignSelf: "stretch",
   },
   bodyHeader: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
     gap: heightPercentage(10),
-    alignSelf: 'stretch',
-    backgroundColor: '#FFF',
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
     paddingVertical: heightPercentage(16),
     paddingHorizontal: widthPercentage(20),
   },
   bodyMain: {
-    flexDirection: 'column',
-    alignItems: 'center',
+    flexDirection: "column",
+    alignItems: "center",
     flexGrow: 1,
     flexShrink: 0,
     flexBasis: 0,
-    alignSelf: 'stretch',
-    backgroundColor: '#FFF',
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
     paddingVertical: heightPercentage(15),
     paddingHorizontal: widthPercentage(25),
   },
   bodyFooter: {
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    alignItems: "center",
     gap: heightPercentage(10),
-    alignSelf: 'stretch',
-    backgroundColor: '#FFF',
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
     paddingVertical: heightPercentage(15),
     paddingHorizontal: widthPercentage(25),
   },
   informationContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
     gap: heightPercentage(5),
-    alignSelf: 'stretch',
+    alignSelf: "stretch",
   },
   buttonText: {
     ...commonTextStyle,
-    color: 'white',
+    color: "white",
     fontSize: fontPercentage(16),
-    fontWeight: '700',
+    fontWeight: "700",
   },
   submitButton: {
     height: heightPercentage(55),
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'stretch',
-    backgroundColor: '#55ACEE',
-    flexDirection: 'row',
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "stretch",
+    backgroundColor: "#55ACEE",
+    flexDirection: "row",
     borderRadius: 10,
   },
   disabledButton: {
-    backgroundColor: '#F2F4F6',
+    backgroundColor: "#F2F4F6",
+  },
+  errorInputField: {
+    borderColor: "#E90061",
+    borderWidth: 1,
+  },
+  successInputField: {
+    borderColor: "#55acee",
+    borderWidth: 1,
   },
 });
 
