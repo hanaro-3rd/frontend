@@ -22,11 +22,14 @@ import { getMyKeymoneyUnit } from "../../api/api";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
-  height: ${phoneHeight}px;
+  /* padding-top: ${getStatusBarHeight}px; */
+  /* height: ${phoneHeight}px;
+  min-height: ${phoneHeight}px; */
   z-index: 9999;
   background-color: ${(props) =>
     props.categoryMode ? "rgba(0, 0, 0, 0.5)" : "#F2F4F6"};
-  justify-content: space-between;
+  /* justify-content: space-between; */
+  /* flex: 1 0 0; */
 `;
 
 const BodyContainer = styled.View`
@@ -354,11 +357,11 @@ const ModalBackground = styled.View`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9998; /* CategoryComponent보다 낮은 z-index 설정 */
+  z-index: 9998;
 `;
 
 const ContentContainer = styled.View`
-  position: relative; /* 반드시 필요합니다! */
+  position: relative;
 `;
 
 const ForeignPayHistoryPage = ({ route, navigation }) => {

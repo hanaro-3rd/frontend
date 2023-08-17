@@ -50,7 +50,7 @@ const KeyMoneyHistoryPage = ({ route, navigation }) => {
   //   },
   // });
   return (
-    <Root>
+    <>
       <PrevHeader navigation={navigation} to="MainPage" />
       <BodyContainer>
         <BodyHeader>
@@ -96,7 +96,7 @@ const KeyMoneyHistoryPage = ({ route, navigation }) => {
           </ExchangeText>
         </BodyMainContainer>
       </BodyContainer>
-    </Root>
+    </>
   );
 };
 
@@ -117,11 +117,13 @@ const NoAccountMessage = styled.Text`
   font-weight: 700;
 `;
 
-const Root = styled.View`
+const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
-  height: ${phoneHeight}px;
-  justify-content: space-between;
-  flex: 1 0 0;
+  /* height: ${phoneHeight}px; */
+  min-height: ${phoneHeight}px;
+  /* padding-top: ${getStatusBarHeight}px; */
+  /* justify-content: space-between; */
+  /* flex: 1 0 0; */
 `;
 
 const BodyContainer = styled.View`

@@ -333,7 +333,7 @@ const Header = styled.View`
   background-color: transparent;
 `;
 const Main = styled.SafeAreaView`
-  padding-top: ${getStatusBarHeight}px;
+  /* padding-top: ${getStatusBarHeight}px; */
   width: ${phoneWidth}px;
   height: ${phoneHeight}px;
   justify-content: space-between;

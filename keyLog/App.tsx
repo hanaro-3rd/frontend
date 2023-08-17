@@ -118,171 +118,171 @@ const App = () => {
     return null;
   }
   return (
-    <SafeAreaView style={{flex:1}}>
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName={
-          login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
-        }
-
-      >
-        <Stack.Screen
-          name="MainPage"
-          component={MainPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="TestPaymentSearchPage"
-          component={TestPaymentSearchPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ForeignPayHistoryPage"
-          component={ForeignPayHistoryPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="OwnPayHistoryPage"
-          component={OwnPayHistoryPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ScanPage"
-          component={ScanPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="TestPaymentPage"
-          component={TestPaymentPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="PaymentSuccessPage"
-          component={PaymentSuccessPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="PaymentFailPage"
-          component={PaymentFailPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="KeyMoneyHistoryPage"
-          component={KeyMoneyHistoryPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="SettingPage"
-          component={SettingPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="AccountConnectPage"
-          component={AccountConnectPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="AccountConnectSuccess"
-          component={AccountConnectSuccess}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="AccountConnectFail"
-          component={AccountConnectFail}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ChooseAccountComponent"
-          component={ChooseAccountComponent}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ExchangePage"
-          component={ExchangePage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="CountryChoiceComponent"
-          component={CountryChoiceComponent}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ExchangeSuccess"
-          component={ExchangeSuccess}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ExchangeFail"
-          component={ExchangeFail}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="PickUpKeyPage"
-          component={PickUpKeyPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="SignUpPage"
-          component={SignUpPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="LoginPasswordPage"
-          component={LoginPasswordPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="LoginPatternPage"
-          component={LoginPatternPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="LoginPage"
-          component={LoginPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="TravelRecordMainComponent"
-          component={TravelRecordMainComponent}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="TravelRecordDetailComponent"
-          component={TravelRecordDetailComponent}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="PaymentPageInputComponent"
-          component={PaymentPageInputComponent}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="TravelRecordPage"
-          component={TravelRecordPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="TravelBudgetPage"
-          component={TravelBudgetPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="TravelBudgetDetailPage"
-          component={TravelBudgetDetailPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="TravelSchedulePage"
-          component={TravelSchedulePage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="TravelBudgetPlanPage"
-          component={TravelBudgetPlanPage}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName={
+            "SignUpPage"
+            // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
+          }
+        >
+          <Stack.Screen
+            name="MainPage"
+            component={MainPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TestPaymentSearchPage"
+            component={TestPaymentSearchPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ForeignPayHistoryPage"
+            component={ForeignPayHistoryPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="OwnPayHistoryPage"
+            component={OwnPayHistoryPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ScanPage"
+            component={ScanPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TestPaymentPage"
+            component={TestPaymentPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PaymentSuccessPage"
+            component={PaymentSuccessPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PaymentFailPage"
+            component={PaymentFailPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="KeyMoneyHistoryPage"
+            component={KeyMoneyHistoryPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SettingPage"
+            component={SettingPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AccountConnectPage"
+            component={AccountConnectPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AccountConnectSuccess"
+            component={AccountConnectSuccess}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AccountConnectFail"
+            component={AccountConnectFail}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ChooseAccountComponent"
+            component={ChooseAccountComponent}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ExchangePage"
+            component={ExchangePage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CountryChoiceComponent"
+            component={CountryChoiceComponent}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ExchangeSuccess"
+            component={ExchangeSuccess}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ExchangeFail"
+            component={ExchangeFail}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PickUpKeyPage"
+            component={PickUpKeyPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SignUpPage"
+            component={SignUpPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="LoginPasswordPage"
+            component={LoginPasswordPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="LoginPatternPage"
+            component={LoginPatternPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="LoginPage"
+            component={LoginPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TravelRecordMainComponent"
+            component={TravelRecordMainComponent}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TravelRecordDetailComponent"
+            component={TravelRecordDetailComponent}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PaymentPageInputComponent"
+            component={PaymentPageInputComponent}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TravelRecordPage"
+            component={TravelRecordPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TravelBudgetPage"
+            component={TravelBudgetPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TravelBudgetDetailPage"
+            component={TravelBudgetDetailPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TravelSchedulePage"
+            component={TravelSchedulePage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TravelBudgetPlanPage"
+            component={TravelBudgetPlanPage}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </SafeAreaView>
   );
 };
