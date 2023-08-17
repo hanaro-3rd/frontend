@@ -75,10 +75,10 @@ const App = () => {
             await AsyncStorage.getItem("refresh_token")
           );
           console.log(response.data);
-          if(response.data?.errorCode==500) {
-            setLogin(false)
-            setHaveDeviceId(false)
-            setLoading(false)
+          if (response.data?.errorCode == 500) {
+            setLogin(false);
+            setHaveDeviceId(false);
+            setLoading(false);
             return;
           }
           if (token) {
@@ -122,14 +122,9 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName={
-          // "SignUpPage"
           login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
         }
-        screenOptions={{
-          headerStyle: {          // 헤더 높이 설정
-            backgroundColor: 'transparent', // 투명한 배경 설정
-          },
-        }}
+
       >
         <Stack.Screen
           name="MainPage"

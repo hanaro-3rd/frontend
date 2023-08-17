@@ -23,7 +23,12 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getAccount, getExchange, postExchange } from "../../api/api";
+import {
+  getAccount,
+  getExchange,
+  postExchange,
+  getExchangeFromRedis,
+} from "../../api/api";
 import {
   Collapse,
   CollapseHeader,
@@ -31,13 +36,7 @@ import {
 } from "accordion-collapse-react-native";
 import _ from "lodash";
 import { useDebouncedEffect } from "../../hooks/useDebouncedEffect";
-import AccountConnectPageComponents from "../../components/AccountConnectPageComponents/AccountConnectPageComponents";
 import { integerUnit, minimumUnit } from "../../utils/ExchangeSentence";
-import Swiper from "react-native-swiper";
-import { styled } from "styled-components/native";
-import USIcon from "../../assets/Main/CountryIcon.png";
-import JapanIcon from "../../assets/Setting/JapanCountryIcon.png";
-import EuroIcon from "../../assets/exchangeImg/EUR.png";
 export const ExchangePage = () => {
   const [accountList, setAccountList] = useState([]);
   const inputRef = useRef(null);
@@ -56,38 +55,13 @@ export const ExchangePage = () => {
   const [subKoreaText, setSubKoreaText] = useState("");
   const [foreignTextInput, setForeignTextInput] = useState();
   const [subForeignText, setSubForeignText] = useState();
+  const [apiTime, setApiTime] = useState([]);
   const navigation = useNavigation();
   const handleChooseAccountComponent = () => {
     navigation.navigate("ChooseAccountComponent", {
       page: "ExchangePage",
     });
   };
-  const [USD, setUSD] = useState();
-  const [EUR, setEUR] = useState();
-  const [JPY, setJPY] = useState();
-  const [exchangeDate, setExchangeDate] = useState();
-  const { exchangeRating } = useQuery("exchange", async () => getExchange(), {
-    onSuccess: (response) => {
-      console.log(response.data, "메인환율");
-      setUSD(response.data.result.usd);
-      setEUR(response.data.result.eur);
-      setJPY(response.data.result.jpy);
-      let today = new Date(); // today 객체에 Date()의 결과를 넣어줬다
-      let time = {
-        year: today.getFullYear(), //현재 년도
-        month: today.getMonth() + 1, // 현재 월
-        date: today.getDate(), // 현제 날짜
-        hours: today.getHours(), //현재 시간
-        minutes: today.getMinutes(), //현재 분
-      };
-      setExchangeDate(
-        `${time.year}/${time.month}/${time.date} ${time.hours}:${time.minutes}`
-      );
-    },
-    onError: (error) => {
-      console.log(error.response.data);
-    },
-  });
   const queryClient = useQueryClient();
   const { data } = useQuery("account", async () => getAccount(), {
     onSuccess: (response) => {
@@ -98,18 +72,37 @@ export const ExchangePage = () => {
     },
   });
 
-  const { exchangeData } = useQuery("exchange", async () => getExchange(), {
-    onSuccess: (response) => {
-      console.log("exchangePage", response.data);
-      setJpy(response.data.result.jpy);
-      setEur(response.data.result.eur);
-      setUsd(response.data.result.usd);
-      setExchangeRate(response.data.result.usd.exchangeRate);
-    },
-    onError: (error) => {
-      console.log("exchangePage,exchangeApi에러", error);
-    },
-  });
+  // const { exchangeData } = useQuery("exchange", async () => getExchange(), {
+  //   onSuccess: (response) => {
+  //     console.log("exchangePage", response.data);
+  //     setJpy(response.data.result.jpy);
+  //     setEur(response.data.result.eur);
+  //     setUsd(response.data.result.usd);
+  //     setExchangeRate(response.data.result.usd.exchangeRate);
+  //     setChangePrice(response.data.result.usd.changePrice);
+  //   },
+  //   onError: (error) => {
+  //     console.log("exchangePage,exchangeApi에러", error);
+  //   },
+  // });
+  const { exchangeData } = useQuery(
+    "exchangefromredis",
+    async () => getExchange(),
+    {
+      onSuccess: (response) => {
+        console.log("exchangePageFromRedis", response.data);
+        setJpy(response.data.result.jpy);
+        setEur(response.data.result.eur);
+        setUsd(response.data.result.usd);
+        setExchangeRate(response.data.result.usd.exchangeRate);
+        setChangePrice(response.data.result.usd.changePrice);
+        setApiTime(response.data.result.updatedAt);
+      },
+      onError: (error) => {
+        console.log("exchangePage,exchangeApi에러2", error);
+      },
+    }
+  );
   const handleCountryPress = (account) => {
     setSelectedAccount(account);
     setExpanded(false);
@@ -147,6 +140,7 @@ export const ExchangePage = () => {
       return;
     }
     if (numericValue > 1000000) {
+      //한국돈 100만원보다 클때
       let exchangeMoney = Math.floor(1000000 / exchangeRate);
       console.log("exchangeRate", exchangeRate);
       console.log(exchangeMoney, "exchangeMoney1000000");
@@ -161,6 +155,7 @@ export const ExchangePage = () => {
       return;
     }
     if (numericValue / exchangeRate < minimumMoney) {
+      //입력값이 최소 환전 금액보다 작을 때
       const exchangeValue = minimumMoney;
       setForeignTextInput(`${exchangeValue}`);
       const koreaValue = Math.floor(exchangeValue * exchangeRate);
@@ -182,18 +177,20 @@ export const ExchangePage = () => {
 
   const postExchangeMutation = useMutation(postExchange, {
     onSuccess: (response) => {
-      console.log(response.data);
+      console.log("postExchange", response.data);
       navigation.navigate("ExchangeSuccess", {
         exchangeFromUnit: response.data.result.exchangeFromUnit,
         exchangeFromMoney: response.data.result.exchangeFromMoney,
         exchangeToUnit: response.data.result.exchangeToUnit,
         exchangeToMoney: response.data.result.exchangeToMoney,
-        exchangeRate: response.data.result.exchangeRate,
-        changePrice: response.data.result.changePrice
+        exchangeUnit: selectedMoney,
+        exchangeRate: exchangeRate,
+        changePrice: changePrice,
       });
     },
     onError: (error) => {
-      console.log(error.response);
+      console.log(error); //실패 페이지로 이동
+      navigation.navigate("ExchangeFail");
     },
   });
 
@@ -229,9 +226,7 @@ export const ExchangePage = () => {
             <View style={styles.accountContainer}>
               <Text style={styles.containerTitle}>계좌 선택</Text>
               {accountList.length > 0 ? (
-                <TouchableOpacity
-                  onPress={() => handleCountryPress(e.bank + e.accountNum)}
-                >
+                <TouchableOpacity>
                   <Collapse
                     isExpanded={expanded}
                     onToggle={(isExpanded) =>
@@ -256,7 +251,7 @@ export const ExchangePage = () => {
                           <TouchableOpacity
                             key={idx}
                             onPress={() => {
-                              handleCountryPress(e.bank + e.accountNum);
+                              handleCountryPress(e.bank + " " + e.accountNum);
                               setAccountId(e.accountId);
                               setAccountBalance(e.balance);
                             }}
@@ -264,7 +259,7 @@ export const ExchangePage = () => {
                             <View style={styles.countrySelect}>
                               <View style={styles.countrySelectRow}>
                                 <Text style={styles.unitText}>
-                                  {e.bank} {e.accountNum}
+                                  {e.bank + " "} {e.accountNum}
                                 </Text>
                               </View>
                             </View>
@@ -295,7 +290,7 @@ export const ExchangePage = () => {
               <View style={styles.titleContainer}>
                 <Text style={styles.containerTitle2}>환전 금액</Text>
                 <Text style={styles.containerSubtitle}>
-                  휴일 수수료 10%가 적용됩니다
+                  휴일 수수료 원화 20원이 적용됩니다
                 </Text>
               </View>
 
@@ -315,7 +310,6 @@ export const ExchangePage = () => {
                   keyboardType="numeric"
                   style={{ textAlign: "right" }}
                 />
-                {/* <Text style={styles.koreaMoneyText}>10,000 ~ 10,000,000</Text> */}
               </View>
               <View style={{ width: "100%" }}>
                 <Text
@@ -364,67 +358,41 @@ export const ExchangePage = () => {
               </View>
               {/* 환율 부분 */}
             </View>
-
-            <Swiper
-              loop={true} // 무한 루프로 스와이프할 수 있도록 설정
-              autoplay={true} // 자동 재생 비활성화
-              style={styles.exchangeRateContainer}
-              showsButtons={false}
-              showsPagination={false}
-            >
-              {[USD, JPY, EUR].map((e, idx) => {
-                return (
-                  <ExchangeRateContainer key={idx}>
-                    <CountryExchangeRateContainer>
-                      {idx == 0 && <Image source={USIcon} />}
-                      {idx == 1 && <Image source={JapanIcon} />}
-                      {idx == 2 && <Image source={EuroIcon} />}
-                      <TextContainer>
-                        <CountryTextContainer>
-                          <CountryContainer>
-                            {idx == 0 && <Country>미국</Country>}
-                            {idx == 1 && <Country>일본</Country>}
-                            {idx == 2 && <Country>유럽</Country>}
-
-                            {idx == 0 && <MoneytaryUnit>USD</MoneytaryUnit>}
-                            {idx == 1 && <MoneytaryUnit>JPY</MoneytaryUnit>}
-                            {idx == 2 && <MoneytaryUnit>EUR</MoneytaryUnit>}
-                          </CountryContainer>
-                          {exchangeDate && <DateTime>{exchangeDate}</DateTime>}
-                        </CountryTextContainer>
-
-                        {USD && (
-                          <RateTextContainer>
-                            <ExchangeRate>{e.exchangeRate}</ExchangeRate>
-                            {e.changePrice > 0 ? (
-                              <ChangeUpRate>▲ {e.changePrice}</ChangeUpRate>
-                            ) : (
-                              <ChangeRate>▼ {e.changePrice}</ChangeRate>
-                            )}
-                          </RateTextContainer>
-                        )}
-                      </TextContainer>
-                    </CountryExchangeRateContainer>
-                  </ExchangeRateContainer>
-                );
-              })}
-            </Swiper>
-            {/* <View style={styles.exchangeRateContainer}>
+            <View style={styles.exchangeRateContainer}>
               <View style={styles.titleContainer2}>
                 <Text style={styles.containerTitle3}>현재 환율</Text>
-                <Text style={styles.containerSubtitle2}>07.11. 18:19 기준</Text>
+                <Text style={styles.containerSubtitle2}>
+                  {apiTime != null
+                    ? `${apiTime[1]}.${apiTime[2]}. ${apiTime[3]}:${apiTime[4]} 기준`
+                    : ""}
+                </Text>
               </View>
               <View style={styles.currentExchangeRateContainer}>
                 <View style={styles.countryInformationContainer}>
-                  <Text style={styles.countryText}>미국</Text>
-                  <Text style={styles.unitText3}>USD</Text>
+                  <Text style={styles.countryText}>
+                    {selectedMoney == "USD"
+                      ? "미국"
+                      : selectedMoney == "JPY"
+                      ? "일본"
+                      : "유럽"}
+                  </Text>
+                  <Text style={styles.unitText3}>{selectedMoney}</Text>
                 </View>
                 <View style={styles.currentExchangeRateTextContainer}>
-                  <Text style={styles.exchangeRateText}>1,294.50</Text>
-                  <Text style={styles.changeRateText}>▼ 12.00</Text>
+                  <Text style={styles.exchangeRateText}>{exchangeRate}</Text>
+                  <Text
+                    style={
+                      changePrice > 0
+                        ? styles.changeRateUp
+                        : styles.changeRateDown
+                    }
+                  >
+                    {changePrice > 0 ? "▲" : "▼"}
+                    {changePrice}
+                  </Text>
                 </View>
               </View>
-            </View> */}
+            </View>
           </View>
         </View>
         <View style={styles.footer}>
@@ -441,7 +409,7 @@ export const ExchangePage = () => {
           </View>
           {koreaTextInput > 0 &&
           foreignTextInput > 0 &&
-          selectedAccount != "" ? (
+          selectedAccount !== undefined ? (
             <TouchableOpacity
               onPress={handleExchangeSubmit}
               style={styles.submitButton}
@@ -633,8 +601,10 @@ const styles = StyleSheet.create({
     fontWeight: "400",
   },
   exchangeRateContainer: {
-    flexDirection: "row",
-    height:100,
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: 10,
+    alignSelf: "stretch",
   },
   titleContainer2: {
     justifyContent: "center",
@@ -679,7 +649,12 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(16),
     fontWeight: "700",
   },
-  changeRateText: {
+  changeRateUp: {
+    color: "#f20a0a",
+    fontSize: fontPercentage(12),
+    fontWeight: "700",
+  },
+  changeRateDown: {
     color: "#0A7DF2",
     fontSize: fontPercentage(12),
     fontWeight: "700",
@@ -768,100 +743,3 @@ const styles = StyleSheet.create({
     width: "90%",
   },
 });
-const CountryContainer = styled.View`
-  width: ${widthPercentage(65)}px;
-  height: ${heightPercentage(18)}px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  gap: 5px;
-`;
-const ExchangeRateContainer = styled.View`
-  width: ${widthPercentage(390)}px;
-  height: ${heightPercentage(80)}px;
-  align-self: stretch;
-  background-color: #fff;
-  flex-direction: row;
-  gap: 30px;
-`;
-const CountryExchangeRateContainer = styled.View`
-   width: ${widthPercentage(310)}px;
-  height: ${heightPercentage(70)}px;
-  display: flex;
-  padding: ${heightPercentage(5)}px 0px;
-  align-items: center;
-  gap: 30px;
-  flex-direction: row;
-`;
-const RateTextContainer = styled.View`
-  width: ${widthPercentage(70)}px;
-  height: ${heightPercentage(36)}px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
-  /* gap: 10px; */
-`;
-const CountryTextContainer = styled.View`
-  width: ${widthPercentage(100)}px;
-  height: ${heightPercentage(40)}px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-`;
-const TextContainer = styled.View`
-  width: ${widthPercentage(230)}px;
-  height: ${heightPercentage(40)}px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex: 1 0 0;
-  flex-direction: row;
-`;
-const Country = styled.Text`
-  width: ${widthPercentage(34)}px;
-  height: ${heightPercentage(22)}px;
-  color: #191f29;
-  font-family: Inter;
-  font-size: ${fontPercentage(18)}px;
-  font-style: normal;
-  font-weight: 700;
-`;
-const MoneytaryUnit = styled.Text`
-  width: ${widthPercentage(26)}px;
-  height: ${heightPercentage(14)}px;
-  color: #191f29;
-  font-family: Inter;
-  font-size: ${fontPercentage(12)}px;
-  font-style: normal;
-  font-weight: 400;
-`;
-const DateTime = styled.Text`
-  color: #8b95a1;
-  font-family: Inter;
-  font-size: ${fontPercentage(12)}px;
-  font-style: normal;
-  font-weight: 400;
-`;
-const ExchangeRate = styled.Text`
-  color: #191f29;
-  font-family: Inter;
-  font-size: ${fontPercentage(16)}px;
-  font-style: normal;
-  font-weight: 700;
-`;
-const ChangeRate = styled.Text`
-  color: #0a7df2;
-  font-family: Inter;
-  font-size: ${fontPercentage(12)}px;
-  font-style: normal;
-  font-weight: 700;
-`;
-const ChangeUpRate = styled.Text`
-  color: #ee3739;
-  font-family: Inter;
-  font-size: ${fontPercentage(12)}px;
-  font-style: normal;
-  font-weight: 700;
-`;

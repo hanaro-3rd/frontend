@@ -284,10 +284,14 @@ export const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "700",
   },
-  changeRateText: {
+  changeRateUp: {
+    color: "#f20a0a",
+    fontSize: fontPercentage(12),
+    fontWeight: "700",
+  },
+  changeRateDown: {
     color: "#0A7DF2",
     fontSize: fontPercentage(12),
-    fontStyle: "normal",
     fontWeight: "700",
   },
   currentExchangeRateTextContainer: {
