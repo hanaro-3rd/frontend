@@ -101,7 +101,8 @@ const PickUpKeyPage = ({ navigation }) => {
   //   console.log("location" + location);
   // }, []);
   return (
-    <View style={{ flex: 1, marginTop: `${getStatusBarHeight()}` }}>
+
+    <View style={{ flex: 1, marginTop:`${getStatusBarHeight()}` }}>
       <View
         style={{
           position: "absolute",
