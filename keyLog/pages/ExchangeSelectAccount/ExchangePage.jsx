@@ -203,12 +203,13 @@ export const ExchangePage = () => {
     console.log("money", koreaTextInput);
     console.log("unit", selectedMoney);
     postExchangeMutation.mutate({
-      isBought: true,
-      isBusinessday: true,
-      isNow: true,
-      unit: selectedMoney,
-      money: koreaTextInput,
       accountId: accountId,
+      changePrice: changePrice,
+      exchangeRate: exchangeRate,
+      isBought: true,
+      money: koreaTextInput,
+      moneyToExchange: foreignTextInput,
+      unit: selectedMoney,
     });
   };
   return (
