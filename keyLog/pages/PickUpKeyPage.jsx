@@ -4,6 +4,8 @@ import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components/native";
 import {
   fontPercentage,
+  getCountryUnit,
+  getMoneyUnit,
   getStatusBarHeight,
   heightPercentage,
   widthPercentage,
@@ -26,6 +28,9 @@ const PickUpKeyPage = ({ navigation }) => {
   const [showElementView, setShowElementView] = useState(true);
   const [showModalView, setShowModalView] = useState(false);
   const [showSuccessModalView, setShowSuccessModalView] = useState(false);
+  const [successUnit, setSuccessUnit] = useState();
+  const [successBalance, setSuccessBalance] = useState();
+  const [canGetPrice, setCanGetPrice] = useState();
   const queryClient = useQueryClient();
   const mapRef = useRef(null);
   const placesRef = useRef();
@@ -34,7 +39,18 @@ const PickUpKeyPage = ({ navigation }) => {
   const { data } = useQuery("getMarkers", async () => getMarkers(), {
     onSuccess: async (response) => {
       console.log(response.data);
-      // setMarkerList(response.data.result.markers);
+      let markerMoney = response.data.result.markers.filter(
+        (e) => e.isPickUp == false
+      );
+
+      const markerBalance = markerMoney.reduce((acc, cur) => {
+        return (acc += cur.amount);
+      }, 0);
+      console.log(markerBalance);
+      setCanGetPrice(markerBalance);
+      setMarkerList(response.data.result.markers);
+      console.log(response.data.result.markers[0]);
+      console.log(response.data.result.markers[1]);
     },
 
     onError: async (error) => {
@@ -42,7 +58,6 @@ const PickUpKeyPage = ({ navigation }) => {
       navigation.navigate("LoginPage");
     },
   });
-
   const postMarkersMutation = useMutation(postMarkers, {
     onSuccess: (response) => {
       console.log(response.data);
@@ -50,6 +65,8 @@ const PickUpKeyPage = ({ navigation }) => {
       setShowModalView(false);
       setShowElementView(true);
       setShowSuccessModalView(true);
+      setSuccessUnit(response.data.result.unit);
+      setSuccessBalance(response.data.result?.price);
     },
     onError: (error) => {
       console.log("markerpost" + error);
@@ -61,7 +78,7 @@ const PickUpKeyPage = ({ navigation }) => {
     postMarkersMutation.mutate({ markerId, markerData });
   };
 
-  const [isSearched,setIsSearched] = useState(false)
+  const [isSearched, setIsSearched] = useState(false);
   //현재 위치 표시
   // useEffect(() => {
   //   Geolocation.getCurrentPosition(
@@ -84,6 +101,7 @@ const PickUpKeyPage = ({ navigation }) => {
   //   console.log("location" + location);
   // }, []);
   return (
+
     <View style={{ flex: 1, marginTop:`${getStatusBarHeight()}` }}>
       <View
         style={{
@@ -92,9 +110,8 @@ const PickUpKeyPage = ({ navigation }) => {
           minHeight: 40,
           zIndex: 1111,
           width: "100%",
-          flexDirection: "row",   
-          marginTop:`${getStatusBarHeight()}`
-          
+          flexDirection: "row",
+          marginTop: `${getStatusBarHeight()}`,
         }}
       >
         <TouchableOpacity
@@ -118,7 +135,7 @@ const PickUpKeyPage = ({ navigation }) => {
 
               // console.log(data, details);
               // console.log(data)
-              setIsSearched(true)
+              setIsSearched(true);
               console.log(details);
               console.log(data);
               console.log(details.geometry.location.lat);
@@ -163,7 +180,8 @@ const PickUpKeyPage = ({ navigation }) => {
             }}
           >
             <Text style={{ color: "white" }}>
-              ￥10 하나머니 받기 완료! 해당 외화 하나머니를 확인해주세요!{" "}
+              {getMoneyUnit(successUnit)} {successBalance} 하나머니 받기 완료!
+              해당 외화 하나머니를 확인해주세요!{" "}
             </Text>
             <TouchableOpacity
               onPress={() => {
@@ -192,7 +210,7 @@ const PickUpKeyPage = ({ navigation }) => {
         showsMyLocationButton={true}
         region={location}
       >
-                {isSearched && (
+        {isSearched && (
           <Marker
             opacity={1.5}
             coordinate={{
@@ -227,19 +245,32 @@ const PickUpKeyPage = ({ navigation }) => {
                     markerId: marker.id,
                     lat: marker.lat,
                     lng: marker.lng,
+                    isPickUp: marker.isPickUp,
                   });
                 }}
-            
               >
-                <MarkerView>
-                  <MarkerTitleText>{marker.place}</MarkerTitleText>
-                  <MarkerKeymoneyText>
-                    ￥{marker.amount} 키머니
-                  </MarkerKeymoneyText>
-                  <LeftPeopleText>
-                    {marker.limitAmount}명 남았어요
-                  </LeftPeopleText>
-                </MarkerView>
+                {!marker.isPickUp ? (
+                  <MarkerView>
+                    <MarkerTitleText>{marker.place}</MarkerTitleText>
+                    <MarkerKeymoneyText>
+                      ￥{marker.amount} 키머니
+                    </MarkerKeymoneyText>
+                    <LeftPeopleText>
+                      {marker.limitAmount}명 남았어요
+                    </LeftPeopleText>
+                  </MarkerView>
+                ) : (
+                  <PickupMarkerView>
+                    <MarkerTitleText>{marker.place}</MarkerTitleText>
+                    <MarkerKeymoneyText>
+                      ￥{marker.amount} 키머니
+                    </MarkerKeymoneyText>
+                    <LeftPeopleText>
+                      {marker.limitAmount}명 남았어요
+                    </LeftPeopleText>
+                  </PickupMarkerView>
+                )}
+
                 <PolygonView>
                   <PolygonImage source={require("../Images/polygon.png")} />
                 </PolygonView>
@@ -266,19 +297,32 @@ const PickUpKeyPage = ({ navigation }) => {
                     markerId: marker.id,
                     lat: marker.lat,
                     lng: marker.lng,
+                    isPickUp: marker.isPickUp,
                   });
                 }}
                 style={{ zIndex: isSearched === idx ? 2 : 1 }}
               >
-                <CantGoMarkerView>
-                  <MarkerTitleText>{marker.place}</MarkerTitleText>
-                  <MarkerKeymoneyText>
-                    ￥{marker.amount} 키머니
-                  </MarkerKeymoneyText>
-                  <LeftPeopleText>
-                    {marker.limitAmount}명 남았어요
-                  </LeftPeopleText>
-                </CantGoMarkerView>
+                {!marker.isPickUp ? (
+                  <MarkerView>
+                    <MarkerTitleText>{marker.place}</MarkerTitleText>
+                    <MarkerKeymoneyText>
+                      ￥{marker.amount} 키머니
+                    </MarkerKeymoneyText>
+                    <LeftPeopleText>
+                      {marker.limitAmount}명 남았어요
+                    </LeftPeopleText>
+                  </MarkerView>
+                ) : (
+                  <PickupMarkerView>
+                    <MarkerTitleText>{marker.place}</MarkerTitleText>
+                    <MarkerKeymoneyText>
+                      ￥{marker.amount} 키머니
+                    </MarkerKeymoneyText>
+                    <LeftPeopleText>
+                      {marker.limitAmount}명 남았어요
+                    </LeftPeopleText>
+                  </PickupMarkerView>
+                )}
                 <PolygonView>
                   <PolygonImage source={require("../Images/polygon.png")} />
                 </PolygonView>
@@ -309,16 +353,22 @@ const PickUpKeyPage = ({ navigation }) => {
                 ￥{showModalView.amount} 키머니
               </ModalKeyMoneyText>
             </ModalKeyMoneyView>
-            <ModalGetMoneyButton
-              onPress={() => {
-                handlePostMarkers(showModalView.markerId, {
-                  lat: showModalView.lat,
-                  lng: showModalView.lng,
-                });
-              }}
-            >
-              <ModalGetMoneyText>키머니 받기</ModalGetMoneyText>
-            </ModalGetMoneyButton>
+            {!showModalView.isPickUp ? (
+              <ModalGetMoneyButton
+                onPress={() => {
+                  handlePostMarkers(showModalView.markerId, {
+                    lat: showModalView.lat,
+                    lng: showModalView.lng,
+                  });
+                }}
+              >
+                <ModalGetMoneyText>키머니 받기</ModalGetMoneyText>
+              </ModalGetMoneyButton>
+            ) : (
+              <View>
+                <Text>주운 마커입니다.</Text>
+              </View>
+            )}
           </ModalView>
         </ModalWrapper>
       )}
@@ -327,9 +377,15 @@ const PickUpKeyPage = ({ navigation }) => {
         <UpButtonView onPress={() => setShowElementView(!showElementView)}>
           <UpButton></UpButton>
         </UpButtonView>
-        <MainTextList>
-          <MainText>총 ￥200 하나머니를 주울 수 있어요!</MainText>
-        </MainTextList>
+        {markerList.length > 0 && (
+          <MainTextList>
+            <MainText>
+              총 {getCountryUnit(markerList[0].unit)}
+              {canGetPrice} 하나머니를 주울 수 있어요!
+            </MainText>
+          </MainTextList>
+        )}
+
         {showElementView == true ? (
           <ElementView>
             {markerList?.map((marker, idx) => {
@@ -351,6 +407,7 @@ const PickUpKeyPage = ({ navigation }) => {
                       markerId: marker.id,
                       lat: marker.lat,
                       lng: marker.lng,
+                      isPickUp: marker.isPickUp,
                     });
                   }}
                 >
@@ -359,7 +416,10 @@ const PickUpKeyPage = ({ navigation }) => {
                     <PeopleText>{marker.limitAmount} 남았어요</PeopleText>
                   </View>
                   <View>
-                    <MoneyText>￥{marker.amount} 키머니</MoneyText>
+                    <MoneyText>
+                      {getCountryUnit(marker.unit)}
+                      {marker.amount} 키머니
+                    </MoneyText>
                   </View>
                 </MarkerElementView>
               );
@@ -478,6 +538,20 @@ const MarkerView = styled.View`
   gap: 2px;
   border-radius: 10px;
   background: #fff;
+  width: ${widthPercentage(95)}px;
+  height: ${heightPercentage(55)}px;
+`;
+const PickupMarkerView = styled.View`
+  display: flex;
+  padding: 5px 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+
+  elevation:5;
+  border-radius: 10px;
+  background:gray;
   width: ${widthPercentage(95)}px;
   height: ${heightPercentage(55)}px;
 `;
