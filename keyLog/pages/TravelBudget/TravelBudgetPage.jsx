@@ -275,7 +275,10 @@ const TravelBudgetPage = () => {
                 </YearContainer>
               );
             })
-          :<Text>아직 생성된 경비계획이 없습니다.</Text>
+            : <NoPlanContainer>
+              <NoPlanTitleText>내 여행 기록이 없어요</NoPlanTitleText>
+              <NoPlanText>상단의 + 버튼을 눌러 여행 기록을 추가해 보세요</NoPlanText>
+              </NoPlanContainer>
           }
 
         </BodyMain>
@@ -284,4 +287,30 @@ const TravelBudgetPage = () => {
   );
 };
 
+const NoPlanContainer = styled.View`
+display: flex;
+height: ${heightPercentage(460)}px;
+padding: ${heightPercentage(20)}px ${widthPercentage(20)}px;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 15px;
+align-self: stretch;
+`;
+
+const NoPlanTitleText = styled.Text`
+color: #191F29;
+font-family: Inter;
+font-size: ${fontPercentage(18)}px;
+font-style: normal;
+font-weight: 700;
+`;
+
+const NoPlanText = styled.Text`
+color: #4E5968;
+font-family: Inter;
+font-size: ${fontPercentage(13)}px;
+font-style: normal;
+font-weight: 400;
+`;
 export default TravelBudgetPage;
