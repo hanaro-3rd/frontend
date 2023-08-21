@@ -28,6 +28,7 @@ import SignUpPage from "./pages/SignUp/SignUpPage";
 import ForeignPayHistoryPage from "./pages/History/ForeignPayHistoryPage";
 import OwnPayHistoryPage from "./pages/History/OwnPayHistoryPage";
 import KeyMoneyHistoryPage from "./pages/History/KeyMoneyHistoryPage";
+import ExchangeHistoryResult from "./components/PaymentPageComponents/ExchangeHistoryResult";
 import TravelBudgetDetailPage from "./pages/TravelBudget/TravelBudgetDetailPage";
 import TravelBudgetPage from "./pages/TravelBudget/TravelBudgetPage";
 import TravelBudgetPlanPage from "./pages/TravelBudget/TravelBudgetPlanPage";
@@ -148,6 +149,11 @@ const App = () => {
           <Stack.Screen
             name="OwnPayHistoryPage"
             component={OwnPayHistoryPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ExchangeHistoryResult"
+            component={ExchangeHistoryResult}
             options={{ headerShown: false }}
           />
           <Stack.Screen
