@@ -161,8 +161,8 @@ const RemainCostText = styled.Text`
 const TravelBudgetPage = () => {
   const navigation = useNavigation();
 
-  const handleTravelCardPress = (planId) => {
-    navigation.navigate("TravelBudgetDetailPage",{planId});
+  const handleTravelCardPress = (planId, totalBudget) => {
+    navigation.navigate("TravelBudgetDetailPage", { planId, totalBudget });
   };
 
   const handleGoBack = () => {
@@ -204,8 +204,8 @@ const TravelBudgetPage = () => {
     () => getTravelBudget(),
     {
       onSuccess: (response) => {
-        let dataArray = response.data.result;;
-        console.log(dataArray)
+        let dataArray = response.data.result;
+        console.log(dataArray);
         let obj = {};
         for (let i = 0; i < dataArray.length; i++) {
           if (obj[dataArray[i].startDate[0]] == undefined) {
@@ -214,11 +214,11 @@ const TravelBudgetPage = () => {
             obj[dataArray[i].startDate[0]].push(dataArray[i]);
           }
         }
-        console.log(obj)
-      obj = Object.fromEntries(
-        Object.entries(obj).sort(([a],[b]) => b > a? -1: 1 )
-      );
-      console.log(obj)
+        console.log(obj);
+        obj = Object.fromEntries(
+          Object.entries(obj).sort(([a], [b]) => (b > a ? -1 : 1))
+        );
+        console.log(obj);
         setData(obj);
         console.log(obj);
       },
@@ -246,38 +246,50 @@ const TravelBudgetPage = () => {
           <TitleText>내 경비 계획</TitleText>
         </BodyHeader>
         <BodyMain>
-          {Object.keys(data).length !== 0 ?
+          {Object.keys(data).length !== 0 ? (
             Object?.keys(data).map((key, idx) => {
               return (
                 <YearContainer key={idx}>
                   <YearText>{key}</YearText>
                   {data[key]?.map((e, idx) => {
                     return (
-               
-                      <TouchableOpacity key={idx} onPress={()=>handleTravelCardPress(e.planId)}>
+                      <TouchableOpacity
+                        key={idx}
+                        onPress={() =>
+                          handleTravelCardPress(e.planId, e.totalBudget)
+                        }
+                      >
                         <TravelCard>
                           <TitleTextContainer>
-                            <PeriodText>{e.startDate.slice(0,3).join(".")} ~ {e.endDate.slice(0,3).join(".")}</PeriodText>
+                            <PeriodText>
+                              {e.startDate.slice(0, 3).join(".")} ~{" "}
+                              {e.endDate.slice(0, 3).join(".")}
+                            </PeriodText>
                             <View>
                               <TravelTitle>{e.title}</TravelTitle>
-                              <CityText>{e.country}, {e.city}</CityText>
+                              <CityText>
+                                {e.country}, {e.city}
+                              </CityText>
                             </View>
                           </TitleTextContainer>
                           <View>
-                            <RemainCostText>총 비용 ￥{e.totalBudget}</RemainCostText>
-                            <RemainCostText>남은 비용 ￥{e.totalBalance}</RemainCostText>
+                            <RemainCostText>
+                              총 비용 ￥{e.totalBudget}
+                            </RemainCostText>
+                            <RemainCostText>
+                              남은 비용 ￥{e.totalBalance}
+                            </RemainCostText>
                           </View>
                         </TravelCard>
                       </TouchableOpacity>
-                 
                     );
                   })}
                 </YearContainer>
               );
             })
-          :<Text>아직 생성된 경비계획이 없습니다.</Text>
-          }
-
+          ) : (
+            <Text>아직 생성된 경비계획이 없습니다.</Text>
+          )}
         </BodyMain>
       </BodyContainer>
     </RootScrollView>

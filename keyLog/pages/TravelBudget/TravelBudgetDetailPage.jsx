@@ -8,7 +8,14 @@ import {
   phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
-import { Image, ScrollView, TouchableOpacity } from "react-native";
+import {
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+  View,
+  Text,
+} from "react-native";
 import styled from "styled-components/native";
 import CloseButton from "../../assets/travelBudget/CloseButton.png";
 import DeleteButton from "../../assets/travelBudget/delete.png";
@@ -218,7 +225,7 @@ const DropImage = styled.Image`
 
 const TotalBudgetContainer = styled.View`
   width: ${widthPercentage(390)}px;
-  height: ${heightPercentage(45)}px;
+  height: ${heightPercentage(130)}px;
   display: flex;
   padding: ${heightPercentage(13)}px ${widthPercentage(12)}px;
   justify-content: center;
@@ -314,7 +321,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
   const handleGoBackToBudgetPage = () => {
     navigation.goBack();
   };
-  const { planId } = route.params;
+  const { planId, totalBudget } = route.params;
   const [category, setCategory] = useState([]);
   const [foodCategory, setFoodCategory] = useState([]);
   const [transCategory, setTransCategory] = useState([]);
@@ -334,6 +341,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
   const [isSelected, setIsSelected] = useState(false);
   const [travelBudget, setTravelBudget] = useState();
   const [timePaymentHistory, setTimePaymentHistory] = useState({});
+  const [totalPayment, setTotalPayment] = useState(0);
   const { recentData } = useQuery(
     "getRecentPlan",
     () => getTravelBudgetDetail(planId),
@@ -496,7 +504,36 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
         />
         <BodyMain>
           <TotalBudgetContainer>
-            <TotalBudgetText>총 ￥100,000</TotalBudgetText>
+            <View style={styles.planpayContainer}>
+              <View style={styles.frame154}>
+                <Text style={styles.planText}>계획한 총 비용</Text>
+                <Text style={styles.planText}>
+                  {travelBudget}
+                  {totalBudget}
+                </Text>
+              </View>
+              <View style={styles.frame155}>
+                <Text style={styles.planText}>결제한 총 금액</Text>
+                <Text style={styles.planText}>
+                  {travelBudget}
+                  {totalPayment}
+                </Text>
+              </View>
+              <View style={styles.line} />
+              <View style={styles.frame156}>
+                <Text style={styles.leftPayment}>남은 비용</Text>
+                <Text
+                  style={
+                    totalBudget - totalPayment > 0
+                      ? styles._20000
+                      : styles.minusBudget
+                  }
+                >
+                  {travelBudget}
+                  {totalBudget - totalPayment}
+                </Text>
+              </View>
+            </View>
           </TotalBudgetContainer>
           <SelectMenuContainer>
             <CategoryOrDateContainer
@@ -531,6 +568,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                     categoryIcon="foodIcon"
                     categoryTitle="식비"
                     travelBudgetUnit={travelBudget}
+                    setTotalPayment={setTotalPayment}
                   />
                 )
               }
@@ -542,6 +580,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                   categoryIcon="transIcon"
                   categoryTitle="교통"
                   travelBudgetUnit={travelBudget}
+                  setTotalPayment={setTotalPayment}
                 />
               )}
               {category.length > 0 && ( //카테고리명 숙박, 카테고리아이디 3
@@ -552,6 +591,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                   categoryIcon="houseIcon"
                   categoryTitle="숙박"
                   travelBudgetUnit={travelBudget}
+                  setTotalPayment={setTotalPayment}
                 />
               )}
               {category.length > 0 && ( //카테고리명 교통, 카테고리아이디 4
@@ -562,6 +602,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                   categoryIcon="shopIcon"
                   categoryTitle="쇼핑 · 편의점 · 마트"
                   travelBudgetUnit={travelBudget}
+                  setTotalPayment={setTotalPayment}
                 />
               )}
               {category.length > 0 && ( //카테고리명 문화 · 여가, 카테고리아이디 5
@@ -572,6 +613,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                   categoryIcon="playIcon"
                   categoryTitle="문화 · 여가"
                   travelBudgetUnit={travelBudget}
+                  setTotalPayment={setTotalPayment}
                 />
               )}
               {category.length > 0 && ( //카테고리명 문화 · 여가, 카테고리아이디 5
@@ -582,6 +624,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                   categoryIcon="etcIcon"
                   categoryTitle="기타"
                   travelBudgetUnit={travelBudget}
+                  setTotalPayment={setTotalPayment}
                 />
               )}
             </MainContainer>
@@ -656,7 +699,6 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                               </CategoryDetailTextContainer>
                             </CategoryDetailContainer>
                             <PayCostText>
-                             
                               {getCountryUnit(e.unit)}
                               {e.price}
                             </PayCostText>
@@ -769,4 +811,84 @@ const PolygonView = styled.View`
   flex-direction: row;
   justify-content: center;
 `;
+const styles = StyleSheet.create({
+  planpayContainer: {
+    paddingTop: 10,
+    paddingBottom: 20,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    gap: 10,
+    alignSelf: "stretch",
+    borderBottom: "1px solid #F2F4F6",
+    backgroundColor: "#FFF",
+    paddingHorizontal: 40,
+  },
+  planText: {
+    color: "#191F29",
+    fontFamily: "Inter",
+    fontSize: 14,
+    fontStyle: "normal",
+    fontWeight: "400",
+  },
+  leftPayment: {
+    color: "#191F29",
+    fontFamily: "Inter",
+    fontSize: 14,
+    fontStyle: "normal",
+    fontWeight: "400",
+    marginLeft: 10,
+  },
+  frame154: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    alignSelf: "stretch",
+    flexDirection: "row",
+    paddingVertical: 0,
+    paddingHorizontal: 10,
+  },
+  frame155: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    alignSelf: "stretch",
+    flexDirection: "row",
+    paddingVertical: 0,
+    paddingHorizontal: 10,
+  },
+  ____: {
+    width: 93,
+    color: "#191F29",
+    fontFamily: "Inter",
+    fontSize: 14,
+    fontStyle: "normal",
+    fontWeight: "400",
+  },
+  _20000: {
+    color: "#55ACEE",
+    fontFamily: "Inter",
+    fontSize: 14,
+    fontStyle: "normal",
+    fontWeight: "400",
+  },
+  minusBudget: {
+    color: "red",
+    fontFamily: "Inter",
+    fontSize: 14,
+    fontStyle: "normal",
+    fontWeight: "400",
+  },
+  frame156: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    alignSelf: "stretch",
+    flexDirection: "row",
+    paddingHorizontal: 10,
+  },
+  line: {
+    borderBottomColor: "#878787",
+    borderBottomWidth: 1,
+    width: "100%",
+    marginVertical: 5,
+  },
+});
 export default TravelBudgetDetailPage;

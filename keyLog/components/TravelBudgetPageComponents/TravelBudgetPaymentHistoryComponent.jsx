@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   fontPercentage,
   getCountryUnit,
@@ -31,8 +31,17 @@ const TravelBudgetPaymentHistoryComponent = ({
   setLocation,
   categoryIcon,
   categoryTitle,
-  travelBudgetUnit
+  travelBudgetUnit,
+  setTotalPayment,
 }) => {
+  const calculateTotalPayment = () => {
+    return categoryList.reduce((acc, cur) => acc + cur.price, 0);
+  };
+  const totalPayment = calculateTotalPayment();
+
+  useEffect(() => {
+    setTotalPayment((prevTotalPayment) => prevTotalPayment + totalPayment);
+  }, [categoryList, setTotalPayment]);
   return (
     //categoryId=1, 식비
     <CategoryPaymentContainer>
@@ -42,7 +51,10 @@ const TravelBudgetPaymentHistoryComponent = ({
         </CategoryContainer>
         <RemainCostContainer>
           <RemainText>계획한 비용</RemainText>
-          <CostText>{travelBudgetUnit}{category.categoryBudget}</CostText>
+          <CostText>
+            {travelBudgetUnit}
+            {category.categoryBudget}
+          </CostText>
           <SelectButtonImage source={SelectButton} />
         </RemainCostContainer>
       </CategoryCardContainer>
@@ -101,7 +113,11 @@ const TravelBudgetPaymentHistoryComponent = ({
                   </DateAndTimeText>
                 </CategoryDetailTextContainer>
               </CategoryDetailContainer>
-              <PayCostText> {getCountryUnit(e.unit)}{e.price}</PayCostText>
+              <PayCostText>
+                {" "}
+                {getCountryUnit(e.unit)}
+                {e.price}
+              </PayCostText>
             </PaymentContainer>
           );
         })}
@@ -118,9 +134,9 @@ const TravelBudgetPaymentHistoryComponent = ({
           {category.categoryBudget >
           categoryList.reduce((acc, cur) => {
             return (acc += cur.price);
-          }, 0) ? (
+          }, 0) ? ( //예산이 더 많을때
             <UsedPlusCostText>
-              경비잔액  {travelBudgetUnit}
+              경비잔액 {travelBudgetUnit}
               {category.categoryBudget -
                 categoryList.reduce((acc, cur) => {
                   return (acc += cur.price);
