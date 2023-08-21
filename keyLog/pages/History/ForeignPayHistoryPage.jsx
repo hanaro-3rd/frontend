@@ -19,6 +19,7 @@ import React, { useState, useEffect } from "react";
 import PrevHeader from "../../components/Header/PrevHeader";
 import { useQuery, useQueryClient } from "react-query";
 import { getMyKeymoneyUnit } from "../../api/api";
+import { isNewBackTitleImplementation } from "react-native-screens";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
@@ -540,17 +541,27 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                       <ListContainer
                         key={idx}
                         onPress={() => {
-                          navigation.navigate("PaymentPageInputComponent", {
-                            category: item.category,
-                            keymoney: item.keymoney,
-                            unit: item.unit,
-                            formattedDate: formattedDate,
-                            formattedTime: formattedTime,
-                            subject: item.subject,
-                            categoryImage: categoryIconMap[item.category],
-                            historyId: item.historyId,
-                            type: item.type,
-                          });
+                          if (item.type === "exchange") {
+                            navigation.navigate("ExchangeHistoryResult", {
+                              keymoney: item.keymoney,
+                              unit: item.unit,
+                              time: item.createdAt,
+                              historyId: item.historyId,
+                              type: item.type,
+                            });
+                          } else {
+                            navigation.navigate("PaymentPageInputComponent", {
+                              category: item.category,
+                              keymoney: item.keymoney,
+                              unit: item.unit,
+                              formattedDate: formattedDate,
+                              formattedTime: formattedTime,
+                              subject: item.subject,
+                              categoryImage: categoryIconMap[item.category],
+                              historyId: item.historyId,
+                              type: item.type,
+                            });
+                          }
                         }}
                       >
                         <Image source={categoryIcon} />

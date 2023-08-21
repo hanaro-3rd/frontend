@@ -1,5 +1,14 @@
-import { StyleSheet, View, Text, navigation, Image } from "react-native";
-import DeleteHeader from "../../components/Header/DeleteHeader";
+import {
+  StyleSheet,
+  View,
+  Text,
+  navigation,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import React, { useState } from "react";
+import DeleteHeader from "../Header/DeleteHeader";
 import Vector from "../../assets/accountImg/Vector.png";
 import {
   fontPercentage,
@@ -8,8 +17,28 @@ import {
   phoneHeight,
   widthPercentage,
 } from "../../utils/ResponseSize";
+import { getDetailKeymoneyHistory } from "../../api/api";
 
-export const ExchangeHistoryResult = ({ navigation }) => {
+export const ExchangeHistoryResult = ({ route, navigation }) => {
+  const { keymoney, unit, time, historyId, type } = route.params;
+  const [exchangeRate, setExchangeRate] = useState();
+  const [exchangeWon, setExchangeWon] = useState();
+  const { data } = useQuery(
+    "detailKeymoneyHistory",
+    async () => getDetailKeymoneyHistory({ historyId, type }),
+    {
+      onSuccess: (response) => {
+        console.log(response.data);
+        console.log("어디있니", historyId, type);
+        setExchangeRate(response.data.result.exchangeRate);
+        setExchangeWon(response.data.result.exchangeWon);
+      },
+      onError: () => {},
+    }
+  );
+  const handleNavigation = () => {
+    navigation.navigate("ForeignPayHistoryPage", { unit });
+  };
   return (
     <View style={styles.root}>
       <DeleteHeader navigation={navigation} to="KeyMoneyHistoryPage" />
@@ -29,8 +58,13 @@ export const ExchangeHistoryResult = ({ navigation }) => {
           </View>
           <View style={styles.frame80}>
             <Text style={styles.____2}>환전 금액</Text>
-            <Text style={styles._80000}>￥80,000</Text>
-            <Text style={styles.$202307011359}>2023.07.01 13:59</Text>
+            <Text style={styles._80000}>
+              {unit == "JPY" ? "￥" : unit == "EUR" ? "€" : "$"}
+              {keymoney}
+            </Text>
+            <Text style={styles.$202307011359}>
+              {time[0]}.{time[1]}.{time[2]} {time[3]}:{time[4]}
+            </Text>
           </View>
           <View style={styles.exchangeInformationContainer}>
             <View style={styles.exchangeMoneyContainer}>
@@ -38,12 +72,12 @@ export const ExchangeHistoryResult = ({ navigation }) => {
               <View style={styles.exchangeMoneyBox}>
                 <View style={styles.koreaMoneyContianer}>
                   <Text style={styles.koreaMoneyUnitText}>KRW</Text>
-                  <Text style={styles.koreaMoneyText}>730,000</Text>
+                  <Text style={styles.koreaMoneyText}>{exchangeWon}</Text>
                 </View>
                 <Image source={Vector} />
                 <View style={styles.foreignMoneyContainer}>
-                  <Text style={styles.foreignMoneyUnitText}>JPY</Text>
-                  <Text style={styles.foreignMoneyText}>80,000</Text>
+                  <Text style={styles.foreignMoneyUnitText}>{unit}</Text>
+                  <Text style={styles.foreignMoneyText}>{keymoney}</Text>
                 </View>
               </View>
             </View>
@@ -51,20 +85,22 @@ export const ExchangeHistoryResult = ({ navigation }) => {
               <Text style={styles.containerTitle2}>적용 환율</Text>
               <View style={styles.currentExchangeRateContainer}>
                 <View style={styles.countryInformationContainer}>
-                  <Text style={styles.countryText}>일본</Text>
-                  <Text style={styles.unitText}>JPY</Text>
+                  <Text style={styles.countryText}>
+                    {unit == "USD" ? "미국" : unit == "JPY" ? "일본" : "유럽"}
+                  </Text>
+                  <Text style={styles.unitText}>{unit}</Text>
                 </View>
                 <View style={styles.currentExchangeRateTextContainer}>
-                  <Text style={styles.exchangeRateText}>1,294.50</Text>
+                  <Text style={styles.exchangeRateText}>{exchangeRate}</Text>
                 </View>
               </View>
             </View>
           </View>
         </View>
         <View style={styles.bodyFooter}>
-          <View style={styles.frame17}>
+          <TouchableOpacity style={styles.frame17} onPress={handleNavigation}>
             <Text style={styles.____3}>저장하기</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
