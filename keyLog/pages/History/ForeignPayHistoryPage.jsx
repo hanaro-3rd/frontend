@@ -24,8 +24,8 @@ import { isNewBackTitleImplementation } from "react-native-screens";
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
   /* padding-top: ${getStatusBarHeight}px; */
-  /* height: ${phoneHeight}px;
-  min-height: ${phoneHeight}px; */
+  height: ${phoneHeight}px;
+  /* min-height: ${phoneHeight}px; */
   z-index: 9999;
   background-color: ${(props) =>
     props.categoryMode ? "rgba(0, 0, 0, 0.5)" : "#F2F4F6"};
@@ -274,7 +274,7 @@ const CostPlusText = styled.Text`
 
 const CategoryComponent = styled.View`
   background-color: white;
-  height: ${heightPercentage(210)}px;
+  height: ${heightPercentage(250)}px;
   padding: ${heightPercentage(20)}px ${widthPercentage(20)}px;
   width: 100%;
   bottom: 0;
@@ -445,7 +445,7 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
     if (category === "전체") {
       setFilter("all");
     } else if (category === "입금") {
-      setFilter("exchange");
+      setFilter("exchangeOrMarker");
     } else if (category === "출금") {
       setFilter("payment");
     }
@@ -476,148 +476,164 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
 
   return (
     <Root categoryMode={openSelect}>
-      <PrevHeader navigation={navigation} to="KeyMoneyHistoryPage" />
-      <BodyContainer>
-        <BodyHeaderContainer>
-          <TitleText>입출금 내역</TitleText>
-          <CountryContainer>
-            <CountrySelectedImage source={selectedImage} />
-            <TotalPayCostText>
-              {balance} {unit}
-            </TotalPayCostText>
-          </CountryContainer>
-          <ButtonContainer>
-            <RevertToWonButton>
-              <Image source={require("../../assets/Setting/loop.png")} />
-              <ButtonText>원화</ButtonText>
-            </RevertToWonButton>
+      <ScrollView>
+        <PrevHeader navigation={navigation} to="KeyMoneyHistoryPage" />
+        <BodyContainer>
+          <BodyHeaderContainer>
+            <TitleText>입출금 내역</TitleText>
+            <CountryContainer>
+              <CountrySelectedImage source={selectedImage} />
+              <TotalPayCostText>
+                {balance} {unit}
+              </TotalPayCostText>
+            </CountryContainer>
+            <ButtonContainer>
+              <RevertToWonButton>
+                <Image source={require("../../assets/Setting/loop.png")} />
+                <ButtonText>원화</ButtonText>
+              </RevertToWonButton>
 
-            {unit !== "KRW" ? (
-              <ExchangeButton>
-                <ExchangeButtonText
-                  onPress={() => {
-                    navigation.navigate("ExchangePage");
-                  }}
-                >
-                  충전하기
-                </ExchangeButtonText>
-              </ExchangeButton>
-            ) : (
-              <ExchangeButtonKRW disabled={true}>
-                <ExchangeButtonText style={{ textColor: "white" }}>
-                  충전하기
-                </ExchangeButtonText>
-              </ExchangeButtonKRW>
-            )}
-          </ButtonContainer>
-        </BodyHeaderContainer>
-        <SelectContainer>
-          <SelectTextContainer onPress={() => setOpenSelect(true)}>
-            <SelectText>{selectedCategory}</SelectText>
-            <SelectImage
-              source={require("../../assets/travelBudget/SelectButtonBefore.png")}
-            />
-          </SelectTextContainer>
-        </SelectContainer>
-        <HistoryContainer>
-          {Object.entries(historyList).map(([formattedDate, items]) => (
-            <React.Fragment key={formattedDate}>
-              {items.filter(
-                (item) =>
-                  filter === "all" ||
-                  (filter === "payment" && item.type === "payment") ||
-                  (filter === "exchange" && item.type === "exchange")
-              ).length > 0 && (
-                <>
-                  <DateText>{formattedDate}</DateText>
-                  {items.map((item, idx) => {
-                    if (
-                      (filter === "payment" && item.type === "exchange") ||
-                      (filter === "exchange" && item.type === "payment")
-                    ) {
-                      return null;
-                    }
-                    const createdAt = item.createdAt;
-                    const hour = createdAt[3];
-                    const minute = createdAt[4];
-                    const formattedTime = `${String(hour).padStart(
-                      2,
-                      "0"
-                    )}:${String(minute).padStart(2, "0")}`;
-
-                    const type = item.type === "payment" ? "-" : "+";
-                    const textColor =
-                      item.type === "payment" ? "black" : "#55ACEE";
-                    const categoryIconMap = {
-                      식비: require("../../assets/travelBudget/FoodIcon.png"),
-                      교통: require("../../assets/travelBudget/TransIcon.png"),
-                      숙박: require("../../assets/travelBudget/HouseIcon.png"),
-                      "쇼핑 · 편의점 · 마트": require("../../assets/travelBudget/ShopIcon.png"),
-                      "문화 · 여가": require("../../assets/travelBudget/PlayIcon.png"),
-                      기타: require("../../assets/travelBudget/EtcIcon.png"),
-                    };
-
-                    const categoryIcon =
-                      categoryIconMap[item.category] ||
-                      require("../../assets/travelBudget/환전.png");
-
-                    return (
-                      <ListContainer
-                        key={idx}
-                        onPress={() => {
-                          if (item.type === "exchange") {
-                            navigation.navigate("ExchangeHistoryResult", {
-                              keymoney: item.keymoney,
-                              unit: item.unit,
-                              time: item.createdAt,
-                              historyId: item.historyId,
-                              type: item.type,
-                            });
-                          } else {
-                            navigation.navigate("PaymentPageInputComponent", {
-                              category: item.category,
-                              keymoney: item.keymoney,
-                              unit: item.unit,
-                              formattedDate: formattedDate,
-                              formattedTime: formattedTime,
-                              subject: item.subject,
-                              categoryImage: categoryIconMap[item.category],
-                              historyId: item.historyId,
-                              type: item.type,
-                            });
-                          }
-                        }}
-                      >
-                        <Image source={categoryIcon} />
-                        <ListInfoContainer>
-                          <ListTextContainer>
-                            <ListText>{item.subject}</ListText>
-                            <TimeText>{formattedTime}</TimeText>
-                          </ListTextContainer>
-                          <CostTextContainer>
-                            <CostText
-                              style={{ color: textColor }}
-                            >{`${type}${item.keymoney} ${item.unit}`}</CostText>
-                            <RemainCostText>
-                              {item.balance} {item.unit}
-                            </RemainCostText>
-                          </CostTextContainer>
-                        </ListInfoContainer>
-                      </ListContainer>
-                    );
-                  })}
-                </>
+              {unit !== "KRW" ? (
+                <ExchangeButton>
+                  <ExchangeButtonText
+                    onPress={() => {
+                      navigation.navigate("ExchangePage");
+                    }}
+                  >
+                    충전하기
+                  </ExchangeButtonText>
+                </ExchangeButton>
+              ) : (
+                <ExchangeButtonKRW disabled={true}>
+                  <ExchangeButtonText style={{ textColor: "white" }}>
+                    충전하기
+                  </ExchangeButtonText>
+                </ExchangeButtonKRW>
               )}
-              {items.filter(
-                (item) =>
-                  filter === "all" ||
-                  (filter === "payment" && item.type === "payment") ||
-                  (filter === "exchange" && item.type === "exchange")
-              ).length === 0 && <Text>내역이 없습니다.</Text>}
-            </React.Fragment>
-          ))}
-        </HistoryContainer>
-      </BodyContainer>
+            </ButtonContainer>
+          </BodyHeaderContainer>
+          <SelectContainer>
+            <SelectTextContainer onPress={() => setOpenSelect(true)}>
+              <SelectText>{selectedCategory}</SelectText>
+              <SelectImage
+                source={require("../../assets/travelBudget/SelectButtonBefore.png")}
+              />
+            </SelectTextContainer>
+          </SelectContainer>
+          <HistoryContainer>
+            {Object.entries(historyList).map(([formattedDate, items]) => (
+              <React.Fragment key={formattedDate}>
+                {items.filter(
+                  (item) =>
+                    filter === "all" ||
+                    (filter === "payment" && item.type === "payment") ||
+                    (filter === "exchangeOrMarker" &&
+                      (item.type === "exchange" || item.type === "marker"))
+                ).length > 0 && (
+                  <>
+                    <DateText>{formattedDate}</DateText>
+                    {items.map((item, idx) => {
+                      if (
+                        (filter === "payment" &&
+                          (item.type === "exchange" ||
+                            item.type === "marker")) ||
+                        (filter === "exchangeOrMarker" &&
+                          item.type === "payment")
+                      ) {
+                        return null;
+                      }
+                      const createdAt = item.createdAt;
+                      const hour = createdAt[3];
+                      const minute = createdAt[4];
+                      const formattedTime = `${String(hour).padStart(
+                        2,
+                        "0"
+                      )}:${String(minute).padStart(2, "0")}`;
+
+                      const type = item.type === "payment" ? "-" : "+";
+                      const textColor =
+                        item.type === "payment" ? "black" : "#55ACEE";
+                      const categoryIconMap = {
+                        식비: require("../../assets/travelBudget/FoodIcon.png"),
+                        교통: require("../../assets/travelBudget/TransIcon.png"),
+                        숙박: require("../../assets/travelBudget/HouseIcon.png"),
+                        "쇼핑 · 편의점 · 마트": require("../../assets/travelBudget/ShopIcon.png"),
+                        "문화 · 여가": require("../../assets/travelBudget/PlayIcon.png"),
+                        기타: require("../../assets/travelBudget/EtcIcon.png"),
+                        마커: require("../../assets/travelBudget/MarkerIcon.png"),
+                      };
+
+                      const categoryIcon =
+                        categoryIconMap[item.category] ||
+                        require("../../assets/travelBudget/환전.png");
+
+                      return (
+                        <ListContainer
+                          key={idx}
+                          onPress={() => {
+                            if (item.type === "exchange") {
+                              navigation.navigate("ExchangeHistoryResult", {
+                                keymoney: item.keymoney,
+                                unit: item.unit,
+                                time: item.createdAt,
+                                historyId: item.historyId,
+                                type: item.type,
+                              });
+                            } else if (item.type === "payment") {
+                              navigation.navigate("PaymentPageInputComponent", {
+                                category: item.category,
+                                keymoney: item.keymoney,
+                                unit: item.unit,
+                                formattedDate: formattedDate,
+                                formattedTime: formattedTime,
+                                subject: item.subject,
+                                categoryImage: categoryIconMap[item.category],
+                                historyId: item.historyId,
+                                type: item.type,
+                              });
+                            } else if (item.type === "marker") {
+                              navigation.navigate("MarkerHistoryPage", {
+                                keymoney: item.keymoney,
+                                unit: item.unit,
+                                time: item.createdAt,
+                                historyId: item.historyId,
+                                type: item.type,
+                              });
+                            }
+                          }}
+                        >
+                          <Image source={categoryIcon} />
+                          <ListInfoContainer>
+                            <ListTextContainer>
+                              <ListText>{item.subject}</ListText>
+                              <TimeText>{formattedTime}</TimeText>
+                            </ListTextContainer>
+                            <CostTextContainer>
+                              <CostText
+                                style={{ color: textColor }}
+                              >{`${type}${item.keymoney} ${item.unit}`}</CostText>
+                              <RemainCostText>
+                                {item.balance} {item.unit}
+                              </RemainCostText>
+                            </CostTextContainer>
+                          </ListInfoContainer>
+                        </ListContainer>
+                      );
+                    })}
+                  </>
+                )}
+                {items.filter(
+                  (item) =>
+                    filter === "all" ||
+                    (filter === "payment" && item.type === "payment") ||
+                    (filter === "exchangeOrMarker" &&
+                      (item.type === "exchange" || item.type === "marker"))
+                ).length === 0 && <Text>내역이 없습니다.</Text>}
+              </React.Fragment>
+            ))}
+          </HistoryContainer>
+        </BodyContainer>
+      </ScrollView>
       {openSelect && (
         <>
           <ModalBackground onPress={() => setOpenSelect(false)} />

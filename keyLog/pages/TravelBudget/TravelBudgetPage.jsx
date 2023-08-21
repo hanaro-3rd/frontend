@@ -228,7 +228,7 @@ const TravelBudgetPage = () => {
   return (
     <RootScrollView>
       <Header>
-        <TouchableOpacity onPress={handleGoBackToMainPage}>
+        <TouchableOpacity onPress={handleGoBack}>
           <Image source={CloseButton} />
         </TouchableOpacity>
         <HeaderRight>

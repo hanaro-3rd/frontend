@@ -26,6 +26,7 @@ import LoginPasswordPage from "./pages/SignUp/LoginPasswordPage";
 import LoginPatternPage from "./pages/SignUp/LoginPatternPage";
 import SignUpPage from "./pages/SignUp/SignUpPage";
 import ForeignPayHistoryPage from "./pages/History/ForeignPayHistoryPage";
+import MarkerHistoryPage from "./pages/History/MarkerHistoryPage";
 import OwnPayHistoryPage from "./pages/History/OwnPayHistoryPage";
 import KeyMoneyHistoryPage from "./pages/History/KeyMoneyHistoryPage";
 import ExchangeHistoryResult from "./components/PaymentPageComponents/ExchangeHistoryResult";
@@ -289,6 +290,11 @@ const App = () => {
           <Stack.Screen
             name="TravelBudgetPlanPage"
             component={TravelBudgetPlanPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="MarkerHistoryPage"
+            component={MarkerHistoryPage}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
