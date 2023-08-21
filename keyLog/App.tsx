@@ -46,6 +46,7 @@ import TestPaymentSearchPage from "./pages/Payment/TestPaymentSearchPage";
 import AccountConnectPageComponents from "./components/AccountConnectPageComponents/AccountConnectPageComponents";
 import { usernameAtom } from "./recoil/usernameAtom";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AlreadySignUpPage from "./pages/SignUp/AlreadySignUpPage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -121,9 +122,15 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName={
-            login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
+            "AlreadySignUpPage"
+            // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
           }
         >
+          <Stack.Screen
+            name="AlreadySignUpPage"
+            component={AlreadySignUpPage}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="MainPage"
             component={MainPage}
