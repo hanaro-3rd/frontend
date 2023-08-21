@@ -28,7 +28,7 @@ import { useQueryClient, useQuery, useMutation } from "react-query";
 import { getAccounExternal, postAccountExternal } from "../../api/api";
 import { initialWindowMetrics } from "react-native-safe-area-context";
 
-export const AccountConnectPage = ({navigation,route}) => {
+export const AccountConnectPage = ({ navigation, route }) => {
   const [selectedItem, setSelectedItem] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [password, setPassword] = useState("");
@@ -52,13 +52,12 @@ export const AccountConnectPage = ({navigation,route}) => {
       },
       onError: (error) => {
         console.log(error);
-        console.log("connect에러")
+        console.log("connect에러");
       },
     }
   );
 
   //useMuttaion을 통해 post요청
-
 
   const handleNumPress = (num) => {
     if (alertInconsistencyPassword) {
@@ -84,12 +83,12 @@ export const AccountConnectPage = ({navigation,route}) => {
     onSuccess: (response) => {
       setIsPasswordMismatch(false);
       setIsButtonEnabled(false);
- 
+
       navigation.navigate("AccountConnectSuccess", {
         bank: response.data.result.bank,
         balance: response.data.result.balance,
         accountNum: response.data.result.accountNum,
-        page: route?.params?.page 
+        page: route?.params?.page,
       });
     },
     onError: () => {
@@ -99,14 +98,13 @@ export const AccountConnectPage = ({navigation,route}) => {
     },
   });
   const handlePassWord = () => {
-
     if (password.length === 4) {
       setIsButtonEnabled(true);
-      console.log(password)
+      console.log(password);
       const externalAccountId = selectedItem.externalId;
       const externalAccountData = { accountPassword: password };
-      console.log(externalAccountId+"externalAccountId")
-      console.log(externalAccountData.accountPassword +"externalAccountData")
+      console.log(externalAccountId + "externalAccountId");
+      console.log(externalAccountData.accountPassword + "externalAccountData");
       postExtenalAccountMutation.mutate({
         externalAccountId,
         externalAccountData,
@@ -148,7 +146,11 @@ export const AccountConnectPage = ({navigation,route}) => {
               return (
                 <Pressable
                   onPress={() =>
-                    setSelectedItem({ idx, externalId: item.accountId, bank: item.bank + " " + item.accountNum })
+                    setSelectedItem({
+                      idx,
+                      externalId: item.accountId,
+                      bank: item.bank + " " + item.accountNum,
+                    })
                   }
                   key={idx}
                 >
@@ -208,7 +210,7 @@ export const AccountConnectPage = ({navigation,route}) => {
             <View style={styles.popupHeader}>
               <View style={styles.popupHeaderTitle}>
                 <Text style={styles.popupHeaderText}>계좌 비밀번호 입력</Text>
-                
+
                 <Pressable onPress={() => setModalVisible(!modalVisible)}>
                   <Image
                     source={require("../../assets/accountImg/CloseButton.png")}
@@ -216,7 +218,9 @@ export const AccountConnectPage = ({navigation,route}) => {
                   />
                 </Pressable>
               </View>
-              <Text style={styles.popupRedHeaderText}>(가상 계좌이므로 비밀번호는 1234입니다.)</Text>
+              <Text style={styles.popupRedHeaderText}>
+                (가상 계좌이므로 비밀번호는 1234입니다.)
+              </Text>
               <View style={styles.popupSubtitle}>
                 <Text>{selectedItem.bank}</Text>
               </View>
@@ -391,11 +395,11 @@ const styles = StyleSheet.create({
     gap: 30,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    marginTop: heightPercentage(200),
+    marginTop: heightPercentage(180),
     paddingLeft: widthPercentage(20),
     paddingRight: widthPercentage(20),
     paddingTop: heightPercentage(20),
-    paddingBottom: widthPercentage(15),
+    paddingBottom: widthPercentage(20),
     flexDirection: "column",
     justifyContent: "space-between",
   },
@@ -410,7 +414,7 @@ const styles = StyleSheet.create({
     paddingLeft: widthPercentage(20),
     paddingRight: widthPercentage(20),
     paddingTop: heightPercentage(20),
-    paddingBottom: widthPercentage(15),
+    paddingBottom: widthPercentage(20),
     flexDirection: "column",
     justifyContent: "space-between",
   },
