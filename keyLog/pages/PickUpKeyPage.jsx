@@ -101,8 +101,7 @@ const PickUpKeyPage = ({ navigation }) => {
   //   console.log("location" + location);
   // }, []);
   return (
-
-    <View style={{ flex: 1, marginTop:`${getStatusBarHeight()}` }}>
+    <View style={{ flex: 1, marginTop: `${getStatusBarHeight()}` }}>
       <View
         style={{
           position: "absolute",
@@ -170,7 +169,7 @@ const PickUpKeyPage = ({ navigation }) => {
           <View
             style={{
               backgroundColor: "#55ACEE",
-              width: "95%",
+              width: "97%",
               height: 40,
               borderRadius: 5,
               elevation: 2,
@@ -189,8 +188,8 @@ const PickUpKeyPage = ({ navigation }) => {
               }}
             >
               <Image
-                source={require("../Images/삭제.png")}
-                style={{ zIndex: 1111, width: 15, height: 15, marginTop: 3 }}
+                source={require("../Images/삭제_흰.png")}
+                style={{ zIndex: 1111, width: 10, height: 10, marginTop: 3 }}
               />
             </TouchableOpacity>
           </View>
@@ -434,7 +433,7 @@ const PickUpKeyPage = ({ navigation }) => {
 };
 const ModalWrapper = styled.View`
   width: 100%;
-  height: ${heightPercentage(144)}px;
+  height: ${heightPercentage(140)}px;
   align-items: center;
 `;
 const ModalTextView = styled.View`
@@ -464,7 +463,7 @@ const ModalGetMoneyButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   width: 90%;
-  margin-bottom: 100px;
+  margin-bottom: ${heightPercentage(100)}px;
 `;
 const ModalKeyMoneyText = styled.Text`
   color: #191f29;
@@ -490,7 +489,7 @@ const ModalRightText = styled.Text`
 `;
 const ModalView = styled.View`
   width: ${widthPercentage(368)}px;
-  height: ${heightPercentage(120)}px;
+  height: ${heightPercentage(130)}px;
   background-color: white;
   position: absolute;
   bottom: 5px;
@@ -549,9 +548,9 @@ const PickupMarkerView = styled.View`
   align-items: center;
   gap: 2px;
 
-  elevation:5;
+  elevation: 5;
   border-radius: 10px;
-  background:gray;
+  background: gray;
   width: ${widthPercentage(95)}px;
   height: ${heightPercentage(55)}px;
 `;
@@ -608,6 +607,7 @@ const MainTextList = styled.View`
   height: ${heightPercentage(25)}px;
   align-items: center;
   justify-content: center;
+  margin-bottom: ${heightPercentage(5)}px;
 `;
 const MainText = styled.Text`
   color: #191f29;
