@@ -67,16 +67,16 @@ const MainPage = ({ navigation }) => {
     buttonText: "키머니 환전하기",
   };
   const fourthMainCardContent = {
-    subTitle: "뭐하지상준아",
-    title: "여행기록",
+    subTitle: "합리적인 소비 계획 만들기",
+    title: "여행 경비 계획",
     imageSource: CarouselRecordIcon,
-    buttonText: "여행 기록 확인하기",
+    buttonText: "여행 계획하기",
   };
   const fifthMainCardContent = {
-    subTitle: "뭐하지상준아2",
-    title: "키줍기",
+    subTitle: "여행도 하고 돈도 줍고",
+    title: "키머니 줍기",
     imageSource: CarouselPickUpIcon,
-    buttonText: "키머니 줍기",
+    buttonText: "키머니 주우러 가기",
   };
 
   const contents = [
@@ -593,8 +593,8 @@ const MainPage = ({ navigation }) => {
             <Image source={RecordTravleIcon} />
             <MenuSubContainer>
               <MenuTextContainer>
-                <MenuTitle>여행 기록 확인하기</MenuTitle>
-                <MenuSubtitle>여행 기록을 확인해보아용</MenuSubtitle>
+                <MenuTitle>여행 계획하기</MenuTitle>
+                <MenuSubtitle>여행을 계획해보아용</MenuSubtitle>
               </MenuTextContainer>
               <MenuButton
                 onPress={() => navigation.navigate("TravelBudgetPage")}
