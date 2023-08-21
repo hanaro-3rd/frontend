@@ -66,6 +66,7 @@ export const CountryChoiceComponent = ({
           exchangeRate: response.data.result.usd.exchangeRate,
           changePrice: response.data.result.usd.changePrice,
           minimum: 10,
+          index: 1,
         },
         {
           name: "JPY",
@@ -73,6 +74,7 @@ export const CountryChoiceComponent = ({
           exchangeRate: response.data.result.jpy.exchangeRate / 1000,
           changePrice: response.data.result.jpy.changePrice,
           minimum: 1000,
+          index: 2,
         },
         {
           name: "EUR",
@@ -80,6 +82,7 @@ export const CountryChoiceComponent = ({
           exchangeRate: response.data.result.eur.exchangeRate,
           changePrice: response.data.result.eur.changePrice,
           minimum: 10,
+          index: 3,
         },
       ]);
     },
@@ -125,28 +128,32 @@ export const CountryChoiceComponent = ({
           </CollapseHeader>
 
           <CollapseBody>
-            {list?.map((item) => (
-              <TouchableOpacity
-                key={item.name}
-                onPress={() => {
-                  handleCountryPress(item);
-                }}
-              >
-                <View style={styles.countrySelect}>
-                  <View style={styles.countrySelectRow}>
-                    <Image
-                      source={item?.country_url}
-                      style={{
-                        width: widthPercentage(32),
-                        height: heightPercentage(30),
-                        marginRight: 10,
-                      }}
-                    />
-                    <Text style={styles.unitText}>{item.name}</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            ))}
+            <View style={styles.countryLists}>
+              {list?.map((item, index) => (
+                <React.Fragment key={item.name}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleCountryPress(item);
+                    }}
+                  >
+                    <View style={styles.countrySelectRow}>
+                      <Image
+                        source={item?.country_url}
+                        style={{
+                          width: widthPercentage(32),
+                          height: heightPercentage(30),
+                          marginRight: 10,
+                        }}
+                      />
+                      <Text style={styles.unitText}>{item.name}</Text>
+                    </View>
+                  </TouchableOpacity>
+                  {index !== list.length - 1 && (
+                    <View style={styles.separator} />
+                  )}
+                </React.Fragment>
+              ))}
+            </View>
           </CollapseBody>
         </Collapse>
       </TouchableOpacity>
@@ -174,10 +181,25 @@ const styles = StyleSheet.create({
     height: 30,
     flexDirection: "row",
     alignItems: "center",
+    height: 60,
   },
   unitText: {
     color: "#191F29",
     fontSize: fontPercentage(16),
     fontWeight: "700",
+  },
+  countryLists: {
+    borderWidth: 1,
+    borderColor: "#191F29",
+    borderStyle: "solid",
+    backgroundColor: "#FFF",
+    borderRadius: 10,
+    paddingHorizontal: widthPercentage(20),
+    paddingVertical: heightPercentage(10),
+  },
+  separator: {
+    height: 1,
+    backgroundColor: "#E5E5E5",
+    marginVertical: heightPercentage(3),
   },
 });

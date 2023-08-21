@@ -455,13 +455,15 @@ const MainPage = ({ navigation }) => {
       console.error("An error occurred:", error)
     );
   };
-  
+
   return (
     <Main>
       <Header>
         <LogoText>키로그</LogoText>
         <Setting>
-          <TouchableOpacity onPress={() => navigation.navigate("TestPaymentPage")}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("TestPaymentPage")}
+          >
             <SettingImage source={Scan} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("SettingPage")}>
@@ -546,6 +548,36 @@ const MainPage = ({ navigation }) => {
         {/* 메뉴들 */}
         <MenuContainer>
           <MenuCard>
+            <Image source={ExchangeIcon} />
+            <MenuSubContainer>
+              <MenuTextContainer>
+                <MenuTitle>키머니 환전하기</MenuTitle>
+                <MenuSubtitle>키머니를 환전해보아용</MenuSubtitle>
+              </MenuTextContainer>
+              <MenuButton onPress={() => navigation.navigate("ExchangePage")}>
+                <MenuButtonText fontPercentage={fontPercentage}>
+                  환전하러 가기
+                </MenuButtonText>
+              </MenuButton>
+            </MenuSubContainer>
+          </MenuCard>
+          <MenuCard>
+            <Image source={AccountConnectIcon} />
+            <MenuSubContainer>
+              <MenuTextContainer>
+                <MenuTitle>계좌 연결하기</MenuTitle>
+                <MenuSubtitle>계좌를 연결해보아용</MenuSubtitle>
+              </MenuTextContainer>
+              <MenuButton
+                onPress={() => navigation.navigate("AccountConnectPage")}
+              >
+                <MenuButtonText fontPercentage={fontPercentage}>
+                  연결하러 가기
+                </MenuButtonText>
+              </MenuButton>
+            </MenuSubContainer>
+          </MenuCard>
+          <MenuCard>
             <Image source={KeyPickIcon} />
             <MenuSubContainer>
               <MenuTextContainer>
@@ -584,36 +616,6 @@ const MainPage = ({ navigation }) => {
                 onPress={() => navigation.navigate("KeyMoneyHistoryPage")}
               >
                 <MenuButtonText>확인하러 가기</MenuButtonText>
-              </MenuButton>
-            </MenuSubContainer>
-          </MenuCard>
-          <MenuCard>
-            <Image source={ExchangeIcon} />
-            <MenuSubContainer>
-              <MenuTextContainer>
-                <MenuTitle>키머니 환전하기</MenuTitle>
-                <MenuSubtitle>키머니를 환전해보아용</MenuSubtitle>
-              </MenuTextContainer>
-              <MenuButton onPress={() => navigation.navigate("ExchangePage")}>
-                <MenuButtonText fontPercentage={fontPercentage}>
-                  환전하러 가기
-                </MenuButtonText>
-              </MenuButton>
-            </MenuSubContainer>
-          </MenuCard>
-          <MenuCard>
-            <Image source={AccountConnectIcon} />
-            <MenuSubContainer>
-              <MenuTextContainer>
-                <MenuTitle>계좌 연결하기</MenuTitle>
-                <MenuSubtitle>계좌를 연결해보아용</MenuSubtitle>
-              </MenuTextContainer>
-              <MenuButton
-                onPress={() => navigation.navigate("AccountConnectPage")}
-              >
-                <MenuButtonText fontPercentage={fontPercentage}>
-                  연결하러 가기
-                </MenuButtonText>
               </MenuButton>
             </MenuSubContainer>
           </MenuCard>

@@ -246,26 +246,32 @@ export const ExchangePage = () => {
                       </View>
                     </CollapseHeader>
                     <CollapseBody>
-                      {accountList?.map((e, idx) => {
-                        return (
-                          <TouchableOpacity
-                            key={idx}
-                            onPress={() => {
-                              handleCountryPress(e.bank + " " + e.accountNum);
-                              setAccountId(e.accountId);
-                              setAccountBalance(e.balance);
-                            }}
-                          >
-                            <View style={styles.countrySelect}>
-                              <View style={styles.countrySelectRow}>
-                                <Text style={styles.unitText}>
-                                  {e.bank + " "} {e.accountNum}
-                                </Text>
-                              </View>
-                            </View>
-                          </TouchableOpacity>
-                        );
-                      })}
+                      <View style={styles.accountLists}>
+                        {accountList?.map((e, idx) => {
+                          return (
+                            <React.Fragment key={idx}>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  handleCountryPress(
+                                    e.bank + " " + e.accountNum
+                                  );
+                                  setAccountId(e.accountId);
+                                  setAccountBalance(e.balance);
+                                }}
+                              >
+                                <View style={styles.countrySelectRow}>
+                                  <Text style={styles.unitText}>
+                                    {e.bank + " "} {e.accountNum}
+                                  </Text>
+                                </View>
+                              </TouchableOpacity>
+                              {idx !== accountList.length - 1 && (
+                                <View style={styles.separator} />
+                              )}
+                            </React.Fragment>
+                          );
+                        })}
+                      </View>
                     </CollapseBody>
                   </Collapse>
                 </TouchableOpacity>
@@ -398,13 +404,7 @@ export const ExchangePage = () => {
         <View style={styles.footer}>
           <View style={styles.informationContainer}>
             <Text style={styles.informationText}>
-              주말 및 공휴일은 수수료가 붙습니다..
-            </Text>
-            <Text style={styles.informationText}>
-              주말 및 공휴일은 수수료가 붙습니다..
-            </Text>
-            <Text style={styles.informationText}>
-              주말 및 공휴일은 수수료가 붙습니다..
+              * 주말 및 공휴일은 수수료가 붙습니다
             </Text>
           </View>
           {koreaTextInput > 0 &&
@@ -730,16 +730,31 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "100%",
   },
+  accountLists: {
+    borderWidth: 1,
+    borderColor: "#191F29",
+    borderStyle: "solid",
+    backgroundColor: "#FFF",
+    borderRadius: 10,
+    paddingHorizontal: widthPercentage(20),
+    paddingVertical: heightPercentage(10),
+  },
   countrySelectRow: {
     width: "100%",
     height: 30,
     flexDirection: "row",
     alignItems: "center",
+    height: 50,
   },
   unitText: {
     color: "#191F29",
     fontSize: fontPercentage(16),
     fontWeight: "700",
     width: "90%",
+  },
+  separator: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E5E5",
+    marginVertical: heightPercentage(10),
   },
 });
