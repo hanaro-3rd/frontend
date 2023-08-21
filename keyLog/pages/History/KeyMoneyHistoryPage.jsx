@@ -34,6 +34,7 @@ const KeyMoneyHistoryPage = ({ route, navigation }) => {
   );
 
   const unitImageMap = {
+    KRW: require("../../assets/History/KRW.png"),
     USD: require("../../assets/History/USD.png"),
     JPY: require("../../assets/History/JPY.png"),
     EUR: require("../../assets/History/EUR.png"),

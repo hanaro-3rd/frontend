@@ -95,7 +95,19 @@ const ExchangeButton = styled.TouchableOpacity`
   background-color: #55acee;
   flex-direction: row;
 `;
-
+const ExchangeButtonKRW = styled.TouchableOpacity`
+  width: ${widthPercentage(170)}px;
+  height: ${heightPercentage(40)}px;
+  display: flex;
+  padding: ${heightPercentage(10)}px ${widthPercentage(10)}px;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  /* flex: 1 0 0; */
+  border-radius: 10px;
+  background-color: #f2f4f6;
+  flex-direction: row;
+`;
 const RevertToWonButton = styled.TouchableOpacity`
   width: ${widthPercentage(170)}px;
   height: ${heightPercentage(40)}px;
@@ -478,15 +490,24 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
               <Image source={require("../../assets/Setting/loop.png")} />
               <ButtonText>원화</ButtonText>
             </RevertToWonButton>
-            <ExchangeButton>
-              <ExchangeButtonText
-                onPress={() => {
-                  navigation.navigate("ExchangePage");
-                }}
-              >
-                충전하기
-              </ExchangeButtonText>
-            </ExchangeButton>
+
+            {unit !== "KRW" ? (
+              <ExchangeButton>
+                <ExchangeButtonText
+                  onPress={() => {
+                    navigation.navigate("ExchangePage");
+                  }}
+                >
+                  충전하기
+                </ExchangeButtonText>
+              </ExchangeButton>
+            ) : (
+              <ExchangeButtonKRW disabled={true}>
+                <ExchangeButtonText style={{ textColor: "white" }}>
+                  충전하기
+                </ExchangeButtonText>
+              </ExchangeButtonKRW>
+            )}
           </ButtonContainer>
         </BodyHeaderContainer>
         <SelectContainer>
