@@ -1,4 +1,4 @@
-import { AppRegistry } from 'react-native';
+import { AppRegistry, LogBox, YellowBox } from 'react-native';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import App from './App';
 import { RecoilRoot } from 'recoil';
@@ -9,8 +9,9 @@ const queryClient = new QueryClient({
     },
   },
 });
-
+LogBox.ignoreAllLogs();
 const RootApp = () => (
+  
   <RecoilRoot>
   <QueryClientProvider client={queryClient}>
     <App />

@@ -55,7 +55,6 @@ const App = () => {
   const [haveDeviceId, setHaveDeviceId] = useState(false);
   const [username, setUsername] = useRecoilState(usernameAtom);
   // usePermissions();
-
   const { data } = useQuery(
     "registration",
     async () => getRegistrationDeviceId(await DeviceInfo.getUniqueId()),
