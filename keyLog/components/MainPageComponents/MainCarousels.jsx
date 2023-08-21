@@ -59,13 +59,14 @@ const MainCarousels = ({ navigation, content, onPress }) => {
     color: #55acee;
     font-family: Inter;
     font-size: ${fontPercentage(20)}px;
-    height: ${heightPercentage(24)}px;
+    height: ${heightPercentage(29)}px;
     font-weight: 700;
   `;
 
   const CarouselImage = styled.Image`
     width: ${widthPercentage(100)}px;
     height: ${heightPercentage(100)}px;
+    object-fit: scale-down;
   `;
 
   const handleCarouselCardPress = () => {

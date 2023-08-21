@@ -21,7 +21,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { postTravelBudget } from "../../api/api";
 
 const RootScrollView = styled.ScrollView`
-  margin-top: ${getStatusBarHeight}px;
+  /* margin-top: ${getStatusBarHeight}px; */
   /* min-height: ${phoneHeight}px; */
   height: ${heightPercentage(844)}px;
   width: 100%;
@@ -170,7 +170,7 @@ const BudgetTotalContainer = styled.View`
   border: 1px solid #8b95a1;
   flex-direction: row;
   padding: ${heightPercentage(10)}px ${widthPercentage(20)}px;
-  margin-top: ${heightPercentage(19)}px;
+  margin-bottom: ${heightPercentage(19)}px;
 `;
 
 const BudgetTotalText = styled.Text`
@@ -241,7 +241,7 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
     onSuccess: (response) => {
       console.log(response.data);
       queryClient.invalidateQueries("travelBudgetData");
-      navigation.navigate("TravelBudgetPage")
+      navigation.navigate("TravelBudgetPage");
     },
     onError: (error) => {
       console.log(error.response);
@@ -353,6 +353,13 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
           <Subtitle>카테고리별 여행 경비를 작성해주세요.</Subtitle>
         </BodyHeader>
         <BodyMain>
+          <BudgetTotalContainer>
+            <TotalText>총</TotalText>
+            <InputTotal>
+              <BudgetTotalText>{totalBudget}</BudgetTotalText>
+              <MoneyTotalUnitText>{moneyUnit}</MoneyTotalUnitText>
+            </InputTotal>
+          </BudgetTotalContainer>
           <BudgetListContainer>
             <BudgetContainer>
               <CategoryContainer>
@@ -481,13 +488,6 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
               </Input>
             </BudgetContainer>
           </BudgetListContainer>
-          <BudgetTotalContainer>
-            <TotalText>총</TotalText>
-            <InputTotal>
-              <BudgetTotalText>{totalBudget}</BudgetTotalText>
-              <MoneyTotalUnitText>{moneyUnit}</MoneyTotalUnitText>
-            </InputTotal>
-          </BudgetTotalContainer>
         </BodyMain>
       </Body>
       <Footer>
