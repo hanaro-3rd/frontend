@@ -370,49 +370,84 @@ const TestPaymentPage = ({ navigation, route }) => {
   console.log(unit);
   return (
     <Root showModal={showModal}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <DeleteHeader navigation={navigation} to="MainPage" />
-        <Body>
-          <BodyHeader>
-            <Title>결제하기</Title>
-            <SubTitle>테스트용 결제를 하는 페이지입니다.</SubTitle>
-          </BodyHeader>
-          <BodyMain>
-            <PaymentTitleContainer>
-              <TitleContainer>
-                <PaymentTitle>가게</PaymentTitle>
-                {/* <TextSize>
+      <DeleteHeader navigation={navigation} to="MainPage" />
+      <Body>
+        <BodyHeader>
+          <Title>결제하기</Title>
+          <SubTitle>테스트용 결제를 하는 페이지입니다.</SubTitle>
+        </BodyHeader>
+        <BodyMain>
+          <PaymentTitleContainer>
+            <TitleContainer>
+              <PaymentTitle>가게</PaymentTitle>
+              {/* <TextSize>
                 {storeTitle.length} / {MAX_TITLE_LENGTH}
               </TextSize> */}
-              </TitleContainer>
-              {markerInformation ? (
+            </TitleContainer>
+            {markerInformation ? (
+              <StoreTextinput
+                value={storeTitle}
+                onChangeText={handleStoreTitleChange}
+                hasValue={markerInformation.store !== ""}
+                onPress={() => navigation.navigate("TestPaymentSearchPage")}
+              >
+                {markerInformation.store}
+              </StoreTextinput>
+            ) : (
+              <TouchableOpacity
+                onPress={() => navigation.navigate("TestPaymentSearchPage")}
+              >
                 <StoreTextinput
                   value={storeTitle}
                   onChangeText={handleStoreTitleChange}
-                  hasValue={markerInformation.store !== ""}
-                  onPress={() => navigation.navigate("TestPaymentSearchPage")}
+                  hasValue={storeTitle !== ""}
+                />
+              </TouchableOpacity>
+            )}
+          </PaymentTitleContainer>
+          <PaymentTitleContainer>
+            <TitleContainer>
+              <PaymentTitle>카테고리</PaymentTitle>
+            </TitleContainer>
+            <PickerContainer hasValue={category !== ""}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                }}
+              >
+                <Picker
+                  selectedValue={category}
+                  onValueChange={(itemValue, itemIndex) => {
+                    setCategory(itemValue);
+                    updateIsAllFieldsFilled();
+                  }}
+                  style={{
+                    width: widthPercentage(350),
+                    color: category ? "#000" : "#b0b8c1",
+                    textAlign: "right",
+                  }}
                 >
-                  {markerInformation.store}
-                </StoreTextinput>
-              ) : (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("TestPaymentSearchPage")}
-                >
-                  <StoreTextinput
-                    value={storeTitle}
-                    onChangeText={handleStoreTitleChange}
-                    hasValue={storeTitle !== ""}
-                  />
-                </TouchableOpacity>
-              )}
-            </PaymentTitleContainer>
-            <PaymentTitleContainer>
-              <TitleContainer>
-                <PaymentTitle>카테고리</PaymentTitle>
-              </TitleContainer>
-              <PickerContainer hasValue={category !== ""}>
+                  {category == "" && <Picker.Item label="선택" value="" />}
+                  <Picker.Item label="식비" value="식비" />
+                  <Picker.Item label="교통" value="교통" />
+                  <Picker.Item label="숙박" value="숙박" />
+                  <Picker.Item label="쇼핑 · 편의점 · 마트" value="쇼핑" />
+                  <Picker.Item label="문화 · 여가" value="문화" />
+                  <Picker.Item label="기타" value="Etc" />
+                </Picker>
+              </View>
+            </PickerContainer>
+          </PaymentTitleContainer>
+          <PaymentTitleContainer>
+            <TitleContainer>
+              <PaymentTitle>금액</PaymentTitle>
+              <TextSize>
+                {moneyText.length} / {MAX_MONEY_LENGTH}
+              </TextSize>
+            </TitleContainer>
+            <SelectedFrame>
+              <PickerContainer hasValue={unit !== ""}>
                 <View
                   style={{
                     flex: 1,
@@ -420,86 +455,48 @@ const TestPaymentPage = ({ navigation, route }) => {
                   }}
                 >
                   <Picker
-                    selectedValue={category}
+                    selectedValue={unit}
                     onValueChange={(itemValue, itemIndex) => {
-                      setCategory(itemValue);
+                      setUnit(itemValue);
+                      console.log(itemValue, "itemValue");
+                      if (itemValue == "USD") {
+                        for (x of units) {
+                          console.log("ss");
+                          if (x.unit == "USD")
+                            setBalance("잔액: " + String(x.balance) + "USD");
+                        }
+                      } else if (itemValue == "JPY") {
+                        for (x of units) {
+                          if (x.unit == "JPY")
+                            setBalance("잔액: " + String(x.balance) + "JPY");
+                        }
+                      } else {
+                        for (x of units) {
+                          if (x.unit == "EUR")
+                            setBalance("잔액: " + String(x.balance) + "EUR");
+                        }
+                      }
                       updateIsAllFieldsFilled();
                     }}
+                    onFocus={() => {}}
                     style={{
-                      width: widthPercentage(350),
-                      color: category ? "#000" : "#b0b8c1",
+                      width: widthPercentage(110),
+                      color: unit ? "#000" : "#b0b8c1",
                       textAlign: "right",
                     }}
                   >
-                    {category == "" && <Picker.Item label="선택" value="" />}
-                    <Picker.Item label="식비" value="식비" />
-                    <Picker.Item label="교통" value="교통" />
-                    <Picker.Item label="숙박" value="숙박" />
-                    <Picker.Item label="쇼핑 · 편의점 · 마트" value="쇼핑" />
-                    <Picker.Item label="문화 · 여가" value="문화" />
-                    <Picker.Item label="기타" value="Etc" />
-                  </Picker>
-                </View>
-              </PickerContainer>
-            </PaymentTitleContainer>
-            <PaymentTitleContainer>
-              <TitleContainer>
-                <PaymentTitle>금액</PaymentTitle>
-                <TextSize>
-                  {moneyText.length} / {MAX_MONEY_LENGTH}
-                </TextSize>
-              </TitleContainer>
-              <SelectedFrame>
-                <PickerContainer hasValue={unit !== ""}>
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Picker
-                      selectedValue={unit}
-                      onValueChange={(itemValue, itemIndex) => {
-                        setUnit(itemValue);
-                        console.log(itemValue, "itemValue");
-                        if (itemValue == "USD") {
-                          for (x of units) {
-                            console.log("ss");
-                            if (x.unit == "USD")
-                              setBalance("잔액: " + String(x.balance) + "USD");
-                          }
-                        } else if (itemValue == "JPY") {
-                          for (x of units) {
-                            if (x.unit == "JPY")
-                              setBalance("잔액: " + String(x.balance) + "JPY");
-                          }
-                        } else {
-                          for (x of units) {
-                            if (x.unit == "EUR")
-                              setBalance("잔액: " + String(x.balance) + "EUR");
-                          }
-                        }
-                        updateIsAllFieldsFilled();
-                      }}
-                      onFocus={() => {}}
-                      style={{
-                        width: widthPercentage(110),
-                        color: unit ? "#000" : "#b0b8c1",
-                        textAlign: "right",
-                      }}
-                    >
-                      {unit == "" && <Picker.Item label="선택" value="" />}
-                      {units.length > 0 &&
-                        units.map((e, idx) => {
-                          return (
-                            <Picker.Item
-                              label={e.unit}
-                              value={e.unit}
-                              key={idx}
-                            />
-                          );
-                        })}
-                      {/* {units.includes("KRW") && (
+                    {unit == "" && <Picker.Item label="선택" value="" />}
+                    {units.length > 0 &&
+                      units.map((e, idx) => {
+                        return (
+                          <Picker.Item
+                            label={e.unit}
+                            value={e.unit}
+                            key={idx}
+                          />
+                        );
+                      })}
+                    {/* {units.includes("KRW") && (
                       <Picker.Item label="KRW" value="KRW" />
                     )}
                     {units.includes("USD") && (
@@ -511,86 +508,83 @@ const TestPaymentPage = ({ navigation, route }) => {
                     {units.includes("EUR") && (
                       <Picker.Item label="EUR" value="EUR" />
                     )} */}
-                    </Picker>
-                  </View>
-                </PickerContainer>
-                <CostTextinput
-                  placeholder={balance}
-                  keyboardType="numeric"
-                  placeholderTextColor="#b0b8c1"
-                  value={moneyText}
-                  onChangeText={handleMoneyChange}
-                  maxLength={MAX_MONEY_LENGTH}
-                  hasValue={moneyText !== ""}
-                />
-              </SelectedFrame>
-            </PaymentTitleContainer>
-            <PaymentTitleContainer>
-              <TitleContainer>
-                <PaymentTitle>메모</PaymentTitle>
-              </TitleContainer>
-              <MemoTextinput
-                value={memoText}
-                onChangeText={handleMemoChange}
-                hasValue={memoText !== ""}
+                  </Picker>
+                </View>
+              </PickerContainer>
+              <CostTextinput
+                placeholder={balance}
+                keyboardType="numeric"
+                placeholderTextColor="#b0b8c1"
+                value={moneyText}
+                onChangeText={handleMoneyChange}
+                maxLength={MAX_MONEY_LENGTH}
+                hasValue={moneyText !== ""}
               />
-            </PaymentTitleContainer>
-          </BodyMain>
-          <Footer>
-            {isAllFieldsFilled ? (
-              <NextButton
-                onPress={() => {
-                  handleSubmitPay();
-                }}
-              >
-                <NextButtonText>결제하기</NextButtonText>
-              </NextButton>
-            ) : (
-              <DisabledButton>
-                <NextButtonText>결제하기</NextButtonText>
-              </DisabledButton>
-            )}
-          </Footer>
-        </Body>
-
-        {showModal && (
-          <Modal visible={showModal} animationType="slide">
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: showModal
-                  ? "rgba(0, 0, 0, 0.5)"
-                  : "transparent",
+            </SelectedFrame>
+          </PaymentTitleContainer>
+          <PaymentTitleContainer>
+            <TitleContainer>
+              <PaymentTitle>메모</PaymentTitle>
+            </TitleContainer>
+            <MemoTextinput
+              value={memoText}
+              onChangeText={handleMemoChange}
+              hasValue={memoText !== ""}
+            />
+          </PaymentTitleContainer>
+        </BodyMain>
+        <Footer>
+          {isAllFieldsFilled ? (
+            <NextButton
+              onPress={() => {
+                handleSubmitPay();
               }}
             >
-              <View
+              <NextButtonText>결제하기</NextButtonText>
+            </NextButton>
+          ) : (
+            <DisabledButton>
+              <NextButtonText>결제하기</NextButtonText>
+            </DisabledButton>
+          )}
+        </Footer>
+      </Body>
+
+      {showModal && (
+        <Modal visible={showModal} animationType="slide">
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: showModal ? "rgba(0, 0, 0, 0.5)" : "transparent",
+            }}
+          >
+            <View
+              style={{
+                width: 300,
+                height: 200,
+                backgroundColor: "white",
+                padding: 20,
+                borderWidth: 1,
+                borderColor: "#e5e8eb",
+                borderRadius: 20,
+                elevation: 7,
+              }}
+            >
+              <ModalTextContainer
                 style={{
-                  width: 300,
-                  height: 200,
-                  backgroundColor: "white",
-                  padding: 20,
-                  borderWidth: 1,
-                  borderColor: "#e5e8eb",
-                  borderRadius: 20,
-                  elevation: 7,
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                <ModalTextContainer
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <ModalText>연결된 외환 계좌가 없습니다.</ModalText>
-                </ModalTextContainer>
-              </View>
+                <ModalText>연결된 외환 계좌가 없습니다.</ModalText>
+              </ModalTextContainer>
             </View>
-          </Modal>
-        )}
-      </KeyboardAvoidingView>
+          </View>
+        </Modal>
+      )}
     </Root>
   );
 };
