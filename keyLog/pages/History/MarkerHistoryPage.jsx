@@ -16,7 +16,7 @@ import {
   phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
-import DeleteHeader from "../Header/DeleteHeader";
+import DeleteHeader from "../../components/Header/DeleteHeader";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getDetailKeymoneyHistory, updatepayment } from "../../api/api";
 
@@ -145,7 +145,7 @@ const CategoryButtonImage = styled.Image`
 const CategoryView = styled.View`
   flex-direction: row;
 `;
-const PaymentPageInputComponent = ({ route, navigation }) => {
+const MarkerHistoryPage = ({ route, navigation }) => {
   const {
     category,
     keymoney,
@@ -211,12 +211,12 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
       <View>
         <DeleteHeader navigation={navigation} to="KeyMoneyHistoryPage" />
         <TitleView>
-          <TitleText>결제내역</TitleText>
+          <TitleText>마커 줍기 내역</TitleText>
         </TitleView>
         <MainComponent>
           <CategoryTitleImage source={categoryImage} style={{ opacity: 0.3 }} />
           <NameText>{subject}</NameText>
-          <PriceText>결제금액</PriceText>
+          <PriceText>주운 금액</PriceText>
           <CostText>
             {unit} {keymoney}
           </CostText>
@@ -224,27 +224,7 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
             {formattedDate} {formattedTime}
           </DateText>
         </MainComponent>
-        <CategoryWrapper>
-          <CategoryWord>카테고리</CategoryWord>
-          <TouchableOpacity onPress={() => setOpenCategory(true)}>
-            <CategoryView>
-              <CategoryPickWord>{selectedChangeCategory}</CategoryPickWord>
-              <CategoryButtonImage
-                source={require("../../assets/Main/arrow_next.png")}
-              />
-            </CategoryView>
-          </TouchableOpacity>
-        </CategoryWrapper>
-        <MemoWrapper>
-          <MemoText>메모</MemoText>
-          <MemoTextInput
-            value={changeMemo === "string" ? "" : changeMemo}
-            onChangeText={handleChangeMemo}
-            placeholder={
-              changeMemo === "string" ? "메모를 작성해보세요" : changeMemo
-            }
-          />
-        </MemoWrapper>
+        
       </View>
       <SubmitButton
         onPress={() => {
@@ -324,7 +304,7 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
   );
 };
 
-export default PaymentPageInputComponent;
+export default MarkerHistoryPage;
 
 const Header = styled.View`
   width: 100%;

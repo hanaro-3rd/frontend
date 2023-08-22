@@ -101,11 +101,11 @@ const SignUpPage = ({ navigation }) => {
   };
 
   const handleDebouncedPersonalNumberChange = () => {
-    if (checkResidentNumber(personalNumber)&&checkNumberSet(oneNumber)) {
+    if (checkResidentNumber(personalNumber) && checkNumberSet(oneNumber)) {
       setIsPersonalNumberValid(true);
       setIsPersonalNumberValidSuccess(true);
     } else {
-      if (personalNumber == "" && oneNumber=="") return;
+      if (personalNumber == "" && oneNumber == "") return;
       setIsPersonalNumberValid(false);
       setIsPersonalNumberValidSuccess(false);
     }
@@ -121,7 +121,8 @@ const SignUpPage = ({ navigation }) => {
   //   }
   // };
   useDebouncedEffect(handleDebouncedPersonalNumberChange, 1000, [
-    personalNumber,oneNumber
+    personalNumber,
+    oneNumber,
   ]);
 
   const handlePhoneChange = (number) => {
@@ -224,6 +225,7 @@ const SignUpPage = ({ navigation }) => {
                   paddingHorizontal: widthPercentage(20),
                   fontSize: fontPercentage(16),
                   fontWeight: "700",
+                  borderRadius: 10,
                 }}
                 value={personalNumber}
                 onChangeText={handlePersonalNumberChange}
@@ -232,7 +234,7 @@ const SignUpPage = ({ navigation }) => {
                 maxLength={6}
               />
             </TouchableOpacity>
-            <Text style={{ fontSize: 50, fontWeight: 700, marginBottom: 6 }}>
+            <Text style={{ fontSize: 50, fontWeight: 200, marginBottom: 6 }}>
               -
             </Text>
             <View
@@ -253,7 +255,8 @@ const SignUpPage = ({ navigation }) => {
                     width: "100%",
                     height: heightPercentage(65),
                     backgroundColor: "#F9FAFB",
-                  
+                    borderRadius: 10,
+
                     fontSize: fontPercentage(16),
                     fontWeight: "700",
                   }}
@@ -265,22 +268,22 @@ const SignUpPage = ({ navigation }) => {
               </TouchableOpacity>
 
               {/* <Image source={phoneNumberIcon}/> */}
-              <Text style={{ fontSize: 30, fontWeight: 400, marginTop: 9 }}>
+              <Text style={{ fontSize: 25, fontWeight: 400, marginTop: 9 }}>
                 *
               </Text>
-              <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 9 }}>
+              <Text style={{ fontSize: 25, fontWeight: 700, marginTop: 9 }}>
                 *
               </Text>
-              <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 9 }}>
+              <Text style={{ fontSize: 25, fontWeight: 700, marginTop: 9 }}>
                 *
               </Text>
-              <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 9 }}>
+              <Text style={{ fontSize: 25, fontWeight: 700, marginTop: 9 }}>
                 *
               </Text>
-              <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 9 }}>
+              <Text style={{ fontSize: 25, fontWeight: 700, marginTop: 9 }}>
                 *
               </Text>
-              <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 9 }}>
+              <Text style={{ fontSize: 25, fontWeight: 700, marginTop: 9 }}>
                 *
               </Text>
             </View>
@@ -290,8 +293,9 @@ const SignUpPage = ({ navigation }) => {
               <Text
                 style={{
                   textAlign: "left",
-                  color: "red",
+                  color: "#E90061",
                   fontSize: fontPercentage(12),
+                  marginBottom:heightPercentage(15)
                 }}
               >
                 입력하신 정보를 확인해주세요.
@@ -329,15 +333,13 @@ const SignUpPage = ({ navigation }) => {
             style={[
               styles.submitButton,
               (!checkKoreanName(name) ||
-                ! checkResidentNumber(personalNumber) ||
-                ! checkPhoneChange(phoneNumber) )&&
+                !checkResidentNumber(personalNumber) ||
+                !checkPhoneChange(phoneNumber)) &&
                 styles.disabledButton,
             ]}
             onPress={(e) => handleVerification(e)}
             disabled={
-              !isNameValid ||
-                ! isPersonalNumberValid ||
-                ! isPhoneNumberValid
+              !isNameValid || !isPersonalNumberValid || !isPhoneNumberValid
             }
           >
             <Text style={styles.buttonText}>인증 요청</Text>
@@ -347,7 +349,7 @@ const SignUpPage = ({ navigation }) => {
           modalVisible={modalVisible}
           toggleModal={toggleModal}
           phoneNumber={phoneNumber}
-          personalNumber={personalNumber+oneNumber}
+          personalNumber={personalNumber + oneNumber}
           name={name}
           setModalVisible={setModalVisible}
           navigation={navigation}
@@ -456,10 +458,12 @@ const styles = StyleSheet.create({
   errorInputField: {
     borderColor: "#E90061",
     borderWidth: 1,
+    borderRadius: 10,
   },
   successInputField: {
     borderColor: "#55acee",
     borderWidth: 1,
+    borderRadius: 10,
   },
 });
 

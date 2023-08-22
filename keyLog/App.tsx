@@ -27,6 +27,7 @@ import LoginPasswordPage from "./pages/SignUp/LoginPasswordPage";
 import LoginPatternPage from "./pages/SignUp/LoginPatternPage";
 import SignUpPage from "./pages/SignUp/SignUpPage";
 import ForeignPayHistoryPage from "./pages/History/ForeignPayHistoryPage";
+import MarkerHistoryPage from "./pages/History/MarkerHistoryPage";
 import OwnPayHistoryPage from "./pages/History/OwnPayHistoryPage";
 import KeyMoneyHistoryPage from "./pages/History/KeyMoneyHistoryPage";
 import ExchangeHistoryResult from "./components/PaymentPageComponents/ExchangeHistoryResult";
@@ -48,6 +49,7 @@ import TestPaymentSearchPage from "./pages/Payment/TestPaymentSearchPage";
 import AccountConnectPageComponents from "./components/AccountConnectPageComponents/AccountConnectPageComponents";
 import { usernameAtom } from "./recoil/usernameAtom";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AlreadySignUpPage from "./pages/SignUp/AlreadySignUpPage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -124,10 +126,21 @@ const App = () => {
         <Stack.Navigator
           initialRouteName={
             login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
+<<<<<<< HEAD
             // "ExchangeHistoryResult"
           }
         >
           <Stack.Screen
+=======
+          }
+        >
+          <Stack.Screen
+            name="AlreadySignUpPage"
+            component={AlreadySignUpPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+>>>>>>> main
             name="MainPage"
             component={MainPage}
             options={{ headerShown: false }}
@@ -208,11 +221,14 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+<<<<<<< HEAD
             name="ExchangeToWonPage"
             component={ExchangeToWonPage}
             options={{ headerShown: false }}
           />
           <Stack.Screen
+=======
+>>>>>>> main
             name="CountryChoiceComponent"
             component={CountryChoiceComponent}
             options={{ headerShown: false }}
@@ -292,6 +308,14 @@ const App = () => {
             component={TravelBudgetPlanPage}
             options={{ headerShown: false }}
           />
+<<<<<<< HEAD
+=======
+          <Stack.Screen
+            name="MarkerHistoryPage"
+            component={MarkerHistoryPage}
+            options={{ headerShown: false }}
+          />
+>>>>>>> main
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

@@ -41,6 +41,7 @@ import { useRecoilState } from "recoil";
 import { usernameAtom } from "../recoil/usernameAtom";
 import { useQuery, useQueryClient } from "react-query";
 import { getExchange } from "../api/api";
+import { he } from "date-fns/locale";
 
 const MainPage = ({ navigation }) => {
   const [username, setUsername] = useRecoilState(usernameAtom);
@@ -49,8 +50,8 @@ const MainPage = ({ navigation }) => {
   const [JPY, setJPY] = useState();
   const [exchangeDate, setExchangeDate] = useState();
   const firstMainCardContent = {
-    subTitle: "어디서든 쓸 수 있는",
-    title: "키머니",
+    subTitle: "바로 사용할 수 있는",
+    title: "키머니 확인",
     imageSource: CarouselIconKeymoney,
     buttonText: "키머니 확인하기",
   };
@@ -62,21 +63,21 @@ const MainPage = ({ navigation }) => {
   };
   const thirdMainCardContent = {
     subTitle: "수수료 걱정없는",
-    title: "환전하기",
+    title: "키머니 환전",
     imageSource: CarouselHanaMoneyIcon,
     buttonText: "키머니 환전하기",
   };
   const fourthMainCardContent = {
-    subTitle: "뭐하지상준아",
-    title: "여행기록",
+    subTitle: "한눈에 알아볼 수 있는",
+    title: "여행 경비 계획",
     imageSource: CarouselRecordIcon,
-    buttonText: "여행 기록 확인하기",
+    buttonText: "여행 계획하기",
   };
   const fifthMainCardContent = {
-    subTitle: "뭐하지상준아2",
-    title: "키줍기",
+    subTitle: "여행도 하고 돈도 줍고",
+    title: "키머니 줍기",
     imageSource: CarouselPickUpIcon,
-    buttonText: "키머니 줍기",
+    buttonText: "키머니 주우러 가기",
   };
 
   const contents = [
@@ -102,6 +103,12 @@ const MainPage = ({ navigation }) => {
     flex-direction: row;
     align-self: stretch;
     padding: ${heightPercentage(13)}px ${widthPercentage(12)}px;
+  `;
+
+  const LogoImg = styled.View`
+    /* margin-left: ${widthPercentage(12)}px;
+    height: ${heightPercentage(16)}px;
+    width: ${widthPercentage(45)}px; */
   `;
   const LogoText = styled.Text`
     color: #191f29;
@@ -273,7 +280,7 @@ const MainPage = ({ navigation }) => {
   const MenuContainer = styled.View`
     width: ${widthPercentage(390)}px;
     height: ${heightPercentage(840)}px;
-    padding: ${heightPercentage(30)}px ${widthPercentage(20)}px;
+    padding: ${heightPercentage(15)}px ${widthPercentage(20)}px;
     flex-direction: column;
     align-items: center;
     gap: 20px;
@@ -458,15 +465,19 @@ const MainPage = ({ navigation }) => {
     <Main>
       <Header>
         <LogoText>키로그</LogoText>
+        {/* <Image
+          source={require("../assets/Main/키로그_logo.png")}
+          style={{ marginTop: 5 }}
+        /> */}
         <Setting>
           <TouchableOpacity
             onPress={() => navigation.navigate("TestPaymentPage")}
           >
             <SettingImage source={Scan} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("SettingPage")}>
+          {/* <TouchableOpacity onPress={() => navigation.navigate("SettingPage")}>
             <SettingImage source={SettingButton} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </Setting>
       </Header>
 
@@ -550,7 +561,7 @@ const MainPage = ({ navigation }) => {
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>키머니 환전하기</MenuTitle>
-                <MenuSubtitle>키머니를 환전해보아용</MenuSubtitle>
+                <MenuSubtitle>여행에 사용할 키머니로 환전해요</MenuSubtitle>
               </MenuTextContainer>
               <MenuButton onPress={() => navigation.navigate("ExchangePage")}>
                 <MenuButtonText fontPercentage={fontPercentage}>
@@ -564,7 +575,7 @@ const MainPage = ({ navigation }) => {
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>계좌 연결하기</MenuTitle>
-                <MenuSubtitle>계좌를 연결해보아용</MenuSubtitle>
+                <MenuSubtitle>환전할 계좌를 연결해 보세요</MenuSubtitle>
               </MenuTextContainer>
               <MenuButton
                 onPress={() => navigation.navigate("AccountConnectPage")}
@@ -580,7 +591,7 @@ const MainPage = ({ navigation }) => {
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>키머니 줍기</MenuTitle>
-                <MenuSubtitle>여행을 떠나서 키머니를 주워봐용</MenuSubtitle>
+                <MenuSubtitle>여행 안에서 키머니를 주워보세요</MenuSubtitle>
               </MenuTextContainer>
               <MenuButton onPress={() => navigation.navigate("PickUpKeyPage")}>
                 <MenuButtonText>주우러 가기</MenuButtonText>
@@ -591,8 +602,8 @@ const MainPage = ({ navigation }) => {
             <Image source={RecordTravleIcon} />
             <MenuSubContainer>
               <MenuTextContainer>
-                <MenuTitle>여행 기록 확인하기</MenuTitle>
-                <MenuSubtitle>여행 기록을 확인해보아용</MenuSubtitle>
+                <MenuTitle>여행 계획하기</MenuTitle>
+                <MenuSubtitle>나만의 여행을 계획해보세요</MenuSubtitle>
               </MenuTextContainer>
               <MenuButton
                 onPress={() => navigation.navigate("TravelBudgetPage")}
@@ -608,7 +619,7 @@ const MainPage = ({ navigation }) => {
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>키머니 확인하기</MenuTitle>
-                <MenuSubtitle>내 키머니를 확인해보아용</MenuSubtitle>
+                <MenuSubtitle>환전된 키머니를 확인해보세요</MenuSubtitle>
               </MenuTextContainer>
               <MenuButton
                 onPress={() => navigation.navigate("KeyMoneyHistoryPage")}
@@ -618,7 +629,7 @@ const MainPage = ({ navigation }) => {
             </MenuSubContainer>
           </MenuCard>
         </MenuContainer>
-        <HanaServiceContainer>
+        {/* <HanaServiceContainer>
           <MenuTitle>하나금융그룹 서비스</MenuTitle>
           <ButtonContainer>
             <HanaServiceButton
@@ -658,7 +669,7 @@ const MainPage = ({ navigation }) => {
               <HanaServiceText>하나저축은행</HanaServiceText>
             </HanaServiceButton>
           </ButtonContainer>
-        </HanaServiceContainer>
+        </HanaServiceContainer> */}
       </BodyMain>
     </Main>
   );

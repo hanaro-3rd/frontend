@@ -18,10 +18,9 @@ import {
 import React, { useState, useEffect } from "react";
 import PrevHeader from "../../components/Header/PrevHeader";
 
-const Root = styled.View`
+const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
   height: ${phoneHeight}px;
-
   background-color: white;
   justify-content: space-between;
   z-index: 99999;

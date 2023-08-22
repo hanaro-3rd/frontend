@@ -193,7 +193,6 @@ const Footer = styled.View`
   align-items: center;
   gap: 20px;
   align-self: stretch;
-  margin-bottom: ${heightPercentage(25)}px;
   position: relative;
   bottom: 80px;
 `;
