@@ -453,6 +453,13 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
     handleReloadQuery();
   };
 
+  const handleNavigationToWon = () => {
+    navigation.navigate("ExchangeToWonPage", {
+      Keyunit: unit,
+      Keybalance: balance,
+    });
+  };
+
   // const handleSelectCategory = () => {
   //   if (selectedCategory == "전체") {
   //     setFilter("all");
@@ -488,12 +495,7 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
               </TotalPayCostText>
             </CountryContainer>
             <ButtonContainer>
-              <RevertToWonButton
-                onPress={() => {
-                  navigation.navigate("ExchangeToWonPage"),
-                    { unit: unit, balance: balance };
-                }}
-              >
+              <RevertToWonButton onPress={handleNavigationToWon}>
                 <Image source={require("../../assets/Setting/loop.png")} />
                 <ButtonText>원화</ButtonText>
               </RevertToWonButton>
