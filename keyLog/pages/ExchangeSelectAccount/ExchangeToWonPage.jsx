@@ -37,7 +37,7 @@ import {
 import _ from "lodash";
 import { useDebouncedEffect } from "../../hooks/useDebouncedEffect";
 import { integerUnit, minimumUnit } from "../../utils/ExchangeSentence";
-export const ExchangeToWonPage = () => {
+export const ExchangeToWonPage = ({ route }) => {
   const [accountList, setAccountList] = useState([]);
   const inputRef = useRef(null);
   const [eur, setEur] = useState({});
@@ -57,6 +57,9 @@ export const ExchangeToWonPage = () => {
   const [subForeignText, setSubForeignText] = useState();
   const [apiTime, setApiTime] = useState([]);
   const navigation = useNavigation();
+  const receivedUnit = route.params.unit;
+  const receivedBalance = route.params.balance;
+
   const handleChooseAccountComponent = () => {
     navigation.navigate("ChooseAccountComponent", {
       page: "ExchangePage",
@@ -297,7 +300,7 @@ export const ExchangeToWonPage = () => {
               <View style={styles.titleContainer}>
                 <Text style={styles.containerTitle2}>환전 금액</Text>
                 <Text style={styles.containerSubtitle}>
-                  휴일 수수료 원화 20원이 적용됩니다
+                  주말, 공휴일 수수료 원화 20원이 적용됩니다
                 </Text>
               </View>
 
@@ -305,10 +308,24 @@ export const ExchangeToWonPage = () => {
 
               <View style={styles.koreaWonContainer}>
                 <View style={styles.textContainer}>
-                  <Image
-                    source={require("../../assets/exchangeImg/Korea.png")}
-                  />
-                  <Text style={styles.unitText2}>KRW</Text>
+                  {receivedUnit == "USD" ? (
+                    <Image
+                      source={require("../../assets/exchangeImg/USD.png")}
+                    />
+                  ) : receivedUnit == "JPY" ? (
+                    <Image
+                      source={require("../../assets/exchangeImg/Japan.png")}
+                    />
+                  ) : receivedUnit == "EUR" ? (
+                    <Image
+                      source={require("../../assets/exchangeImg/EUR.png")}
+                    />
+                  ) : (
+                    <Image
+                      source={require("../../assets/exchangeImg/Korea.png")}
+                    />
+                  )}
+                  <Text style={styles.unitText2}>{receivedUnit}</Text>
                 </View>
                 <TextInput
                   value={koreaTextInput}
@@ -368,7 +385,7 @@ export const ExchangeToWonPage = () => {
                   </TouchableOpacity>
                 </View>
                 <View style={styles.foreignCurrencyInput}>
-                  <TextInput
+                  <Text
                     placeholder="환전할 외화를 입력하세요"
                     style={{ textAlign: "right" }}
                     onChangeText={(text) => foreignInputChange(text)}
@@ -391,41 +408,45 @@ export const ExchangeToWonPage = () => {
               </View>
               {/* 환율 부분 */}
             </View>
-            <View style={styles.exchangeRateContainer}>
-              <View style={styles.titleContainer2}>
-                <Text style={styles.containerTitle3}>현재 환율</Text>
-                <Text style={styles.containerSubtitle2}>
-                  {apiTime != null
-                    ? `${apiTime[1]}.${apiTime[2]}. ${apiTime[3]}:${apiTime[4]} 기준`
-                    : ""}
-                </Text>
-              </View>
-              <View style={styles.currentExchangeRateContainer}>
-                <View style={styles.countryInformationContainer}>
-                  <Text style={styles.countryText}>
-                    {selectedMoney == "USD"
-                      ? "미국"
-                      : selectedMoney == "JPY"
-                      ? "일본"
-                      : "유럽"}
-                  </Text>
-                  <Text style={styles.unitText3}>{selectedMoney}</Text>
-                </View>
-                <View style={styles.currentExchangeRateTextContainer}>
-                  <Text style={styles.exchangeRateText}>{exchangeRate}</Text>
-                  <Text
-                    style={
-                      changePrice > 0
-                        ? styles.changeRateUp
-                        : styles.changeRateDown
-                    }
-                  >
-                    {changePrice > 0 ? "▲" : "▼"}
-                    {changePrice}
+            {receivedUnit == "Korea" ? (
+              <View />
+            ) : (
+              <View style={styles.exchangeRateContainer}>
+                <View style={styles.titleContainer2}>
+                  <Text style={styles.containerTitle3}>현재 환율</Text>
+                  <Text style={styles.containerSubtitle2}>
+                    {apiTime != null
+                      ? `${apiTime[1]}.${apiTime[2]}. ${apiTime[3]}:${apiTime[4]} 기준`
+                      : ""}
                   </Text>
                 </View>
+                <View style={styles.currentExchangeRateContainer}>
+                  <View style={styles.countryInformationContainer}>
+                    <Text style={styles.countryText}>
+                      {receivedUnit == "USD"
+                        ? "미국"
+                        : receivedUnit == "JPY"
+                        ? "일본"
+                        : "유럽"}
+                    </Text>
+                    <Text style={styles.unitText3}>{receivedUnit}</Text>
+                  </View>
+                  <View style={styles.currentExchangeRateTextContainer}>
+                    <Text style={styles.exchangeRateText}>{exchangeRate}</Text>
+                    <Text
+                      style={
+                        changePrice > 0
+                          ? styles.changeRateUp
+                          : styles.changeRateDown
+                      }
+                    >
+                      {changePrice > 0 ? "▲" : "▼"}
+                      {changePrice}
+                    </Text>
+                  </View>
+                </View>
               </View>
-            </View>
+            )}
           </View>
         </View>
         <View style={styles.footer}>

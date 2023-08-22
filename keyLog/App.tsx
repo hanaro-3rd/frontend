@@ -102,10 +102,9 @@ const App = () => {
       //DeviceId가 존재하지 않을 때
       onError: async (error) => {
         try {
-          console.log("error");
+          console.log(error.response.data);
           setHaveDeviceId(false);
           setLogin(false);
-          console.log("뭐가문제야");
         } catch (error) {
           // 에러 처리
           setLogin(false); // 에러 발생 시 로그인을 하지 않은 상태로 설정
@@ -126,12 +125,6 @@ const App = () => {
         <Stack.Navigator
           initialRouteName={
             login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
-<<<<<<< HEAD
-            // "ExchangeHistoryResult"
-          }
-        >
-          <Stack.Screen
-=======
           }
         >
           <Stack.Screen
@@ -140,7 +133,6 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
->>>>>>> main
             name="MainPage"
             component={MainPage}
             options={{ headerShown: false }}
@@ -221,14 +213,11 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-<<<<<<< HEAD
             name="ExchangeToWonPage"
             component={ExchangeToWonPage}
             options={{ headerShown: false }}
           />
           <Stack.Screen
-=======
->>>>>>> main
             name="CountryChoiceComponent"
             component={CountryChoiceComponent}
             options={{ headerShown: false }}
@@ -308,14 +297,11 @@ const App = () => {
             component={TravelBudgetPlanPage}
             options={{ headerShown: false }}
           />
-<<<<<<< HEAD
-=======
           <Stack.Screen
             name="MarkerHistoryPage"
             component={MarkerHistoryPage}
             options={{ headerShown: false }}
           />
->>>>>>> main
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

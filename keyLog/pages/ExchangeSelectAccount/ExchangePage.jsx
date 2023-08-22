@@ -297,7 +297,7 @@ export const ExchangePage = () => {
               <View style={styles.titleContainer}>
                 <Text style={styles.containerTitle2}>환전 금액</Text>
                 <Text style={styles.containerSubtitle}>
-                  휴일 수수료 원화 20원이 적용됩니다
+                  주말, 공휴일 수수료 원화 20원이 적용됩니다
                 </Text>
               </View>
 
@@ -369,7 +369,7 @@ export const ExchangePage = () => {
               <View style={styles.titleContainer2}>
                 <Text style={styles.containerTitle3}>현재 환율</Text>
                 <Text style={styles.containerSubtitle2}>
-                  {apiTime != null
+                  {apiTime != undefined
                     ? `${apiTime[1]}.${apiTime[2]}. ${apiTime[3]}:${apiTime[4]} 기준`
                     : ""}
                 </Text>

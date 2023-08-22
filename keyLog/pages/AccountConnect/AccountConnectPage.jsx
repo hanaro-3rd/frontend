@@ -46,12 +46,11 @@ export const AccountConnectPage = ({ navigation, route }) => {
     async () => getAccounExternal(),
     {
       onSuccess: (response) => {
-        console.log(response.data);
         console.log("외부계좌불러오기" + response.data.result.externalAccounts);
         setExternalAccountList(response.data.result.externalAccounts);
       },
       onError: (error) => {
-        console.log(error);
+        console.log("외부계좌불러오기에러",error);
         console.log("connect에러");
       },
     }
@@ -83,7 +82,7 @@ export const AccountConnectPage = ({ navigation, route }) => {
     onSuccess: (response) => {
       setIsPasswordMismatch(false);
       setIsButtonEnabled(false);
-
+      console.log("externalAccountIDPOST성공",response.data)
       navigation.navigate("AccountConnectSuccess", {
         bank: response.data.result.bank,
         balance: response.data.result.balance,
@@ -91,7 +90,8 @@ export const AccountConnectPage = ({ navigation, route }) => {
         page: route?.params?.page,
       });
     },
-    onError: () => {
+    onError: (error) => {
+      console.log("externalAccountIDPOST실패",error.response)
       setIsPasswordMismatch(true);
       setIsButtonEnabled(false);
       setPassword("");
@@ -99,12 +99,8 @@ export const AccountConnectPage = ({ navigation, route }) => {
   });
   const handlePassWord = () => {
     if (password.length === 4) {
-      setIsButtonEnabled(true);
-      console.log(password);
       const externalAccountId = selectedItem.externalId;
       const externalAccountData = { accountPassword: password };
-      console.log(externalAccountId + "externalAccountId");
-      console.log(externalAccountData.accountPassword + "externalAccountData");
       postExtenalAccountMutation.mutate({
         externalAccountId,
         externalAccountData,

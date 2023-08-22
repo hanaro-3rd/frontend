@@ -488,7 +488,12 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
               </TotalPayCostText>
             </CountryContainer>
             <ButtonContainer>
-              <RevertToWonButton>
+              <RevertToWonButton
+                onPress={() => {
+                  navigation.navigate("ExchangeToWonPage"),
+                    { unit: unit, balance: balance };
+                }}
+              >
                 <Image source={require("../../assets/Setting/loop.png")} />
                 <ButtonText>원화</ButtonText>
               </RevertToWonButton>
