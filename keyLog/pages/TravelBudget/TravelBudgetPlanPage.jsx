@@ -135,7 +135,7 @@ const MoneyUnitText = styled.Text`
   font-size: ${fontPercentage(16)}px;
   font-style: normal;
   font-weight: 400;
-  margin-bottom: ${heightPercentage(6)}px;
+  /* margin-bottom: ${heightPercentage(6)}px; */
 `;
 
 const Input = styled.View`
@@ -300,7 +300,7 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
   const [playBudget, setPlayBudget] = useState(0);
   const [etcBudget, setEtcBudget] = useState(0);
   const [moneyUnit, setMoneyunit] = useState(getMoneyUnit(travelCountry));
-  console.log(moneyUnit);
+
   useEffect(() => {
     const totalBudget =
       foodBudget +
@@ -312,12 +312,25 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
     setTotalBudget(totalBudget);
   }, [foodBudget, transBudget, houseBudget, shopBudget, playBudget, etcBudget]);
 
-  // State for the total budget
   const [totalBudget, setTotalBudget] = useState(0);
 
   useEffect(() => {
     setTotalBudget(0);
   }, []);
+
+  useEffect(() => {
+    let newMoneyUnit = "₩";
+
+    if (travelCountry === "USA") {
+      newMoneyUnit = "$";
+    } else if (travelCountry === "JPY") {
+      newMoneyUnit = "¥";
+    } else if (travelCountry === "EUR") {
+      newMoneyUnit = "€";
+    }
+
+    setMoneyunit(newMoneyUnit);
+  }, [travelCountry]);
 
   const [isBudgetInputFilled, setIsBudgetInputFilled] = useState(false);
   const [isFoodBudgetInputFilled, setIsFoodBudgetInputFilled] = useState(false);

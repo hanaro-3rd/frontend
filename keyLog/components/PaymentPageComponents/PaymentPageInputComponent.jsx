@@ -138,8 +138,8 @@ const CategoryTitleImage = styled.Image`
   height: ${heightPercentage(40)}px;
 `;
 const CategoryButtonImage = styled.Image`
-  width: ${widthPercentage(14)}px;
-  height: ${heightPercentage(14)}px;
+  width: ${widthPercentage(13)}px;
+  height: ${heightPercentage(9)}px;
   margin-top: ${heightPercentage(5)}px;
 `;
 const CategoryView = styled.View`
@@ -246,7 +246,7 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
           />
         </MemoWrapper>
       </View>
-      <SubmitButton
+      {/* <SubmitButton
         onPress={() => {
           handlePatchKeymoneyHistory(),
             navigation.navigate("ForeignPayHistoryPage", { unit });
@@ -255,7 +255,18 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
         <SubmitView>
           <SubmitText>저장하기</SubmitText>
         </SubmitView>
-      </SubmitButton>
+      </SubmitButton> */}
+      <View style={styles.bodyFooter}>
+        <TouchableOpacity
+          style={styles.frame17}
+          onPress={() => {
+            handlePatchKeymoneyHistory(),
+              navigation.navigate("ForeignPayHistoryPage", { unit });
+          }}
+        >
+          <Text style={styles.____3}>저장하기</Text>
+        </TouchableOpacity>
+      </View>
       {openCategory && (
         <CategoryComponent>
           <CategoryTitleList>
@@ -361,4 +372,33 @@ const SubmitText = styled.Text`
   font-size: 16px;
 `;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  ____3: {
+    color: "#FFF",
+    fontFamily: "Inter",
+    fontSize: fontPercentage(16),
+    fontStyle: "normal",
+    fontWeight: "700",
+  },
+  bodyFooter: {
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    gap: 20,
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
+    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(25),
+  },
+  frame17: {
+    height: heightPercentage(55),
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+    alignSelf: "stretch",
+    backgroundColor: "#55ACEE",
+    flexDirection: "row",
+    padding: 10,
+    borderRadius: 10,
+  },
+});

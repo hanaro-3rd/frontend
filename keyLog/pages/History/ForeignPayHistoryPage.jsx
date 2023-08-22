@@ -595,9 +595,10 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                               navigation.navigate("MarkerHistoryPage", {
                                 keymoney: item.keymoney,
                                 unit: item.unit,
-                                time: item.createdAt,
+                                formattedDate: formattedDate,
+                                formattedTime: formattedTime,
                                 historyId: item.historyId,
-                                type: item.type,
+                                place: item.place,
                               });
                             }
                           }}
