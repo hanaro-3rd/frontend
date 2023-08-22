@@ -48,6 +48,12 @@ const TravelPeriodText = styled.Text`
   color: ${(props) => (props.hasValue ? "#000" : "#b0b8c1")};
 `;
 
+const PlaceholderText = styled.Text`
+  color: #b0b8c1;
+  font-family: Inter;
+  font-size: ${fontPercentage(16)}px;
+`;
+
 const TravelDateComponent = ({
   startDate,
   setStartDate,
@@ -97,7 +103,7 @@ const TravelDateComponent = ({
             placeholderTextColor="#b0b8c1"
             hasValue={startDate !== null}
           >
-            {!isStartDateSelected && <View style={{ flex: 1 }} />}
+            {!isStartDateSelected && <View style={{ flex: 1 }}><PlaceholderText>시작일</PlaceholderText></View>}
             {isStartDateSelected ? (
               <>
                 <TravelPeriodText hasValue={startDate !== ""}>
@@ -118,7 +124,7 @@ const TravelDateComponent = ({
             placeholderTextColor="#b0b8c1"
             hasValue={endDate !== null}
           >
-            {!isEndDateSelected && <View style={{ flex: 1 }} />}
+            {!isEndDateSelected && <View style={{ flex: 1 }}><PlaceholderText>종료일</PlaceholderText></View>}
             {isEndDateSelected ? (
               <>
                 <TravelPeriodText hasValue={endDate !== ""}>
@@ -139,6 +145,8 @@ const TravelDateComponent = ({
         onCancel={onCancel}
         date={startDate ? new Date(startDate) : new Date()}
         isVisible={isStartDateVisible}
+        minimumDate={new Date()}
+        placeholder="시작일"
       />
       <DateTimePickerModal
         onConfirm={onConfirmEndDate}

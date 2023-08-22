@@ -11,7 +11,7 @@ import {
 import CloseButton from "../../assets/travelBudget/CloseButton.png";
 import SelectButton from "../../assets/travelBudget/SelectButton.png";
 import SelectButtonBefore from "../../assets/travelBudget/SelectButtonBefore.png";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import DeleteHeader from "../../components/Header/DeleteHeader";
 import TravelDateComponent from "../../components/TravelBudgetPageComponents/TravelDateComponent";
@@ -260,10 +260,13 @@ const TravelSchedulePage = ({ navigation }) => {
   }, [travelTitle, travelCountry, travelCountryOption, startDate, endDate]);
 
   const handleNextButtonPress = () => {
-
     if (isAllFieldsFilled) {
       navigation.navigate("TravelBudgetPlanPage", {
-        travelCountry,travelTitle,travelCountryOption,startDate,endDate
+        travelCountry,
+        travelTitle,
+        travelCountryOption,
+        startDate,
+        endDate,
       });
     }
     // else {
@@ -288,7 +291,6 @@ const TravelSchedulePage = ({ navigation }) => {
               </TextSize>
             </TitleContainer>
             <TravelTextinput
-              placeholder="이름없는 여행1"
               placeholderTextColor="#b0b8c1"
               value={travelTitle}
               onChangeText={handleTravelTitleChange}
@@ -299,9 +301,7 @@ const TravelSchedulePage = ({ navigation }) => {
           <TravelTitleContainer>
             <TitleContainer>
               <TravelTitle>여행지</TravelTitle>
-              <TextSize>
-                {travelCountryOption.length} / {MAX_TITLE_LENGTH}
-              </TextSize>
+              <TextSize>{travelCountryOption.length} / 10</TextSize>
             </TitleContainer>
             <SelectedFrame>
               <PickerContainer hasValue={travelCountry !== ""}>

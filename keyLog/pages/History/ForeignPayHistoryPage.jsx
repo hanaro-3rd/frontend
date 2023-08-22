@@ -124,8 +124,8 @@ const RevertToWonButton = styled.TouchableOpacity`
 `;
 
 const ButtonText = styled.Text`
-  width: ${widthPercentage(30)}px;
-  height: ${heightPercentage(23)}px;
+  width: ${widthPercentage(40)}px;
+  height: ${heightPercentage(19)}px;
   color: #55acee;
   font-family: Inter;
   font-size: ${fontPercentage(16)}px;
@@ -134,8 +134,8 @@ const ButtonText = styled.Text`
 `;
 
 const ExchangeButtonText = styled.Text`
-  width: ${widthPercentage(59)}px;
-  height: ${heightPercentage(23)}px;
+  width: ${widthPercentage(65)}px;
+  height: ${heightPercentage(19)}px;
   color: #ffffff;
   font-family: Inter;
   font-size: ${fontPercentage(16)}px;

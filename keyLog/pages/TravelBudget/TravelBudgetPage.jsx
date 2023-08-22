@@ -252,6 +252,11 @@ const TravelBudgetPage = () => {
                 <YearContainer key={idx}>
                   <YearText>{key}</YearText>
                   {data[key]?.map((e, idx) => {
+                    let unit = "";
+                    if (e.country === "USA") unit = "$";
+                    else if (e.country === "JPY") unit = "￥";
+                    else if (e.country === "EUR") unit = "€";
+                    else unit = "₩";
                     return (
                       <TouchableOpacity
                         key={idx}
@@ -274,10 +279,12 @@ const TravelBudgetPage = () => {
                           </TitleTextContainer>
                           <View>
                             <RemainCostText>
-                              총 비용 ￥{e.totalBudget}
+                              총 비용 {unit}
+                              {e.totalBudget}
                             </RemainCostText>
                             <RemainCostText>
-                              남은 비용 ￥{e.totalBalance}
+                              남은 비용 {unit}
+                              {e.totalBalance === 0 ? e.totalBalance : 0}
                             </RemainCostText>
                           </View>
                         </TravelCard>

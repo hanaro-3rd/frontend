@@ -76,10 +76,10 @@ const App = () => {
             "refresh_token",
             await AsyncStorage.getItem("refresh_token")
           );
-          console.log(response.data);
+          console.log(response.data,"app");
           if (response.data?.errorCode == 500) {
             setLogin(false);
-            setHaveDeviceId(false);
+  
             setLoading(false);
             return;
           }
@@ -101,7 +101,7 @@ const App = () => {
       //DeviceId가 존재하지 않을 때
       onError: async (error) => {
         try {
-          console.log("error");
+          console.log("error",error.response);
           setHaveDeviceId(false);
           setLogin(false);
           console.log("뭐가문제야");

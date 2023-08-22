@@ -276,7 +276,7 @@ const CategoryOrDateContainer = styled.View`
 `;
 
 const CategoryOrDateText = styled.Text`
-  width: ${widthPercentage(74)}px;
+  width: ${widthPercentage(80)}px;
   height: ${heightPercentage(24)}px;
   color: #191f29;
   text-align: center;
