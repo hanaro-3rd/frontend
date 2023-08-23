@@ -59,7 +59,13 @@ export const ExchangeHistoryResult = ({ route, navigation }) => {
           <View style={styles.frame80}>
             <Text style={styles.____2}>환전 금액</Text>
             <Text style={styles._80000}>
-              {unit == "JPY" ? "￥" : unit == "EUR" ? "€" : "$"}
+              {unit == "JPY"
+                ? "￥"
+                : unit == "EUR"
+                ? "€"
+                : unit == "USD"
+                ? "$"
+                : "₩"}
               {keymoney}
             </Text>
             <Text style={styles.$202307011359}>
@@ -99,7 +105,7 @@ export const ExchangeHistoryResult = ({ route, navigation }) => {
         </View>
         <View style={styles.bodyFooter}>
           <TouchableOpacity style={styles.frame17} onPress={handleNavigation}>
-            <Text style={styles.____3}>저장하기</Text>
+            <Text style={styles.____3}>확인</Text>
           </TouchableOpacity>
         </View>
       </View>

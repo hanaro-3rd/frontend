@@ -320,7 +320,7 @@ const CategoryTitleText = styled.Text`
 `;
 const CategoryText = styled.Text`
   display: flex;
-  width: ${widthPercentage(30)}px;
+  width: ${widthPercentage(50)}px;
   height: ${heightPercentage(24)}px;
   flex-direction: column;
   justify-content: center;
@@ -381,6 +381,14 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
   const { unit, balance } = route?.params;
   const [filter, setFilter] = useState("all");
   const [historyList, setHistoryList] = useState([]);
+  const [unitSymbol, setUnitSymbol] = useState("");
+
+  useEffect(() => {
+    if (unit === "USD") setUnitSymbol("$");
+    else if (unit === "JPY") setUnitSymbol("￥");
+    else if (unit === "EUR") setUnitSymbol("€");
+    else setUnitSymbol("₩");
+  }, [unit]);
 
   const queryClient = useQueryClient();
   const { unitdata } = useQuery(
@@ -584,21 +592,21 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                                 category: item.category,
                                 keymoney: item.keymoney,
                                 unit: item.unit,
-                                formattedDate: formattedDate,
-                                formattedTime: formattedTime,
+                                time: item.createdAt,
                                 subject: item.subject,
                                 categoryImage: categoryIconMap[item.category],
                                 historyId: item.historyId,
                                 type: item.type,
+                                unitSymbol:unitSymbol
                               });
                             } else if (item.type === "marker") {
                               navigation.navigate("MarkerHistoryPage", {
                                 keymoney: item.keymoney,
                                 unit: item.unit,
-                                formattedDate: formattedDate,
-                                formattedTime: formattedTime,
+                                time: item.createdAt,
                                 historyId: item.historyId,
-                                place: item.place,
+                                subject: item.subject,
+                                unitSymbol:unitSymbol
                               });
                             }
                           }}

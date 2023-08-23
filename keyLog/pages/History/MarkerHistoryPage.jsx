@@ -18,40 +18,7 @@ import {
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
 import MarkerPickUp from "../../assets/History/MarkerPickUp.png";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getDetailKeymoneyHistory, updatepayment } from "../../api/api";
 
-const CategoryComponent = styled.View`
-  background-color: white;
-  height: ${heightPercentage(384)}px;
-  width: 100%;
-  bottom: 0;
-  position: absolute;
-  align-items: center;
-  border-radius: 10px 10px 0px 0px;
-`;
-const CategoryTitleList = styled.View`
-  width: ${widthPercentage(350)}px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-`;
-const CategoryList = styled.TouchableOpacity`
-  width: ${widthPercentage(350)}px;
-  flex-direction: row;
-  align-items: center;
-  margin-top: 3px;
-  height: ${heightPercentage(50)}px;
-`;
-const CategoryText = styled.Text`
-  font-size: ${fontPercentage(16)}px;
-  color: black;
-`;
-const CategoryImage = styled.Image`
-  margin-right: ${widthPercentage(15)}px;
-  width: ${widthPercentage(30)};
-`;
 const TitleView = styled.View`
   width: 100%;
   height: ${heightPercentage(50)}px;
@@ -71,7 +38,7 @@ const MainComponent = styled.View`
 `;
 const NameText = styled.Text`
   color: #191f29;
-  font-size: ${fontPercentage(16)}px;
+  font-size: ${fontPercentage(20)}px;
   font-weight: 700;
   margin-top: ${heightPercentage(10)}px;
 `;
@@ -79,7 +46,6 @@ const PriceText = styled.Text`
   color: #191f29;
   font-size: ${fontPercentage(16)}px;
   font-weight: 400;
-  margin-top: ${heightPercentage(30)}px;
 `;
 const CostText = styled.Text`
   color: #191f29;
@@ -90,67 +56,33 @@ const DateText = styled.Text`
   color: #4e5968;
   font-size: ${fontPercentage(14)}px;
   font-weight: 400;
-  margin-top: ${heightPercentage(10)}px;
-`;
-
-const CategoryWrapper = styled.View`
-  width: ${widthPercentage(390)}px;
-  height: ${heightPercentage(50)}px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: ${widthPercentage(20)}px;
-  padding-right: ${widthPercentage(20)}px;
-  margin-top: ${heightPercentage(18)}px;
-`;
-
-const CategoryWord = styled.Text`
-  color: #191f29;
-  font-size: ${fontPercentage(16)}px;
-  font-weight: 700;
-`;
-const CategoryPickWord = styled.Text`
-  color: #191f29;
-  font-size: ${fontPercentage(16)}px;
-  font-weight: 400;
-`;
-const MemoWrapper = styled.View`
-  width: ${widthPercentage(390)}px;
-  height: ${heightPercentage(50)}px;
-  padding-left: ${widthPercentage(20)}px;
-  padding-right: ${widthPercentage(20)}px;
-  margin-top: ${heightPercentage(18)}px;
-`;
-const MemoText = styled.Text`
-  color: #191f29;
-  font-size: ${fontPercentage(16)}px;
-  font-weight: 700;
-`;
-const MemoTextInput = styled.TextInput`
-  height: ${heightPercentage(49)}px;
-  border-radius: 5px;
-  border: 1px solid #b0b8c1;
-  height: 100%;
-  margin-top: ${heightPercentage(10)}px;
 `;
 
 const CategoryTitleImage = styled.Image`
   width: ${widthPercentage(100)}px;
   height: ${heightPercentage(100)}px;
-    object-fit: scale-down;
+  object-fit: scale-down;
+`;
+const InfoContainer = styled.View`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: ${widthPercentage(100)}px;
+  height: ${heightPercentage(134)}px;
+`;
 
+const DetailContainer = styled.View`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: ${heightPercentage(30)}px;
 `;
-const CategoryButtonImage = styled.Image`
-  width: ${widthPercentage(13)}px;
-  height: ${heightPercentage(9)}px;
-  margin-top: ${heightPercentage(5)}px;
-`;
-const CategoryView = styled.View`
-  flex-direction: row;
-`;
+
 const MarkerHistoryPage = ({ route, navigation }) => {
-  const { keymoney, unit, formattedDate, formattedTime, historyId, place } =
-    route.params;
+  const { keymoney, unit, time, historyId, subject, unitSymbol } = route.params;
+  console.log(subject);
 
   return (
     <Main>
@@ -160,15 +92,19 @@ const MarkerHistoryPage = ({ route, navigation }) => {
           <TitleText>마커 줍기 내역</TitleText>
         </TitleView>
         <MainComponent>
-          <CategoryTitleImage source={MarkerPickUp} style={{ opacity: 0.3 }} />
-          <NameText>{place}</NameText>
-          <PriceText>주운 금액</PriceText>
-          <CostText>
-            {unit} {keymoney}
-          </CostText>
-          <DateText>
-            {formattedDate} {formattedTime}
-          </DateText>
+          <InfoContainer>
+            <CategoryTitleImage source={MarkerPickUp} />
+            <NameText>{subject}</NameText>
+          </InfoContainer>
+          <DetailContainer>
+            <PriceText>주운 금액</PriceText>
+            <CostText>
+              {unitSymbol} {keymoney}
+            </CostText>
+            <DateText>
+              {time[0]}.{time[1]}.{time[2]} {time[3]}:{time[4]}
+            </DateText>
+          </DetailContainer>
         </MainComponent>
       </View>
       {/* <SubmitButton
@@ -185,14 +121,12 @@ const MarkerHistoryPage = ({ route, navigation }) => {
         <TouchableOpacity
           style={styles.frame17}
           onPress={() => {
-            handlePatchKeymoneyHistory(),
               navigation.navigate("ForeignPayHistoryPage", { unit });
           }}
         >
-          <Text style={styles.____3}>저장하기</Text>
+          <Text style={styles.____3}>확인</Text>
         </TouchableOpacity>
       </View>
-      
     </Main>
   );
 };

@@ -78,6 +78,9 @@ export const postTravelBudget = (travelbudgetData) => {
   return axiosClient.post('/plan',travelbudgetData)
 }
 
+export const patchTravelPlan = ({plan_id,patchTravelPlanData}) => {
+  return axiosClient.patch(`/plan/${plan_id}/category`,patchTravelPlanData)
+}
 export const patchTravelBudget = ({planId,patchTravelBudgetData}) => {
   return axiosClient.patch(`/plan${planId}`,patchTravelBudgetData)
 }
@@ -89,10 +92,6 @@ export const getTravelBudgetDetail = (plan_id) => {
 export const deleteTravelBudget = (plan_id) => {
   return axiosClient.delete(`/plan/${plan_id}`)
 } 
-
-export const patchTravelBudgetDetail = ({plan_id,patchTravelBudgetDetailData}) => {
-  return axiosClient.patch(`/plan/${plan_id}/category`,patchTravelBudgetDetailData)
-}
 
 export const getTravelBudgetCategory = (plan_id) => {
   return axiosClient.get(`/plan/${plan_id}/category`)
@@ -111,4 +110,6 @@ export const getDetailKeymoneyHistory = ({ historyId, type }) => {
     `/keymoney/detail?historyId=${historyId}&type=${type}`
   );
 };
+
+
 

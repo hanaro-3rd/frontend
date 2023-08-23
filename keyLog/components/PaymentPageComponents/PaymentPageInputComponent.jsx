@@ -70,7 +70,7 @@ const MainComponent = styled.View`
 `;
 const NameText = styled.Text`
   color: #191f29;
-  font-size: ${fontPercentage(16)}px;
+  font-size: ${fontPercentage(20)}px;
   font-weight: 700;
   margin-top: ${heightPercentage(10)}px;
 `;
@@ -150,12 +150,12 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
     category,
     keymoney,
     unit,
-    formattedDate,
-    formattedTime,
+    time,
     subject,
     categoryImage,
     historyId,
     type,
+    unitSymbol
   } = route.params;
   StatusBar.setTranslucent(true);
   const [openCategory, setOpenCategory] = useState(false);
@@ -172,7 +172,8 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
     setChangeMemo(memo);
     console.log(memo);
   };
-
+  console.log(unit);
+  console.log(unitSymbol);
   const queryClient = useQueryClient();
 
   const { data } = useQuery(
@@ -218,10 +219,10 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
           <NameText>{subject}</NameText>
           <PriceText>결제금액</PriceText>
           <CostText>
-            {unit} {keymoney}
+            {unitSymbol} {keymoney}
           </CostText>
           <DateText>
-            {formattedDate} {formattedTime}
+          {time[0]}.{time[1]}.{time[2]} {time[3]}:{time[4]}
           </DateText>
         </MainComponent>
         <CategoryWrapper>
