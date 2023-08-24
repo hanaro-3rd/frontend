@@ -1,4 +1,10 @@
-import { Image, TouchableOpacity, ScrollView, Linking ,Text} from "react-native";
+import {
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Linking,
+  Text,
+} from "react-native";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -491,11 +497,11 @@ const MainPage = ({ navigation }) => {
   return (
     <Main>
       <Header>
-        {/* <LogoText>키로그</LogoText> */}
-        <Image
-          source={require("../assets/Main/KEYLOG.png")}
+        <LogoText>키로그</LogoText>
+        {/* <Image
+          source={require("../assets/Main/KeyLog.png")}
           style={{ marginTop: 5 }}
-        />
+        /> */}
         <Setting>
           <TouchableOpacity
             onPress={() => navigation.navigate("TestPaymentPage")}
