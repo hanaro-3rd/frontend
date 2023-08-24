@@ -17,40 +17,8 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getDetailKeymoneyHistory, updatepayment } from "../../api/api";
+import MarkerPickUp from "../../assets/History/MarkerPickUp.png";
 
-const CategoryComponent = styled.View`
-  background-color: white;
-  height: ${heightPercentage(384)}px;
-  width: 100%;
-  bottom: 0;
-  position: absolute;
-  align-items: center;
-  border-radius: 10px 10px 0px 0px;
-`;
-const CategoryTitleList = styled.View`
-  width: ${widthPercentage(350)}px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-`;
-const CategoryList = styled.TouchableOpacity`
-  width: ${widthPercentage(350)}px;
-  flex-direction: row;
-  align-items: center;
-  margin-top: 3px;
-  height: ${heightPercentage(50)}px;
-`;
-const CategoryText = styled.Text`
-  font-size: ${fontPercentage(16)}px;
-  color: black;
-`;
-const CategoryImage = styled.Image`
-  margin-right: ${widthPercentage(15)}px;
-  width: ${widthPercentage(30)};
-`;
 const TitleView = styled.View`
   width: 100%;
   height: ${heightPercentage(50)}px;
@@ -70,7 +38,7 @@ const MainComponent = styled.View`
 `;
 const NameText = styled.Text`
   color: #191f29;
-  font-size: ${fontPercentage(16)}px;
+  font-size: ${fontPercentage(20)}px;
   font-weight: 700;
   margin-top: ${heightPercentage(10)}px;
 `;
@@ -78,7 +46,6 @@ const PriceText = styled.Text`
   color: #191f29;
   font-size: ${fontPercentage(16)}px;
   font-weight: 400;
-  margin-top: ${heightPercentage(30)}px;
 `;
 const CostText = styled.Text`
   color: #191f29;
@@ -89,144 +56,58 @@ const DateText = styled.Text`
   color: #4e5968;
   font-size: ${fontPercentage(14)}px;
   font-weight: 400;
-  margin-top: ${heightPercentage(10)}px;
-`;
-
-const CategoryWrapper = styled.View`
-  width: ${widthPercentage(390)}px;
-  height: ${heightPercentage(50)}px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: ${widthPercentage(20)}px;
-  padding-right: ${widthPercentage(20)}px;
-  margin-top: ${heightPercentage(18)}px;
-`;
-
-const CategoryWord = styled.Text`
-  color: #191f29;
-  font-size: ${fontPercentage(16)}px;
-  font-weight: 700;
-`;
-const CategoryPickWord = styled.Text`
-  color: #191f29;
-  font-size: ${fontPercentage(16)}px;
-  font-weight: 400;
-`;
-const MemoWrapper = styled.View`
-  width: ${widthPercentage(390)}px;
-  height: ${heightPercentage(50)}px;
-  padding-left: ${widthPercentage(20)}px;
-  padding-right: ${widthPercentage(20)}px;
-  margin-top: ${heightPercentage(18)}px;
-`;
-const MemoText = styled.Text`
-  color: #191f29;
-  font-size: ${fontPercentage(16)}px;
-  font-weight: 700;
-`;
-const MemoTextInput = styled.TextInput`
-  height: ${heightPercentage(49)}px;
-  border-radius: 5px;
-  border: 1px solid #b0b8c1;
-  height: 100%;
-  margin-top: ${heightPercentage(10)}px;
 `;
 
 const CategoryTitleImage = styled.Image`
-  width: ${widthPercentage(40)}px;
-  height: ${heightPercentage(40)}px;
+  width: ${widthPercentage(100)}px;
+  height: ${heightPercentage(100)}px;
+  object-fit: scale-down;
 `;
-const CategoryButtonImage = styled.Image`
-  width: ${widthPercentage(14)}px;
-  height: ${heightPercentage(14)}px;
-  margin-top: ${heightPercentage(5)}px;
+const InfoContainer = styled.View`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: ${widthPercentage(100)}px;
+  height: ${heightPercentage(134)}px;
 `;
-const CategoryView = styled.View`
-  flex-direction: row;
+
+const DetailContainer = styled.View`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: ${heightPercentage(30)}px;
 `;
+
 const MarkerHistoryPage = ({ route, navigation }) => {
-  const {
-    category,
-    keymoney,
-    unit,
-    formattedDate,
-    formattedTime,
-    subject,
-    categoryImage,
-    historyId,
-    type,
-  } = route.params;
-  StatusBar.setTranslucent(true);
-  const [openCategory, setOpenCategory] = useState(false);
-  const [selectedChangeCategory, setSelectedChangeCategory] =
-    useState(category);
-  const [changeMemo, setChangeMemo] = useState("");
-
-  const handleChangeCategory = (category) => {
-    setSelectedChangeCategory(category);
-    setOpenCategory(false);
-  };
-
-  const handleChangeMemo = (memo) => {
-    setChangeMemo(memo);
-    console.log(memo);
-  };
-
-  const queryClient = useQueryClient();
-
-  const { data } = useQuery(
-    "detailKeymoneyHistory",
-    async () => getDetailKeymoneyHistory({ historyId, type }),
-    {
-      onSuccess: (response) => {
-        console.log(response.data);
-        console.log("제대로 있니", historyId, type);
-        console.log(response.data.result.memo);
-        setChangeMemo(response.data.result.memo);
-      },
-      onError: () => {},
-    }
-  );
-
-  const patchKeymoneyHistoryMutation = useMutation(updatepayment, {
-    onSuccess: (response) => {
-      console.log(response.data);
-    },
-    onError: () => {},
-  });
-
-  const handlePatchKeymoneyHistory = () => {
-    console.log(selectedChangeCategory, changeMemo);
-    const updatePaymentData = {
-      category: selectedChangeCategory,
-      memo: changeMemo,
-    };
-    console.log(updatePaymentData);
-    patchKeymoneyHistoryMutation.mutate({ historyId, updatePaymentData });
-  };
+  const { keymoney, unit, time, historyId, subject, unitSymbol,totalBalance } = route.params;
+  console.log(subject);
 
   return (
-    <Main categoryMode={openCategory}>
+    <Main>
       <View>
         <DeleteHeader navigation={navigation} to="KeyMoneyHistoryPage" />
         <TitleView>
           <TitleText>마커 줍기 내역</TitleText>
         </TitleView>
         <MainComponent>
-          <CategoryTitleImage source={categoryImage} style={{ opacity: 0.3 }} />
-          <NameText>{subject}</NameText>
-          <PriceText>주운 금액</PriceText>
-          <CostText>
-            {unit} {keymoney}
-          </CostText>
-          <DateText>
-            {formattedDate} {formattedTime}
-          </DateText>
+          <InfoContainer>
+            <CategoryTitleImage source={MarkerPickUp} />
+            <NameText>{subject}</NameText>
+          </InfoContainer>
+          <DetailContainer>
+            <PriceText>주운 금액</PriceText>
+            <CostText>
+              {unitSymbol} {keymoney}
+            </CostText>
+            <DateText>
+              {time[0]}.{time[1]}.{time[2]} {time[3]}:{time[4]}
+            </DateText>
+          </DetailContainer>
         </MainComponent>
-        
       </View>
-      <SubmitButton
+      {/* <SubmitButton
         onPress={() => {
           handlePatchKeymoneyHistory(),
             navigation.navigate("ForeignPayHistoryPage", { unit });
@@ -235,71 +116,17 @@ const MarkerHistoryPage = ({ route, navigation }) => {
         <SubmitView>
           <SubmitText>저장하기</SubmitText>
         </SubmitView>
-      </SubmitButton>
-      {openCategory && (
-        <CategoryComponent>
-          <CategoryTitleList>
-            <CategoryText>카테고리 선택</CategoryText>
-            <TouchableOpacity onPress={() => setOpenCategory(false)}>
-              <Image
-                source={require("../../Images/삭제.png")}
-                style={styles.image}
-              />
-            </TouchableOpacity>
-          </CategoryTitleList>
-          <CategoryList
-            onPress={() => {
-              handleChangeCategory("식비");
-            }}
-          >
-            <CategoryImage
-              source={require("../../Images/식비.png")}
-              resizeMode="contain"
-            />
-            <CategoryText>식비</CategoryText>
-          </CategoryList>
-          <CategoryList
-            onPress={() => {
-              handleChangeCategory("교통");
-            }}
-          >
-            <CategoryImage source={require("../../Images/교통.png")} />
-            <CategoryText>교통</CategoryText>
-          </CategoryList>
-          <CategoryList
-            onPress={() => {
-              handleChangeCategory("숙박");
-            }}
-          >
-            <CategoryImage source={require("../../Images/숙박.png")} />
-            <CategoryText>숙박</CategoryText>
-          </CategoryList>
-          <CategoryList
-            onPress={() => {
-              handleChangeCategory("쇼핑 · 편의점 · 마트");
-            }}
-          >
-            <CategoryImage source={require("../../Images/쇼핑.png")} />
-            <CategoryText>쇼핑 · 편의점 · 마트</CategoryText>
-          </CategoryList>
-          <CategoryList
-            onPress={() => {
-              handleChangeCategory("문화 · 여가");
-            }}
-          >
-            <CategoryImage source={require("../../Images/문화.png")} />
-            <CategoryText>문화 · 여가</CategoryText>
-          </CategoryList>
-          <CategoryList
-            onPress={() => {
-              handleChangeCategory("기타");
-            }}
-          >
-            <CategoryImage source={require("../../Images/기타.png")} />
-            <CategoryText>기타</CategoryText>
-          </CategoryList>
-        </CategoryComponent>
-      )}
+      </SubmitButton> */}
+      <View style={styles.bodyFooter}>
+        <TouchableOpacity
+          style={styles.frame17}
+          onPress={() => {
+              navigation.navigate("ForeignPayHistoryPage", { unit, balance:totalBalance });
+          }}
+        >
+          <Text style={styles.____3}>확인</Text>
+        </TouchableOpacity>
+      </View>
     </Main>
   );
 };
@@ -341,4 +168,33 @@ const SubmitText = styled.Text`
   font-size: 16px;
 `;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  ____3: {
+    color: "#FFF",
+    fontFamily: "Inter",
+    fontSize: fontPercentage(16),
+    fontStyle: "normal",
+    fontWeight: "700",
+  },
+  bodyFooter: {
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    gap: 20,
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
+    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(25),
+  },
+  frame17: {
+    height: heightPercentage(55),
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+    alignSelf: "stretch",
+    backgroundColor: "#55ACEE",
+    flexDirection: "row",
+    padding: 10,
+    borderRadius: 10,
+  },
+});

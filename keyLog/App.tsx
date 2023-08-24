@@ -50,6 +50,7 @@ import AccountConnectPageComponents from "./components/AccountConnectPageCompone
 import { usernameAtom } from "./recoil/usernameAtom";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AlreadySignUpPage from "./pages/SignUp/AlreadySignUpPage";
+import TravelScheduleEditPage from "./pages/TravelBudget/TravelScheduleEditPage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -77,10 +78,10 @@ const App = () => {
             "refresh_token",
             await AsyncStorage.getItem("refresh_token")
           );
-          console.log(response.data);
+          console.log(response.data, "app");
           if (response.data?.errorCode == 500) {
             setLogin(false);
-            setHaveDeviceId(false);
+
             setLoading(false);
             return;
           }
@@ -290,6 +291,11 @@ const App = () => {
           <Stack.Screen
             name="TravelSchedulePage"
             component={TravelSchedulePage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TravelScheduleEditPage"
+            component={TravelScheduleEditPage}
             options={{ headerShown: false }}
           />
           <Stack.Screen

@@ -1,4 +1,10 @@
-import { Image, TouchableOpacity, ScrollView, Linking } from "react-native";
+import {
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Linking,
+  Text,
+} from "react-native";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -17,7 +23,7 @@ import arrow_prev from "../assets/Main/arrow_prev.png";
 import CarouselMoneyIcon from "../assets/Main/CarouselIcon.png";
 import CarouselIconKeymoney from "../assets/Main/CarouselIconKeymoney.png";
 import CarouselAccountIcon from "../assets/Main/CarouselAccountIcon.png";
-import CarouselHanaMoneyIcon from "../assets/Main/CarouselHanaMoneyIcon.png";
+import CarouselKeyMoneyIcon from "../assets/Main/CarouselKeyMoneyIcon.png";
 import CarouselRecordIcon from "../assets/Main/CarouselRecordIcon.png";
 import CarouselPickUpIcon from "../assets/Main/CarouselPickUpIcon.png";
 import USIcon from "../assets/Main/CountryIcon.png";
@@ -27,7 +33,7 @@ import KeyPickIcon from "../assets/Main/MenuIcon1.png";
 import PlanTravelBudgetIcon from "../assets/Main/MenuIcon2.png";
 import RecordTravleIcon from "../assets/Main/MenuIcon3.png";
 import MoneyIcon from "../assets/Main/MenuIcon4.png";
-import ExchangeIcon from "../assets/Main/MenuIcon5.png";
+import ExchangeIcon from "../assets/Main/ExchangeIcon.png";
 import AccountConnectIcon from "../assets/Main/MenuIcon6.png";
 import HanaBankIcon from "../assets/Main/HanaServiceIcon1.png";
 import HanaCardIcon from "../assets/Main/HanaServiceIcon2.png";
@@ -64,7 +70,7 @@ const MainPage = ({ navigation }) => {
   const thirdMainCardContent = {
     subTitle: "수수료 걱정없는",
     title: "키머니 환전",
-    imageSource: CarouselHanaMoneyIcon,
+    imageSource: CarouselKeyMoneyIcon,
     buttonText: "키머니 환전하기",
   };
   const fourthMainCardContent = {
@@ -162,7 +168,7 @@ const MainPage = ({ navigation }) => {
     background-color: #fff;
     flex-direction: row;
   `;
-  const PrevOrNextButton = styled.View`
+  const PrevOrNextButton = styled.TouchableOpacity`
     display: flex;
     width: ${widthPercentage(40)}px;
     padding: 10px;
@@ -217,7 +223,7 @@ const MainPage = ({ navigation }) => {
   `;
   const Country = styled.Text`
     width: ${widthPercentage(34)}px;
-    height: ${heightPercentage(22)}px;
+    height: ${heightPercentage(18)}px;
     color: #191f29;
     font-family: Inter;
     font-size: ${fontPercentage(18)}px;
@@ -226,7 +232,7 @@ const MainPage = ({ navigation }) => {
   `;
   const MoneytaryUnit = styled.Text`
     width: ${widthPercentage(26)}px;
-    height: ${heightPercentage(14)}px;
+    height: ${heightPercentage(12)}px;
     color: #191f29;
     font-family: Inter;
     font-size: ${fontPercentage(12)}px;
@@ -291,7 +297,7 @@ const MainPage = ({ navigation }) => {
 
   const MenuCard = styled.View`
     width: ${widthPercentage(350)}px;
-    height: ${heightPercentage(140)}px;
+    height: ${heightPercentage(120)}px;
     align-items: center;
     gap: 20px;
     background-color: #fff;
@@ -304,7 +310,7 @@ const MainPage = ({ navigation }) => {
 
   const MenuSubContainer = styled.View`
     width: ${widthPercentage(210)}px;
-    height: ${heightPercentage(120)}px;
+    height: ${heightPercentage(100)}px;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
@@ -325,13 +331,15 @@ const MainPage = ({ navigation }) => {
     font-size: ${fontPercentage(12)}px;
     font-style: normal;
     font-weight: 700;
+    width: ${widthPercentage(80)}px;
+    height: ${heightPercentage(15)}px;
   `;
 
   const MenuButton = styled(TouchableOpacity)`
     width: ${widthPercentage(210)}px;
     height: ${heightPercentage(30)}px;
     flex-direction: column;
-    padding-top: ${heightPercentage(5)}px;
+    padding-top: ${heightPercentage(7.5)}px;
     align-items: center;
     align-self: stretch;
     background-color: #55acee;
@@ -392,6 +400,7 @@ const MainPage = ({ navigation }) => {
   const KeyMoneyImage = styled.Image`
     width: ${widthPercentage(80)}px;
     height: ${heightPercentage(80)}px;
+    object-fit: scale-down;
   `;
 
   const CustomSwiper = styled(Swiper)`
@@ -408,7 +417,7 @@ const MainPage = ({ navigation }) => {
   `;
 
   const queryClient = useQueryClient();
-  const { exchangeData } = useQuery("exchange", async () => getExchange(), {
+  const { data } = useQuery("exchange", async () => getExchange(), {
     onSuccess: (response) => {
       console.log(response.data, "메인환율");
       setUSD(response.data.result.usd);
@@ -429,44 +438,66 @@ const MainPage = ({ navigation }) => {
     onError: (error) => {},
   });
 
-  const handleHanaServiceLink = (serviceName) => {
-    let url;
+  const [currentExchangeIndex, setCurrentExchangeIndex] = useState(0);
 
-    switch (serviceName) {
-      case "하나은행":
-        url = "https://www.kebhana.com/";
-        break;
-      case "하나카드":
-        url = "https://www.hanacard.co.kr/";
-        break;
-      case "하나캐피탈":
-        url = "https://www.hanacapital.co.kr/";
-        break;
-      case "하나생명":
-        url = "https://hanalife.co.kr/";
-        break;
-      case "하나증권":
-        url = "https://www.hanaw.com/";
-        break;
-      case "하나저축은행":
-        url = "https://www.hanasavings.com/";
-        break;
-
-      default:
-        return;
-    }
-
-    Linking.openURL(url).catch((error) =>
-      console.error("An error occurred:", error)
-    );
+  const handlePrevExchange = () => {
+    setCurrentExchangeIndex((prevIndex) => {
+      if (prevIndex - 1 < 0) {
+        return 2;
+      } else {
+        return prevIndex - 1;
+      }
+    });
   };
+
+  const handleNextExchange = () => {
+    setCurrentExchangeIndex((prevIndex) => {
+      if (prevIndex + 1 > 2) {
+        return 0;
+      } else {
+        return prevIndex + 1;
+      }
+    });
+  };
+
+  // const handleHanaServiceLink = (serviceName) => {
+  //   let url;
+
+  //   switch (serviceName) {
+  //     case "하나은행":
+  //       url = "https://www.kebhana.com/";
+  //       break;
+  //     case "하나카드":
+  //       url = "https://www.hanacard.co.kr/";
+  //       break;
+  //     case "하나캐피탈":
+  //       url = "https://www.hanacapital.co.kr/";
+  //       break;
+  //     case "하나생명":
+  //       url = "https://hanalife.co.kr/";
+  //       break;
+  //     case "하나증권":
+  //       url = "https://www.hanaw.com/";
+  //       break;
+  //     case "하나저축은행":
+  //       url = "https://www.hanasavings.com/";
+  //       break;
+
+  //     default:
+  //       return;
+  //   }
+
+  //   Linking.openURL(url).catch((error) =>
+  //     console.error("An error occurred:", error)
+  //   );
+  // };
 
   return (
     <Main>
       <Header>
         <LogoText>키로그</LogoText>
         {/* <Image
-          source={require("../assets/Main/키로그_logo.png")}
+          source={require("../assets/Main/KeyLog.png")}
           style={{ marginTop: 5 }}
         /> */}
         <Setting>
@@ -501,10 +532,56 @@ const MainPage = ({ navigation }) => {
             />
           ))}
         </CustomSwiper>
+        {/* 환율
+        {[USD, JPY, EUR].map((e, idx) => {
+          if (idx !== currentExchangeIndex) {
+            return null;
+          }
+          return (
+            <ExchangeRateContainer key={idx}>
+              <PrevOrNextButton onPress={handlePrevExchange}>
+                <Image source={arrow_prev} />
+              </PrevOrNextButton>
+              <CountryExchangeRateContainer>
+                {idx == 0 && <Image source={USIcon} />}
+                {idx == 1 && <Image source={JapanIcon} />}
+                {idx == 2 && <Image source={EuroIcon} />}
+                <TextContainer>
+                  <CountryTextContainer>
+                    <CountryContainer>
+                      {idx == 0 && <Country>미국</Country>}
+                      {idx == 1 && <Country>일본</Country>}
+                      {idx == 2 && <Country>유럽</Country>}
+
+                      {idx == 0 && <MoneytaryUnit>USD</MoneytaryUnit>}
+                      {idx == 1 && <MoneytaryUnit>JPY</MoneytaryUnit>}
+                      {idx == 2 && <MoneytaryUnit>EUR</MoneytaryUnit>}
+                    </CountryContainer>
+                    {exchangeDate && <DateTime>{exchangeDate}</DateTime>}
+                  </CountryTextContainer>
+
+                  {USD && (
+                    <RateTextContainer>
+                      <ExchangeRate>{e.exchangeRate}</ExchangeRate>
+                      {e.changePrice > 0 ? (
+                        <ChangeUpRate>▲ {e.changePrice}</ChangeUpRate>
+                      ) : (
+                        <ChangeRate>▼ {e.changePrice}</ChangeRate>
+                      )}
+                    </RateTextContainer>
+                  )}
+                </TextContainer>
+              </CountryExchangeRateContainer>
+              <PrevOrNextButton onPress={handleNextExchange}>
+                <Image source={arrow_next} />
+              </PrevOrNextButton>
+            </ExchangeRateContainer>
+          );
+        })} */}
         {/* 환율 */}
         <Swiper
           loop={true} // 무한 루프로 스와이프할 수 있도록 설정
-          autoplay={true} // 자동 재생 비활성화
+          autoplay={false} // 자동 재생 비활성화
           width={`100%`}
           height={100}
           showsButtons={false}
@@ -557,7 +634,7 @@ const MainPage = ({ navigation }) => {
         {/* 메뉴들 */}
         <MenuContainer>
           <MenuCard>
-            <Image source={ExchangeIcon} />
+            <KeyMoneyImage source={ExchangeIcon} />
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>키머니 환전하기</MenuTitle>
@@ -571,7 +648,7 @@ const MainPage = ({ navigation }) => {
             </MenuSubContainer>
           </MenuCard>
           <MenuCard>
-            <Image source={AccountConnectIcon} />
+            <KeyMoneyImage source={AccountConnectIcon} />
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>계좌 연결하기</MenuTitle>
@@ -587,7 +664,7 @@ const MainPage = ({ navigation }) => {
             </MenuSubContainer>
           </MenuCard>
           <MenuCard>
-            <Image source={KeyPickIcon} />
+            <KeyMoneyImage source={KeyPickIcon} />
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>키머니 줍기</MenuTitle>
@@ -599,7 +676,7 @@ const MainPage = ({ navigation }) => {
             </MenuSubContainer>
           </MenuCard>
           <MenuCard>
-            <Image source={RecordTravleIcon} />
+            <KeyMoneyImage source={RecordTravleIcon} />
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>여행 계획하기</MenuTitle>
