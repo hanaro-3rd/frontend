@@ -11,6 +11,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Keyboard,
+  navigation,
 } from "react-native";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -20,6 +21,8 @@ import {
   fontPercentage,
   getStatusBarHeight,
   heightPercentage,
+  phoneHeight,
+  phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -37,7 +40,9 @@ import {
 import _ from "lodash";
 import { useDebouncedEffect } from "../../hooks/useDebouncedEffect";
 import { integerUnit, minimumUnit } from "../../utils/ExchangeSentence";
-export const ExchangePage = () => {
+import styled from "styled-components/native";
+
+export const ExchangeToWonPage = ({ route, navigation }) => {
   const [accountList, setAccountList] = useState([]);
   const inputRef = useRef(null);
   const [eur, setEur] = useState({});
@@ -47,21 +52,27 @@ export const ExchangePage = () => {
   const [selectedAccount, setSelectedAccount] = useState();
   const [accountId, setAccountId] = useState();
   const [accountBalance, setAccountBalance] = useState(false);
-  const [selectedMoney, setSelectedMoney] = useState("USD");
   const [exchangeRate, setExchangeRate] = useState();
   const [changePrice, setChangePrice] = useState();
-  const [minimumMoney, setMinimumMoney] = useState(10);
+  const [minimumMoney, setMinimumMoney] = useState();
   const [koreaTextInput, setKoreaTextInput] = useState();
   const [subKoreaText, setSubKoreaText] = useState("");
   const [foreignTextInput, setForeignTextInput] = useState();
   const [subForeignText, setSubForeignText] = useState();
   const [apiTime, setApiTime] = useState([]);
-  const navigation = useNavigation();
+  const { Keyunit, Keybalance } = route?.params;
+  const placeholderText = `0~${Keybalance}`;
+  const [selectedMoney, setSelectedMoney] = useState(Keyunit);
+  useEffect(() => {
+    setMinimumMoney(Keyunit == "JPY" ? 1000 : 10);
+  }, [setMinimumMoney]);
+
   const handleChooseAccountComponent = () => {
     navigation.navigate("ChooseAccountComponent", {
       page: "ExchangePage",
     });
   };
+
   const queryClient = useQueryClient();
   const { data } = useQuery("account", async () => getAccount(), {
     onSuccess: (response) => {
@@ -212,13 +223,20 @@ export const ExchangePage = () => {
       unit: selectedMoney,
     });
   };
+
+  const Root = styled.SafeAreaView`
+    width: ${phoneWidth}px;
+    /* padding-top: ${getStatusBarHeight}px; */
+    height: ${phoneHeight}px;
+  `;
+
   return (
-    <View style={styles.root}>
+    <Root>
       <ScrollView>
         <DeleteHeader navigation={navigation} to="MainPage" />
         <View style={styles.body}>
           <View style={styles.bodyHeader}>
-            <Text style={styles.title}>하나머니 환전</Text>
+            <Text style={styles.title}>원화 계좌로 송금하기</Text>
             <Text style={styles.subtitle}>
               환전을 위해 계좌 및 금액을 설정합니다.
             </Text>
@@ -235,7 +253,7 @@ export const ExchangePage = () => {
                     }
                   >
                     <CollapseHeader>
-                      <View style={styles.countrySelect}>
+                      <View style={styles.countrySelect1}>
                         <Text style={styles.unitText}>
                           {selectedAccount
                             ? selectedAccount
@@ -292,117 +310,164 @@ export const ExchangePage = () => {
                   ? ""
                   : "통장 잔고: " + accountBalance + "원"}
               </Text>
-            </View>
-            <View style={styles.moneyContainer}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.containerTitle2}>환전 금액</Text>
-                <Text style={styles.containerSubtitle}>
-                  주말, 공휴일에는 환율에 수수료 20이 부과됩니다
-                </Text>
-              </View>
 
-              {/* 환율부분 */}
-
-              <View style={styles.koreaWonContainer}>
-                <View style={styles.textContainer}>
-                  <Image
-                    source={require("../../assets/exchangeImg/Korea.png")}
-                  />
-                  <Text style={styles.unitText2}>KRW</Text>
+              <View style={styles.moneyContainer}>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.containerTitle2}>환전 금액</Text>
+                  <Text style={styles.containerSubtitle}>
+                    주말, 공휴일 수수료 원화 20원이 적용됩니다
+                  </Text>
                 </View>
-                <TextInput
-                  value={koreaTextInput}
-                  onChangeText={(text) => koreaInputChange(text)}
-                  placeholder="환전할 원화를 입력하세요"
-                  keyboardType="numeric"
-                  style={{ textAlign: "right" }}
-                />
-              </View>
-              <View style={{ width: "100%" }}>
-                <Text
-                  style={{
-                    textAlign: "right",
-                    color: "#8B95A1",
-                    fontSize: 12,
-                    marginBottom: 10,
-                  }}
-                >
-                  {subKoreaText}
-                </Text>
-              </View>
-              <View style={styles.foreignCurrencyContainer}>
-                <CountryChoiceComponent
-                  setMinimumMoney={setMinimumMoney}
-                  setExchangeRate={setExchangeRate}
-                  setSelectedMoney={setSelectedMoney}
-                  setKoreaTextInput={setKoreaTextInput}
-                  setForeignTextInput={setForeignTextInput}
-                  setSubForeignText={setSubForeignText}
-                  setSubKoreaText={setSubKoreaText}
-                  setChangePrice={setChangePrice}
-                />
-                <View style={styles.foreignCurrencyInput}>
-                  <TextInput
-                    placeholder="환전할 외화를 입력하세요"
-                    style={{ textAlign: "right" }}
-                    onChangeText={(text) => foreignInputChange(text)}
+
+                {/* 환율부분 */}
+
+                <View style={styles.koreaWonContainer}>
+                  <View style={styles.textContainer}>
+                    {Keyunit == "USD" ? (
+                      <Image
+                        source={require("../../assets/exchangeImg/USD.png")}
+                        style={{
+                          width: widthPercentage(32),
+                          height: heightPercentage(30),
+                        }}
+                      />
+                    ) : Keyunit == "JPY" ? (
+                      <Image
+                        source={require("../../assets/exchangeImg/Japan.png")}
+                        style={{
+                          width: widthPercentage(32),
+                          height: heightPercentage(30),
+                        }}
+                      />
+                    ) : Keyunit == "EUR" ? (
+                      <Image
+                        source={require("../../assets/exchangeImg/EUR.png")}
+                        style={{
+                          width: widthPercentage(32),
+                          height: heightPercentage(30),
+                        }}
+                      />
+                    ) : (
+                      <Image
+                        source={require("../../assets/exchangeImg/Korea.png")}
+                        style={{
+                          width: widthPercentage(32),
+                          height: heightPercentage(30),
+                        }}
+                      />
+                    )}
+
+                    <Text style={styles.unitText2}>{Keyunit}</Text>
+                  </View>
+                  <TextInput //외화
                     value={foreignTextInput}
+                    onChangeText={(text) => foreignInputChange(text)}
+                    placeholder={placeholderText}
                     keyboardType="numeric"
+                    style={{ textAlign: "right" }}
                   />
                 </View>
-              </View>
-              <View style={{ width: "100%" }}>
-                <Text
-                  style={{
-                    textAlign: "right",
-                    color: "#8B95A1",
-                    fontSize: 12,
-                    marginBottom: 10,
-                  }}
-                >
-                  {subForeignText}
-                </Text>
-              </View>
-              {/* 환율 부분 */}
-            </View>
-            <View style={styles.exchangeRateContainer}>
-              <View style={styles.titleContainer2}>
-                <Text style={styles.containerTitle3}>현재 환율</Text>
-                <Text style={styles.containerSubtitle2}>
-                  {apiTime != undefined
-                    ? `${apiTime[1]}.${apiTime[2]}. ${apiTime[3]}:${apiTime[4]} 기준`
-                    : ""}
-                </Text>
-              </View>
-              <View style={styles.currentExchangeRateContainer}>
-                <View style={styles.countryInformationContainer}>
-                  <Text style={styles.countryText}>
-                    {selectedMoney == "USD"
-                      ? "미국"
-                      : selectedMoney == "JPY"
-                      ? "일본"
-                      : "유럽"}
-                  </Text>
-                  <Text style={styles.unitText3}>{selectedMoney}</Text>
-                </View>
-                <View style={styles.currentExchangeRateTextContainer}>
-                  <Text style={styles.exchangeRateText}>
-                    {selectedMoney == "JPY"
-                      ? exchangeRate * 1000
-                      : exchangeRate?.toFixed(2)}
-                  </Text>
+                <View style={{ width: "100%" }}>
                   <Text
-                    style={
-                      changePrice > 0
-                        ? styles.changeRateUp
-                        : styles.changeRateDown
-                    }
+                    style={{
+                      textAlign: "right",
+                      color: "#8B95A1",
+                      fontSize: 12,
+                      marginBottom: 10,
+                    }}
                   >
-                    {changePrice > 0 ? "▲" : "▼"}
-                    {changePrice}
+                    {subKoreaText}
+                  </Text>
+                </View>
+                <View style={styles.foreignCurrencyContainer}>
+                  <View style={{ width: 140 }}>
+                    <TouchableOpacity disabled>
+                      <Collapse>
+                        <CollapseHeader>
+                          <View style={styles.countrySelect2}>
+                            <Image
+                              source={require("../../assets/exchangeImg/Korea.png")}
+                              style={{
+                                width: widthPercentage(32),
+                                height: heightPercentage(30),
+                              }}
+                            />
+                            <Text style={styles.unitText}>KRW</Text>
+                            <Image
+                              source={require("../../assets/exchangeImg/SelectButton.png")}
+                            />
+                          </View>
+                        </CollapseHeader>
+                      </Collapse>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.foreignCurrencyInput}>
+                    <TextInput //한화
+                      editable={false}
+                      style={{ textAlign: "right" }}
+                      onChangeText={(text) => koreaInputChange(text)}
+                      value={koreaTextInput}
+                      placeholder="계좌에 들어갈 금액"
+                      keyboardType="numeric"
+                    />
+                  </View>
+                </View>
+                <View style={{ width: "100%" }}>
+                  <Text
+                    style={{
+                      textAlign: "right",
+                      color: "#8B95A1",
+                      fontSize: 12,
+                      marginBottom: 10,
+                    }}
+                  >
+                    {subForeignText}
                   </Text>
                 </View>
               </View>
+
+              {/* 환율 부분 */}
+              {Keyunit == "Korea" ? (
+                <View />
+              ) : (
+                <View style={styles.exchangeRateContainer}>
+                  <View style={styles.titleContainer2}>
+                    <Text style={styles.containerTitle3}>현재 환율</Text>
+                    <Text style={styles.containerSubtitle2}>
+                      {apiTime != null
+                        ? `${apiTime[1]}.${apiTime[2]}. ${apiTime[3]}:${apiTime[4]} 기준`
+                        : ""}
+                    </Text>
+                  </View>
+                  <View style={styles.currentExchangeRateContainer}>
+                    <View style={styles.countryInformationContainer}>
+                      <Text style={styles.countryText}>
+                        {Keyunit == "USD"
+                          ? "미국"
+                          : Keyunit == "JPY"
+                          ? "일본"
+                          : "유럽"}
+                      </Text>
+                      <Text style={styles.unitText3}>{Keyunit}</Text>
+                    </View>
+                    <View style={styles.currentExchangeRateTextContainer}>
+                      <Text style={styles.exchangeRateText}>
+                        {exchangeRate}
+                      </Text>
+                      <Text
+                        style={
+                          changePrice > 0
+                            ? styles.changeRateUp
+                            : styles.changeRateDown
+                        }
+                      >
+                        {changePrice > 0 ? "▲" : "▼"}
+                        {changePrice}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              )}
             </View>
           </View>
         </View>
@@ -419,25 +484,24 @@ export const ExchangePage = () => {
               onPress={handleExchangeSubmit}
               style={styles.submitButton}
             >
-              <Text style={styles.buttonText}>환전하기</Text>
+              <Text style={styles.buttonText}>송금하기</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity style={styles.disabledButton} disabled>
-              <Text style={styles.buttonText}>환전하기</Text>
+              <Text style={styles.buttonText}>송금하기</Text>
             </TouchableOpacity>
           )}
         </View>
       </ScrollView>
-    </View>
+    </Root>
   );
 };
 
-export default ExchangePage;
+export default ExchangeToWonPage;
 
 const styles = StyleSheet.create({
   root: {
-    width: widthPercentage(390),
-    height: heightPercentage(844),
+    width: "100%",
     flexDirection: "column",
     alignItems: "flex-start",
     backgroundColor: "#F2F4F6",
@@ -546,7 +610,7 @@ const styles = StyleSheet.create({
     height: 32,
   },
   foreignCurrencyContainer: {
-    alignItems: "flex-start",
+    justifyContent: "space-between",
     gap: 10,
     alignSelf: "stretch",
     flexDirection: "row",
@@ -721,9 +785,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
   },
-  countrySelect: {
+  countrySelect1: {
     height: heightPercentage(65),
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     gap: 10,
     borderWidth: 1,
@@ -734,6 +798,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: widthPercentage(20),
     borderRadius: 10,
     width: "100%",
+  },
+  countrySelect2: {
+    height: heightPercentage(65),
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+    borderWidth: 1,
+    borderColor: "#191F29",
+    borderStyle: "solid",
+    backgroundColor: "#FFF",
+    flexDirection: "row",
+    paddingHorizontal: widthPercentage(40),
+    borderRadius: 10,
   },
   accountLists: {
     borderWidth: 1,

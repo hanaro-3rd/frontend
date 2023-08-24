@@ -23,22 +23,12 @@ const ExchangeFail = ({ navigation }) => {
         <View style={styles.bodyHeader}>
           <Text style={styles.title}>환전 실패</Text>
           <Text style={styles.subtitle}>
-            계좌 잔액이 부족해 환전에 실패했어요. 다시 시도해주세요.
+            계좌 잔액이 부족해 환전에 실패했어요. {"\n"} 다시 시도해주세요.
           </Text>
         </View>
         <View style={styles.bodyMain}>
           <View style={styles.mainIconContainer}>
             <Image source={FailImg} />
-          </View>
-          <View style={styles.exchangeInformationContainer}>
-            <View style={styles.informationContainer}>
-              <Text style={styles.informationText}>
-                계속해서 실패할 경우 아래로 문의해주세요.
-              </Text>
-              <Text style={styles.informationText2}>
-                02)5645-4651 / 02)5645-4651
-              </Text>
-            </View>
           </View>
         </View>
       </View>
@@ -77,6 +67,7 @@ const styles = StyleSheet.create({
     color: "#8B95A1",
     fontSize: fontPercentage(16),
     fontWeight: "400",
+    paddingVertical: heightPercentage(10),
   },
   body: {
     flexDirection: "column",
@@ -116,7 +107,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: heightPercentage(10),
     flexDirection: "row",
-    paddingVertical: heightPercentage(29),
+    paddingVertical: heightPercentage(80),
   },
   informationText: {
     color: "#4E5968",

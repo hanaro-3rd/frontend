@@ -61,18 +61,22 @@ axiosClient.interceptors.response.use(
     return response;
   },
   async (error) => {
+    console.log(
+      "axiosClient에러일때 어세스 토큰",
+      await AsyncStorage.getItem("access_token")
+    );
     const originalRequest = error.config;
-    console.log("에러가 오긴 하니");
-    console.log(error.response.status);
+    console.log(error.response);
+    console.log("axiosClient에러status", error.response.status);
     if (
-      error.response.status === 400 ||
+      error.response.status === 500 ||
       (error.response.status === 401 && !originalRequest._retry)
     ) {
       originalRequest._retry = true;
 
       try {
         const newAccessToken = await getRefresh();
-        console.log("어세스토큰", newAccessToken);
+        console.log("새로 받은 어세스토큰헤더", newAccessToken.headers);
         if (newAccessToken?.data?.refresh_token) {
           await AsyncStorage.removeItem("refresh_token");
           await AsyncStorage.setItem(

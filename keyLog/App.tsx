@@ -16,6 +16,7 @@ import TravelRecordMainComponent from "./components/TravelRecordPageComponents/T
 import AccountConnectPage from "./pages/AccountConnect/AccountConnectPage";
 import ExchangeFail from "./pages/ExchangeSelectAccount/ExchangeFail";
 import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
+import ExchangeToWonPage from "./pages/ExchangeSelectAccount/ExchangeToWonPage";
 import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
 import MainPage from "./pages/MainPage";
 import TestPaymentPage from "./pages/Payment/TestPaymentPage";
@@ -101,10 +102,9 @@ const App = () => {
       //DeviceId가 존재하지 않을 때
       onError: async (error) => {
         try {
-          console.log("error");
+          console.log(error.response.data);
           setHaveDeviceId(false);
           setLogin(false);
-          console.log("뭐가문제야");
         } catch (error) {
           // 에러 처리
           setLogin(false); // 에러 발생 시 로그인을 하지 않은 상태로 설정
@@ -210,6 +210,11 @@ const App = () => {
           <Stack.Screen
             name="ExchangePage"
             component={ExchangePage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ExchangeToWonPage"
+            component={ExchangeToWonPage}
             options={{ headerShown: false }}
           />
           <Stack.Screen
