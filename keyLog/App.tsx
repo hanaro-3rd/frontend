@@ -49,6 +49,7 @@ import AccountConnectPageComponents from "./components/AccountConnectPageCompone
 import { usernameAtom } from "./recoil/usernameAtom";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AlreadySignUpPage from "./pages/SignUp/AlreadySignUpPage";
+import TravelScheduleEditPage from "./pages/TravelBudget/TravelScheduleEditPage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -76,10 +77,10 @@ const App = () => {
             "refresh_token",
             await AsyncStorage.getItem("refresh_token")
           );
-          console.log(response.data,"app");
+          console.log(response.data, "app");
           if (response.data?.errorCode == 500) {
             setLogin(false);
-  
+
             setLoading(false);
             return;
           }
@@ -101,7 +102,7 @@ const App = () => {
       //DeviceId가 존재하지 않을 때
       onError: async (error) => {
         try {
-          console.log("error",error.response);
+          console.log("error", error.response);
           setHaveDeviceId(false);
           setLogin(false);
           console.log("뭐가문제야");
@@ -285,6 +286,11 @@ const App = () => {
           <Stack.Screen
             name="TravelSchedulePage"
             component={TravelSchedulePage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TravelScheduleEditPage"
+            component={TravelScheduleEditPage}
             options={{ headerShown: false }}
           />
           <Stack.Screen

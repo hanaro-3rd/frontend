@@ -50,8 +50,8 @@ const TravelPeriodText = styled.Text`
 
 const PlaceholderText = styled.Text`
   color: #b0b8c1;
-  font-family: Inter;
   font-size: ${fontPercentage(16)}px;
+  font-style: normal;
 `;
 
 const TravelDateComponent = ({
@@ -62,15 +62,16 @@ const TravelDateComponent = ({
 }) => {
   const [isStartDateVisible, setStartDateVisible] = useState(false);
   const [isEndDateVisible, setEndDateVisible] = useState(false);
-
+  const [mode, setMode] = useState("datetime");
   const [isStartDateSelected, setStartDateSelected] = useState(false);
   const [isEndDateSelected, setEndDateSelected] = useState(false);
 
   const onPressStartDate = () => {
+    setMode("datetime");
     setStartDateVisible(true);
   };
-
   const onPressEndDate = () => {
+    setMode("datetime");
     setEndDateVisible(true);
   };
 
@@ -103,18 +104,22 @@ const TravelDateComponent = ({
             placeholderTextColor="#b0b8c1"
             hasValue={startDate !== null}
           >
-            {!isStartDateSelected && <View style={{ flex: 1 }}><PlaceholderText>시작일</PlaceholderText></View>}
             {isStartDateSelected ? (
               <>
                 <TravelPeriodText hasValue={startDate !== ""}>
                   {startDate
-                    ? format(new Date(startDate), "yyyy.MM.dd", { locale: ko })
+                    ? format(new Date(startDate), "yyyy.MM.dd HH:mm", {
+                        locale: ko,
+                      })
                     : ""}
                 </TravelPeriodText>
-                <Image source={SelectButton} />
+                {/* <Image source={SelectButton} /> */}
               </>
             ) : (
-              <Image source={SelectButtonBefore} />
+              <>
+                <PlaceholderText>시작일</PlaceholderText>
+                <Image source={SelectButtonBefore} />
+              </>
             )}
           </TravelPeriodTextContainer>
         </Pressable>
@@ -124,18 +129,22 @@ const TravelDateComponent = ({
             placeholderTextColor="#b0b8c1"
             hasValue={endDate !== null}
           >
-            {!isEndDateSelected && <View style={{ flex: 1 }}><PlaceholderText>종료일</PlaceholderText></View>}
             {isEndDateSelected ? (
               <>
                 <TravelPeriodText hasValue={endDate !== ""}>
                   {endDate
-                    ? format(new Date(endDate), "yyyy.MM.dd", { locale: ko })
+                    ? format(new Date(endDate), "yyyy.MM.dd HH:mm", {
+                        locale: ko,
+                      })
                     : ""}
                 </TravelPeriodText>
-                <Image source={SelectButton} />
+                {/* <Image source={SelectButton} /> */}
               </>
             ) : (
-              <Image source={SelectButtonBefore} />
+              <>
+                <PlaceholderText>종료일</PlaceholderText>
+                <Image source={SelectButtonBefore} />
+              </>
             )}
           </TravelPeriodTextContainer>
         </Pressable>
@@ -143,14 +152,15 @@ const TravelDateComponent = ({
       <DateTimePickerModal
         onConfirm={onConfirmStartDate}
         onCancel={onCancel}
+        mode={mode}
         date={startDate ? new Date(startDate) : new Date()}
+        minimumDate={startDate ? new Date(startDate) : new Date()}
         isVisible={isStartDateVisible}
-        minimumDate={new Date()}
-        placeholder="시작일"
       />
       <DateTimePickerModal
         onConfirm={onConfirmEndDate}
         onCancel={onCancel}
+        mode={mode}
         date={endDate ? new Date(endDate) : new Date()}
         isVisible={isEndDateVisible}
         minimumDate={startDate ? new Date(startDate) : new Date()}

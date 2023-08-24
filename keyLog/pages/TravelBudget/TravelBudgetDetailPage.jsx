@@ -51,6 +51,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
   const [travelBudget, setTravelBudget] = useState();
   const [timePaymentHistory, setTimePaymentHistory] = useState({});
   const [totalPayment, setTotalPayment] = useState(0);
+  const [travelData, setTravelData] = useState(null);
 
   const deleteTravelBudgetMutation = useMutation(
     (planId) => deleteTravelBudget(planId),
@@ -82,7 +83,6 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
           }
           setTimePaymentHistory(subObj);
         }
-        deleteTravelBudgetMutation.mutate(planId);
       },
       onError: (error) => {
         console.log(error.response);
@@ -96,10 +96,12 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
     {
       onSuccess: (response) => {
         console.log(response.data.result, "getDetailPlanCategory");
+        console.log("잘 들어있어?", response.data.result.travelBudget);
         setCategory(response.data.result.category);
         setTravelBudget(
           getCountryUnit(response.data.result.travelBudget.country)
         );
+        setTravelData(response.data.result);
         if (response.data.result.categoryPaymentHistory) {
           const obj = response.data.result.categoryPaymentHistory;
 
@@ -138,7 +140,6 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
             }
           }
         }
-        deleteTravelBudgetMutation.mutate(planId);
       },
       onError: () => {},
     }
@@ -173,6 +174,14 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
     );
   };
 
+  const handleEditButtonClick = () => {
+    navigation.navigate("TravelScheduleEditPage", {
+      planId: planId,
+      travelData: travelData
+    });
+    console.log(travelData, "잘 가는거야?");
+  };
+
   return (
     <RootScrollView>
       <Header>
@@ -189,9 +198,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
               source={require("../../assets/travelBudget/delete.png")}
             />
           </TouchableOpacity>
-          <TouchableOpacity
-          // onPress={ }
-          >
+          <TouchableOpacity onPress={handleEditButtonClick}>
             <HeaderImage
               source={require("../../assets/travelBudget/edit.png")}
             />

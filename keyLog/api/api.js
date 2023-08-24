@@ -78,11 +78,11 @@ export const postTravelBudget = (travelbudgetData) => {
   return axiosClient.post('/plan',travelbudgetData)
 }
 
-export const patchTravelPlan = ({plan_id,patchTravelPlanData}) => {
-  return axiosClient.patch(`/plan/${plan_id}/category`,patchTravelPlanData)
+export const patchTravelPlan = ({planId,patchTravelPlanData}) => {
+  return axiosClient.patch(`/plan${planId}`, patchTravelPlanData)
 }
-export const patchTravelBudget = ({planId,patchTravelBudgetData}) => {
-  return axiosClient.patch(`/plan${planId}`,patchTravelBudgetData)
+export const patchTravelBudget = ({plan_id,patchTravelBudgetData}) => {
+  return axiosClient.patch(`/plan/${plan_id}/category`,patchTravelBudgetData)
 }
 
 export const getTravelBudgetDetail = (plan_id) => {

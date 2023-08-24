@@ -411,7 +411,7 @@ const MainPage = ({ navigation }) => {
   `;
 
   const queryClient = useQueryClient();
-  const { exchangeData } = useQuery("exchange", async () => getExchange(), {
+  const { data } = useQuery("exchange", async () => getExchange(), {
     onSuccess: (response) => {
       console.log(response.data, "메인환율");
       setUSD(response.data.result.usd);
