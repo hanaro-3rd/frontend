@@ -435,9 +435,7 @@ const MainPage = ({ navigation }) => {
         `${time.year}/${time.month}/${time.date} ${time.hours}:${time.minutes}`
       );
     },
-    onError: (error) => {
-      console.log(error.response.data);
-    },
+    onError: (error) => {},
   });
 
   const [currentExchangeIndex, setCurrentExchangeIndex] = useState(0);
