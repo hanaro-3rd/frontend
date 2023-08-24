@@ -14,6 +14,7 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { calculateDistance } from "../../utils/calculateDistance";
 import leftArrow from "../../assets/accountImg/Vector.png";
 import { NavigationContainer } from "@react-navigation/native";
+import Swiper from "react-native-swiper";
 const TestPaymentSearchPage = ({ navigation }) => {
   const [location, setLocation] = useState({
     latitude: 37.545315,
@@ -21,11 +22,12 @@ const TestPaymentSearchPage = ({ navigation }) => {
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
-
+  console.log("photos", photos);
   const [showElementView, setShowElementView] = useState(true);
   const [showModalView, setShowModalView] = useState(false);
   const [showSuccessModalView, setShowSuccessModalView] = useState(false);
   const [isSearched, setIsSearched] = useState(false);
+  const [photos, setPhotos] = useState([]);
   const [markerPostion, setMarkerPostion] = useState({
     latitude: 36,
     longitude: 36,
@@ -58,7 +60,6 @@ const TestPaymentSearchPage = ({ navigation }) => {
       console.log("markerpost" + error);
     },
   });
-  console.log("informationMarker", markerInformation);
   const handlePostMarkers = (markerId, markerData) => {
     console.log(markerId, markerData);
     postMarkersMutation.mutate({ markerId, markerData });
@@ -109,10 +110,20 @@ const TestPaymentSearchPage = ({ navigation }) => {
         <View style={{ width: "90%" }}>
           <GooglePlacesAutocomplete
             placeholder="장소명을 검색하여 등록해주세요!"
-            onPress={(data, details = null) => {
-              console.log(details);
-              console.log(data);
-              console.log(details.geometry.location.lat);
+            onPress={(data, details) => {
+              console.log(details.photos, "details");
+              const imagePairs = [];
+             if(details.photos) {
+              for (let i = 0; i < details.photos.length; i += 2) {
+                // 이미지를 두 개씩 묶어서 배열에 추가
+                const pair = details.photos.slice(i, i + 2);
+                imagePairs.push(pair);
+              }
+              setPhotos(imagePairs);
+             }
+
+              // console.log(data);
+              // console.log(details.geometry.location.lat);
               setLocation({
                 latitude: details.geometry.location.lat,
                 longitude: details.geometry.location.lng,
@@ -177,6 +188,34 @@ const TestPaymentSearchPage = ({ navigation }) => {
               <RankText>{markerInformation.rating}</RankText>
               <StarText>{generateStarIcons(markerInformation.rating)}</StarText>
             </RankTextContainer>
+            <View style={{ width: "100%", height: 150 }}>
+              <Swiper
+                loop={true} // 무한 루프로 스와이프할 수 있도록 설정
+                autoplay={false} // 자동 재생 비활성화
+                showsButtons={false}
+                showsPagination={false}
+                style={{ zIndex: 1 }}
+              >
+                {photos.map((pair, idx) => {
+                  return (
+                    <View style={{ flexDirection: "row" }}>
+                      {
+                        pair.map((e,idx)=>{
+                          return(
+                            <Image
+                            style={{ width: "50%", height: 150 }}
+                            source={{
+                              uri: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${e.photo_reference}&key=AIzaSyB_nxmsBL4iSwU9dniKHw4GWOXONVfCUZw`,
+                            }}
+                          />
+                          )
+                        })
+                      }
+                    </View>
+                  );
+                })}
+              </Swiper>
+            </View>
           </SelectStoreContainer>
 
           <ModalGetMoneyButton
@@ -266,7 +305,7 @@ const ModalGetMoneyButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   width: 90%;
-  margin-bottom: 100px;
+  margin-bottom: 10px;
 `;
 const ModalKeyMoneyText = styled.Text`
   color: #191f29;
@@ -377,8 +416,7 @@ const LeftPeopleText = styled.Text`
 const MarkerList = styled.View`
   align-items: center;
   width: 100%;
-  min-height: ${heightPercentage()}px;
-  height: ${heightPercentage(150)}px;
+  min-height: ${heightPercentage(50)}px;
   background-color: #fff;
 `;
 const UpButtonView = styled.TouchableOpacity`

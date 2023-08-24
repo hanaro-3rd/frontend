@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
 
 const InputField = React.forwardRef(
   (
-    { placeholder, handlePress, value, onChangeText, hasError, onBlur,hasSuccess,maxLength },
+    { placeholder, handlePress, value, onChangeText, hasError, onBlur,hasSuccess,maxLength,keyboardType },
     ref
   ) => (
     <View style={styles.inputFieldWrapper}>
@@ -77,6 +77,7 @@ const InputField = React.forwardRef(
           onChangeText={onChangeText}
           placeholderTextColor='#B0B8C1'
           maxLength={maxLength}
+          keyboardType={keyboardType}
         />
       </TouchableOpacity>
       {hasError && (

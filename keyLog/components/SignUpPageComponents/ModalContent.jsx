@@ -1,21 +1,21 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useRef, useState } from 'react';
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
-import Modal from 'react-native-modal';
-import { useMutation, useQueryClient } from 'react-query';
-import { postVerification, postVerificationAuth } from '../../api/api';
-import CloseButton from '../../assets/SignUp/CloseButton.svg';
+} from "react-native";
+import Modal from "react-native-modal";
+import { useMutation, useQueryClient } from "react-query";
+import { postVerification, postVerificationAuth } from "../../api/api";
+import CloseButton from "../../assets/SignUp/CloseButton.svg";
 import {
   fontPercentage,
   heightPercentage,
   widthPercentage,
-} from '../../utils/ResponseSize';
+} from "../../utils/ResponseSize";
 
 const ModalContent = ({
   modalVisible,
@@ -25,48 +25,48 @@ const ModalContent = ({
   name,
   setModalVisible,
 }) => {
-  const [errorCode,setErrorCode] = useState()
+  const [errorCode, setErrorCode] = useState();
   const queryClient = useQueryClient();
   const postVerificationAuthMutation = useMutation(postVerificationAuth, {
     onSuccess: (response) => {
-      queryClient.invalidateQueries('verificationAuth');
-   
-      console.log('postverificationAuthMutation' , response.data);
-      if(response.data?.errorCode) {
-        setErrorCode(response.data?.errorMessage)
+      queryClient.invalidateQueries("verificationAuth");
+
+      console.log("postverificationAuthMutation", response.data);
+      if (response.data?.errorCode) {
+        setErrorCode(response.data?.errorMessage);
         return;
       }
       setModalVisible(false);
       goToLoginPasswordPage();
     },
-    onError: error => {
+    onError: (error) => {
       console.log(error.response);
-      console.log(error + 'verificationAuth');
-      
+      console.log(error + "verificationAuth");
+      setErrorCode(error.response.data.errorMessage);
     },
   });
 
-  const handleVerificationAuth = async e => {
+  const handleVerificationAuth = async (e) => {
     e.preventDefault();
     postVerificationAuthMutation.mutate({
       code: inputText,
       phonenum: phoneNumber,
     });
-
-   
-
   };
-
+  const handleTogglemodal = () => {
+    setInputText("")
+    toggleModal()
+  }
   const navigation = useNavigation();
   const goToLoginPasswordPage = () => {
-    navigation.navigate('LoginPasswordPage', {
+    navigation.navigate("LoginPasswordPage", {
       phoneNumber,
       personalNumber,
       name,
     });
   };
 
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
   const [remainTime, setRemainTime] = useState(180);
   const [extended, setExtended] = useState(false);
   const [buttonEnabled, setButtonEnabled] = useState(true);
@@ -105,9 +105,9 @@ const ModalContent = ({
   const displayTime = () => {
     const minutes = Math.floor(remainTime / 60);
     const seconds = remainTime % 60;
-    return `${minutes.toString().padStart(2, '0')}:${seconds
+    return `${minutes.toString().padStart(2, "0")}:${seconds
       .toString()
-      .padStart(2, '0')}`;
+      .padStart(2, "0")}`;
   };
 
   const extendTime = () => {
@@ -115,19 +115,20 @@ const ModalContent = ({
       setRemainTime(180);
       setExtended(true);
     } else {
-      console.log('시간 연장은 최초 1회만 가능합니다.');
+      console.log("시간 연장은 최초 1회만 가능합니다.");
     }
   };
 
   const postVerificationMutation = useMutation(postVerification, {
-    onSuccess: data => {
-      queryClient.invalidateQueries('verification');
-      console.log('Response Data:', data);
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("verification");
+      console.log("Response Data:", data);
     },
   });
 
-  const resendCode = e => {
+  const resendCode = (e) => {
     e.preventDefault();
+    extendTime();
     postVerificationMutation.mutate({ phonenum: phoneNumber });
   };
 
@@ -135,8 +136,8 @@ const ModalContent = ({
     <Modal
       isVisible={modalVisible}
       onBackdropPress={toggleModal}
-      animationIn='slideInUp'
-      animationOut='slideOutDown'
+      animationIn="slideInUp"
+      animationOut="slideOutDown"
       backdropTransitionOutTiming={0}
       backdropOpacity={0.5}
       style={styles.modalContainer}
@@ -157,8 +158,8 @@ const ModalContent = ({
               <View style={styles.popupRemainTime}>
                 <Text style={styles.remainTime}>{displayTime()}</Text>
                 <View style={styles.extendTimeButton}>
-                  <TouchableOpacity onPress={extendTime}>
-                    <Text style={styles.buttonText2}>시간 연장</Text>
+                  <TouchableOpacity>
+                    <Text style={styles.buttonText2}>남은시간</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -173,12 +174,15 @@ const ModalContent = ({
                 ref={inputRef}
                 style={[
                   styles.certificationNumber,
-                  { color: inputText.length > 0 ? '#000000' : '#B0B8C1' },
+                  { color: inputText.length > 0 ? "#000000" : "#B0B8C1" },
                 ]}
                 value={inputText}
-                onChangeText={text => setInputText(text.replace(/[^0-9]/g, ''))}
+                onChangeText={(text) =>
+                  setInputText(text.replace(/[^0-9]/g, ""))
+                }
                 maxLength={6}
-                placeholder='인증번호'
+                keyboardType="numeric"
+                placeholder="인증번호"
               />
               <TouchableOpacity onPress={resendCode}>
                 <View style={styles.resendButton}>
@@ -186,7 +190,6 @@ const ModalContent = ({
                 </View>
               </TouchableOpacity>
             </View>
-  
           </View>
           <Text style={styles.errorMessage}>{errorCode}</Text>
           <View style={styles.popupFooter}>
@@ -200,8 +203,8 @@ const ModalContent = ({
                   {
                     backgroundColor:
                       buttonEnabled && inputText.length === 6
-                        ? '#55ACEE'
-                        : '#F2F4F6',
+                        ? "#55ACEE"
+                        : "#F2F4F6",
                   },
                 ]}
               >
@@ -211,8 +214,8 @@ const ModalContent = ({
                     {
                       color:
                         buttonEnabled && inputText.length === 6
-                          ? '#FFFFFF'
-                          : '#B0B8C1',
+                          ? "#FFFFFF"
+                          : "#B0B8C1",
                     },
                   ]}
                 >
@@ -231,158 +234,158 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     margin: 0,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     padding: widthPercentage(20),
     height: heightPercentage(310),
   },
   popup: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
+    flexDirection: "column",
+    alignItems: "flex-start",
     gap: heightPercentage(20),
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     padding: widthPercentage(20),
   },
   popupHeader: {
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    alignSelf: 'stretch',
-    flexDirection: 'row',
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    alignSelf: "stretch",
+    flexDirection: "row",
   },
   popupHeaderRight: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
     gap: heightPercentage(10),
-    alignSelf: 'stretch',
+    alignSelf: "stretch",
   },
   popupTitle: {
-    alignItems: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    flexDirection: "row",
   },
   subtitle2: {
-    color: '#4E5968',
-    fontFamily: 'Inter',
+    color: "#4E5968",
+    fontFamily: "Inter",
     fontSize: fontPercentage(12),
-    fontStyle: 'normal',
-    fontWeight: '700',
+    fontStyle: "normal",
+    fontWeight: "700",
   },
   popupSubtitle: {
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    flexDirection: 'row',
+    justifyContent: "center",
+    alignItems: "flex-start",
+    flexDirection: "row",
   },
   remainTime: {
-    color: '#55ACEE',
-    fontFamily: 'Inter',
+    color: "#55ACEE",
+    fontFamily: "Inter",
     fontSize: fontPercentage(12),
-    fontStyle: 'normal',
-    fontWeight: '700',
+    fontStyle: "normal",
+    fontWeight: "700",
   },
   buttonText2: {
-    color: '#55ACEE',
-    fontFamily: 'Inter',
+    color: "#55ACEE",
+    fontFamily: "Inter",
     fontSize: fontPercentage(10),
-    fontStyle: 'normal',
-    fontWeight: '400',
+    fontStyle: "normal",
+    fontWeight: "400",
   },
   popupHeaderLeft: {
-    flexDirection: 'column',
-    alignItems: 'flex-end',
+    flexDirection: "column",
+    alignItems: "flex-end",
     gap: heightPercentage(8),
   },
   popupRemainTime: {
-    alignItems: 'center',
+    alignItems: "center",
     gap: widthPercentage(5),
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   extendTimeButton: {
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
     borderWidth: 1,
-    borderColor: '#55ACEE',
-    borderStyle: 'solid',
-    flexDirection: 'row',
+    borderColor: "#55ACEE",
+    borderStyle: "solid",
+    flexDirection: "row",
     paddingVertical: heightPercentage(3),
     paddingHorizontal: widthPercentage(4),
     borderRadius: 2,
   },
   certificationNumber: {
-    color: '#B0B8C1',
-    fontFamily: 'Inter',
+    color: "#B0B8C1",
+    fontFamily: "Inter",
     fontSize: fontPercentage(16),
-    fontStyle: 'normal',
-    fontWeight: '700',
+    fontStyle: "normal",
+    fontWeight: "700",
   },
   buttonText3: {
-    color: '#F9FAFB',
-    fontFamily: 'Inter',
+    color: "#F9FAFB",
+    fontFamily: "Inter",
     fontSize: fontPercentage(14),
-    fontStyle: 'normal',
-    fontWeight: '700',
+    fontStyle: "normal",
+    fontWeight: "700",
   },
   popupMain: {
     height: heightPercentage(65),
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'stretch',
-    flexDirection: 'row',
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "stretch",
+    flexDirection: "row",
   },
   input3: {
     width: widthPercentage(350),
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    alignSelf: 'stretch',
-    backgroundColor: '#F9FAFB',
-    flexDirection: 'row',
+    justifyContent: "space-between",
+    alignItems: "center",
+    alignSelf: "stretch",
+    backgroundColor: "#F9FAFB",
+    flexDirection: "row",
     paddingVertical: 0,
     paddingHorizontal: 20,
     borderRadius: 10,
   },
   resendButton: {
     width: widthPercentage(59),
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    justifyContent: "space-between",
+    alignItems: "center",
     flexShrink: 0,
-    backgroundColor: '#333D4B',
-    flexDirection: 'row',
+    backgroundColor: "#333D4B",
+    flexDirection: "row",
     paddingVertical: heightPercentage(7),
     paddingHorizontal: widthPercentage(10),
     borderRadius: 5,
   },
   buttonText4: {
-    color: '#B0B8C1',
-    fontFamily: 'Inter',
+    color: "#B0B8C1",
+    fontFamily: "Inter",
     fontSize: fontPercentage(16),
-    fontStyle: 'normal',
-    fontWeight: '700',
+    fontStyle: "normal",
+    fontWeight: "700",
   },
   popupFooter: {
     height: heightPercentage(55),
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'stretch',
-    flexDirection: 'row',
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "stretch",
+    flexDirection: "row",
   },
   submitButton2: {
     width: widthPercentage(350),
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'stretch',
-    backgroundColor: '#F2F4F6',
-    flexDirection: 'row',
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "stretch",
+    backgroundColor: "#F2F4F6",
+    flexDirection: "row",
     padding: widthPercentage(10),
     borderRadius: 10,
   },
   errorMessage: {
-    color: '#E90061',
+    color: "#E90061",
     fontSize: fontPercentage(12),
   },
 });

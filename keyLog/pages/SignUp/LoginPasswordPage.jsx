@@ -134,7 +134,8 @@ const LoginPasswordPage = ({ route }) => {
       } else {
         console.log("Passwords do not match");
         setIsPasswordMismatch(true);
-        setIsConfirming(true);
+        setPassword("")
+        setIsConfirming(false);
       }
     }
   }, [password, confirmPassword, setIsPasswordMismatch]);
