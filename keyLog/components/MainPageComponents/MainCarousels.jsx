@@ -71,14 +71,14 @@ const MainCarousels = ({ navigation, content, onPress }) => {
 
   const handleCarouselCardPress = () => {
     if (mainCardContent.buttonText === "키머니 확인하기") {
-      // navigation.navigate("");
+      navigation.navigate("KeyMoneyHistoryPage");
     } else if (mainCardContent.buttonText === "계좌연결하기") {
       navigation.navigate("AccountConnectPage");
     } else if (mainCardContent.buttonText === "키머니 환전하기") {
       navigation.navigate("ExchangePage");
-    } else if (mainCardContent.buttonText === "여행 기록 확인하기") {
+    } else if (mainCardContent.buttonText === "여행 계획하기") {
       navigation.navigate("TravelBudgetPage");
-    } else if (mainCardContent.buttonText === "키머니 줍기") {
+    } else if (mainCardContent.buttonText === "키머니 주우러 가기") {
       navigation.navigate("PickUpKeyPage");
     }
   };

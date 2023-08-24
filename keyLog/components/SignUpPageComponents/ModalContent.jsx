@@ -30,12 +30,6 @@ const ModalContent = ({
   const postVerificationAuthMutation = useMutation(postVerificationAuth, {
     onSuccess: (response) => {
       queryClient.invalidateQueries("verificationAuth");
-
-      console.log("postverificationAuthMutation", response.data);
-      if (response.data?.errorCode) {
-        setErrorCode(response.data?.errorMessage);
-        return;
-      }
       setModalVisible(false);
       goToLoginPasswordPage();
     },

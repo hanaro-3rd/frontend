@@ -26,6 +26,7 @@ const KeyMoneyHistoryPage = ({ route, navigation }) => {
         console.log(response.data);
         console.log("키머니 계좌 불러오기" + response.data.result);
         setKeyMoneyAccountList(response.data.result);
+        console.log(response.data.result);
       },
       onError: (error) => {
         console.log(error);

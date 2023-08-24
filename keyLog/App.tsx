@@ -16,6 +16,7 @@ import TravelRecordMainComponent from "./components/TravelRecordPageComponents/T
 import AccountConnectPage from "./pages/AccountConnect/AccountConnectPage";
 import ExchangeFail from "./pages/ExchangeSelectAccount/ExchangeFail";
 import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
+import ExchangeToWonPage from "./pages/ExchangeSelectAccount/ExchangeToWonPage";
 import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
 import MainPage from "./pages/MainPage";
 import TestPaymentPage from "./pages/Payment/TestPaymentPage";
@@ -49,6 +50,7 @@ import AccountConnectPageComponents from "./components/AccountConnectPageCompone
 import { usernameAtom } from "./recoil/usernameAtom";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AlreadySignUpPage from "./pages/SignUp/AlreadySignUpPage";
+import TravelScheduleEditPage from "./pages/TravelBudget/TravelScheduleEditPage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -76,10 +78,10 @@ const App = () => {
             "refresh_token",
             await AsyncStorage.getItem("refresh_token")
           );
-          console.log(response.data);
+          console.log(response.data, "app");
           if (response.data?.errorCode == 500) {
             setLogin(false);
-            setHaveDeviceId(false);
+
             setLoading(false);
             return;
           }
@@ -101,10 +103,9 @@ const App = () => {
       //DeviceId가 존재하지 않을 때
       onError: async (error) => {
         try {
-          console.log("error");
+          console.log(error.response.data);
           setHaveDeviceId(false);
           setLogin(false);
-          console.log("뭐가문제야");
         } catch (error) {
           // 에러 처리
           setLogin(false); // 에러 발생 시 로그인을 하지 않은 상태로 설정
@@ -214,6 +215,11 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name="ExchangeToWonPage"
+            component={ExchangeToWonPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="CountryChoiceComponent"
             component={CountryChoiceComponent}
             options={{ headerShown: false }}
@@ -286,6 +292,11 @@ const App = () => {
           <Stack.Screen
             name="TravelSchedulePage"
             component={TravelSchedulePage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TravelScheduleEditPage"
+            component={TravelScheduleEditPage}
             options={{ headerShown: false }}
           />
           <Stack.Screen

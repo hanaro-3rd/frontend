@@ -9,6 +9,7 @@ import {
   FlatList,
   Alert,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import {
@@ -24,7 +25,12 @@ import Ellipse from "../../assets/SignUp/Ellipse.svg";
 import Vector from "../../assets/accountImg/Vector.png";
 import AccountPasswordSymbol from "../../components/AccountConnectPageComponents/AccountPasswordSymbol";
 import AccountPWNumberPad from "../../components/AccountConnectPageComponents/AccountPWNumberPad";
-import { useQueryClient, useQuery, useMutation } from "react-query";
+import {
+  useQueryClient,
+  useQuery,
+  useMutation,
+  invalidateQueries,
+} from "react-query";
 import { getAccounExternal, postAccountExternal } from "../../api/api";
 import { initialWindowMetrics } from "react-native-safe-area-context";
 
@@ -32,12 +38,13 @@ export const AccountConnectPage = ({ navigation, route }) => {
   const [selectedItem, setSelectedItem] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("1234"); //계좌 비밀번호 받아오기
   const [isPasswordMismatch, setIsPasswordMismatch] = useState(false);
   const [alertInconsistencyPassword, setAlertInconsistencyPassword] =
-    useState(false);
+    useState(false); //불일치
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [externalAccountList, setExternalAccountList] = useState([]);
+  const [errorOccurred, setErrorOccurred] = useState(false);
+
   //queryclient 호출
   const queryClient = useQueryClient();
   //useQuery를 통해 get요청
@@ -46,12 +53,11 @@ export const AccountConnectPage = ({ navigation, route }) => {
     async () => getAccounExternal(),
     {
       onSuccess: (response) => {
-        console.log(response.data);
         console.log("외부계좌불러오기" + response.data.result.externalAccounts);
         setExternalAccountList(response.data.result.externalAccounts);
       },
       onError: (error) => {
-        console.log(error);
+        console.log("외부계좌불러오기에러", error);
         console.log("connect에러");
       },
     }
@@ -62,11 +68,14 @@ export const AccountConnectPage = ({ navigation, route }) => {
   const handleNumPress = (num) => {
     if (alertInconsistencyPassword) {
       resetPasswordProcess();
-      setAlertInconsistencyPassword(false);
+      setAlertInconsistencyPassword(false); //원위치
     }
 
     if (password.length < 4) {
-      setPassword(password + num);
+      const newpassword = password + num;
+      setPassword(newpassword);
+      console.log(newpassword);
+      setIsPasswordMismatch(false);
     }
   };
 
@@ -83,7 +92,9 @@ export const AccountConnectPage = ({ navigation, route }) => {
     onSuccess: (response) => {
       setIsPasswordMismatch(false);
       setIsButtonEnabled(false);
-
+      setPassword("");
+      queryClient.invalidateQueries("account");
+      console.log("externalAccountIDPOST성공", response.data);
       navigation.navigate("AccountConnectSuccess", {
         bank: response.data.result.bank,
         balance: response.data.result.balance,
@@ -91,7 +102,8 @@ export const AccountConnectPage = ({ navigation, route }) => {
         page: route?.params?.page,
       });
     },
-    onError: () => {
+    onError: (error) => {
+      console.log("externalAccountIDPOST실패", error.response);
       setIsPasswordMismatch(true);
       setIsButtonEnabled(false);
       setPassword("");
@@ -99,29 +111,24 @@ export const AccountConnectPage = ({ navigation, route }) => {
   });
   const handlePassWord = () => {
     if (password.length === 4) {
-      setIsButtonEnabled(true);
-      console.log(password);
       const externalAccountId = selectedItem.externalId;
       const externalAccountData = { accountPassword: password };
-      console.log(externalAccountId + "externalAccountId");
-      console.log(externalAccountData.accountPassword + "externalAccountData");
       postExtenalAccountMutation.mutate({
         externalAccountId,
         externalAccountData,
       });
-
-      // if (isSuccess) {
-      //   setIsPasswordMismatch(false);
-      //   setIsButtonEnabled(false);
-      //   navigation.navigate("AccountConnectSuccess",{
-
-      //   });
-      // } else {
-      //   setIsPasswordMismatch(true);
-      //   setIsButtonEnabled(false);
-      //   setPassword("");
-      // }
     }
+    // if (isSuccess) {
+    //   setIsPasswordMismatch(false);
+    //   setIsButtonEnabled(false);
+    //   navigation.navigate("AccountConnectSuccess",{
+
+    //   });
+    // } else {
+    //   setIsPasswordMismatch(true);
+    //   setIsButtonEnabled(false);
+    //   setPassword("");
+    // }
   };
 
   useEffect(() => {
@@ -140,18 +147,19 @@ export const AccountConnectPage = ({ navigation, route }) => {
         </View>
         <View style={styles.bodyMain}>
           <Text style={styles.containerTitle}>연결 가능한 계좌</Text>
-          <View style={{ width: "100%" }}>
+          <ScrollView style={{ width: "100%", flex: 1 }}>
             {externalAccountList?.map((item, idx) => {
               const isSelected = idx === selectedItem.idx;
               return (
                 <Pressable
-                  onPress={() =>
+                  onPress={() => {
                     setSelectedItem({
                       idx,
                       externalId: item.accountId,
                       bank: item.bank + " " + item.accountNum,
-                    })
-                  }
+                    });
+                    setIsPasswordMismatch(false);
+                  }}
                   key={idx}
                 >
                   <View
@@ -180,7 +188,7 @@ export const AccountConnectPage = ({ navigation, route }) => {
                 </Pressable>
               );
             })}
-          </View>
+          </ScrollView>
         </View>
       </View>
       <View style={styles.footer}>
