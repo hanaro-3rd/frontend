@@ -432,13 +432,8 @@ const TestPaymentPage = ({ navigation, route }) => {
                       updateIsAllFieldsFilled();
                     }}
                     style={{
-<<<<<<< HEAD
-                      width: widthPercentage(145),
-                      color: unit ? "#000" : "#b0b8c1",
-=======
                       width: widthPercentage(350),
                       color: category ? "#000" : "#b0b8c1",
->>>>>>> e3f5112d031391b50088f6dd2d76bcf4f4f406ad
                       textAlign: "right",
                     }}
                   >
