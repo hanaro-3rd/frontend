@@ -386,7 +386,9 @@ export const ExchangePage = () => {
                   <Text style={styles.unitText3}>{selectedMoney}</Text>
                 </View>
                 <View style={styles.currentExchangeRateTextContainer}>
-                  <Text style={styles.exchangeRateText}>{exchangeRate}</Text>
+                  <Text style={styles.exchangeRateText}>
+                    {exchangeRate?.toFixed(2)}
+                  </Text>
                   <Text
                     style={
                       changePrice > 0

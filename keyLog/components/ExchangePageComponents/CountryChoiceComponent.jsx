@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     backgroundColor: "#FFF",
     flexDirection: "row",
-    paddingHorizontal: widthPercentage(20),
+    paddingHorizontal: widthPercentage(15),
     borderRadius: 10,
   },
   countrySelectRow: {

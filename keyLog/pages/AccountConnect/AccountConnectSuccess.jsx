@@ -11,8 +11,8 @@ import {
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
 
-const AccountConnectSuccess = ({ navigation,route }) => {
-  const {bank,balance,accountNum,page} = route?.params;
+const AccountConnectSuccess = ({ navigation, route }) => {
+  const { bank, balance, accountNum, page } = route?.params;
 
   return (
     <View style={styles.root}>
@@ -48,7 +48,14 @@ const AccountConnectSuccess = ({ navigation,route }) => {
         </View>
       </View>
       <View style={styles.footer}>
-        <TouchableOpacity onPress={()=>navigation.navigate(`${route.params.page ? route.params.page : "MainPage"}`)} style={styles.submitButton}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(
+              `${route.params.page ? route.params.page : "MainPage"}`
+            )
+          }
+          style={styles.submitButton}
+        >
           <Text style={styles.buttonText}>확인하기</Text>
         </TouchableOpacity>
       </View>
@@ -161,7 +168,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   containerTitle4: {
-    width: widthPercentage(60),
+    width: widthPercentage(90),
     color: "#191F29",
     textAlign: "center",
     fontFamily: "Inter",

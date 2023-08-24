@@ -32,10 +32,9 @@ export const AccountConnectPage = ({ navigation, route }) => {
   const [selectedItem, setSelectedItem] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("1234"); //계좌 비밀번호 받아오기
   const [isPasswordMismatch, setIsPasswordMismatch] = useState(false);
   const [alertInconsistencyPassword, setAlertInconsistencyPassword] =
-    useState(false);
+    useState(false); //불일치
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [externalAccountList, setExternalAccountList] = useState([]);
   //queryclient 호출
@@ -50,7 +49,7 @@ export const AccountConnectPage = ({ navigation, route }) => {
         setExternalAccountList(response.data.result.externalAccounts);
       },
       onError: (error) => {
-        console.log("외부계좌불러오기에러",error);
+        console.log("외부계좌불러오기에러", error);
         console.log("connect에러");
       },
     }
@@ -61,16 +60,20 @@ export const AccountConnectPage = ({ navigation, route }) => {
   const handleNumPress = (num) => {
     if (alertInconsistencyPassword) {
       resetPasswordProcess();
-      setAlertInconsistencyPassword(false);
+      setAlertInconsistencyPassword(false); //원위치
     }
 
     if (password.length < 4) {
-      setPassword(password + num);
+      const newpassword = password + num;
+      setPassword(newpassword);
+      console.log(newpassword);
+      setIsPasswordMismatch(false);
     }
   };
 
   const handleBackspacePress = () => {
     setPassword(password.slice(0, -1));
+    setIsPasswordMismatch(true);
   };
 
   const resetPasswordProcess = () => {
@@ -82,7 +85,8 @@ export const AccountConnectPage = ({ navigation, route }) => {
     onSuccess: (response) => {
       setIsPasswordMismatch(false);
       setIsButtonEnabled(false);
-      console.log("externalAccountIDPOST성공",response.data)
+      setPassword("");
+      console.log("externalAccountIDPOST성공", response.data);
       navigation.navigate("AccountConnectSuccess", {
         bank: response.data.result.bank,
         balance: response.data.result.balance,
@@ -91,7 +95,7 @@ export const AccountConnectPage = ({ navigation, route }) => {
       });
     },
     onError: (error) => {
-      console.log("externalAccountIDPOST실패",error.response)
+      console.log("externalAccountIDPOST실패", error.response);
       setIsPasswordMismatch(true);
       setIsButtonEnabled(false);
       setPassword("");
