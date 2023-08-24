@@ -391,6 +391,17 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
   }, [unit]);
 
   const queryClient = useQueryClient();
+
+  const handleReloadQuery = () => {
+    queryClient.invalidateQueries("unitdata");
+  };
+
+  useEffect(() => {
+    return (unsubscribe = navigation.addListener("focus", () => {
+      queryClient.invalidateQueries("unitdata");
+    }));
+  }, [navigation, queryClient]);
+
   const { unitdata } = useQuery(
     "unitdata",
     async () => getMyKeymoneyUnit({ unit, filter }),
@@ -437,9 +448,6 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
     }
   );
 
-  const handleReloadQuery = () => {
-    queryClient.invalidateQueries("unitdata");
-  };
   StatusBar.setTranslucent(true);
   const [openSelect, setOpenSelect] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("전체");
@@ -566,7 +574,9 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                         교통: require("../../assets/travelBudget/TransIcon.png"),
                         숙박: require("../../assets/travelBudget/HouseIcon.png"),
                         "쇼핑 · 편의점 · 마트": require("../../assets/travelBudget/ShopIcon.png"),
+                        쇼핑: require("../../assets/travelBudget/ShopIcon.png"),
                         "문화 · 여가": require("../../assets/travelBudget/PlayIcon.png"),
+                        문화: require("../../assets/travelBudget/PlayIcon.png"),
                         기타: require("../../assets/travelBudget/EtcIcon.png"),
                         마커: require("../../assets/travelBudget/MarkerIcon.png"),
                       };
@@ -586,6 +596,7 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                                 time: item.createdAt,
                                 historyId: item.historyId,
                                 type: item.type,
+                                totalBalance: balance,
                               });
                             } else if (item.type === "payment") {
                               navigation.navigate("PaymentPageInputComponent", {
@@ -597,7 +608,8 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                                 categoryImage: categoryIconMap[item.category],
                                 historyId: item.historyId,
                                 type: item.type,
-                                unitSymbol:unitSymbol
+                                unitSymbol: unitSymbol,
+                                totalBalance: balance,
                               });
                             } else if (item.type === "marker") {
                               navigation.navigate("MarkerHistoryPage", {
@@ -606,7 +618,8 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                                 time: item.createdAt,
                                 historyId: item.historyId,
                                 subject: item.subject,
-                                unitSymbol:unitSymbol
+                                unitSymbol: unitSymbol,
+                                totalBalance: balance,
                               });
                             }
                           }}

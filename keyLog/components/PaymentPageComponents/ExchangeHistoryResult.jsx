@@ -20,7 +20,7 @@ import {
 import { getDetailKeymoneyHistory } from "../../api/api";
 
 export const ExchangeHistoryResult = ({ route, navigation }) => {
-  const { keymoney, unit, time, historyId, type } = route.params;
+  const { keymoney, unit, time, historyId, type, totalBalance } = route.params;
   const [exchangeRate, setExchangeRate] = useState();
   const [exchangeWon, setExchangeWon] = useState();
   const { data } = useQuery(
@@ -37,7 +37,10 @@ export const ExchangeHistoryResult = ({ route, navigation }) => {
     }
   );
   const handleNavigation = () => {
-    navigation.navigate("ForeignPayHistoryPage", { unit });
+    navigation.navigate("ForeignPayHistoryPage", {
+      unit,
+      balance: totalBalance,
+    });
   };
   return (
     <View style={styles.root}>

@@ -155,7 +155,8 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
     categoryImage,
     historyId,
     type,
-    unitSymbol
+    unitSymbol,
+    totalBalance
   } = route.params;
   StatusBar.setTranslucent(true);
   const [openCategory, setOpenCategory] = useState(false);
@@ -197,15 +198,36 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
     onError: () => {},
   });
 
-  const handlePatchKeymoneyHistory = () => {
-    console.log(selectedChangeCategory, changeMemo);
+  const handlePatchKeymoneyHistory = async () => {
     const updatePaymentData = {
       category: selectedChangeCategory,
       memo: changeMemo,
     };
-    console.log(updatePaymentData);
-    patchKeymoneyHistoryMutation.mutate({ historyId, updatePaymentData });
+
+    try {
+      const response = await patchKeymoneyHistoryMutation.mutateAsync({
+        historyId,
+        updatePaymentData,
+      });
+
+      console.log(response.data);
+
+      // 결제 내역 업데이트가 성공하면 ForeignPayHistoryPage로 이동
+      navigation.navigate("ForeignPayHistoryPage", { unit, balance:totalBalance });
+    } catch (error) {
+      // 에러 처리
+    }
   };
+  // const handlePatchKeymoneyHistory = () => {
+  //   console.log(selectedChangeCategory, changeMemo);
+  //   const updatePaymentData = {
+  //     category: selectedChangeCategory,
+  //     memo: changeMemo,
+  //   };
+  //   console.log(updatePaymentData);
+  //   patchKeymoneyHistoryMutation.mutate({ historyId, updatePaymentData });
+  //   navigation.navigate("ForeignPayHistoryPage", { unit });
+  // };
 
   return (
     <Main categoryMode={openCategory}>
@@ -222,7 +244,7 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
             {unitSymbol} {keymoney}
           </CostText>
           <DateText>
-          {time[0]}.{time[1]}.{time[2]} {time[3]}:{time[4]}
+            {time[0]}.{time[1]}.{time[2]} {time[3]}:{time[4]}
           </DateText>
         </MainComponent>
         <CategoryWrapper>
@@ -261,8 +283,7 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
         <TouchableOpacity
           style={styles.frame17}
           onPress={() => {
-            handlePatchKeymoneyHistory(),
-              navigation.navigate("ForeignPayHistoryPage", { unit });
+            handlePatchKeymoneyHistory();
           }}
         >
           <Text style={styles.____3}>저장하기</Text>

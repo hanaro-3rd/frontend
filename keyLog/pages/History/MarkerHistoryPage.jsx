@@ -81,7 +81,7 @@ const DetailContainer = styled.View`
 `;
 
 const MarkerHistoryPage = ({ route, navigation }) => {
-  const { keymoney, unit, time, historyId, subject, unitSymbol } = route.params;
+  const { keymoney, unit, time, historyId, subject, unitSymbol,totalBalance } = route.params;
   console.log(subject);
 
   return (
@@ -121,7 +121,7 @@ const MarkerHistoryPage = ({ route, navigation }) => {
         <TouchableOpacity
           style={styles.frame17}
           onPress={() => {
-              navigation.navigate("ForeignPayHistoryPage", { unit });
+              navigation.navigate("ForeignPayHistoryPage", { unit, balance:totalBalance });
           }}
         >
           <Text style={styles.____3}>확인</Text>

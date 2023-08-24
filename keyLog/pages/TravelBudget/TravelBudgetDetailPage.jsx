@@ -177,7 +177,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
   const handleEditButtonClick = () => {
     navigation.navigate("TravelScheduleEditPage", {
       planId: planId,
-      travelData: travelData
+      travelData: travelData,
     });
     console.log(travelData, "잘 가는거야?");
   };

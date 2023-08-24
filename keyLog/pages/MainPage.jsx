@@ -1,4 +1,4 @@
-import { Image, TouchableOpacity, ScrollView, Linking } from "react-native";
+import { Image, TouchableOpacity, ScrollView, Linking ,Text} from "react-native";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -162,7 +162,7 @@ const MainPage = ({ navigation }) => {
     background-color: #fff;
     flex-direction: row;
   `;
-  const PrevOrNextButton = styled.View`
+  const PrevOrNextButton = styled.TouchableOpacity`
     display: flex;
     width: ${widthPercentage(40)}px;
     padding: 10px;
@@ -291,7 +291,7 @@ const MainPage = ({ navigation }) => {
 
   const MenuCard = styled.View`
     width: ${widthPercentage(350)}px;
-    height: ${heightPercentage(140)}px;
+    height: ${heightPercentage(120)}px;
     align-items: center;
     gap: 20px;
     background-color: #fff;
@@ -304,7 +304,7 @@ const MainPage = ({ navigation }) => {
 
   const MenuSubContainer = styled.View`
     width: ${widthPercentage(210)}px;
-    height: ${heightPercentage(120)}px;
+    height: ${heightPercentage(100)}px;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
@@ -434,37 +434,59 @@ const MainPage = ({ navigation }) => {
     },
   });
 
-  const handleHanaServiceLink = (serviceName) => {
-    let url;
+  const [currentExchangeIndex, setCurrentExchangeIndex] = useState(0);
 
-    switch (serviceName) {
-      case "하나은행":
-        url = "https://www.kebhana.com/";
-        break;
-      case "하나카드":
-        url = "https://www.hanacard.co.kr/";
-        break;
-      case "하나캐피탈":
-        url = "https://www.hanacapital.co.kr/";
-        break;
-      case "하나생명":
-        url = "https://hanalife.co.kr/";
-        break;
-      case "하나증권":
-        url = "https://www.hanaw.com/";
-        break;
-      case "하나저축은행":
-        url = "https://www.hanasavings.com/";
-        break;
-
-      default:
-        return;
-    }
-
-    Linking.openURL(url).catch((error) =>
-      console.error("An error occurred:", error)
-    );
+  const handlePrevExchange = () => {
+    setCurrentExchangeIndex((prevIndex) => {
+      if (prevIndex - 1 < 0) {
+        return 2;
+      } else {
+        return prevIndex - 1;
+      }
+    });
   };
+
+  const handleNextExchange = () => {
+    setCurrentExchangeIndex((prevIndex) => {
+      if (prevIndex + 1 > 2) {
+        return 0;
+      } else {
+        return prevIndex + 1;
+      }
+    });
+  };
+
+  // const handleHanaServiceLink = (serviceName) => {
+  //   let url;
+
+  //   switch (serviceName) {
+  //     case "하나은행":
+  //       url = "https://www.kebhana.com/";
+  //       break;
+  //     case "하나카드":
+  //       url = "https://www.hanacard.co.kr/";
+  //       break;
+  //     case "하나캐피탈":
+  //       url = "https://www.hanacapital.co.kr/";
+  //       break;
+  //     case "하나생명":
+  //       url = "https://hanalife.co.kr/";
+  //       break;
+  //     case "하나증권":
+  //       url = "https://www.hanaw.com/";
+  //       break;
+  //     case "하나저축은행":
+  //       url = "https://www.hanasavings.com/";
+  //       break;
+
+  //     default:
+  //       return;
+  //   }
+
+  //   Linking.openURL(url).catch((error) =>
+  //     console.error("An error occurred:", error)
+  //   );
+  // };
 
   return (
     <Main>
@@ -506,10 +528,56 @@ const MainPage = ({ navigation }) => {
             />
           ))}
         </CustomSwiper>
+        {/* 환율
+        {[USD, JPY, EUR].map((e, idx) => {
+          if (idx !== currentExchangeIndex) {
+            return null;
+          }
+          return (
+            <ExchangeRateContainer key={idx}>
+              <PrevOrNextButton onPress={handlePrevExchange}>
+                <Image source={arrow_prev} />
+              </PrevOrNextButton>
+              <CountryExchangeRateContainer>
+                {idx == 0 && <Image source={USIcon} />}
+                {idx == 1 && <Image source={JapanIcon} />}
+                {idx == 2 && <Image source={EuroIcon} />}
+                <TextContainer>
+                  <CountryTextContainer>
+                    <CountryContainer>
+                      {idx == 0 && <Country>미국</Country>}
+                      {idx == 1 && <Country>일본</Country>}
+                      {idx == 2 && <Country>유럽</Country>}
+
+                      {idx == 0 && <MoneytaryUnit>USD</MoneytaryUnit>}
+                      {idx == 1 && <MoneytaryUnit>JPY</MoneytaryUnit>}
+                      {idx == 2 && <MoneytaryUnit>EUR</MoneytaryUnit>}
+                    </CountryContainer>
+                    {exchangeDate && <DateTime>{exchangeDate}</DateTime>}
+                  </CountryTextContainer>
+
+                  {USD && (
+                    <RateTextContainer>
+                      <ExchangeRate>{e.exchangeRate}</ExchangeRate>
+                      {e.changePrice > 0 ? (
+                        <ChangeUpRate>▲ {e.changePrice}</ChangeUpRate>
+                      ) : (
+                        <ChangeRate>▼ {e.changePrice}</ChangeRate>
+                      )}
+                    </RateTextContainer>
+                  )}
+                </TextContainer>
+              </CountryExchangeRateContainer>
+              <PrevOrNextButton onPress={handleNextExchange}>
+                <Image source={arrow_next} />
+              </PrevOrNextButton>
+            </ExchangeRateContainer>
+          );
+        })} */}
         {/* 환율 */}
         <Swiper
           loop={true} // 무한 루프로 스와이프할 수 있도록 설정
-          autoplay={true} // 자동 재생 비활성화
+          autoplay={false} // 자동 재생 비활성화
           width={`100%`}
           height={100}
           showsButtons={false}
@@ -542,7 +610,7 @@ const MainPage = ({ navigation }) => {
                     {USD && (
                       <RateTextContainer>
                         <ExchangeRate>{e.exchangeRate}</ExchangeRate>
-                        {e.changePrice > 0 ? (
+                        {e.exchangeRate > 0 ? (
                           <ChangeUpRate>▲ {e.changePrice}</ChangeUpRate>
                         ) : (
                           <ChangeRate>▼ {e.changePrice}</ChangeRate>
