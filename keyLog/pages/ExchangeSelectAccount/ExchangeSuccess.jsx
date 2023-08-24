@@ -68,27 +68,33 @@ const ExchangeSuccess = ({ navigation, route }) => {
                   </View>
                 </View>
               </View>
-              <View style={styles.exchangeRateContainer}>
-                <Text style={styles.containerTitle2}>적용 환율</Text>
-                <View style={styles.currentExchangeRateContainer}>
-                  <View style={styles.countryInformationContainer}>
-                    <Text style={styles.countryText}>
-                      {(exchangeToUnit == "USD" && "미국") ||
-                        (exchangeToUnit == "EUR" && "유럽") ||
-                        (exchangeToUnit == "JPY" && "일본")}
-                    </Text>
-                    <Text style={styles.unitText}>{exchangeToUnit}</Text>
-                  </View>
-                  <View style={styles.currentExchangeRateTextContainer}>
-                    <Text style={styles.exchangeRateText}>{exchangeRate}</Text>
-                    {changePrice > 0 ? (
-                      <ChangeUpRate>▲ {changePrice}</ChangeUpRate>
-                    ) : (
-                      <ChangeRate>▼ {changePrice}</ChangeRate>
-                    )}
+              {exchangeToUnit != "KRW" ? (
+                <View style={styles.exchangeRateContainer}>
+                  <Text style={styles.containerTitle2}>적용 환율</Text>
+                  <View style={styles.currentExchangeRateContainer}>
+                    <View style={styles.countryInformationContainer}>
+                      <Text style={styles.countryText}>
+                        {(exchangeToUnit == "USD" && "미국") ||
+                          (exchangeToUnit == "EUR" && "유럽") ||
+                          (exchangeToUnit == "JPY" && "일본")}
+                      </Text>
+                      <Text style={styles.unitText}>{exchangeToUnit}</Text>
+                    </View>
+                    <View style={styles.currentExchangeRateTextContainer}>
+                      <Text style={styles.exchangeRateText}>
+                        {exchangeRate}
+                      </Text>
+                      {changePrice > 0 ? (
+                        <ChangeUpRate>▲ {changePrice}</ChangeUpRate>
+                      ) : (
+                        <ChangeRate>▼ {changePrice}</ChangeRate>
+                      )}
+                    </View>
                   </View>
                 </View>
-              </View>
+              ) : (
+                <View />
+              )}
             </View>
           </View>
         </View>

@@ -297,7 +297,7 @@ export const ExchangePage = () => {
               <View style={styles.titleContainer}>
                 <Text style={styles.containerTitle2}>환전 금액</Text>
                 <Text style={styles.containerSubtitle}>
-                  주말, 공휴일 수수료 원화 20원이 적용됩니다
+                  주말, 공휴일에는 환율에 수수료 20이 부과됩니다
                 </Text>
               </View>
 
@@ -387,7 +387,9 @@ export const ExchangePage = () => {
                 </View>
                 <View style={styles.currentExchangeRateTextContainer}>
                   <Text style={styles.exchangeRateText}>
-                    {exchangeRate?.toFixed(2)}
+                    {selectedMoney == "JPY"
+                      ? exchangeRate * 1000
+                      : exchangeRate?.toFixed(2)}
                   </Text>
                   <Text
                     style={

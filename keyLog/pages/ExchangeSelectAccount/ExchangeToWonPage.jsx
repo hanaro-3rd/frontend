@@ -54,7 +54,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
   const [accountBalance, setAccountBalance] = useState(false);
   const [exchangeRate, setExchangeRate] = useState();
   const [changePrice, setChangePrice] = useState();
-  const [minimumMoney, setMinimumMoney] = useState(10);
+  const [minimumMoney, setMinimumMoney] = useState();
   const [koreaTextInput, setKoreaTextInput] = useState();
   const [subKoreaText, setSubKoreaText] = useState("");
   const [foreignTextInput, setForeignTextInput] = useState();
@@ -63,17 +63,16 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
   const { Keyunit, Keybalance } = route?.params;
   const placeholderText = `0~${Keybalance}`;
   const [selectedMoney, setSelectedMoney] = useState(Keyunit);
+  useEffect(() => {
+    setMinimumMoney(Keyunit == "JPY" ? 1000 : 10);
+  }, [setMinimumMoney]);
 
-  const Root = styled.SafeAreaView`
-    width: ${phoneWidth}px;
-    /* padding-top: ${getStatusBarHeight}px; */
-    height: ${phoneHeight}px;
-  `;
   const handleChooseAccountComponent = () => {
     navigation.navigate("ChooseAccountComponent", {
       page: "ExchangePage",
     });
   };
+
   const queryClient = useQueryClient();
   const { data } = useQuery("account", async () => getAccount(), {
     onSuccess: (response) => {
@@ -106,15 +105,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
         setJpy(response.data.result.jpy);
         setEur(response.data.result.eur);
         setUsd(response.data.result.usd);
-        if (Keyunit === "JPY") {
-          setExchangeRate(response.data.result.jpy.exchangeRate);
-        } else if (Keyunit === "EUR") {
-          setExchangeRate(response.data.result.eur.exchangeRate);
-        } else if (Keyunit === "USD") {
-          setExchangeRate(response.data.result.usd.exchangeRate);
-        } else {
-          setExchangeRate(1);
-        }
+        setExchangeRate(response.data.result.usd.exchangeRate);
         setChangePrice(response.data.result.usd.changePrice);
         setApiTime(response.data.result.updatedAt);
       },
@@ -226,12 +217,18 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
       accountId: accountId,
       changePrice: changePrice,
       exchangeRate: exchangeRate,
-      isBought: false,
+      isBought: true,
       money: koreaTextInput,
       moneyToExchange: foreignTextInput,
       unit: selectedMoney,
     });
   };
+
+  const Root = styled.SafeAreaView`
+    width: ${phoneWidth}px;
+    /* padding-top: ${getStatusBarHeight}px; */
+    height: ${phoneHeight}px;
+  `;
 
   return (
     <Root>
@@ -239,7 +236,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
         <DeleteHeader navigation={navigation} to="MainPage" />
         <View style={styles.body}>
           <View style={styles.bodyHeader}>
-            <Text style={styles.title}>하나머니 환전</Text>
+            <Text style={styles.title}>원화 계좌로 송금하기</Text>
             <Text style={styles.subtitle}>
               환전을 위해 계좌 및 금액을 설정합니다.
             </Text>
@@ -364,7 +361,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                   </View>
                   <TextInput //외화
                     value={foreignTextInput}
-                    onChangeText={(text) => koreaInputChange(text)}
+                    onChangeText={(text) => foreignInputChange(text)}
                     placeholder={placeholderText}
                     keyboardType="numeric"
                     style={{ textAlign: "right" }}
@@ -408,7 +405,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                     <TextInput //한화
                       editable={false}
                       style={{ textAlign: "right" }}
-                      onChangeText={(text) => foreignInputChange(text)}
+                      onChangeText={(text) => koreaInputChange(text)}
                       value={koreaTextInput}
                       placeholder="계좌에 들어갈 금액"
                       keyboardType="numeric"
