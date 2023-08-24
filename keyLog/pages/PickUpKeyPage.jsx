@@ -17,6 +17,8 @@ import { calculateDistance } from "../utils/calculateDistance";
 import leftArrow from "../assets/accountImg/Vector.png";
 import { NavigationContainer } from "@react-navigation/native";
 import { navigateToLoginPage } from "../utils/NavigateToLoginPage";
+import Geolocation from "react-native-geolocation-service";
+import arrowBack from "../assets/travelBudget/arrow_back.png";
 const PickUpKeyPage = ({ navigation }) => {
   const [location, setLocation] = useState({
     latitude: 37.545315,
@@ -31,6 +33,7 @@ const PickUpKeyPage = ({ navigation }) => {
   const [successUnit, setSuccessUnit] = useState();
   const [successBalance, setSuccessBalance] = useState();
   const [canGetPrice, setCanGetPrice] = useState();
+  const [maxHeight, setMaxHeight] = useState(300);
   const queryClient = useQueryClient();
   const mapRef = useRef(null);
   const placesRef = useRef();
@@ -48,7 +51,9 @@ const PickUpKeyPage = ({ navigation }) => {
       }, 0);
       console.log(markerBalance);
       setCanGetPrice(markerBalance);
-      setMarkerList(response.data.result.markers);
+      setMarkerList(
+        response.data.result.markers.filter((e, idx) => e.isPickUp == false)
+      );
       console.log(response.data.result.markers[0]);
       console.log(response.data.result.markers[1]);
     },
@@ -72,7 +77,15 @@ const PickUpKeyPage = ({ navigation }) => {
       console.log("markerpost" + error);
     },
   });
-
+ 
+  useEffect(()=>{
+     if (showSuccessModalView == true) 
+     {
+      setTimeout(()=>{
+         setShowSuccessModalView(false)
+      },3000)
+     }
+  },[showSuccessModalView])
   const handlePostMarkers = (markerId, markerData) => {
     console.log(markerId, markerData);
     postMarkersMutation.mutate({ markerId, markerData });
@@ -80,26 +93,40 @@ const PickUpKeyPage = ({ navigation }) => {
 
   const [isSearched, setIsSearched] = useState(false);
   //현재 위치 표시
-  // useEffect(() => {
-  //   Geolocation.getCurrentPosition(
-  //     (position) => {
-  //       const { latitude, longitude } = position.coords;
-  //       setLocation({
-  //         latitude: 37.545315,
-  //         longitude: 127.057088,
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        console.log(position.coords);
+        setLocation({
+          latitude: 37.545315,
+          longitude: 127.057088,
 
-  //         latitudeDelta: 0.01,
-  //         longitudeDelta: 0.01,
-  //       });
-  //     },
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        });
+      },
 
-  //     (error) => {
-  //       console.log(error.code, error.message);
-  //     },
-  //     { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-  //   );
-  //   console.log("location" + location);
-  // }, []);
+      (error) => {
+        console.log(error);
+        console.log(error.code, error.message, "geolocation에러");
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+    );
+    console.log("location" + location);
+  }, []);
+
+  const [markerInfo, setMarkerInfo] = useState(null);
+
+  const handleMarkerPress = (event, marker) => {
+    // 마커를 클릭하면 해당 마커의 정보를 가져옵니다.
+    setMarkerInfo(marker);
+  };
+
+  const handleMapPress = () => {
+    // 지도를 클릭하면 마커 정보를 리셋합니다.
+    setMarkerInfo(null);
+  };
   return (
     <View style={{ flex: 1, marginTop: `${getStatusBarHeight()}` }}>
       <View
@@ -124,7 +151,7 @@ const PickUpKeyPage = ({ navigation }) => {
             navigation.navigate("MainPage");
           }}
         >
-          <Image source={leftArrow} />
+          <Image source={arrowBack} />
         </TouchableOpacity>
         <View style={{ width: "90%" }}>
           <GooglePlacesAutocomplete
@@ -178,9 +205,9 @@ const PickUpKeyPage = ({ navigation }) => {
               flexDirection: "row",
             }}
           >
-            <Text style={{ color: "white" }}>
-              {getMoneyUnit(successUnit)} {successBalance} 하나머니 받기 완료!
-              해당 외화 하나머니를 확인해주세요!{" "}
+            <Text style={{ color: "white", fontSize: 13 }}>
+              {getCountryUnit(successUnit)} {successBalance} 키머니 받기 완료!
+              해당 외화 키머니를 확인해주세요!{" "}
             </Text>
             <TouchableOpacity
               onPress={() => {
@@ -189,7 +216,7 @@ const PickUpKeyPage = ({ navigation }) => {
             >
               <Image
                 source={require("../Images/삭제_흰.png")}
-                style={{ zIndex: 1111, width: 10, height: 10, marginTop: 3 }}
+                style={{ zIndex: 1111, width: 10, height: 10 }}
               />
             </TouchableOpacity>
           </View>
@@ -208,6 +235,7 @@ const PickUpKeyPage = ({ navigation }) => {
         showsUserLocation={true}
         showsMyLocationButton={true}
         region={location}
+        onPress={ (event) => console.log(event.nativeEvent.coordinate)  }
       >
         {isSearched && (
           <Marker
@@ -218,6 +246,12 @@ const PickUpKeyPage = ({ navigation }) => {
             }}
           ></Marker>
         )}
+                <Marker
+          coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
+          title="마커 제목"
+          description="마커 설명"
+          onPress={e => handleMarkerPress(e, marker)}
+        />
         {markerList?.map((marker, idx) => {
           if (
             calculateDistance(
@@ -245,6 +279,7 @@ const PickUpKeyPage = ({ navigation }) => {
                     lat: marker.lat,
                     lng: marker.lng,
                     isPickUp: marker.isPickUp,
+                    unit: marker.unit,
                   });
                 }}
               >
@@ -297,6 +332,7 @@ const PickUpKeyPage = ({ navigation }) => {
                     lat: marker.lat,
                     lng: marker.lng,
                     isPickUp: marker.isPickUp,
+                    unit: marker.unit,
                   });
                 }}
                 style={{ zIndex: isSearched === idx ? 2 : 1 }}
@@ -349,7 +385,8 @@ const PickUpKeyPage = ({ navigation }) => {
             </ModalHeader>
             <ModalKeyMoneyView>
               <ModalKeyMoneyText>
-                ￥{showModalView.amount} 키머니
+                {showModalView.unit}
+                {showModalView.amount} 키머니
               </ModalKeyMoneyText>
             </ModalKeyMoneyView>
             {!showModalView.isPickUp ? (
@@ -372,7 +409,7 @@ const PickUpKeyPage = ({ navigation }) => {
         </ModalWrapper>
       )}
 
-      <MarkerList>
+      <MarkerList maxHeight={maxHeight}>
         <UpButtonView onPress={() => setShowElementView(!showElementView)}>
           <UpButton></UpButton>
         </UpButtonView>
@@ -380,7 +417,7 @@ const PickUpKeyPage = ({ navigation }) => {
           <MainTextList>
             <MainText>
               총 {getCountryUnit(markerList[0].unit)}
-              {canGetPrice} 하나머니를 주울 수 있어요!
+              {canGetPrice} 키머니를 주울 수 있어요!
             </MainText>
           </MainTextList>
         )}
@@ -425,7 +462,7 @@ const PickUpKeyPage = ({ navigation }) => {
             })}
           </ElementView>
         ) : (
-          <ElementView></ElementView>
+          <View></View>
         )}
       </MarkerList>
     </View>
@@ -433,8 +470,11 @@ const PickUpKeyPage = ({ navigation }) => {
 };
 const ModalWrapper = styled.View`
   width: 100%;
-  height: ${heightPercentage(140)}px;
+  /* height: ${heightPercentage(140)}px; */
   align-items: center;
+  background-color: transparent;
+  position: fixed;
+  bottom: 10;
 `;
 const ModalTextView = styled.View`
   flex-direction: row;
@@ -446,10 +486,9 @@ const ModalDeleteButton = styled.TouchableOpacity`
 `;
 const ModalKeyMoneyView = styled.View`
   width: 100%;
-  height: ${heightPercentage(24)}px;
+  height: ${heightPercentage(40)}px;
   align-items: center;
   justify-content: center;
-  margin: 10px 0px;
 `;
 const ModalGetMoneyText = styled.Text`
   color: #fff;
@@ -504,13 +543,13 @@ const ModalHeader = styled.View`
   width: 100%;
   align-items: center;
 `;
-const ElementView = styled.View`
+const ElementView = styled.ScrollView`
   flex-direction: column;
   width: 100%;
   padding-left: ${widthPercentage(20)}px;
   padding-right: ${widthPercentage(20)}px;
-  align-items: center;
-  justify-content: space-between;
+  /* align-items: center;
+  justify-content: space-between; */
 `;
 const MarkerElementView = styled.TouchableOpacity`
   flex-direction: row;
@@ -586,9 +625,8 @@ const LeftPeopleText = styled.Text`
   font-weight: 400;
 `;
 const MarkerList = styled.View`
-  align-items: center;
   width: 100%;
-  min-height: ${heightPercentage()}px;
+  max-height: ${(props) => props.maxHeight}px;
 `;
 const UpButtonView = styled.TouchableOpacity`
   width: 100%;

@@ -58,7 +58,7 @@ const App = () => {
   const [isLoading, setLoading] = useState(true);
   const [haveDeviceId, setHaveDeviceId] = useState(false);
   const [username, setUsername] = useRecoilState(usernameAtom);
-  // usePermissions();
+  usePermissions();
   const { data } = useQuery(
     "registration",
     async () => getRegistrationDeviceId(await DeviceInfo.getUniqueId()),
@@ -126,6 +126,7 @@ const App = () => {
         <Stack.Navigator
           initialRouteName={
             login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
+            // "SignUpPage"
           }
         >
           <Stack.Screen

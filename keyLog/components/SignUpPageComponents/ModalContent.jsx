@@ -30,19 +30,13 @@ const ModalContent = ({
   const postVerificationAuthMutation = useMutation(postVerificationAuth, {
     onSuccess: (response) => {
       queryClient.invalidateQueries("verificationAuth");
-
-      // if (response?.data?.errorCode) {
-      //   setErrorCode(response.data?.errorMessage);
-      //   return;
-      // }
       setModalVisible(false);
       goToLoginPasswordPage();
     },
     onError: (error) => {
-      setModalVisible(false);
-      goToLoginPasswordPage();
       console.log(error.response);
       console.log(error + "verificationAuth");
+      setErrorCode(error.response.data.errorMessage);
     },
   });
 
@@ -53,7 +47,10 @@ const ModalContent = ({
       phonenum: phoneNumber,
     });
   };
-
+  const handleTogglemodal = () => {
+    setInputText("")
+    toggleModal()
+  }
   const navigation = useNavigation();
   const goToLoginPasswordPage = () => {
     navigation.navigate("LoginPasswordPage", {
@@ -125,6 +122,7 @@ const ModalContent = ({
 
   const resendCode = (e) => {
     e.preventDefault();
+    extendTime();
     postVerificationMutation.mutate({ phonenum: phoneNumber });
   };
 
@@ -154,8 +152,8 @@ const ModalContent = ({
               <View style={styles.popupRemainTime}>
                 <Text style={styles.remainTime}>{displayTime()}</Text>
                 <View style={styles.extendTimeButton}>
-                  <TouchableOpacity onPress={extendTime}>
-                    <Text style={styles.buttonText2}>시간 연장</Text>
+                  <TouchableOpacity>
+                    <Text style={styles.buttonText2}>남은시간</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -177,6 +175,7 @@ const ModalContent = ({
                   setInputText(text.replace(/[^0-9]/g, ""))
                 }
                 maxLength={6}
+                keyboardType="numeric"
                 placeholder="인증번호"
               />
               <TouchableOpacity onPress={resendCode}>
