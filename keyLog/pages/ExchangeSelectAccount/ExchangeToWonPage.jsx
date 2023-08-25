@@ -41,6 +41,7 @@ import _ from "lodash";
 import { useDebouncedEffect } from "../../hooks/useDebouncedEffect";
 import { integerUnit, minimumUnit } from "../../utils/ExchangeSentence";
 import styled from "styled-components/native";
+import ToWonComponent from "../../components/ExchangePageComponents/ToWonComponent";
 
 export const ExchangeToWonPage = ({ route, navigation }) => {
   const [accountList, setAccountList] = useState([]);
@@ -63,6 +64,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
   const { Keyunit, Keybalance } = route?.params;
   const placeholderText = `0~${Keybalance}`;
   const [selectedMoney, setSelectedMoney] = useState(Keyunit);
+
   useEffect(() => {
     setMinimumMoney(Keyunit == "JPY" ? 1000 : 10);
   }, [setMinimumMoney]);
@@ -135,56 +137,56 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
     }
   };
 
-  const koreaInputChange = (text) => {
-    setKoreaTextInput(text);
-    console.log("sdf", text / exchangeRate);
-    const exchangeMoney = Math.floor(text / exchangeRate);
-    setForeignTextInput(`${exchangeMoney}`);
-  };
+  // const koreaInputChange = (text) => {
+  //   setKoreaTextInput(text);
+  //   console.log("sdf", text / exchangeRate);
+  //   const exchangeMoney = Math.floor(text / exchangeRate);
+  //   setForeignTextInput(`${exchangeMoney}`);
+  // };
 
   // Debounce된 함수 생성
-  const handleDebouncedInputChange = () => {
-    const numericValue = parseInt(koreaTextInput);
-    console.log(minimumMoney, "minimumMoney");
-    if (isNaN(numericValue)) {
-      Keyboard.dismiss();
-      return;
-    }
-    if (numericValue > 1000000) {
-      //한국돈 100만원보다 클때
-      let exchangeMoney = Math.floor(1000000 / exchangeRate);
-      console.log("exchangeRate", exchangeRate);
-      console.log(exchangeMoney, "exchangeMoney1000000");
-      if (selectedMoney == "JPY") {
-        exchangeMoney = Math.floor(exchangeMoney / 1000) * 1000;
-      }
-      const koreaMoney = Math.floor(exchangeMoney * exchangeRate);
-      setForeignTextInput(String(exchangeMoney));
-      setKoreaTextInput(String(koreaMoney));
-      setSubForeignText("최대 환전금액은 원화 기준 100만원입니다.");
-      Keyboard.dismiss();
-      return;
-    }
-    if (numericValue / exchangeRate < minimumMoney) {
-      //입력값이 최소 환전 금액보다 작을 때
-      const exchangeValue = minimumMoney;
-      setForeignTextInput(`${exchangeValue}`);
-      const koreaValue = Math.floor(exchangeValue * exchangeRate);
-      setKoreaTextInput(`${koreaValue}`);
-      setSubForeignText(minimumUnit(minimumMoney, selectedMoney));
-    } else {
-      if (minimumMoney == 1000) {
-        //  foreignTextInput % 1000 == 0 ? setSubForeignText("") : setSubForeignText(integerUnit(minimumMoney,selectedMoney))
-        const japanMoney = Math.round(foreignTextInput / 1000) * 1000;
-        console.log(japanMoney);
-        setForeignTextInput(String(japanMoney));
-        setKoreaTextInput(String(Math.floor(japanMoney * exchangeRate)));
-      } else {
-        setKoreaTextInput(String(Math.floor(foreignTextInput * exchangeRate)));
-      }
-    }
-    Keyboard.dismiss();
-  };
+  // const handleDebouncedInputChange = () => {
+  //   const numericValue = parseInt(koreaTextInput);
+  //   console.log(minimumMoney, "minimumMoney");
+  //   if (isNaN(numericValue)) {
+  //     Keyboard.dismiss();
+  //     return;
+  //   }
+  //   if (numericValue > 1000000) {
+  //     //한국돈 100만원보다 클때
+  //     let exchangeMoney = Math.floor(1000000 / exchangeRate);
+  //     console.log("exchangeRate", exchangeRate);
+  //     console.log(exchangeMoney, "exchangeMoney1000000");
+  //     if (selectedMoney == "JPY") {
+  //       exchangeMoney = Math.floor(exchangeMoney / 1000) * 1000;
+  //     }
+  //     const koreaMoney = Math.floor(exchangeMoney * exchangeRate);
+  //     setForeignTextInput(String(exchangeMoney));
+  //     setKoreaTextInput(String(koreaMoney));
+  //     setSubForeignText("최대 환전금액은 원화 기준 100만원입니다.");
+  //     Keyboard.dismiss();
+  //     return;
+  //   }
+  //   if (numericValue / exchangeRate < minimumMoney) {
+  //     //입력값이 최소 환전 금액보다 작을 때
+  //     const exchangeValue = minimumMoney;
+  //     setForeignTextInput(`${exchangeValue}`);
+  //     const koreaValue = Math.floor(exchangeValue * exchangeRate);
+  //     setKoreaTextInput(`${koreaValue}`);
+  //     setSubForeignText(minimumUnit(minimumMoney, selectedMoney));
+  //   } else {
+  //     if (minimumMoney == 1000) {
+  //       //  foreignTextInput % 1000 == 0 ? setSubForeignText("") : setSubForeignText(integerUnit(minimumMoney,selectedMoney))
+  //       const japanMoney = Math.round(foreignTextInput / 1000) * 1000;
+  //       console.log(japanMoney);
+  //       setForeignTextInput(String(japanMoney));
+  //       setKoreaTextInput(String(Math.floor(japanMoney * exchangeRate)));
+  //     } else {
+  //       setKoreaTextInput(String(Math.floor(foreignTextInput * exchangeRate)));
+  //     }
+  //   }
+  //   Keyboard.dismiss();
+  // };
 
   const postExchangeMutation = useMutation(postExchange, {
     onSuccess: (response) => {
@@ -206,7 +208,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
   });
 
   // 입력값이 변경될 때마다 debounce된 함수 실행
-  useDebouncedEffect(handleDebouncedInputChange, 1500, [koreaTextInput]);
+  // useDebouncedEffect(handleDebouncedInputChange, 1500, [koreaTextInput]);
   // 나머지 로직을 여기에 추가
 
   const handleExchangeSubmit = () => {
@@ -359,12 +361,16 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
 
                     <Text style={styles.unitText2}>{Keyunit}</Text>
                   </View>
-                  <TextInput //외화
+                  {/* <TextInput //외화
                     value={foreignTextInput}
                     onChangeText={(text) => foreignInputChange(text)}
-                    placeholder={placeholderText}
+                    // placeholder={placeholderText}
                     keyboardType="numeric"
                     style={{ textAlign: "right" }}
+                  /> */}
+                  <ToWonComponent
+                    value={foreignTextInput}
+                    onChangeText={(text) => foreignInputChange(text)}
                   />
                 </View>
                 <View style={{ width: "100%" }}>
@@ -405,7 +411,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                     <TextInput //한화
                       editable={false}
                       style={{ textAlign: "right" }}
-                      onChangeText={(text) => koreaInputChange(text)}
+                      // onChangeText={(text) => koreaInputChange(text)}
                       value={koreaTextInput}
                       placeholder="계좌에 들어갈 금액"
                       keyboardType="numeric"

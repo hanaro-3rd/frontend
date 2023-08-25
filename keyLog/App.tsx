@@ -215,11 +215,6 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="ExchangeToWonPage"
-            component={ExchangeToWonPage}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
             name="CountryChoiceComponent"
             component={CountryChoiceComponent}
             options={{ headerShown: false }}
