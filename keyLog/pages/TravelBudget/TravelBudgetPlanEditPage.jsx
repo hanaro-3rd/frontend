@@ -18,7 +18,7 @@ import PlayIcon from "../../assets/travelBudget/PlayIcon.png";
 import EtcIcon from "../../assets/travelBudget/EtcIcon.png";
 import arrow_back from "../../assets/travelBudget/arrow_back.png";
 import { useMutation, useQueryClient } from "react-query";
-import { postTravelBudget } from "../../api/api";
+import { postTravelBudget,getTravelBudgetDetail } from "../../api/api";
 
 const RootScrollView = styled.ScrollView`
   /* margin-top: ${getStatusBarHeight}px; */
@@ -232,11 +232,11 @@ const SubmitButton = styled.TouchableOpacity`
   border-radius: 10px;
 `;
 
-const TravelBudgetPlanPage = ({ navigation, route }) => {
+const TravelBudgetPlanEditPage = ({ navigation, route }) => {
   const handleGoBackToSchedulePage = () => {
     navigation.goBack();
   };
-
+  const queryClient = useQueryClient();
   const postTravelBudgetMutation = useMutation(postTravelBudget, {
     onSuccess: (response) => {
       console.log(response.data);
@@ -248,7 +248,7 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
     },
   });
   console.log(route.params);
-  const queryClient = useQueryClient();
+
   const {
     travelTitle,
     travelCountry,
@@ -515,4 +515,4 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
   );
 };
 
-export default TravelBudgetPlanPage;
+export default TravelBudgetPlanEditPage;

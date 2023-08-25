@@ -38,7 +38,7 @@ const SignUpPage = ({ navigation }) => {
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [name, setName] = useState("");
-
+  const [turnName,setTurnName] = useState(false)
   const [oneNumber, setOneNumber] = useState("");
   const [isOneNumberValid, setIsOneNumberValid] = useState("");
 
@@ -148,11 +148,12 @@ const SignUpPage = ({ navigation }) => {
   };
 
   const handleDebouncedNameChange = () => {
-    if (checkKoreanName(name) && name != "") {
+    if (checkKoreanName(name)) {
+      setTurnName(true)
       setIsNameValid(true);
       setIsNameValidSuccess(true);
     } else {
-      if (name == "") return;
+      if (turnName == false) return;
       setIsNameValid(false);
       setIsNameValidSuccess(false);
     }
@@ -176,7 +177,8 @@ const SignUpPage = ({ navigation }) => {
     postVerificationMutation.mutate({ phonenum: phoneNumber });
     setModalVisible(true);
   };
-
+  const firstTextInputRef = useRef(null);
+  const secondTextInputRef = useRef(null);
   return (
     <ScrollView
       contentContainerStyle={styles.root}
@@ -201,6 +203,7 @@ const SignUpPage = ({ navigation }) => {
             hasError={!isNameValid}
             hasSuccess={isNameValidSuccess}
             maxLength={5}
+            keyboardType= "default"
           />
           <View
             style={{
@@ -232,6 +235,9 @@ const SignUpPage = ({ navigation }) => {
                 placeholder="주민번호6자리"
                 placeholderTextColor="#B0B8C1"
                 maxLength={6}
+                keyboardType="numeric"
+                ref={firstTextInputRef}
+                onSubmitEditing={() => secondTextInputRef.current.focus()}
               />
             </TouchableOpacity>
             <Text style={{ fontSize: 50, fontWeight: 200, marginBottom: 6 }}>
@@ -260,10 +266,12 @@ const SignUpPage = ({ navigation }) => {
                     fontSize: fontPercentage(16),
                     fontWeight: "700",
                   }}
+                  ref={secondTextInputRef}
                   placeholderTextColor="#B0B8C1"
                   value={oneNumber}
                   onChangeText={handleNumberChange}
-                  maxLength={2}
+                  maxLength={1}
+                  keyboardType="numeric"
                 />
               </TouchableOpacity>
 
@@ -321,6 +329,7 @@ const SignUpPage = ({ navigation }) => {
             hasError={!isPhoneNumberValid}
             hasSuccess={isPhoneNumberValidSuccess}
             maxLength={11}
+            keyboardType="numeric"
           />
         </View>
         <View style={styles.bodyFooter}>
@@ -332,14 +341,14 @@ const SignUpPage = ({ navigation }) => {
           <TouchableOpacity
             style={[
               styles.submitButton,
-              (!checkKoreanName(name) ||
-                !checkResidentNumber(personalNumber) ||
-                !checkPhoneChange(phoneNumber)) &&
+              (isNameValidSuccess==false ||
+                isPersonalNumberValidSuccess==false ||
+                isPhoneNumberValidSuccess==false )&&
                 styles.disabledButton,
             ]}
             onPress={(e) => handleVerification(e)}
             disabled={
-              !isNameValid || !isPersonalNumberValid || !isPhoneNumberValid
+              isNameValidSuccess==false || isPersonalNumberValidSuccess==false || isPhoneNumberValidSuccess==false
             }
           >
             <Text style={styles.buttonText}>인증 요청</Text>

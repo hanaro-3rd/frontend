@@ -15,312 +15,21 @@ import {
   StyleSheet,
   View,
   Text,
+  Alert,
 } from "react-native";
 import styled from "styled-components/native";
-import CloseButton from "../../assets/travelBudget/CloseButton.png";
-import DeleteButton from "../../assets/travelBudget/delete.png";
-import EditButton from "../../assets/travelBudget/edit.png";
-import FoodIcon from "../../assets/travelBudget/FoodIcon.png";
-import TransIcon from "../../assets/travelBudget/TransIcon.png";
-import HouseIcon from "../../assets/travelBudget/HouseIcon.png";
-import ShopIcon from "../../assets/travelBudget/ShopIcon.png";
-import EtcIcon from "../../assets/travelBudget/EtcIcon.png";
-import PlayIcon from "../../assets/travelBudget/PlayIcon.png";
 import SelectButton from "../../assets/travelBudget/SelectButton.png";
-import DeleteHeader from "../../components/Header/DeleteHeader";
-import HeaderBack from "../../assets/travelBudget/Header-Back.png";
-import { useQuery, useQueryClient } from "react-query";
-import { getTravelBudgetCategory, getTravelBudgetDetail } from "../../api/api";
+import { useQuery, useQueryClient, useMutation } from "react-query";
+import {
+  getTravelBudgetCategory,
+  getTravelBudgetDetail,
+  deleteTravelBudget,
+} from "../../api/api";
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import TravelBudgetPaymentHistoryComponent from "../../components/TravelBudgetPageComponents/TravelBudgetPaymentHistoryComponent";
 import { formatDate } from "../../utils/formatDate";
 
-const RootScrollView = styled.View`
-  /* margin-top: ${getStatusBarHeight}px; */
-  min-height: ${phoneHeight}px;
-  width: 100%;
-  flex-direction: column;
-  background-color: #f2f4f6;
-`;
-
-const BodyContainer = styled.View`
-  flex-direction: column;
-  align-items: flex-start;
-  flex: 1;
-`;
-
-const BodyMain = styled.ScrollView`
-  flex-direction: column;
-  /* align-items: center; */
-  /* gap: 20px; */
-  align-self: stretch;
-  background-color: #fff;
-`;
-
-const MainContainer = styled.View`
-  flex-direction: column;
-  align-items: center;
-  align-self: stretch;
-  margin-bottom: ${heightPercentage(20)}px;
-`;
-
-const CategoryPaymentContainer = styled.View`
-  flex-direction: column;
-  align-items: center;
-  align-self: stretch;
-  background-color: #f2f4f6;
-`;
-
-const CategoryCardContainer = styled.View`
-  height: ${heightPercentage(40)}px;
-  justify-content: space-between;
-  align-items: center;
-  align-self: stretch;
-  background-color: #fff;
-  flex-direction: row;
-  padding: ${heightPercentage(8)}px ${widthPercentage(15)}px;
-`;
-
-const CategoryContainer = styled.View`
-  align-items: center;
-  gap: 10px;
-  flex-direction: row;
-`;
-
-const Icon = styled.View`
-  width: ${widthPercentage(30)}px;
-  height: ${heightPercentage(30)}px;
-  align-items: center;
-  gap: 10px;
-  flex-direction: row;
-  padding: 0px ${widthPercentage(5)}px;
-  margin-right: ${widthPercentage(8)}px;
-`;
-
-const CategoryText = styled.Text`
-  height: ${heightPercentage(24)}px;
-  width: ${widthPercentage(151)}px;
-  color: #191f29;
-  font-family: "Inter";
-  font-size: ${fontPercentage(16)}px;
-  font-style: normal;
-  font-weight: 400;
-`;
-
-const RemainText = styled.Text`
-  color: #191f29;
-  text-align: right;
-  font-family: "Inter";
-  font-size: ${fontPercentage(12)}px;
-  font-style: normal;
-  font-weight: 400;
-`;
-
-const CostText = styled.Text`
-  color: #191f29;
-  text-align: right;
-  font-family: "Inter";
-  font-size: ${fontPercentage(14)}px;
-  font-style: normal;
-  font-weight: 700;
-`;
-
-const RemainCostContainer = styled.View`
-  /* width: ${widthPercentage(150)}px; */
-  height: ${heightPercentage(20)}px;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  flex-direction: row;
-`;
-
-const SelectButtonImage = styled.Image`
-  height: ${heightPercentage(19)}px;
-  margin-top: ${heightPercentage(4)}px;
-`;
-
-const CategoryDetailText = styled.Text`
-  color: #191f29;
-  font-family: Inter;
-  font-size: ${fontPercentage(16)}px;
-  font-style: normal;
-  font-weight: 400;
-`;
-
-const PaymentListContainer = styled.View`
-  flex-direction: column;
-  align-items: center;
-  align-self: stretch;
-`;
-
-const PaymentContainer = styled.TouchableOpacity`
-  height: ${heightPercentage(58)}px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  align-self: stretch;
-  gap: 15px;
-  background-color: #f2f4f6;
-  flex-direction: row;
-  padding: ${heightPercentage(10)}px ${widthPercentage(15)}px;
-`;
-
-const CategoryDetailContainer = styled.View`
-  align-items: center;
-  gap: 5px;
-  flex-direction: row;
-`;
-
-const PayCostText = styled.Text`
-  color: #191f29;
-  text-align: right;
-  font-family: "Inter";
-  font-size: ${fontPercentage(16)}px;
-  font-style: normal;
-  font-weight: 400;
-`;
-
-const CategoryRemainText = styled.Text`
-  color: #191f29;
-  font-family: "Inter";
-  font-size: ${fontPercentage(14)}px;
-  font-style: normal;
-  font-weight: 700;
-`;
-
-const UsedCostText = styled.Text`
-  color: #191f29;
-  text-align: right;
-  font-family: "Inter";
-  font-size: ${fontPercentage(16)}px;
-  font-style: normal;
-  font-weight: 400;
-`;
-
-const UsedPlusCostText = styled.Text`
-  color: #55acee;
-  text-align: right;
-  font-family: "Inter";
-  font-size: ${fontPercentage(16)}px;
-  font-style: normal;
-  font-weight: 400;
-`;
-const UsedMinusCostText = styled.Text`
-  color: red;
-  text-align: right;
-  font-family: "Inter";
-  font-size: ${fontPercentage(16)}px;
-  font-style: normal;
-  font-weight: 400;
-`;
-const MapImage = styled.View`
-  width: ${widthPercentage(390)}px;
-  height: ${heightPercentage(300)}px;
-`;
-
-const DropImage = styled.Image`
-  width: ${widthPercentage(390)}px;
-  height: ${heightPercentage(23)}px;
-`;
-
-const TotalBudgetContainer = styled.View`
-  width: ${widthPercentage(390)}px;
-  height: ${heightPercentage(130)}px;
-  display: flex;
-  padding: ${heightPercentage(13)}px ${widthPercentage(12)}px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  align-self: stretch;
-  border-bottom-width: 1px;
-  border-bottom-color: #f2f4f6;
-  /* border-bottom: 1px solid #f2f4f6; */
-  /* background: #fff; */
-`;
-
-const TotalBudgetText = styled.Text`
-  width: ${widthPercentage(97)}px;
-  height: ${heightPercentage(23)}px;
-  color: #191f29;
-  font-family: Inter;
-  font-size: ${fontPercentage(16)}px;
-  font-style: normal;
-  font-weight: 400;
-`;
-
-const SelectMenuContainer = styled.View`
-  width: ${widthPercentage(390)}px;
-  height: ${heightPercentage(49)}px;
-  display: flex;
-  padding: ${heightPercentage(5)}px ${widthPercentage(12)}px;
-  justify-content: center;
-  align-items: center;
-  /* gap: 10px; */
-  align-self: stretch;
-  flex-direction: row;
-`;
-
-const CategoryOrDateContainer = styled.View`
-  width: ${widthPercentage(178)}px;
-  height: ${heightPercentage(39)}px;
-  border-bottom-width: 2px;
-  /* border-bottom-color: #55acee; */
-  /* border-bottom: 2px solid #55acee; */
-  display: flex;
-  padding: ${heightPercentage(10)}px 0px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  flex: 1 0 0;
-  align-self: stretch;
-`;
-
-const CategoryOrDateText = styled.Text`
-  width: ${widthPercentage(74)}px;
-  height: ${heightPercentage(24)}px;
-  color: #191f29;
-  text-align: center;
-  font-family: Inter;
-  font-size: ${fontPercentage(16)}px;
-  font-style: normal;
-  font-weight: 400;
-`;
-
-const CategoryDetailTextContainer = styled.View`
-  display: flex;
-  width: ${widthPercentage(200)}px;
-  padding: ${heightPercentage(2)}px 0px;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  align-self: stretch;
-`;
-
-const DateAndTimeText = styled.Text`
-  color: #4e5968;
-  font-family: Inter;
-  font-size: ${fontPercentage(12)}px;
-  font-style: normal;
-  font-weight: 400;
-`;
-
-const PaymentTotalContainer = styled.View`
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-end;
-  flex: 1 0 0;
-  align-self: stretch;
-  display: flex;
-  padding: ${heightPercentage(8)}px ${widthPercentage(15)}px;
-  height: ${heightPercentage(43)}px;
-  gap: 15px;
-  align-self: stretch;
-`;
-
 const TravelBudgetDetailPage = ({ navigation, route }) => {
-  const handleGoBackToBudgetPage = () => {
-    navigation.goBack();
-  };
   const { planId, totalBudget } = route.params;
   const [category, setCategory] = useState([]);
   const [foodCategory, setFoodCategory] = useState([]);
@@ -342,6 +51,17 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
   const [travelBudget, setTravelBudget] = useState();
   const [timePaymentHistory, setTimePaymentHistory] = useState({});
   const [totalPayment, setTotalPayment] = useState(0);
+  const [travelData, setTravelData] = useState(null);
+
+  const deleteTravelBudgetMutation = useMutation(
+    (planId) => deleteTravelBudget(planId),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("travelBudgetList");
+      },
+    }
+  );
+
   const { recentData } = useQuery(
     "getRecentPlan",
     () => getTravelBudgetDetail(planId),
@@ -369,16 +89,19 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
       },
     }
   );
+
   const { categoryData } = useQuery(
     "getDetailCategoryPlan",
     () => getTravelBudgetCategory(planId),
     {
       onSuccess: (response) => {
         console.log(response.data.result, "getDetailPlanCategory");
+        console.log("잘 들어있어?", response.data.result.travelBudget);
         setCategory(response.data.result.category);
         setTravelBudget(
           getCountryUnit(response.data.result.travelBudget.country)
         );
+        setTravelData(response.data.result);
         if (response.data.result.categoryPaymentHistory) {
           const obj = response.data.result.categoryPaymentHistory;
 
@@ -424,9 +147,64 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
 
   const [selectedTab, setSelectedTab] = useState("category");
 
+  const handleDeleteImageClick = () => {
+    Alert.alert(
+      "경비 계획 삭제하기",
+      "경비 계획을 삭제하면  여행 계획과 카테고리별 경비 계획이 모두 삭제됩니다.",
+      [
+        {
+          text: "취소",
+          style: "cancel",
+        },
+        {
+          text: "삭제하기",
+          onPress: async () => {
+            try {
+              await deleteTravelBudgetMutation.mutateAsync(planId);
+              console.log("잘 지워짐!");
+              navigation.navigate("TravelBudgetPage");
+              queryClient.invalidateQueries("travelBudgetData");
+            } catch (error) {
+              console.error("실패", error);
+            }
+          },
+          style: "destructive",
+        },
+      ]
+    );
+  };
+
+  const handleEditButtonClick = () => {
+    navigation.navigate("TravelScheduleEditPage", {
+      planId: planId,
+      travelData: travelData,
+    });
+    console.log(travelData, "잘 가는거야?");
+  };
+
   return (
     <RootScrollView>
-      <DeleteHeader navigation={navigation} to="TravelBudgetPage" />
+      <Header>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("TravelBudgetPage");
+          }}
+        >
+          <HeaderImage source={require("../../Images/삭제.png")} />
+        </TouchableOpacity>
+        <HeaderRight>
+          <TouchableOpacity onPress={handleDeleteImageClick}>
+            <HeaderImage
+              source={require("../../assets/travelBudget/delete.png")}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleEditButtonClick}>
+            <HeaderImage
+              source={require("../../assets/travelBudget/edit.png")}
+            />
+          </TouchableOpacity>
+        </HeaderRight>
+      </Header>
       <BodyContainer>
         <MapImage>
           {isMarker ? (
@@ -756,6 +534,302 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
     </RootScrollView>
   );
 };
+
+const Header = styled.View`
+  width: 100%;
+  height: ${heightPercentage(50)}px;
+  justify-content: space-between;
+  background-color: white;
+  flex-direction: row;
+  padding: ${heightPercentage(13)}px ${widthPercentage(12)}px;
+`;
+const HeaderRight = styled.View`
+  align-items: flex-start;
+  gap: 10px;
+  flex-direction: row;
+`;
+const RootScrollView = styled.View`
+  /* margin-top: ${getStatusBarHeight}px; */
+  min-height: ${phoneHeight}px;
+  width: 100%;
+  flex-direction: column;
+  background-color: #f2f4f6;
+`;
+
+const BodyContainer = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+`;
+
+const BodyMain = styled.ScrollView`
+  flex-direction: column;
+  /* align-items: center; */
+  /* gap: 20px; */
+  align-self: stretch;
+  background-color: #fff;
+`;
+
+const MainContainer = styled.View`
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  margin-bottom: ${heightPercentage(20)}px;
+`;
+
+const CategoryPaymentContainer = styled.View`
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  background-color: #f2f4f6;
+`;
+
+const CategoryCardContainer = styled.View`
+  height: ${heightPercentage(40)}px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  background-color: #fff;
+  flex-direction: row;
+  padding: ${heightPercentage(8)}px ${widthPercentage(15)}px;
+`;
+
+const CategoryContainer = styled.View`
+  align-items: center;
+  gap: 10px;
+  flex-direction: row;
+`;
+
+const Icon = styled.View`
+  width: ${widthPercentage(30)}px;
+  height: ${heightPercentage(30)}px;
+  align-items: center;
+  gap: 10px;
+  flex-direction: row;
+  padding: 0px ${widthPercentage(5)}px;
+  margin-right: ${widthPercentage(8)}px;
+`;
+
+const CategoryText = styled.Text`
+  height: ${heightPercentage(24)}px;
+  width: ${widthPercentage(151)}px;
+  color: #191f29;
+  font-family: "Inter";
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const RemainText = styled.Text`
+  color: #191f29;
+  text-align: right;
+  font-family: "Inter";
+  font-size: ${fontPercentage(12)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const CostText = styled.Text`
+  color: #191f29;
+  text-align: right;
+  font-family: "Inter";
+  font-size: ${fontPercentage(14)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
+
+const RemainCostContainer = styled.View`
+  /* width: ${widthPercentage(150)}px; */
+  height: ${heightPercentage(20)}px;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  flex-direction: row;
+`;
+
+const SelectButtonImage = styled.Image`
+  height: ${heightPercentage(19)}px;
+  margin-top: ${heightPercentage(4)}px;
+`;
+
+const CategoryDetailText = styled.Text`
+  color: #191f29;
+  font-family: Inter;
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const PaymentListContainer = styled.View`
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+`;
+
+const PaymentContainer = styled.TouchableOpacity`
+  height: ${heightPercentage(58)}px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  gap: 15px;
+  background-color: #f2f4f6;
+  flex-direction: row;
+  padding: ${heightPercentage(10)}px ${widthPercentage(15)}px;
+`;
+
+const CategoryDetailContainer = styled.View`
+  align-items: center;
+  gap: 5px;
+  flex-direction: row;
+`;
+
+const PayCostText = styled.Text`
+  color: #191f29;
+  text-align: right;
+  font-family: "Inter";
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const CategoryRemainText = styled.Text`
+  color: #191f29;
+  font-family: "Inter";
+  font-size: ${fontPercentage(14)}px;
+  font-style: normal;
+  font-weight: 700;
+`;
+
+const UsedCostText = styled.Text`
+  color: #191f29;
+  text-align: right;
+  font-family: "Inter";
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const UsedPlusCostText = styled.Text`
+  color: #55acee;
+  text-align: right;
+  font-family: "Inter";
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+const UsedMinusCostText = styled.Text`
+  color: red;
+  text-align: right;
+  font-family: "Inter";
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+const MapImage = styled.View`
+  width: ${widthPercentage(390)}px;
+  height: ${heightPercentage(300)}px;
+`;
+
+const DropImage = styled.Image`
+  width: ${widthPercentage(390)}px;
+  height: ${heightPercentage(23)}px;
+`;
+
+const TotalBudgetContainer = styled.View`
+  width: ${widthPercentage(390)}px;
+  height: ${heightPercentage(130)}px;
+  display: flex;
+  padding: ${heightPercentage(13)}px ${widthPercentage(12)}px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-bottom-width: 1px;
+  border-bottom-color: #f2f4f6;
+  /* border-bottom: 1px solid #f2f4f6; */
+  /* background: #fff; */
+`;
+
+const TotalBudgetText = styled.Text`
+  width: ${widthPercentage(97)}px;
+  height: ${heightPercentage(23)}px;
+  color: #191f29;
+  font-family: Inter;
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const SelectMenuContainer = styled.View`
+  width: ${widthPercentage(390)}px;
+  height: ${heightPercentage(49)}px;
+  display: flex;
+  padding: ${heightPercentage(5)}px ${widthPercentage(12)}px;
+  justify-content: center;
+  align-items: center;
+  /* gap: 10px; */
+  align-self: stretch;
+  flex-direction: row;
+`;
+
+const CategoryOrDateContainer = styled.View`
+  width: ${widthPercentage(178)}px;
+  height: ${heightPercentage(39)}px;
+  border-bottom-width: 2px;
+  /* border-bottom-color: #55acee; */
+  /* border-bottom: 2px solid #55acee; */
+  display: flex;
+  padding: ${heightPercentage(10)}px 0px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex: 1 0 0;
+  align-self: stretch;
+`;
+
+const CategoryOrDateText = styled.Text`
+  width: ${widthPercentage(80)}px;
+  height: ${heightPercentage(24)}px;
+  color: #191f29;
+  text-align: center;
+  font-family: Inter;
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const CategoryDetailTextContainer = styled.View`
+  display: flex;
+  width: ${widthPercentage(200)}px;
+  padding: ${heightPercentage(2)}px 0px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
+`;
+
+const DateAndTimeText = styled.Text`
+  color: #4e5968;
+  font-family: Inter;
+  font-size: ${fontPercentage(12)}px;
+  font-style: normal;
+  font-weight: 400;
+`;
+
+const PaymentTotalContainer = styled.View`
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex: 1 0 0;
+  align-self: stretch;
+  display: flex;
+  padding: ${heightPercentage(8)}px ${widthPercentage(15)}px;
+  height: ${heightPercentage(43)}px;
+  gap: 15px;
+  align-self: stretch;
+`;
+
 const CantGoMarkerView = styled.View`
   elevation: 15;
   display: flex;
@@ -810,6 +884,11 @@ const PolygonView = styled.View`
   width: ${widthPercentage(95)}px;
   flex-direction: row;
   justify-content: center;
+`;
+
+const HeaderImage = styled.Image`
+  width: ${widthPercentage(24)}px;
+  height: ${heightPercentage(24)}px;
 `;
 const styles = StyleSheet.create({
   planpayContainer: {

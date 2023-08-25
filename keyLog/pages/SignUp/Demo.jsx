@@ -1,0 +1,133 @@
+import React, { useState } from "react";
+import {
+  Animated,
+  Dimensions,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Easing,
+  SafeAreaView,
+  Platform,
+} from "react-native";
+import { PatternLock } from "./pattern/PatternLock";
+
+
+const screen = Dimensions.get("screen");
+const screenHeight = Math.max(screen.width, screen.height);
+
+export default function Demo() {
+  const [msg, setMsg] = useState();
+  const [code, setCode] = useState("");
+  const [status, setStatus] = useState("");
+  const [modalY] = useState(new Animated.Value(screenHeight));
+  const ms = StyleSheet.flatten([
+    { transform: [{ translateY: modalY }] },
+    styles.modal,
+  ]);
+  const modal = {
+    open: () =>
+      Animated.timing(modalY, {
+        toValue: 0,
+        duration: 250,
+        useNativeDriver: true,
+      }).start(),
+    close: () =>
+      Animated.timing(modalY, {
+        toValue: screenHeight,
+        duration: 250,
+        useNativeDriver: true,
+      }).start(),
+  };
+  const onSet = () => {
+    setCode("");
+    setStatus("setting");
+    setMsg("Set pattern lock");
+    modal.open();
+  };
+  const onVerify = () => {
+    setStatus("verifying");
+    setMsg("Draw An Unlock Pattern To Verify");
+    modal.open();
+  };
+  const onCheck = (res) => {
+    if (status === "setting") {
+      if (!code) {
+        setCode(res);
+        setMsg("Repeat Setting Pattern");
+        return true;
+      } else if (code === res) {
+        setMsg("Success");
+        setTimeout(modal.close, 1000);
+        return true;
+      } else {
+        setMsg("Repeat Error,Set Again");
+        return false;
+      }
+    } else {
+      if (code === res) {
+        setMsg("Success");
+        setTimeout(modal.close, 1000);
+        return true;
+      } else {
+        setMsg("Input Error,Please Try Again");
+        return false;
+      }
+    }
+  };
+  return (
+    <View style={styles.container}>
+      <Button onPress={onSet} title="Set pattern lock" />
+      <Button onPress={onVerify} title="Verify" />
+      <Animated.View style={ms}>
+        <SafeAreaView style={styles.sfv}>
+          <Button color="#007AFF" title="Cancel" onPress={modal.close} />
+          <PatternLock
+            message={msg}
+            onCheck={onCheck}
+            // rowCount={4}
+            // columnCount={4}
+            // patternMargin={15}
+            inactiveColor="#8E91A8"
+            activeColor="#5FA8FC"
+            errorColor="#D93609"
+          />
+        </SafeAreaView>
+      </Animated.View>
+    </View>
+  );
+}
+
+const Button = ({ title, onPress }) => {
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <Text style={styles.btnc}>{title}</Text>
+    </TouchableOpacity>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modal: {
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    position: "absolute",
+    backgroundColor: "rgb(41,43,56)",
+  },
+  sfv: {
+    flex: 1,
+    alignItems: "flex-start",
+    paddingTop: Platform.select({ android: 30, web:20 }),
+  },
+  btnc: {
+    marginLeft: 16,
+    fontSize: 18,
+    color: "#007AFF",
+  },
+});

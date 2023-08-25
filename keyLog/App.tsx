@@ -16,8 +16,8 @@ import TravelRecordMainComponent from "./components/TravelRecordPageComponents/T
 import AccountConnectPage from "./pages/AccountConnect/AccountConnectPage";
 import ExchangeFail from "./pages/ExchangeSelectAccount/ExchangeFail";
 import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
-import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
 import ExchangeToWonPage from "./pages/ExchangeSelectAccount/ExchangeToWonPage";
+import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
 import MainPage from "./pages/MainPage";
 import TestPaymentPage from "./pages/Payment/TestPaymentPage";
 import PaymentSuccessPage from "./pages/Payment/PaymentSuccessPage";
@@ -50,6 +50,7 @@ import AccountConnectPageComponents from "./components/AccountConnectPageCompone
 import { usernameAtom } from "./recoil/usernameAtom";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AlreadySignUpPage from "./pages/SignUp/AlreadySignUpPage";
+import TravelScheduleEditPage from "./pages/TravelBudget/TravelScheduleEditPage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -57,7 +58,7 @@ const App = () => {
   const [isLoading, setLoading] = useState(true);
   const [haveDeviceId, setHaveDeviceId] = useState(false);
   const [username, setUsername] = useRecoilState(usernameAtom);
-  // usePermissions();
+  usePermissions();
   const { data } = useQuery(
     "registration",
     async () => getRegistrationDeviceId(await DeviceInfo.getUniqueId()),
@@ -77,10 +78,10 @@ const App = () => {
             "refresh_token",
             await AsyncStorage.getItem("refresh_token")
           );
-          console.log(response.data);
+          console.log(response.data, "app");
           if (response.data?.errorCode == 500) {
             setLogin(false);
-            setHaveDeviceId(false);
+
             setLoading(false);
             return;
           }
@@ -125,6 +126,7 @@ const App = () => {
         <Stack.Navigator
           initialRouteName={
             login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
+            // "SignUpPage"
           }
         >
           <Stack.Screen
@@ -213,6 +215,11 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name="ExchangeToWonPage"
+            component={ExchangeToWonPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="CountryChoiceComponent"
             component={CountryChoiceComponent}
             options={{ headerShown: false }}
@@ -290,6 +297,11 @@ const App = () => {
           <Stack.Screen
             name="TravelSchedulePage"
             component={TravelSchedulePage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TravelScheduleEditPage"
+            component={TravelScheduleEditPage}
             options={{ headerShown: false }}
           />
           <Stack.Screen

@@ -6,7 +6,6 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 import {
   fontPercentage,
@@ -136,6 +135,7 @@ const TravelCard = styled.View`
   border-color: #55acee;
   border-style: solid;
   background-color: #fff;
+  elevation: 3;
   /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); */
   flex-direction: row;
   padding: ${heightPercentage(10)}px ${widthPercentage(15)}px;
@@ -158,9 +158,7 @@ const RemainCostText = styled.Text`
   font-weight: 400;
 `;
 
-const TravelBudgetPage = () => {
-  const navigation = useNavigation();
-
+const TravelBudgetPage = ({ route, navigation }) => {
   const handleTravelCardPress = (planId, totalBudget) => {
     navigation.navigate("TravelBudgetDetailPage", { planId, totalBudget });
   };
@@ -180,25 +178,10 @@ const TravelBudgetPage = () => {
     });
   };
 
-  const handleDeleteImageClick = () => {
-    Alert.alert(
-      "경비 계획 삭제하기",
-      "경비 계획을 삭제하면  여행 계획과 카테고리별 경비 계획이 모두 삭제됩니다.",
-      [
-        {
-          text: "취소",
-          style: "cancel",
-        },
-        {
-          text: "삭제하기",
-          onPress: () => {},
-          style: "destructive",
-        },
-      ]
-    );
-  };
   const queryClient = useQueryClient();
-  const [data, setData] = useState({});
+
+  // const [data, setData] = useState({});
+  const [data, setData] = useState([]);
   const { travelBudgetData } = useQuery(
     "travelBudgetData",
     () => getTravelBudget(),
@@ -206,37 +189,50 @@ const TravelBudgetPage = () => {
       onSuccess: (response) => {
         let dataArray = response.data.result;
         console.log(dataArray);
-        let obj = {};
-        for (let i = 0; i < dataArray.length; i++) {
-          if (obj[dataArray[i].startDate[0]] == undefined) {
-            obj[dataArray[i].startDate[0]] = [dataArray[i]];
+        // let obj = {};
+        // for (let i = 0; i < dataArray.length; i++) {
+        //   if (obj[dataArray[i].startDate[0]] == undefined) {
+        //     obj[dataArray[i].startDate[0]] = [dataArray[i]];
+        //   } else {
+        //     obj[dataArray[i].startDate[0]].push(dataArray[i]);
+        //   }
+        // }
+        // console.log(obj);
+        // obj = Object.fromEntries(
+        //   Object.entries(obj).sort(([a], [b]) => (b > a ? 1 : -1))
+        // );
+        // console.log(obj);
+        // setData(obj);
+        // console.log(obj);
+        let sortedData = dataArray.reduce((acc, curr) => {
+          const year = curr.startDate[0]; 
+          const index = acc.findIndex((item) => item.year === year);
+          if (index !== -1) {
+            acc[index].trips.push(curr);
           } else {
-            obj[dataArray[i].startDate[0]].push(dataArray[i]);
+            acc.push({ year: year, trips: [curr] });
           }
-        }
-        console.log(obj);
-        obj = Object.fromEntries(
-          Object.entries(obj).sort(([a], [b]) => (b > a ? -1 : 1))
-        );
-        console.log(obj);
-        setData(obj);
-        console.log(obj);
+          return acc;
+        }, []);
+
+        sortedData.sort((a, b) => b.year - a.year); 
+
+        console.log(sortedData);
+        setData(sortedData);
       },
       onError: () => {},
     }
   );
+
   return (
     <RootScrollView>
       <Header>
         <TouchableOpacity onPress={handleGoBack}>
-          <Image source={CloseButton} />
+          <HeaderImage source={require("../../Images/삭제.png")} />
         </TouchableOpacity>
         <HeaderRight>
-          <TouchableOpacity onPress={handleDeleteImageClick}>
-            <Image source={Delete} />
-          </TouchableOpacity>
           <TouchableOpacity onPress={handleGoToTravelSchedule}>
-            <Image source={AddButton} />
+            <HeaderImage source={AddButton} />
           </TouchableOpacity>
         </HeaderRight>
       </Header>
@@ -246,15 +242,37 @@ const TravelBudgetPage = () => {
           <TitleText>내 경비 계획</TitleText>
         </BodyHeader>
         <BodyMain>
-          {Object.keys(data).length !== 0 ? (
+          {/* {Object.keys(data).length !== 0 ? (
             Object?.keys(data).map((key, idx) => {
               return (
                 <YearContainer key={idx}>
                   <YearText>{key}</YearText>
-                  {data[key]?.map((e, idx) => {
+                  {data[key]?.map((e, idx) => { */}
+           {data.length !== 0 ? (
+            data.map((yearData, yearIdx) => {
+              return (
+                <YearContainer key={yearIdx}>
+                  <YearText>{yearData.year}</YearText>
+                  {yearData.trips.map((e, tripIdx) => {
+                    let unit = "";
+                    let countryName = "";
+                    if (e.country === "USA") {
+                      unit = "$";
+                      countryName = "미국";
+                    } else if (e.country === "JPY") {
+                      unit = "￥";
+                      countryName = "일본";
+                    } else if (e.country === "EUR") {
+                      unit = "€";
+                      countryName = "유럽";
+                    } else {
+                      unit = "₩ ";
+                      countryName = "대한민국";
+                    }
                     return (
                       <TouchableOpacity
-                        key={idx}
+                        // key={idx}
+                        key={tripIdx}
                         onPress={() =>
                           handleTravelCardPress(e.planId, e.totalBudget)
                         }
@@ -268,16 +286,19 @@ const TravelBudgetPage = () => {
                             <View>
                               <TravelTitle>{e.title}</TravelTitle>
                               <CityText>
-                                {e.country}, {e.city}
+                                {countryName}
+                                {e.city && <Text>,</Text>} {e.city}
                               </CityText>
                             </View>
                           </TitleTextContainer>
                           <View>
                             <RemainCostText>
-                              총 비용 ￥{e.totalBudget}
+                              총 비용 {unit}
+                              {e.totalBudget}
                             </RemainCostText>
                             <RemainCostText>
-                              남은 비용 ￥{e.totalBalance}
+                              남은 비용 {unit}
+                              {e.totalBalance === 0 ? e.totalBalance : 0}
                             </RemainCostText>
                           </View>
                         </TravelCard>
@@ -326,5 +347,10 @@ const NoPlanText = styled.Text`
   font-size: ${fontPercentage(13)}px;
   font-style: normal;
   font-weight: 400;
+`;
+
+const HeaderImage = styled.Image`
+  width: ${widthPercentage(24)}px;
+  height: ${heightPercentage(24)}px;
 `;
 export default TravelBudgetPage;
