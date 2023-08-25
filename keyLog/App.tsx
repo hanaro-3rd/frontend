@@ -16,8 +16,8 @@ import TravelRecordMainComponent from "./components/TravelRecordPageComponents/T
 import AccountConnectPage from "./pages/AccountConnect/AccountConnectPage";
 import ExchangeFail from "./pages/ExchangeSelectAccount/ExchangeFail";
 import ExchangePage from "./pages/ExchangeSelectAccount/ExchangePage";
-import ExchangeToWonPage from "./pages/ExchangeSelectAccount/ExchangeToWonPage";
 import ExchangeSuccess from "./pages/ExchangeSelectAccount/ExchangeSuccess";
+import ExchangeToWonPage from "./pages/ExchangeSelectAccount/ExchangeToWonPage";
 import MainPage from "./pages/MainPage";
 import TestPaymentPage from "./pages/Payment/TestPaymentPage";
 import PaymentSuccessPage from "./pages/Payment/PaymentSuccessPage";
@@ -213,11 +213,6 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="ExchangeToWonPage"
-            component={ExchangeToWonPage}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
             name="CountryChoiceComponent"
             component={CountryChoiceComponent}
             options={{ headerShown: false }}
@@ -230,6 +225,11 @@ const App = () => {
           <Stack.Screen
             name="ExchangeFail"
             component={ExchangeFail}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ExchangeToWonPage"
+            component={ExchangeToWonPage}
             options={{ headerShown: false }}
           />
           <Stack.Screen

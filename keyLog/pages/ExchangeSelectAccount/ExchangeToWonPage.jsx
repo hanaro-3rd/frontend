@@ -123,16 +123,16 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
   // 3. 잔액보다 값이 높으면 잔액으로 리턴 => 소수점 걸리면 내림으로 가야함
   const foreignInputChange = (text) => {
     setForeignTextInput(String(text));
-    const exchangeKoreaMoney = Math.floor(text * exchangeRate);
-    setKoreaTextInput(String(exchangeKoreaMoney));
-    if (minimumMoney == 1000) {
-      //일본 환전할 시
-      if (text % minimumMoney == 0) {
-        setSubForeignText("");
-      } else {
-        setSubForeignText(integerUnit(minimumMoney, selectedMoney));
-      }
-    }
+    // const exchangeKoreaMoney = Math.floor(text * exchangeRate);
+    // setKoreaTextInput(String(exchangeKoreaMoney));
+    // if (minimumMoney == 1000) {
+    //   //일본 환전할 시
+    //   if (text % minimumMoney == 0) {
+    //     setSubForeignText("");
+    //   } else {
+    //     setSubForeignText(integerUnit(minimumMoney, selectedMoney));
+    //   }
+    // }
   };
 
   const koreaInputChange = (text) => {
