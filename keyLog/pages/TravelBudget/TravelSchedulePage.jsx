@@ -120,7 +120,7 @@ const TravelTextinput = styled.TextInput`
   color: ${(props) => (props.hasValue ? "#000" : "#b0b8c1")};
   border: 1px solid ${(props) => (props.hasValue ? "#000" : "#f9fafb")};
   border-radius: 5px;
-  text-align: right;
+  /* text-align: right; */
   font-family: Inter;
   font-size: ${fontPercentage(16)}px;
   font-style: normal;
@@ -141,7 +141,7 @@ const TravelCountryTextinput = styled.TextInput`
   color: ${(props) => (props.hasValue ? "#000" : "#b0b8c1")};
   border: 1px solid ${(props) => (props.hasValue ? "#000" : "#f9fafb")};
   border-radius: 5px;
-  text-align: right;
+  /* text-align: right; */
   font-family: Inter;
   font-size: ${fontPercentage(16)}px;
   font-style: normal;
@@ -168,7 +168,7 @@ const Footer = styled.TouchableOpacity`
   align-items: center;
   gap: 20px;
   align-self: stretch;
-  margin-bottom: ${heightPercentage(25)}px;
+  /* margin-bottom: ${heightPercentage(25)}px; */
   position: absolute;
   bottom: 0;
 `;
@@ -321,7 +321,7 @@ const TravelSchedulePage = ({ navigation }) => {
                     style={{
                       width: widthPercentage(170),
                       color: travelCountry ? "#000" : "#b0b8c1",
-                      textAlign: "right",
+                      
                     }}
                   >
                     {travelCountry == "" && (

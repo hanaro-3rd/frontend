@@ -285,7 +285,7 @@ const MainPage = ({ navigation }) => {
 
   const MenuContainer = styled.View`
     width: ${widthPercentage(390)}px;
-    height: ${heightPercentage(840)}px;
+    height: ${heightPercentage(700)}px;
     padding: ${heightPercentage(15)}px ${widthPercentage(20)}px;
     flex-direction: column;
     align-items: center;
@@ -532,52 +532,6 @@ const MainPage = ({ navigation }) => {
             />
           ))}
         </CustomSwiper>
-        {/* 환율
-        {[USD, JPY, EUR].map((e, idx) => {
-          if (idx !== currentExchangeIndex) {
-            return null;
-          }
-          return (
-            <ExchangeRateContainer key={idx}>
-              <PrevOrNextButton onPress={handlePrevExchange}>
-                <Image source={arrow_prev} />
-              </PrevOrNextButton>
-              <CountryExchangeRateContainer>
-                {idx == 0 && <Image source={USIcon} />}
-                {idx == 1 && <Image source={JapanIcon} />}
-                {idx == 2 && <Image source={EuroIcon} />}
-                <TextContainer>
-                  <CountryTextContainer>
-                    <CountryContainer>
-                      {idx == 0 && <Country>미국</Country>}
-                      {idx == 1 && <Country>일본</Country>}
-                      {idx == 2 && <Country>유럽</Country>}
-
-                      {idx == 0 && <MoneytaryUnit>USD</MoneytaryUnit>}
-                      {idx == 1 && <MoneytaryUnit>JPY</MoneytaryUnit>}
-                      {idx == 2 && <MoneytaryUnit>EUR</MoneytaryUnit>}
-                    </CountryContainer>
-                    {exchangeDate && <DateTime>{exchangeDate}</DateTime>}
-                  </CountryTextContainer>
-
-                  {USD && (
-                    <RateTextContainer>
-                      <ExchangeRate>{e.exchangeRate}</ExchangeRate>
-                      {e.changePrice > 0 ? (
-                        <ChangeUpRate>▲ {e.changePrice}</ChangeUpRate>
-                      ) : (
-                        <ChangeRate>▼ {e.changePrice}</ChangeRate>
-                      )}
-                    </RateTextContainer>
-                  )}
-                </TextContainer>
-              </CountryExchangeRateContainer>
-              <PrevOrNextButton onPress={handleNextExchange}>
-                <Image source={arrow_next} />
-              </PrevOrNextButton>
-            </ExchangeRateContainer>
-          );
-        })} */}
         {/* 환율 */}
         <Swiper
           loop={true} // 무한 루프로 스와이프할 수 있도록 설정
@@ -614,7 +568,7 @@ const MainPage = ({ navigation }) => {
                     {USD && (
                       <RateTextContainer>
                         <ExchangeRate>{e.exchangeRate}</ExchangeRate>
-                        {e.exchangeRate > 0 ? (
+                        {e.changePrice > 0 ? (
                           <ChangeUpRate>▲ {e.changePrice}</ChangeUpRate>
                         ) : (
                           <ChangeRate>▼ {e.changePrice}</ChangeRate>

@@ -16,6 +16,7 @@ import { getMyKeymoney, getAccount } from "../../api/api";
 const KeyMoneyHistoryPage = ({ route, navigation }) => {
   const [KeyMoneyAccountList, setKeyMoneyAccountList] = useState([]);
   // const [accountList, setAccountList] = useState([]);
+  const [unitSymbol, setUnitSymbol] = useState("");
 
   const queryClient = useQueryClient();
   const { data: keyMoneyData } = useQuery(
@@ -51,6 +52,18 @@ const KeyMoneyHistoryPage = ({ route, navigation }) => {
   //     console.log("connect에러");
   //   },
   // });
+
+  const getUnitSymbol = (unit) => {
+    if (unit === "USD") {
+      return "$";
+    } else if (unit === "JPY") {
+      return "￥";
+    } else if (unit === "EUR") {
+      return "€";
+    } else {
+      return "₩";
+    }
+  };
   return (
     <>
       <PrevHeader navigation={navigation} to="MainPage" />
@@ -64,28 +77,33 @@ const KeyMoneyHistoryPage = ({ route, navigation }) => {
         <BodyMainContainer>
           <AccountConatiner>
             {KeyMoneyAccountList.length > 0 ? (
-              KeyMoneyAccountList.map((item, idx) => (
-                <AccountInfoContainer
-                  key={idx}
-                  onPress={() => {
-                    navigation.navigate("ForeignPayHistoryPage", {
-                      balance: item.balance,
-                      unit: item.unit,
-                    });
-                  }}
-                >
-                  <AccountInfo>
-                    <CountryImage source={unitImageMap[item.unit]} />
-                    <AccountInfoTextContainer>
-                      <AccountCountryText>{item.unit}</AccountCountryText>
-                      <AccountMoneyText>{item.balance}</AccountMoneyText>
-                    </AccountInfoTextContainer>
-                  </AccountInfo>
-                  <Image
-                    source={require("../../assets/History/SelectButton.png")}
-                  />
-                </AccountInfoContainer>
-              ))
+              KeyMoneyAccountList.map((item, idx) => {
+                const unitSymbol = getUnitSymbol(item.unit);
+                return (
+                  <AccountInfoContainer
+                    key={idx}
+                    onPress={() => {
+                      navigation.navigate("ForeignPayHistoryPage", {
+                        balance: item.balance,
+                        unit: item.unit,
+                      });
+                    }}
+                  >
+                    <AccountInfo>
+                      <CountryImage source={unitImageMap[item.unit]} />
+                      <AccountInfoTextContainer>
+                        <AccountCountryText>{item.unit}</AccountCountryText>
+                        <AccountMoneyText>
+                          {item.balance.toLocaleString()}{unitSymbol}
+                        </AccountMoneyText>
+                      </AccountInfoTextContainer>
+                    </AccountInfo>
+                    <Image
+                      source={require("../../assets/History/SelectButton.png")}
+                    />
+                  </AccountInfoContainer>
+                );
+              })
             ) : (
               <NoAccountMessageContainer>
                 <Image source={require("../../assets/History/Exchange.png")} />

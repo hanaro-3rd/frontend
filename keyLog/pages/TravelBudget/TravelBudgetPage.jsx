@@ -294,11 +294,7 @@ const TravelBudgetPage = ({ route, navigation }) => {
                           <View>
                             <RemainCostText>
                               총 비용 {unit}
-                              {e.totalBudget}
-                            </RemainCostText>
-                            <RemainCostText>
-                              남은 비용 {unit}
-                              {e.totalBalance === 0 ? e.totalBalance : 0}
+                              {e.totalBudget.toLocaleString()}
                             </RemainCostText>
                           </View>
                         </TravelCard>

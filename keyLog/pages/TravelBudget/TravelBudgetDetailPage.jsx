@@ -487,46 +487,6 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                   </CategoryPaymentContainer>
                 );
               })}
-
-              {/* <CategoryPaymentContainer>
-                <CategoryCardContainer>
-                  <CategoryContainer>
-                    <CategoryText>7월 2일</CategoryText>
-                  </CategoryContainer>
-                  <RemainCostContainer>
-                    <SelectButtonImage source={SelectButton} />
-                  </RemainCostContainer>
-                </CategoryCardContainer>
-                <PaymentListContainer>
-                  <PaymentContainer>
-                    <CategoryDetailContainer>
-                      <Icon>
-                        <Image source={FoodIcon} />
-                      </Icon>
-                      <CategoryDetailTextContainer>
-                        <CategoryDetailText>오코노미야끼</CategoryDetailText>
-                        <DateAndTimeText>7월 2일 13:59</DateAndTimeText>
-                      </CategoryDetailTextContainer>
-                    </CategoryDetailContainer>
-                    <PayCostText> ￥10,000</PayCostText>
-                  </PaymentContainer>
-                  <PaymentContainer>
-                    <CategoryDetailContainer>
-                      <Icon>
-                        <Image source={TransIcon} />
-                      </Icon>
-                      <CategoryDetailTextContainer>
-                        <CategoryDetailText>신칸센</CategoryDetailText>
-                        <DateAndTimeText>7월 2일 13:59</DateAndTimeText>
-                      </CategoryDetailTextContainer>
-                    </CategoryDetailContainer>
-                    <PayCostText> ￥10,000</PayCostText>
-                  </PaymentContainer>
-                  <PaymentTotalContainer>
-                    <UsedCostText>총 ￥20,000</UsedCostText>
-                  </PaymentTotalContainer>
-                </PaymentListContainer>
-              </CategoryPaymentContainer> */}
             </MainContainer>
           )}
         </BodyMain>

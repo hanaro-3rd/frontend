@@ -29,7 +29,7 @@ const TravelPeriodTextContainer = styled.View`
   display: flex;
   padding: ${heightPercentage(7)}px ${widthPercentage(15)}px;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content : center;
   align-items: center;
   color: #000000;
   border-radius: 5px;
@@ -52,6 +52,7 @@ const PlaceholderText = styled.Text`
   color: #b0b8c1;
   font-size: ${fontPercentage(16)}px;
   font-style: normal;
+  text-align: left;
 `;
 
 const TravelDateComponent = ({
@@ -116,10 +117,10 @@ const TravelDateComponent = ({
                 {/* <Image source={SelectButton} /> */}
               </>
             ) : (
-              <>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                 <PlaceholderText>시작일</PlaceholderText>
                 <Image source={SelectButtonBefore} />
-              </>
+              </View>
             )}
           </TravelPeriodTextContainer>
         </Pressable>
@@ -141,10 +142,10 @@ const TravelDateComponent = ({
                 {/* <Image source={SelectButton} /> */}
               </>
             ) : (
-              <>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                 <PlaceholderText>종료일</PlaceholderText>
                 <Image source={SelectButtonBefore} />
-              </>
+              </View>
             )}
           </TravelPeriodTextContainer>
         </Pressable>
