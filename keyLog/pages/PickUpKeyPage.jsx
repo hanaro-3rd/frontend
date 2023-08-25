@@ -176,7 +176,7 @@ const PickUpKeyPage = ({ navigation }) => {
             fetchDetails={true}
             query={{
               key: "AIzaSyB_nxmsBL4iSwU9dniKHw4GWOXONVfCUZw",
-              language: "ko",
+              language: "ko"||"en",
             }}
             ref={placesRef}
           />

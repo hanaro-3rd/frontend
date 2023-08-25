@@ -69,7 +69,6 @@ axiosClient.interceptors.response.use(
     console.log(error.response);
     console.log("axiosClient에러status", error.response.status);
     if (
-      error.response.status === 500 ||
       (error.response.status === 401 && !originalRequest._retry)
     ) {
       originalRequest._retry = true;

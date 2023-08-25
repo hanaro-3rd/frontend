@@ -15,6 +15,7 @@ import { calculateDistance } from "../../utils/calculateDistance";
 import leftArrow from "../../assets/accountImg/Vector.png";
 import { NavigationContainer } from "@react-navigation/native";
 import Swiper from "react-native-swiper";
+import arrowBack from "../../assets/travelBudget/arrow_back.png";
 const TestPaymentSearchPage = ({ navigation }) => {
   const [location, setLocation] = useState({
     latitude: 37.545315,
@@ -105,7 +106,7 @@ const TestPaymentSearchPage = ({ navigation }) => {
             navigation.navigate("TestPaymentPage");
           }}
         >
-          <Image source={leftArrow} />
+          <Image source={arrowBack} />
         </TouchableOpacity>
         <View style={{ width: "90%" }}>
           <GooglePlacesAutocomplete
@@ -147,7 +148,7 @@ const TestPaymentSearchPage = ({ navigation }) => {
             fetchDetails={true}
             query={{
               key: "AIzaSyB_nxmsBL4iSwU9dniKHw4GWOXONVfCUZw",
-              language: "ko",
+              language: "ko"||"en",
             }}
             ref={placesRef}
           />
