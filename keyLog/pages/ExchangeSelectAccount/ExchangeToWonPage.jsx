@@ -249,10 +249,8 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
               {accountList.length > 0 ? (
                 <TouchableOpacity>
                   <Collapse
-                    isExpanded={expanded}
-                    onToggle={(isExpanded) =>
-                      setExpanded({ isExpanded: false })
-                    }
+                    isExpanded={expanded} // 현재 expanded 객체를 사용
+                    onToggle={(isExpanded) => setExpanded(isExpanded)} // 상태 업데이트
                   >
                     <CollapseHeader>
                       <View style={styles.countrySelect1}>
@@ -261,9 +259,16 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                             ? selectedAccount
                             : "계좌를 선택해주세요"}
                         </Text>
-                        <Image
-                          source={require("../../assets/exchangeImg/SelectButton.png")}
-                        />
+                        {expanded ? (
+                          <Image
+                            source={require("../../assets/exchangeImg/SelectButton.png")}
+                            style={{ transform: [{ rotate: `${180}deg` }] }}
+                          />
+                        ) : (
+                          <Image
+                            source={require("../../assets/exchangeImg/SelectButton.png")}
+                          />
+                        )}
                       </View>
                     </CollapseHeader>
                     <CollapseBody>
@@ -815,7 +820,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     backgroundColor: "#FFF",
     flexDirection: "row",
-    paddingHorizontal: widthPercentage(40),
+    paddingHorizontal: widthPercentage(45),
     borderRadius: 10,
   },
   accountLists: {
