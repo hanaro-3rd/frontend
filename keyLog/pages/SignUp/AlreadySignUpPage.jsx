@@ -161,13 +161,10 @@ const ButtonText = styled.Text`
 `;
 
 const AlreadySignUpPage = ({ route, navigation }) => {
-  const [userName, setUserName] = useState("");
-  const [personalNum, setPersonalNum] = useState("");
-  const [phoneNum, setPhoneNum] = useState("");
-  const [signUpDate, setSignUpDate] = useState("");
-
   const queryClient = useQueryClient();
+  const { name, phoneNum, registrateNum } = route?.params;
 
+  const [signUpDate, setSignUpDate] = useState();
   return (
     <Root>
       <Header />
@@ -184,7 +181,7 @@ const AlreadySignUpPage = ({ route, navigation }) => {
           </BodyMainTextTitleContainer>
           <BodyMainTextInfoContainer>
             <BodyMainInfoTextBox>
-              <BodyMainInfoText>{userName}</BodyMainInfoText>
+              <BodyMainInfoText>{name}</BodyMainInfoText>
             </BodyMainInfoTextBox>
           </BodyMainTextInfoContainer>
         </BodyMainTextContainer>
@@ -194,7 +191,7 @@ const AlreadySignUpPage = ({ route, navigation }) => {
           </BodyMainTextTitleContainer>
           <BodyMainTextInfoContainer>
             <BodyMainInfoTextBox>
-              <BodyMainInfoText>{personalNum}</BodyMainInfoText>
+              <BodyMainInfoText>{registrateNum}</BodyMainInfoText>
             </BodyMainInfoTextBox>
           </BodyMainTextInfoContainer>
         </BodyMainTextContainer>
@@ -214,14 +211,22 @@ const AlreadySignUpPage = ({ route, navigation }) => {
           </BodyMainTextTitleContainer>
           <BodyMainTextInfoContainer>
             <BodyMainInfoTextBox>
-              <BodyMainInfoText>{signUpDate}</BodyMainInfoText>
+              {/* <BodyMainInfoText>{signUpDate}</BodyMainInfoText> */}
             </BodyMainInfoTextBox>
           </BodyMainTextInfoContainer>
         </BodyMainTextContainer>
       </BodyMainContainer>
       <Footer>
-        <SubmitButton onPress={() => navigation.navigate("LoginPage")}>
-          <ButtonText>확인</ButtonText>
+        <SubmitButton
+          onPress={() =>
+            navigation.navigate("LoginPasswordPage", {
+              name: name,
+              phoneNumber: phoneNum,
+              personalNumber: registrateNum,
+            })
+          }
+        >
+          <ButtonText>비밀번호 재설정 하기</ButtonText>
         </SubmitButton>
       </Footer>
     </Root>

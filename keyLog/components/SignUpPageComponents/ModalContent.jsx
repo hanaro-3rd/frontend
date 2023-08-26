@@ -30,8 +30,17 @@ const ModalContent = ({
   const postVerificationAuthMutation = useMutation(postVerificationAuth, {
     onSuccess: (response) => {
       queryClient.invalidateQueries("verificationAuth");
+      if (response.isSuccessAuth && response.isSuccessAuth.isExistUser) {
+        navigation.navigate("AlreadySignUpPage", {
+          // deviceId: await DeviceInfo.getUniqueId(),
+          name: name,
+          phoneNum: phoneNumber,
+          registrateNum: personalNumber,
+        });
+      } else {
+        goToLoginPasswordPage();
+      }
       setModalVisible(false);
-      goToLoginPasswordPage();
     },
     onError: (error) => {
       console.log(error.response);
@@ -48,9 +57,9 @@ const ModalContent = ({
     });
   };
   const handleTogglemodal = () => {
-    setInputText("")
-    toggleModal()
-  }
+    setInputText("");
+    toggleModal();
+  };
   const navigation = useNavigation();
   const goToLoginPasswordPage = () => {
     navigation.navigate("LoginPasswordPage", {
