@@ -33,15 +33,20 @@ const TravelBudgetPaymentHistoryComponent = ({
   categoryTitle,
   travelBudgetUnit,
   setTotalPayment,
+  clickCount,
 }) => {
-  const calculateTotalPayment = () => {
+  const calculateOneCategoryTotal = () => {
     return categoryList.reduce((acc, cur) => acc + cur.price, 0);
   };
-  const totalPayment = calculateTotalPayment();
 
   useEffect(() => {
-    setTotalPayment((prevTotalPayment) => prevTotalPayment + totalPayment);
-  }, [categoryList, setTotalPayment]);
+    if (clickCount < 1) {
+      setTotalPayment(
+        (prevTotalPayment) => prevTotalPayment + calculateOneCategoryTotal()
+      );
+    }
+  }, []);
+
   return (
     //categoryId=1, 식비
     <CategoryPaymentContainer>

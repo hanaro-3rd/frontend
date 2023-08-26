@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   fontPercentage,
   getCountryUnit,
@@ -145,8 +145,14 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
     }
   );
 
-  const [selectedTab, setSelectedTab] = useState("category");
+  const handlePressCategory = () => {
+    setSelectedTab("category");
+    setClickCount((prev) => prev + 1);
+    console.log(clickCount);
+  };
 
+  const [selectedTab, setSelectedTab] = useState("category");
+  const [clickCount, setClickCount] = useState(0);
   const handleDeleteImageClick = () => {
     Alert.alert(
       "경비 계획 삭제하기",
@@ -320,7 +326,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                   selectedTab === "category" ? "#55acee" : "white",
               }}
             >
-              <TouchableOpacity onPress={() => setSelectedTab("category")}>
+              <TouchableOpacity onPress={handlePressCategory}>
                 <CategoryOrDateText>카테고리별</CategoryOrDateText>
               </TouchableOpacity>
             </CategoryOrDateContainer>
@@ -347,6 +353,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                     categoryTitle="식비"
                     travelBudgetUnit={travelBudget}
                     setTotalPayment={setTotalPayment}
+                    clickCount={clickCount}
                   />
                 )
               }
@@ -359,6 +366,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                   categoryTitle="교통"
                   travelBudgetUnit={travelBudget}
                   setTotalPayment={setTotalPayment}
+                  clickCount={clickCount}
                 />
               )}
               {category.length > 0 && ( //카테고리명 숙박, 카테고리아이디 3
@@ -370,6 +378,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                   categoryTitle="숙박"
                   travelBudgetUnit={travelBudget}
                   setTotalPayment={setTotalPayment}
+                  clickCount={clickCount}
                 />
               )}
               {category.length > 0 && ( //카테고리명 교통, 카테고리아이디 4
@@ -381,6 +390,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                   categoryTitle="쇼핑 · 편의점 · 마트"
                   travelBudgetUnit={travelBudget}
                   setTotalPayment={setTotalPayment}
+                  clickCount={clickCount}
                 />
               )}
               {category.length > 0 && ( //카테고리명 문화 · 여가, 카테고리아이디 5
@@ -392,6 +402,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                   categoryTitle="문화 · 여가"
                   travelBudgetUnit={travelBudget}
                   setTotalPayment={setTotalPayment}
+                  clickCount={clickCount}
                 />
               )}
               {category.length > 0 && ( //카테고리명 문화 · 여가, 카테고리아이디 5
@@ -403,6 +414,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                   categoryTitle="기타"
                   travelBudgetUnit={travelBudget}
                   setTotalPayment={setTotalPayment}
+                  clickCount={clickCount}
                 />
               )}
             </MainContainer>

@@ -234,7 +234,7 @@ export const styles = StyleSheet.create({
   },
   foreignMoneyContainer: {
     width: widthPercentage(130),
-    alignItems: "center",
+    justifyContent: "flex-end",
     gap: widthPercentage(10),
     flexDirection: "row",
   },

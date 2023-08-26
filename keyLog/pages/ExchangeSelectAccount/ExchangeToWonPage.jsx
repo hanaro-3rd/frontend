@@ -105,8 +105,14 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
         setJpy(response.data.result.jpy);
         setEur(response.data.result.eur);
         setUsd(response.data.result.usd);
-        setExchangeRate(response.data.result.usd.exchangeRate);
-        setChangePrice(response.data.result.usd.changePrice);
+        Keyunit == "USD"
+          ? (setExchangeRate(response.data.result.usd.exchangeRate),
+            setChangePrice(response.data.result.usd.changePrice))
+          : Keyunit == "JPY"
+          ? (setExchangeRate(response.data.result.jpy.exchangeRate),
+            setChangePrice(response.data.result.jpy.changePrice))
+          : (setExchangeRate(response.data.result.eur.exchangeRate),
+            setChangePrice(response.data.result.eur.changePrice));
         setApiTime(response.data.result.updatedAt);
       },
       onError: (error) => {
@@ -143,48 +149,48 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
   };
 
   // Debounce된 함수 생성
-  const handleDebouncedInputChange = () => {
-    const numericValue = parseInt(koreaTextInput);
-    console.log(minimumMoney, "minimumMoney");
-    if (isNaN(numericValue)) {
-      Keyboard.dismiss();
-      return;
-    }
-    if (numericValue > 1000000) {
-      //한국돈 100만원보다 클때
-      let exchangeMoney = Math.floor(1000000 / exchangeRate);
-      console.log("exchangeRate", exchangeRate);
-      console.log(exchangeMoney, "exchangeMoney1000000");
-      if (selectedMoney == "JPY") {
-        exchangeMoney = Math.floor(exchangeMoney / 1000) * 1000;
-      }
-      const koreaMoney = Math.floor(exchangeMoney * exchangeRate);
-      setForeignTextInput(String(exchangeMoney));
-      setKoreaTextInput(String(koreaMoney));
-      setSubForeignText("최대 환전금액은 원화 기준 100만원입니다.");
-      Keyboard.dismiss();
-      return;
-    }
-    if (numericValue / exchangeRate < minimumMoney) {
-      //입력값이 최소 환전 금액보다 작을 때
-      const exchangeValue = minimumMoney;
-      setForeignTextInput(`${exchangeValue}`);
-      const koreaValue = Math.floor(exchangeValue * exchangeRate);
-      setKoreaTextInput(`${koreaValue}`);
-      setSubForeignText(minimumUnit(minimumMoney, selectedMoney));
-    } else {
-      if (minimumMoney == 1000) {
-        //  foreignTextInput % 1000 == 0 ? setSubForeignText("") : setSubForeignText(integerUnit(minimumMoney,selectedMoney))
-        const japanMoney = Math.round(foreignTextInput / 1000) * 1000;
-        console.log(japanMoney);
-        setForeignTextInput(String(japanMoney));
-        setKoreaTextInput(String(Math.floor(japanMoney * exchangeRate)));
-      } else {
-        setKoreaTextInput(String(Math.floor(foreignTextInput * exchangeRate)));
-      }
-    }
-    Keyboard.dismiss();
-  };
+  // const handleDebouncedInputChange = () => {
+  //   const numericValue = parseInt(koreaTextInput);
+  //   console.log(minimumMoney, "minimumMoney");
+  //   if (isNaN(numericValue)) {
+  //     Keyboard.dismiss();
+  //     return;
+  //   }
+  //   if (numericValue > 1000000) {
+  //     //한국돈 100만원보다 클때
+  //     let exchangeMoney = Math.floor(1000000 / exchangeRate);
+  //     console.log("exchangeRate", exchangeRate);
+  //     console.log(exchangeMoney, "exchangeMoney1000000");
+  //     if (selectedMoney == "JPY") {
+  //       exchangeMoney = Math.floor(exchangeMoney / 1000) * 1000;
+  //     }
+  //     const koreaMoney = Math.floor(exchangeMoney * exchangeRate);
+  //     setForeignTextInput(String(exchangeMoney));
+  //     setKoreaTextInput(String(koreaMoney));
+  //     setSubForeignText("최대 환전금액은 원화 기준 100만원입니다.");
+  //     Keyboard.dismiss();
+  //     return;
+  //   }
+  //   if (numericValue / exchangeRate < minimumMoney) {
+  //     //입력값이 최소 환전 금액보다 작을 때
+  //     const exchangeValue = minimumMoney;
+  //     setForeignTextInput(`${exchangeValue}`);
+  //     const koreaValue = Math.floor(exchangeValue * exchangeRate);
+  //     setKoreaTextInput(`${koreaValue}`);
+  //     setSubForeignText(minimumUnit(minimumMoney, selectedMoney));
+  //   } else {
+  //     if (minimumMoney == 1000) {
+  //       //  foreignTextInput % 1000 == 0 ? setSubForeignText("") : setSubForeignText(integerUnit(minimumMoney,selectedMoney))
+  //       const japanMoney = Math.round(foreignTextInput / 1000) * 1000;
+  //       console.log(japanMoney);
+  //       setForeignTextInput(String(japanMoney));
+  //       setKoreaTextInput(String(Math.floor(japanMoney * exchangeRate)));
+  //     } else {
+  //       setKoreaTextInput(String(Math.floor(foreignTextInput * exchangeRate)));
+  //     }
+  //   }
+  //   Keyboard.dismiss();
+  // };
 
   const postExchangeMutation = useMutation(postExchange, {
     onSuccess: (response) => {
@@ -206,7 +212,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
   });
 
   // 입력값이 변경될 때마다 debounce된 함수 실행
-  useDebouncedEffect(handleDebouncedInputChange, 1500, [koreaTextInput]);
+  // useDebouncedEffect(handleDebouncedInputChange, 1500, [koreaTextInput]);
   // 나머지 로직을 여기에 추가
 
   const handleExchangeSubmit = () => {
@@ -310,165 +316,160 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                   ? ""
                   : "통장 잔고: " + accountBalance + "원"}
               </Text>
-
-              <View style={styles.moneyContainer}>
-                <View style={styles.titleContainer}>
-                  <Text style={styles.containerTitle2}>환전 금액</Text>
-                  <Text style={styles.containerSubtitle}>
-                    주말, 공휴일 수수료 원화 20원이 적용됩니다
-                  </Text>
-                </View>
-
-                {/* 환율부분 */}
-
-                <View style={styles.koreaWonContainer}>
-                  <View style={styles.textContainer}>
-                    {Keyunit == "USD" ? (
-                      <Image
-                        source={require("../../assets/exchangeImg/USD.png")}
-                        style={{
-                          width: widthPercentage(32),
-                          height: heightPercentage(30),
-                        }}
-                      />
-                    ) : Keyunit == "JPY" ? (
-                      <Image
-                        source={require("../../assets/exchangeImg/Japan.png")}
-                        style={{
-                          width: widthPercentage(32),
-                          height: heightPercentage(30),
-                        }}
-                      />
-                    ) : Keyunit == "EUR" ? (
-                      <Image
-                        source={require("../../assets/exchangeImg/EUR.png")}
-                        style={{
-                          width: widthPercentage(32),
-                          height: heightPercentage(30),
-                        }}
-                      />
-                    ) : (
-                      <Image
-                        source={require("../../assets/exchangeImg/Korea.png")}
-                        style={{
-                          width: widthPercentage(32),
-                          height: heightPercentage(30),
-                        }}
-                      />
-                    )}
-
-                    <Text style={styles.unitText2}>{Keyunit}</Text>
-                  </View>
-                  <TextInput //외화
-                    value={foreignTextInput}
-                    onChangeText={(text) => foreignInputChange(text)}
-                    placeholder={placeholderText}
-                    keyboardType="numeric"
-                    style={{ textAlign: "right" }}
-                  />
-                </View>
-                <View style={{ width: "100%" }}>
-                  <Text
-                    style={{
-                      textAlign: "right",
-                      color: "#8B95A1",
-                      fontSize: 12,
-                      marginBottom: 10,
-                    }}
-                  >
-                    {subKoreaText}
-                  </Text>
-                </View>
-                <View style={styles.foreignCurrencyContainer}>
-                  <View style={{ width: 140 }}>
-                    <TouchableOpacity disabled>
-                      <Collapse>
-                        <CollapseHeader>
-                          <View style={styles.countrySelect2}>
-                            <Image
-                              source={require("../../assets/exchangeImg/Korea.png")}
-                              style={{
-                                width: widthPercentage(32),
-                                height: heightPercentage(30),
-                              }}
-                            />
-                            <Text style={styles.unitText}>KRW</Text>
-                            <Image
-                              source={require("../../assets/exchangeImg/SelectButton.png")}
-                            />
-                          </View>
-                        </CollapseHeader>
-                      </Collapse>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.foreignCurrencyInput}>
-                    <TextInput //한화
-                      editable={false}
-                      style={{ textAlign: "right" }}
-                      onChangeText={(text) => koreaInputChange(text)}
-                      value={koreaTextInput}
-                      placeholder="계좌에 들어갈 금액"
-                      keyboardType="numeric"
-                    />
-                  </View>
-                </View>
-                <View style={{ width: "100%" }}>
-                  <Text
-                    style={{
-                      textAlign: "right",
-                      color: "#8B95A1",
-                      fontSize: 12,
-                      marginBottom: 10,
-                    }}
-                  >
-                    {subForeignText}
-                  </Text>
-                </View>
+            </View>
+            <View style={styles.moneyContainer}>
+              <View style={styles.titleContainer}>
+                <Text style={styles.containerTitle2}>환전 금액</Text>
+                <Text style={styles.containerSubtitle}>
+                  주말, 공휴일 수수료 원화 20원이 적용됩니다
+                </Text>
               </View>
 
-              {/* 환율 부분 */}
-              {Keyunit == "Korea" ? (
-                <View />
-              ) : (
-                <View style={styles.exchangeRateContainer}>
-                  <View style={styles.titleContainer2}>
-                    <Text style={styles.containerTitle3}>현재 환율</Text>
-                    <Text style={styles.containerSubtitle2}>
-                      {apiTime != null
-                        ? `${apiTime[1]}.${apiTime[2]}. ${apiTime[3]}:${apiTime[4]} 기준`
-                        : ""}
+              {/* 환율부분 */}
+
+              <View style={styles.koreaWonContainer}>
+                <View style={styles.textContainer}>
+                  {Keyunit == "USD" ? (
+                    <Image
+                      source={require("../../assets/exchangeImg/USD.png")}
+                      style={{
+                        width: widthPercentage(32),
+                        height: heightPercentage(30),
+                      }}
+                    />
+                  ) : Keyunit == "JPY" ? (
+                    <Image
+                      source={require("../../assets/exchangeImg/Japan.png")}
+                      style={{
+                        width: widthPercentage(32),
+                        height: heightPercentage(30),
+                      }}
+                    />
+                  ) : Keyunit == "EUR" ? (
+                    <Image
+                      source={require("../../assets/exchangeImg/EUR.png")}
+                      style={{
+                        width: widthPercentage(32),
+                        height: heightPercentage(30),
+                      }}
+                    />
+                  ) : (
+                    <Image
+                      source={require("../../assets/exchangeImg/Korea.png")}
+                      style={{
+                        width: widthPercentage(32),
+                        height: heightPercentage(30),
+                      }}
+                    />
+                  )}
+
+                  <Text style={styles.unitText2}>{Keyunit}</Text>
+                </View>
+                <TextInput //외화
+                  value={foreignTextInput}
+                  onChangeText={(text) => foreignInputChange(text)}
+                  placeholder={placeholderText}
+                  keyboardType="numeric"
+                  style={{ textAlign: "right" }}
+                />
+              </View>
+              <View style={{ width: "100%" }}>
+                <Text
+                  style={{
+                    textAlign: "right",
+                    color: "#8B95A1",
+                    fontSize: 12,
+                  }}
+                >
+                  {subKoreaText}
+                </Text>
+              </View>
+              <View style={styles.foreignCurrencyContainer}>
+                <View style={{ width: 140 }}>
+                  <TouchableOpacity disabled>
+                    <Collapse>
+                      <CollapseHeader>
+                        <View style={styles.countrySelect2}>
+                          <Image
+                            source={require("../../assets/exchangeImg/Korea.png")}
+                            style={{
+                              width: widthPercentage(32),
+                              height: heightPercentage(30),
+                            }}
+                          />
+                          <Text style={styles.unitText}>KRW</Text>
+                          <Image
+                            source={require("../../assets/exchangeImg/SelectButton.png")}
+                          />
+                        </View>
+                      </CollapseHeader>
+                    </Collapse>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.foreignCurrencyInput}>
+                  <TextInput //한화
+                    editable={false}
+                    style={{ textAlign: "right" }}
+                    value={koreaTextInput}
+                    placeholder="계좌에 들어갈 금액"
+                    keyboardType="numeric"
+                  />
+                </View>
+              </View>
+              <View style={{ width: "100%" }}>
+                <Text
+                  style={{
+                    textAlign: "right",
+                    color: "#8B95A1",
+                    fontSize: 12,
+                    marginBottom: 10,
+                  }}
+                >
+                  {subForeignText}
+                </Text>
+              </View>
+            </View>
+
+            {/* 환율 부분 */}
+            {Keyunit == "Korea" ? (
+              <View />
+            ) : (
+              <View style={styles.exchangeRateContainer}>
+                <View style={styles.titleContainer2}>
+                  <Text style={styles.containerTitle3}>현재 환율</Text>
+                  <Text style={styles.containerSubtitle2}>
+                    {apiTime != null
+                      ? `${apiTime[1]}.${apiTime[2]}. ${apiTime[3]}:${apiTime[4]} 기준`
+                      : ""}
+                  </Text>
+                </View>
+                <View style={styles.currentExchangeRateContainer}>
+                  <View style={styles.countryInformationContainer}>
+                    <Text style={styles.countryText}>
+                      {Keyunit == "USD"
+                        ? "미국"
+                        : Keyunit == "JPY"
+                        ? "일본"
+                        : "유럽"}
+                    </Text>
+                    <Text style={styles.unitText3}>{Keyunit}</Text>
+                  </View>
+                  <View style={styles.currentExchangeRateTextContainer}>
+                    <Text style={styles.exchangeRateText}>{exchangeRate}</Text>
+                    <Text
+                      style={
+                        changePrice > 0
+                          ? styles.changeRateUp
+                          : styles.changeRateDown
+                      }
+                    >
+                      {changePrice > 0 ? "▲" : "▼"}
+                      {changePrice}
                     </Text>
                   </View>
-                  <View style={styles.currentExchangeRateContainer}>
-                    <View style={styles.countryInformationContainer}>
-                      <Text style={styles.countryText}>
-                        {Keyunit == "USD"
-                          ? "미국"
-                          : Keyunit == "JPY"
-                          ? "일본"
-                          : "유럽"}
-                      </Text>
-                      <Text style={styles.unitText3}>{Keyunit}</Text>
-                    </View>
-                    <View style={styles.currentExchangeRateTextContainer}>
-                      <Text style={styles.exchangeRateText}>
-                        {exchangeRate}
-                      </Text>
-                      <Text
-                        style={
-                          changePrice > 0
-                            ? styles.changeRateUp
-                            : styles.changeRateDown
-                        }
-                      >
-                        {changePrice > 0 ? "▲" : "▼"}
-                        {changePrice}
-                      </Text>
-                    </View>
-                  </View>
                 </View>
-              )}
-            </View>
+              </View>
+            )}
           </View>
         </View>
         <View style={styles.footer}>
