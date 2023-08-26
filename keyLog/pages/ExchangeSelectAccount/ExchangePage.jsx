@@ -229,10 +229,8 @@ export const ExchangePage = () => {
               {accountList.length > 0 ? (
                 <TouchableOpacity>
                   <Collapse
-                    isExpanded={expanded}
-                    onToggle={(isExpanded) =>
-                      setExpanded({ isExpanded: false })
-                    }
+                    isExpanded={expanded} // 현재 expanded 객체를 사용
+                    onToggle={(isExpanded) => setExpanded(isExpanded)} // 상태 업데이트
                   >
                     <CollapseHeader>
                       <View style={styles.countrySelect}>
@@ -241,9 +239,16 @@ export const ExchangePage = () => {
                             ? selectedAccount
                             : "계좌를 선택해주세요"}
                         </Text>
-                        <Image
-                          source={require("../../assets/exchangeImg/SelectButton.png")}
-                        />
+                        {expanded ? (
+                          <Image
+                            source={require("../../assets/exchangeImg/SelectButton.png")}
+                            style={{ transform: [{ rotate: `${180}deg` }] }}
+                          />
+                        ) : (
+                          <Image
+                            source={require("../../assets/exchangeImg/SelectButton.png")}
+                          />
+                        )}
                       </View>
                     </CollapseHeader>
                     <CollapseBody>
@@ -287,6 +292,7 @@ export const ExchangePage = () => {
                   />
                 </TouchableOpacity>
               )}
+
               <Text>
                 {accountBalance === false
                   ? ""
@@ -324,7 +330,6 @@ export const ExchangePage = () => {
                     textAlign: "right",
                     color: "#8B95A1",
                     fontSize: 12,
-                    marginBottom: 10,
                   }}
                 >
                   {subKoreaText}

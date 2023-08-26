@@ -48,9 +48,9 @@ const ModalContent = ({
     });
   };
   const handleTogglemodal = () => {
-    setInputText("")
-    toggleModal()
-  }
+    setInputText("");
+    toggleModal();
+  };
   const navigation = useNavigation();
   const goToLoginPasswordPage = () => {
     navigation.navigate("LoginPasswordPage", {

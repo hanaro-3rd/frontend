@@ -74,7 +74,6 @@ export const AccountConnectPage = ({ navigation, route }) => {
     if (password.length < 4) {
       const newpassword = password + num;
       setPassword(newpassword);
-      console.log(newpassword);
       setIsPasswordMismatch(false);
     }
   };
@@ -162,6 +161,7 @@ export const AccountConnectPage = ({ navigation, route }) => {
                   }}
                   key={idx}
                 >
+                  {console.log(selectedItem)}
                   <View
                     style={[
                       styles.accountitem,
@@ -192,15 +192,16 @@ export const AccountConnectPage = ({ navigation, route }) => {
         </View>
       </View>
       <View style={styles.footer}>
-        <Pressable
+        <TouchableOpacity
+          disabled={!Object.keys(selectedItem).length}
           style={[
             styles.submitButton,
-            selectedItem != null && styles.submitButtonAfter,
+            Object.keys(selectedItem).length && styles.submitButtonAfter,
           ]}
           onPress={() => setModalVisible(true)}
         >
           <Text style={styles.buttonText}>연결하기</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
 
       <Modal
