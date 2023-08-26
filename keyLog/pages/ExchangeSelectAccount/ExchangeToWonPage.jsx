@@ -13,7 +13,13 @@ import {
   Keyboard,
   navigation,
 } from "react-native";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import { useNavigation } from "@react-navigation/native";
 import DeleteHeader from "../../components/Header/DeleteHeader";
 import CountryChoiceComponent from "../../components/ExchangePageComponents/CountryChoiceComponent";
@@ -107,8 +113,14 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
         setJpy(response.data.result.jpy);
         setEur(response.data.result.eur);
         setUsd(response.data.result.usd);
-        setExchangeRate(response.data.result.usd.exchangeRate);
-        setChangePrice(response.data.result.usd.changePrice);
+        Keyunit == "USD"
+          ? (setExchangeRate(response.data.result.usd.exchangeRate),
+            setChangePrice(response.data.result.usd.changePrice))
+          : Keyunit == "JPY"
+          ? (setExchangeRate(response.data.result.jpy.exchangeRate),
+            setChangePrice(response.data.result.jpy.changePrice))
+          : (setExchangeRate(response.data.result.eur.exchangeRate),
+            setChangePrice(response.data.result.eur.changePrice));
         setApiTime(response.data.result.updatedAt);
       },
       onError: (error) => {
@@ -124,6 +136,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
   // 2. 최소금액 설정하기 (USD= 1달러, EUR = 1유로, JPY= 1000엔)
   // 3. 잔액보다 값이 높으면 잔액으로 리턴 => 소수점 걸리면 내림으로 가야함
   const foreignInputChange = (text) => {
+    console.log(text);
     setForeignTextInput(String(text));
     const exchangeKoreaMoney = Math.floor(text * exchangeRate);
     setKoreaTextInput(String(exchangeKoreaMoney));
@@ -135,6 +148,10 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
         setSubForeignText(integerUnit(minimumMoney, selectedMoney));
       }
     }
+  };
+
+  const blurHandler = (e) => {
+    foreignInputChange(e.target.value);
   };
 
   // const koreaInputChange = (text) => {
@@ -321,9 +338,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
               <View style={styles.moneyContainer}>
                 <View style={styles.titleContainer}>
                   <Text style={styles.containerTitle2}>환전 금액</Text>
-                  <Text style={styles.containerSubtitle}>
-                    주말, 공휴일 수수료 원화 20원이 적용됩니다
-                  </Text>
+                  <Text style={styles.containerSubtitle} />
                 </View>
 
                 {/* 환율부분 */}
@@ -366,17 +381,17 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
 
                     <Text style={styles.unitText2}>{Keyunit}</Text>
                   </View>
-                  {/* <TextInput //외화
+                  <TextInput //외화
                     value={foreignTextInput}
-                    onChangeText={(text) => foreignInputChange(text)}
+                    onBlur={blurHandler}
                     // placeholder={placeholderText}
                     keyboardType="numeric"
                     style={{ textAlign: "right" }}
-                  /> */}
-                  <ToWonComponent
-                    value={foreignTextInput}
-                    onChangeText={(text) => foreignInputChange(text)}
                   />
+                  {/* <ToWonComponent
+                    value={foreignTextInput}
+                    onBlur={(text) => foreignInputChange(text)}
+                  /> */}
                 </View>
                 <View style={{ width: "100%" }}>
                   <Text
@@ -445,7 +460,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                   <View style={styles.titleContainer2}>
                     <Text style={styles.containerTitle3}>현재 환율</Text>
                     <Text style={styles.containerSubtitle2}>
-                      {apiTime != null
+                      {apiTime != undefined
                         ? `${apiTime[1]}.${apiTime[2]}. ${apiTime[3]}:${apiTime[4]} 기준`
                         : ""}
                     </Text>
@@ -484,9 +499,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
         </View>
         <View style={styles.footer}>
           <View style={styles.informationContainer}>
-            <Text style={styles.informationText}>
-              * 주말 및 공휴일은 수수료가 붙습니다
-            </Text>
+            <Text style={styles.informationText} />
           </View>
           {koreaTextInput > 0 &&
           foreignTextInput > 0 &&
