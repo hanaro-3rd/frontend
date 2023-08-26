@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View, Image } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import styled from "styled-components/native";
 import SelectButtonBefore from "../../assets/travelBudget/SelectButtonBefore.png";
@@ -29,7 +29,7 @@ const TravelPeriodTextContainer = styled.View`
   display: flex;
   padding: ${heightPercentage(7)}px ${widthPercentage(15)}px;
   flex-direction: row;
-  justify-content : center;
+  justify-content: center;
   align-items: center;
   color: #000000;
   border-radius: 5px;
@@ -60,12 +60,47 @@ const TravelDateComponent = ({
   setStartDate,
   endDate,
   setEndDate,
+  formatDate,
 }) => {
   const [isStartDateVisible, setStartDateVisible] = useState(false);
   const [isEndDateVisible, setEndDateVisible] = useState(false);
   const [mode, setMode] = useState("datetime");
   const [isStartDateSelected, setStartDateSelected] = useState(false);
   const [isEndDateSelected, setEndDateSelected] = useState(false);
+
+  useEffect(() => {
+    setStartDateSelected(startDate instanceof Date);
+    setEndDateSelected(endDate instanceof Date);
+  }, [startDate, endDate]);
+
+  useEffect(() => {
+    if (formatDate) {
+      if (Array.isArray(startDate) && startDate.length === 5) {
+        const [startYear, startMonth, startDay, startHour, startMinute] =
+          startDate;
+        const isoFormattedStartDate = format(
+          new Date(startYear, startMonth - 1, startDay, startHour, startMinute),
+          "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+          {
+            locale: ko,
+          }
+        );
+        setStartDate(isoFormattedStartDate);
+      }
+
+      if (Array.isArray(endDate) && endDate.length === 5) {
+        const [endYear, endMonth, endDay, endHour, endMinute] = endDate;
+        const isoFormattedEndDate = format(
+          new Date(endYear, endMonth - 1, endDay, endHour, endMinute),
+          "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+          {
+            locale: ko,
+          }
+        );
+        setEndDate(isoFormattedEndDate);
+      }
+    }
+  }, [formatDate, startDate, setStartDate, endDate, setEndDate]);
 
   const onPressStartDate = () => {
     setMode("datetime");
@@ -96,6 +131,7 @@ const TravelDateComponent = ({
     setEndDateVisible(false);
   };
 
+  console.log(startDate);
   return (
     <View>
       <SelectedFrame>
@@ -117,7 +153,14 @@ const TravelDateComponent = ({
                 {/* <Image source={SelectButton} /> */}
               </>
             ) : (
-              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  width: "100%",
+                }}
+              >
                 <PlaceholderText>시작일</PlaceholderText>
                 <Image source={SelectButtonBefore} />
               </View>
@@ -142,7 +185,14 @@ const TravelDateComponent = ({
                 {/* <Image source={SelectButton} /> */}
               </>
             ) : (
-              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  width: "100%",
+                }}
+              >
                 <PlaceholderText>종료일</PlaceholderText>
                 <Image source={SelectButtonBefore} />
               </View>

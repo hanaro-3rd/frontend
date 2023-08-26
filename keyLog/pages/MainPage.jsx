@@ -285,7 +285,7 @@ const MainPage = ({ navigation }) => {
 
   const MenuContainer = styled.View`
     width: ${widthPercentage(390)}px;
-    height: ${heightPercentage(700)}px;
+    height: ${heightPercentage(750)}px;
     padding: ${heightPercentage(15)}px ${widthPercentage(20)}px;
     flex-direction: column;
     align-items: center;

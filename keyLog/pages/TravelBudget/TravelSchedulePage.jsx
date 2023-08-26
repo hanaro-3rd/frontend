@@ -353,6 +353,7 @@ const TravelSchedulePage = ({ navigation }) => {
               setStartDate={handleStartDateChange}
               endDate={endDate}
               setEndDate={handleEndDateChange}
+              formatDate={false}
             />
           </TravelTitleContainer>
         </BodyMain>

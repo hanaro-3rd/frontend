@@ -64,38 +64,35 @@ export const postExchange = (exchangeData) => {
 };
 
 export const getExchange = (exchangeData) => {
-  return axiosClient.get(
-    `/exchange/getFromRedis`,
-    exchangeData
-  );
+  return axiosClient.get(`/exchange/getFromRedis`, exchangeData);
 };
 
 export const getTravelBudget = () => {
-  return axiosClient.get('/plan')
-}
+  return axiosClient.get("/plan");
+};
 
 export const postTravelBudget = (travelbudgetData) => {
-  return axiosClient.post('/plan',travelbudgetData)
-}
+  return axiosClient.post("/plan", travelbudgetData);
+};
 
-export const patchTravelPlan = ({planId,patchTravelPlanData}) => {
-  return axiosClient.patch(`/plan${planId}`, patchTravelPlanData)
-}
-export const patchTravelBudget = ({plan_id,patchTravelBudgetData}) => {
-  return axiosClient.patch(`/plan/${plan_id}/category`,patchTravelBudgetData)
-}
+export const patchTravelPlan = ({ planId, patchTravelPlanData }) => {
+  return axiosClient.patch(`/plan/${planId}`, patchTravelPlanData);
+};
+export const patchTravelBudget = ({ plan_id, patchTravelBudgetData }) => {
+  return axiosClient.patch(`/plan/${plan_id}/category`, patchTravelBudgetData);
+};
 
 export const getTravelBudgetDetail = (plan_id) => {
-  return axiosClient.get(`/plan/${plan_id}`)
-}
+  return axiosClient.get(`/plan/${plan_id}`);
+};
 
 export const deleteTravelBudget = (plan_id) => {
-  return axiosClient.delete(`/plan/${plan_id}`)
-} 
+  return axiosClient.delete(`/plan/${plan_id}`);
+};
 
 export const getTravelBudgetCategory = (plan_id) => {
-  return axiosClient.get(`/plan/${plan_id}/category`)
-}
+  return axiosClient.get(`/plan/${plan_id}/category`);
+};
 
 export const getMyKeymoney = () => {
   return axiosClient.get("/keymoney");
@@ -110,6 +107,3 @@ export const getDetailKeymoneyHistory = ({ historyId, type }) => {
     `/keymoney/detail?historyId=${historyId}&type=${type}`
   );
 };
-
-
-

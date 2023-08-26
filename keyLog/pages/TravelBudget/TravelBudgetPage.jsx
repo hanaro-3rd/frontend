@@ -205,7 +205,7 @@ const TravelBudgetPage = ({ route, navigation }) => {
         // setData(obj);
         // console.log(obj);
         let sortedData = dataArray.reduce((acc, curr) => {
-          const year = curr.startDate[0]; 
+          const year = curr.startDate[0];
           const index = acc.findIndex((item) => item.year === year);
           if (index !== -1) {
             acc[index].trips.push(curr);
@@ -215,10 +215,11 @@ const TravelBudgetPage = ({ route, navigation }) => {
           return acc;
         }, []);
 
-        sortedData.sort((a, b) => b.year - a.year); 
+        sortedData.sort((a, b) => b.year - a.year);
 
         console.log(sortedData);
         setData(sortedData);
+        queryClient.invalidateQueries("travelBudgetData");
       },
       onError: () => {},
     }
@@ -248,7 +249,7 @@ const TravelBudgetPage = ({ route, navigation }) => {
                 <YearContainer key={idx}>
                   <YearText>{key}</YearText>
                   {data[key]?.map((e, idx) => { */}
-           {data.length !== 0 ? (
+          {data.length !== 0 ? (
             data.map((yearData, yearIdx) => {
               return (
                 <YearContainer key={yearIdx}>
