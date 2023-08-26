@@ -330,7 +330,6 @@ export const ExchangePage = () => {
                     textAlign: "right",
                     color: "#8B95A1",
                     fontSize: 12,
-                    marginBottom: 10,
                   }}
                 >
                   {subKoreaText}
