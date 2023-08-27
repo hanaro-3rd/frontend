@@ -27,8 +27,8 @@ export const getRegistrationDeviceId = (deviceId) => {
 export const getRefresh = async () => {
   return axiosRefreshClient.get("/refresh");
 };
-export const getMarkers = () => {
-  return axiosClient.get("/marker");
+export const postMarker = ({sort,isPickup,unit,markerData}) => {
+  return axiosClient.post(`/marker?unit=${unit}&isPickup=${isPickup}&sort=${sort}`,markerData);
 };
 
 export const postMarkers = ({ markerId, markerData }) => {

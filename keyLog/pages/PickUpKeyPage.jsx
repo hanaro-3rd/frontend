@@ -1,5 +1,12 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  StyleSheet
+} from "react-native";
+import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components/native";
 import {
@@ -11,7 +18,7 @@ import {
   widthPercentage,
 } from "../utils/ResponseSize";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getMarkers, postMarkers } from "../api/api";
+import { getMarkers, postMarker, postMarkers } from "../api/api";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { calculateDistance } from "../utils/calculateDistance";
 import leftArrow from "../assets/accountImg/Vector.png";
@@ -19,6 +26,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { navigateToLoginPage } from "../utils/NavigateToLoginPage";
 import Geolocation from "react-native-geolocation-service";
 import arrowBack from "../assets/travelBudget/arrow_back.png";
+import selectDown from "../assets/exchangeImg/SelectButton.png";
+import closeButton from "../assets/travelBudget/CloseButton.png";
+import markerMap from "../Images/마커지도.png";
+import markerAddress from "../Images/마커주소.png";
+import markerPin from "../Images/마커.png";
+import CountryModalComponent from "../components/PickUpPageComponents/CountryModalComponent";
+import MarkerModalComponent from "../components/PickUpPageComponents/MarkerModalComponent";
+import SortModalComponent from "../components/PickUpPageComponents/SortModalComponent";
 const PickUpKeyPage = ({ navigation }) => {
   const [location, setLocation] = useState({
     latitude: 37.545315,
@@ -32,6 +47,17 @@ const PickUpKeyPage = ({ navigation }) => {
   const [showSuccessModalView, setShowSuccessModalView] = useState(false);
   const [successUnit, setSuccessUnit] = useState();
   const [successBalance, setSuccessBalance] = useState();
+  const [countryModal, setCountryModal] = useState(["all", "나라 전체"]);
+  const [markerModal, setMarkerModal] = useState(["all", "마커 전체"]);
+  const [sortModal, setSortModal] = useState(["distance", "거리순"]);
+  const [isCountryModalVisible, setIsCountryModalVisible] = useState(false);
+  const [isMarkerModalVisible, setIsMarkerModalVisible] = useState(false);
+  const [isSortModalVisible, setIsSortModalVisible] = useState(false);
+  //KRW,JPY,USD,EUR,all
+  //all,false,true
+  //distance,amount,limitAmount
+
+  const [upDown, setUpDown] = useState(false);
   const [canGetPrice, setCanGetPrice] = useState();
   const [maxHeight, setMaxHeight] = useState(300);
   const queryClient = useQueryClient();
@@ -39,7 +65,7 @@ const PickUpKeyPage = ({ navigation }) => {
   const placesRef = useRef();
 
   //마커 정보 가져오기
-  const { data } = useQuery("getMarkers", async () => getMarkers(), {
+  const getMarker = useMutation(postMarker, {
     onSuccess: async (response) => {
       console.log(response.data);
       let markerMoney = response.data.result.markers.filter(
@@ -51,18 +77,17 @@ const PickUpKeyPage = ({ navigation }) => {
       }, 0);
       console.log(markerBalance);
       setCanGetPrice(markerBalance);
-      setMarkerList(
-        response.data.result.markers.filter((e, idx) => e.isPickUp == false)
-      );
+      setMarkerList(response.data.result.markers);
       console.log(response.data.result.markers[0]);
       console.log(response.data.result.markers[1]);
     },
 
     onError: async (error) => {
-      console.log(error);
-      navigation.navigate("LoginPage");
+      console.log(error.response, "error나다");
+      // navigation.navigate("LoginPage");
     },
   });
+
   const postMarkersMutation = useMutation(postMarkers, {
     onSuccess: (response) => {
       console.log(response.data);
@@ -77,33 +102,91 @@ const PickUpKeyPage = ({ navigation }) => {
       console.log("markerpost" + error);
     },
   });
- 
-  useEffect(()=>{
-     if (showSuccessModalView == true) 
-     {
-      setTimeout(()=>{
-         setShowSuccessModalView(false)
-      },3000)
-     }
-  },[showSuccessModalView])
+
+  useEffect(() => {
+    if (showSuccessModalView == true) {
+      setTimeout(() => {
+        setShowSuccessModalView(false);
+      }, 3000);
+    }
+  }, [showSuccessModalView]);
   const handlePostMarkers = (markerId, markerData) => {
     console.log(markerId, markerData);
     postMarkersMutation.mutate({ markerId, markerData });
   };
+  const toggleCountryModal = () => {
+    setIsCountryModalVisible(!isCountryModalVisible);
+    if (isCountryModalVisible) {
+      getMarker.mutate({
+        unit: countryModal[0],
+        isPickup: markerModal[0],
+        sort: sortModal[0],
+        markerData: { lat: 37.545315, lng: 127.057088 },
+      });
+      setUpDown(false);
+    }
+  };
 
+  const toggleMarkerModal = () => {
+    setIsMarkerModalVisible(!isMarkerModalVisible);
+    if (isMarkerModalVisible) {
+      getMarker.mutate({
+        unit: countryModal[0],
+        isPickup: markerModal[0],
+        sort: sortModal[0],
+        markerData: { lat: 37.545315, lng: 127.057088 },
+      });
+      setUpDown(false);
+    }
+  };
+  const toggleSortModal = () => {
+    setIsSortModalVisible(!isSortModalVisible);
+    if (isSortModalVisible) {
+      getMarker.mutate({
+        unit: countryModal[0],
+        isPickup: markerModal[0],
+        sort: sortModal[0],
+        markerData: { lat: 37.545315, lng: 127.057088 },
+      });
+      setUpDown(false);
+    }
+  };
+  const toggleUpDown = () => {
+    setUpDown(!upDown);
+    setMarkerList((prevMarkerList) => {
+      // Sort the prevMarkerList based on sortModal
+      let sortedList = [];
+      if (!upDown)
+        sortedList = [...prevMarkerList].sort(
+          (a, b) => b[`${sortModal[0]}`] - a[`${sortModal[0]}`]
+        );
+      else
+        sortedList = [...prevMarkerList].sort(
+          (a, b) => a[`${sortModal[0]}`] - b[`${sortModal[0]}`]
+        );
+      console.log("정렬", prevMarkerList[0][`${sortModal[0]}`]);
+      return sortedList;
+    });
+  };
   const [isSearched, setIsSearched] = useState(false);
   //현재 위치 표시
   useEffect(() => {
     Geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        console.log(position.coords);
+        console.log(position.coords, "position가져오니");
         setLocation({
           latitude: 37.545315,
           longitude: 127.057088,
 
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
+        });
+        getMarker.mutate({
+          unit: countryModal[0],
+          isPickup: markerModal[0],
+          sort: sortModal[0],
+          markerData: { lat: 37.545315, lng: 127.057088 },
         });
       },
 
@@ -122,7 +205,6 @@ const PickUpKeyPage = ({ navigation }) => {
     // 마커를 클릭하면 해당 마커의 정보를 가져옵니다.
     setMarkerInfo(marker);
   };
-
   const handleMapPress = () => {
     // 지도를 클릭하면 마커 정보를 리셋합니다.
     setMarkerInfo(null);
@@ -134,7 +216,7 @@ const PickUpKeyPage = ({ navigation }) => {
           position: "absolute",
           top: 0,
           minHeight: 40,
-          zIndex: 1111,
+          zIndex: 1,
           width: "100%",
           flexDirection: "row",
           marginTop: `${getStatusBarHeight()}`,
@@ -176,7 +258,7 @@ const PickUpKeyPage = ({ navigation }) => {
             fetchDetails={true}
             query={{
               key: "AIzaSyB_nxmsBL4iSwU9dniKHw4GWOXONVfCUZw",
-              language: "ko"||"en",
+              language: "ko" || "en",
             }}
             ref={placesRef}
           />
@@ -235,7 +317,7 @@ const PickUpKeyPage = ({ navigation }) => {
         showsUserLocation={true}
         showsMyLocationButton={true}
         region={location}
-        onPress={ (event) => console.log(event.nativeEvent.coordinate)  }
+        onPress={(event) => console.log(event.nativeEvent.coordinate)}
       >
         {isSearched && (
           <Marker
@@ -246,44 +328,43 @@ const PickUpKeyPage = ({ navigation }) => {
             }}
           ></Marker>
         )}
-                <Marker
-          coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
-          title="마커 제목"
-          description="마커 설명"
-          onPress={e => handleMarkerPress(e, marker)}
-        />
+
         {markerList?.map((marker, idx) => {
-          if (
-            calculateDistance(
-              { latitude: marker.lat, longitude: marker.lng },
-              { latitude: 37.545315, longitude: 127.057088 }
-            ) < 0.05
-          )
-            return (
-              <Marker
-                key={idx}
-                coordinate={{ latitude: marker.lat, longitude: marker.lng }}
-                onPress={() => {
-                  setLocation({
-                    latitude: marker.lat,
-                    longitude: marker.lng,
-                    latitudeDelta: 0.01,
-                    longitudeDelta: 0.01,
-                  });
-                  setShowElementView(false);
-                  setShowModalView({
-                    place: marker.place,
-                    limitAmount: marker.limitAmount,
-                    amount: marker.amount,
-                    markerId: marker.id,
-                    lat: marker.lat,
-                    lng: marker.lng,
-                    isPickUp: marker.isPickUp,
-                    unit: marker.unit,
-                  });
+          return (
+            <Marker
+              key={idx}
+              coordinate={{ latitude: marker.lat, longitude: marker.lng }}
+              onPress={() => {
+                setLocation({
+                  latitude: marker.lat,
+                  longitude: marker.lng,
+                  latitudeDelta: 0.01,
+                  longitudeDelta: 0.01,
+                });
+                setShowElementView(false);
+                setShowModalView({
+                  place: marker.place,
+                  limitAmount: marker.limitAmount,
+                  amount: marker.amount,
+                  markerId: marker.id,
+                  lat: marker.lat,
+                  lng: marker.lng,
+                  isPickUp: marker.isPickUp,
+                  unit: marker.unit,
+                });
+              }}
+            >
+              <Image
+                source={markerPin} // 마커 이미지 경로
+                style={{
+                  width: 50, // 원하는 너비
+                  height: 50, // 원하는 높이
+                  resizeMode: 'contain', // 가로세로 비율 유지하며 조절
                 }}
-              >
-                {!marker.isPickUp ? (
+              
+              />
+              <Callout >
+              
                   <MarkerView>
                     <MarkerTitleText>{marker.place}</MarkerTitleText>
                     <MarkerKeymoneyText>
@@ -293,77 +374,14 @@ const PickUpKeyPage = ({ navigation }) => {
                       {marker.limitAmount}명 남았어요
                     </LeftPeopleText>
                   </MarkerView>
-                ) : (
-                  <PickupMarkerView>
-                    <MarkerTitleText>{marker.place}</MarkerTitleText>
-                    <MarkerKeymoneyText>
-                      ￥{marker.amount} 키머니
-                    </MarkerKeymoneyText>
-                    <LeftPeopleText>
-                      {marker.limitAmount}명 남았어요
-                    </LeftPeopleText>
-                  </PickupMarkerView>
-                )}
+                
 
                 <PolygonView>
                   <PolygonImage source={require("../Images/polygon.png")} />
                 </PolygonView>
-              </Marker>
-            );
-          else {
-            return (
-              <Marker
-                opacity={1.5}
-                key={idx}
-                coordinate={{ latitude: marker.lat, longitude: marker.lng }}
-                onPress={() => {
-                  setLocation({
-                    latitude: marker.lat,
-                    longitude: marker.lng,
-                    latitudeDelta: 0.01,
-                    longitudeDelta: 0.01,
-                  });
-                  setShowElementView(false);
-                  setShowModalView({
-                    place: marker.place,
-                    limitAmount: marker.limitAmount,
-                    amount: marker.amount,
-                    markerId: marker.id,
-                    lat: marker.lat,
-                    lng: marker.lng,
-                    isPickUp: marker.isPickUp,
-                    unit: marker.unit,
-                  });
-                }}
-                style={{ zIndex: isSearched === idx ? 2 : 1 }}
-              >
-                {!marker.isPickUp ? (
-                  <MarkerView>
-                    <MarkerTitleText>{marker.place}</MarkerTitleText>
-                    <MarkerKeymoneyText>
-                      ￥{marker.amount} 키머니
-                    </MarkerKeymoneyText>
-                    <LeftPeopleText>
-                      {marker.limitAmount}명 남았어요
-                    </LeftPeopleText>
-                  </MarkerView>
-                ) : (
-                  <PickupMarkerView>
-                    <MarkerTitleText>{marker.place}</MarkerTitleText>
-                    <MarkerKeymoneyText>
-                      ￥{marker.amount} 키머니
-                    </MarkerKeymoneyText>
-                    <LeftPeopleText>
-                      {marker.limitAmount}명 남았어요
-                    </LeftPeopleText>
-                  </PickupMarkerView>
-                )}
-                <PolygonView>
-                  <PolygonImage source={require("../Images/polygon.png")} />
-                </PolygonView>
-              </Marker>
-            );
-          }
+              </Callout>
+            </Marker>
+          );
         })}
       </MapView>
       {showModalView && (
@@ -386,24 +404,39 @@ const PickUpKeyPage = ({ navigation }) => {
             <ModalKeyMoneyView>
               <ModalKeyMoneyText>
                 {showModalView.unit}
-                {showModalView.amount} 키머니
+                {"  "}
+                {showModalView.amount}
+                {getCountryUnit(showModalView.unit)}
               </ModalKeyMoneyText>
             </ModalKeyMoneyView>
             {!showModalView.isPickUp ? (
-              <ModalGetMoneyButton
-                onPress={() => {
-                  handlePostMarkers(showModalView.markerId, {
-                    lat: showModalView.lat,
-                    lng: showModalView.lng,
-                  });
-                }}
-              >
-                <ModalGetMoneyText>키머니 받기</ModalGetMoneyText>
-              </ModalGetMoneyButton>
+              calculateDistance(
+                { latitude: showModalView.lat, longitude: showModalView.lng },
+                { latitude: 37.545315, longitude: 127.057088 }
+              ) < 0.1 ? (
+                <ModalGetMoneyButton
+                  onPress={() => {
+                    handlePostMarkers(showModalView.markerId, {
+                      lat: showModalView.lat,
+                      lng: showModalView.lng,
+                    });
+                  }}
+                >
+                  <ModalGetMoneyText>키머니 받기</ModalGetMoneyText>
+                </ModalGetMoneyButton>
+              ) : (
+                <ModalGetNotMoneyView disabled={true}>
+                  <ModalGetMoneyText>
+                    마커를 주울 수 있는 위치가 아닙니다.
+                  </ModalGetMoneyText>
+                </ModalGetNotMoneyView>
+              )
             ) : (
-              <View>
-                <Text>주운 마커입니다.</Text>
-              </View>
+              <ModalGetNotMoneyView disabled={true}>
+              <ModalGetMoneyText>
+                주운 마커입니다.
+              </ModalGetMoneyText>
+            </ModalGetNotMoneyView>
             )}
           </ModalView>
         </ModalWrapper>
@@ -413,61 +446,236 @@ const PickUpKeyPage = ({ navigation }) => {
         <UpButtonView onPress={() => setShowElementView(!showElementView)}>
           <UpButton></UpButton>
         </UpButtonView>
-        {markerList.length > 0 && (
+        {
           <MainTextList>
-            <MainText>
-              총 {getCountryUnit(markerList[0].unit)}
-              {canGetPrice} 키머니를 주울 수 있어요!
-            </MainText>
+            <View
+              style={{
+                flexDirection: "row",
+                width: "47%",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                height: 41,
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+                onPress={toggleCountryModal}
+              >
+                <Text style={{ fontSize: 13, color: "#191F29" }}>
+                  {countryModal[1]}
+                </Text>
+                <Image
+                  style={{ marginLeft: 5, marginTop: 3 }}
+                  source={selectDown}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginLeft: 10,
+                }}
+                onPress={toggleMarkerModal}
+              >
+                <Text style={{ fontSize: 13, color: "#191F29" }}>
+                  {markerModal[1]}
+                </Text>
+                <Image
+                  style={{ marginLeft: 5, marginTop: 3 }}
+                  source={selectDown}
+                />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                width: "47%",
+                justifyContent: "flex-end",
+                alignItems: "center",
+                height: 41,
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  fontSize: 15,
+                  marginRight: 10,
+                }}
+                onPress={toggleSortModal}
+              >
+                <Text style={{ fontSize: 13, color: "#191F29" }}>
+                  {sortModal[1]}
+                </Text>
+                <Image
+                  style={{ marginLeft: 5, marginTop: 3 }}
+                  source={selectDown}
+                />
+              </TouchableOpacity>
+              {upDown == false ? (
+                <TouchableOpacity
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    fontSize: 15,
+                  }}
+                  activeOpacity={1}
+                  onPress={toggleUpDown}
+                >
+                  <Text style={{ fontSize: 13, color: "#191F29" }}>
+                    오름차순
+                  </Text>
+                  <View
+                    style={{ marginLeft: 5, marginTop: 3 }}
+                    source={selectDown}
+                  >
+                    <Text>▲</Text>
+                  </View>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  activeOpacity={1}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    fontSize: 15,
+                  }}
+                  onPress={toggleUpDown}
+                >
+                  <Text style={{ fontSize: 13 }}>내림차순</Text>
+                  <View
+                    style={{ marginLeft: 5, marginTop: 3 }}
+                    source={selectDown}
+                  >
+                    <Text>▼</Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+            </View>
           </MainTextList>
-        )}
+        }
 
         {showElementView == true ? (
           <ElementView>
-            {markerList?.map((marker, idx) => {
-              return (
-                <MarkerElementView
-                  key={idx}
-                  onPress={() => {
-                    setLocation({
-                      latitude: marker.lat,
-                      longitude: marker.lng,
-                      latitudeDelta: 0.01,
-                      longitudeDelta: 0.01,
-                    });
-                    setShowElementView(false);
-                    setShowModalView({
-                      place: marker.place,
-                      limitAmount: marker.limitAmount,
-                      amount: marker.amount,
-                      markerId: marker.id,
-                      lat: marker.lat,
-                      lng: marker.lng,
-                      isPickUp: marker.isPickUp,
-                    });
-                  }}
-                >
-                  <View>
-                    <ElementTitle>{marker.place}</ElementTitle>
-                    <PeopleText>{marker.limitAmount} 남았어요</PeopleText>
-                  </View>
-                  <View>
-                    <MoneyText>
-                      {getCountryUnit(marker.unit)}
-                      {marker.amount} 키머니
-                    </MoneyText>
-                  </View>
-                </MarkerElementView>
-              );
-            })}
+            {markerList.length > 0 ? (
+              markerList?.map((marker, idx) => {
+                return (
+                  <MarkerElementView
+                    key={idx}
+                    onPress={() => {
+                      setLocation({
+                        latitude: marker.lat,
+                        longitude: marker.lng,
+                        latitudeDelta: 0.01,
+                        longitudeDelta: 0.01,
+                      });
+                      setShowElementView(false);
+                      setShowModalView({
+                        place: marker.place,
+                        limitAmount: marker.limitAmount,
+                        amount: marker.amount,
+                        markerId: marker.id,
+                        lat: marker.lat,
+                        lng: marker.lng,
+                        isPickUp: marker.isPickUp,
+                        distance: marker.distance,
+                        unit: marker.unit,
+                      });
+                    }}
+                  >
+                    <View>
+                      <View
+                        style={{ flexDirection: "row", alignItems: "flex-end" }}
+                      >
+                        <ElementTitle>{marker.place}</ElementTitle>
+                        <DistanceText>{marker.distance}km</DistanceText>
+                      </View>
+
+                      {/* <PeopleText>{marker.limitAmount} 키머니</PeopleText> */}
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          width: 100,
+                        }}
+                      >
+                        <Image
+                          source={markerMap}
+                          style={{ marginTop: 7, marginRight: 5 }}
+                        />
+                        <PeopleText>
+                          {getCountryUnit(marker.unit)}
+                          {marker.amount} 키머니
+                        </PeopleText>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          width: 100,
+                        }}
+                      >
+                        <Image
+                          source={markerAddress}
+                          style={{ marginTop: 7, marginRight: 5 }}
+                        />
+                        <PeopleText>{marker.address}</PeopleText>
+                      </View>
+                    </View>
+                    <View>
+                      <MoneyText>{marker.limitAmount}명 남았어요</MoneyText>
+                    </View>
+                  </MarkerElementView>
+                );
+              })
+            ) : (
+              <View
+                style={{
+                  height: 100,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text>해당 정렬에 마커가 존재하지 않습니다.</Text>
+              </View>
+            )}
           </ElementView>
         ) : (
           <View></View>
         )}
       </MarkerList>
+      {isCountryModalVisible && (
+        <CountryModalComponent
+          closeModal={toggleCountryModal}
+          countryModal={countryModal}
+          setCountryModal={setCountryModal}
+        />
+      )}
+      {isMarkerModalVisible && (
+        <MarkerModalComponent
+          closeModal={toggleMarkerModal}
+          markerModal={markerModal}
+          setMarkerModal={setMarkerModal}
+        />
+      )}
+      {isSortModalVisible && (
+        <SortModalComponent
+          closeModal={toggleSortModal}
+          sortModal={sortModal}
+          setSortModal={setSortModal}
+        />
+      )}
     </View>
   );
 };
+const CountryText = styled.Text`
+  color: #191f29;
+  font-size: 16px;
+  font-weight: 700;
+`;
 const ModalWrapper = styled.View`
   width: 100%;
   /* height: ${heightPercentage(140)}px; */
@@ -499,6 +707,15 @@ const ModalGetMoneyButton = styled.TouchableOpacity`
   height: ${heightPercentage(40)}px;
   border-radius: 5px;
   background: #55acee;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  margin-bottom: ${heightPercentage(100)}px;
+`;
+const ModalGetNotMoneyView = styled.TouchableOpacity`
+  height: ${heightPercentage(40)}px;
+  border-radius: 5px;
+  background: lightgray;
   justify-content: center;
   align-items: center;
   width: 90%;
@@ -554,7 +771,7 @@ const ElementView = styled.ScrollView`
 const MarkerElementView = styled.TouchableOpacity`
   flex-direction: row;
   width: 100%;
-  align-items: center;
+
   justify-content: space-between;
   margin: ${heightPercentage(10)}px 0;
 `;
@@ -627,6 +844,7 @@ const LeftPeopleText = styled.Text`
 const MarkerList = styled.View`
   width: 100%;
   max-height: ${(props) => props.maxHeight}px;
+  background-color: white;
 `;
 const UpButtonView = styled.TouchableOpacity`
   width: 100%;
@@ -642,9 +860,12 @@ const UpButton = styled.View`
 `;
 const MainTextList = styled.View`
   width: 100%;
+  padding-left: ${widthPercentage(20)}px;
+  padding-right: ${widthPercentage(20)}px;
   height: ${heightPercentage(25)}px;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   margin-bottom: ${heightPercentage(5)}px;
 `;
 const MainText = styled.Text`
@@ -656,17 +877,39 @@ const MainText = styled.Text`
 const ElementTitle = styled.Text`
   color: #191f29;
   font-size: ${fontPercentage(18)}px;
-  font-weight: 400;
+  font-weight: 700;
 `;
 const PeopleText = styled.Text`
   color: #4e5968;
-  font-size: ${fontPercentage(12)}px;
+  font-size: ${fontPercentage(13)}px;
   font-weight: 400;
-  margin-top: ${heightPercentage(4)}px;
+  margin-top: ${heightPercentage(2)}px;
+`;
+const DistanceText = styled.Text`
+  color: #008485;
+  font-size: ${fontPercentage(13)}px;
+  font-weight: 400;
+  margin-top: ${heightPercentage(2)}px;
+  margin-left: 3px;
 `;
 const MoneyText = styled.Text`
-  color: #191f29;
-  font-size: ${fontPercentage(20)}px;
+  color: #55acee;
+  margin-top: 1px;
+  font-size: ${fontPercentage(17)}px;
   font-weight: 700;
 `;
+const customCalloutStyle = StyleSheet.create({
+  /* Define your custom Callout styles here */
+  // For example:
+  container: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'gray',
+  },
+  text: {
+    fontSize: 16,
+  },
+});
 export default PickUpKeyPage;

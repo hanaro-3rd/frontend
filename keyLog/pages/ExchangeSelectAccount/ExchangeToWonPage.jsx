@@ -219,11 +219,20 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
     console.log("accountId", accountId);
     console.log("money", koreaTextInput);
     console.log("unit", selectedMoney);
+    console.log({
+      accountId: accountId,
+      changePrice: changePrice,
+      exchangeRate: exchangeRate,
+      isBought: false,
+      money: koreaTextInput,
+      moneyToExchange: foreignTextInput,
+      unit: selectedMoney,
+    })
     postExchangeMutation.mutate({
       accountId: accountId,
       changePrice: changePrice,
       exchangeRate: exchangeRate,
-      isBought: true,
+      isBought: false,
       money: koreaTextInput,
       moneyToExchange: foreignTextInput,
       unit: selectedMoney,

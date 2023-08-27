@@ -76,22 +76,22 @@ axiosClient.interceptors.response.use(
       try {
         const newAccessToken = await getRefresh();
         console.log("새로 받은 어세스토큰헤더", newAccessToken.headers);
-        if (newAccessToken?.data?.refresh_token) {
+        if (newAccessToken?.headers?.refresh_token) {
           await AsyncStorage.removeItem("refresh_token");
           await AsyncStorage.setItem(
             "refresh_token",
-            JSON.stringify(newAccessToken?.data?.refresh_token)
+            JSON.stringify(newAccessToken?.headers?.refresh_token)
           );
         }
         await AsyncStorage.removeItem("access_token");
         await AsyncStorage.setItem(
           "access_token",
-          JSON.stringify(newAccessToken.data.access_token)
+          JSON.stringify(newAccessToken.headers.access_token)
         );
-        console.log("newAccessToken", newAccessToken.data.access_token);
+        console.log("newAccessToken", newAccessToken.headers.access_token);
         originalRequest.headers[
           "Authorization"
-        ] = `Bearer ${await newAccessToken.data.access_token}`;
+        ] = `Bearer ${newAccessToken.headers.access_token}`;
       } catch (err) {
         console.log("err", err.response.data);
         console.log("status", err.response.data.code);
