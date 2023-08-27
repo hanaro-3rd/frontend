@@ -93,6 +93,7 @@ const BodyMainTextTitleContainer = styled.View`
   padding: ${heightPercentage(15.5)}px ${widthPercentage(20)}px;
   /* align-items: center; */
   gap: 10px;
+  margin-right: ${widthPercentage(50)}px;;
 `;
 const BodyMainTitleText = styled.Text`
   color: #4e5968;
@@ -127,6 +128,7 @@ const BodyMainInfoText = styled.Text`
   font-size: ${fontPercentage(16)}px;
   font-style: normal;
   font-weight: 700;
+  width: ${widthPercentage(150)}px;
 `;
 
 const Footer = styled.View`
@@ -161,13 +163,25 @@ const ButtonText = styled.Text`
 `;
 
 const AlreadySignUpPage = ({ route, navigation }) => {
-  const [userName, setUserName] = useState("");
-  const [personalNum, setPersonalNum] = useState("");
-  const [phoneNum, setPhoneNum] = useState("");
-  const [signUpDate, setSignUpDate] = useState("");
-
   const queryClient = useQueryClient();
+  const { name, phoneNum, registrateNum, createdAt } = route?.params;
 
+  const formattedRegistrateNum = `${registrateNum.slice(
+    0,
+    6
+  )}-${registrateNum.slice(6)}`;
+  const formattedPhoneNum = `${phoneNum.slice(0, 3)}-${phoneNum.slice(
+    3,
+    7
+  )}-${phoneNum.slice(7)}`;
+
+  const year = createdAt[0];
+  const month = createdAt[1];
+  const day = createdAt[2];
+
+  const formattedDate = `${year}년 ${month}월 ${day}일`;
+
+  const [signUpDate, setSignUpDate] = useState();
   return (
     <Root>
       <Header />
@@ -184,7 +198,7 @@ const AlreadySignUpPage = ({ route, navigation }) => {
           </BodyMainTextTitleContainer>
           <BodyMainTextInfoContainer>
             <BodyMainInfoTextBox>
-              <BodyMainInfoText>{userName}</BodyMainInfoText>
+              <BodyMainInfoText>{name}</BodyMainInfoText>
             </BodyMainInfoTextBox>
           </BodyMainTextInfoContainer>
         </BodyMainTextContainer>
@@ -194,7 +208,7 @@ const AlreadySignUpPage = ({ route, navigation }) => {
           </BodyMainTextTitleContainer>
           <BodyMainTextInfoContainer>
             <BodyMainInfoTextBox>
-              <BodyMainInfoText>{personalNum}</BodyMainInfoText>
+              <BodyMainInfoText>{formattedRegistrateNum}</BodyMainInfoText>
             </BodyMainInfoTextBox>
           </BodyMainTextInfoContainer>
         </BodyMainTextContainer>
@@ -204,7 +218,7 @@ const AlreadySignUpPage = ({ route, navigation }) => {
           </BodyMainTextTitleContainer>
           <BodyMainTextInfoContainer>
             <BodyMainInfoTextBox>
-              <BodyMainInfoText>{phoneNum}</BodyMainInfoText>
+              <BodyMainInfoText>{formattedPhoneNum}</BodyMainInfoText>
             </BodyMainInfoTextBox>
           </BodyMainTextInfoContainer>
         </BodyMainTextContainer>
@@ -214,14 +228,23 @@ const AlreadySignUpPage = ({ route, navigation }) => {
           </BodyMainTextTitleContainer>
           <BodyMainTextInfoContainer>
             <BodyMainInfoTextBox>
-              <BodyMainInfoText>{signUpDate}</BodyMainInfoText>
+              <BodyMainInfoText>{formattedDate}</BodyMainInfoText>
             </BodyMainInfoTextBox>
           </BodyMainTextInfoContainer>
         </BodyMainTextContainer>
       </BodyMainContainer>
       <Footer>
-        <SubmitButton onPress={() => navigation.navigate("LoginPage")}>
-          <ButtonText>확인</ButtonText>
+        <SubmitButton
+          onPress={() =>
+            navigation.navigate("LoginPasswordPage", {
+              name: name,
+              phoneNumber: phoneNum,
+              personalNumber: registrateNum,
+              resetPassword: "true"
+            })
+          }
+        >
+          <ButtonText>비밀번호 재설정 하기</ButtonText>
         </SubmitButton>
       </Footer>
     </Root>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Image, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { Image, TouchableOpacity, ActivityIndicator } from "react-native";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -170,7 +170,7 @@ const BudgetTotalContainer = styled.View`
   border: 1px solid #8b95a1;
   flex-direction: row;
   padding: ${heightPercentage(10)}px ${widthPercentage(20)}px;
-  margin-bottom: ${heightPercentage(19)}px;
+  margin-top: ${heightPercentage(19)}px;
 `;
 
 const BudgetTotalText = styled.Text`
@@ -257,6 +257,7 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
     endDate,
   } = route.params;
   const handleSaveButtonPress = () => {
+    setIsLoading(true);
     postTravelBudgetMutation.mutate({
       category: [
         {
@@ -291,6 +292,8 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
       city: travelCountryOption,
       country: travelCountry,
     });
+    navigation.navigate("TravelBudgetPage");
+    setIsLoading(false);
   };
 
   const [foodBudget, setFoodBudget] = useState(0);
@@ -300,6 +303,7 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
   const [playBudget, setPlayBudget] = useState(0);
   const [etcBudget, setEtcBudget] = useState(0);
   const [moneyUnit, setMoneyunit] = useState(getMoneyUnit(travelCountry));
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const totalBudget =
@@ -353,6 +357,12 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
     isPlayBudgetInputFilled ||
     isEtcBudgetInputFilled;
 
+  const foodTextInputRef = useRef(null);
+  const transTextInputRef = useRef(null);
+  const houseTextInputRef = useRef(null);
+  const playTextInputRef = useRef(null);
+  const shopTextInputRef = useRef(null);
+  const etcTextInputRef = useRef(null);
   return (
     <RootScrollView>
       <Header>
@@ -366,13 +376,6 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
           <Subtitle>카테고리별 여행 경비를 작성해주세요.</Subtitle>
         </BodyHeader>
         <BodyMain>
-          <BudgetTotalContainer>
-            <TotalText>총</TotalText>
-            <InputTotal>
-              <BudgetTotalText>{totalBudget}</BudgetTotalText>
-              <MoneyTotalUnitText>{moneyUnit}</MoneyTotalUnitText>
-            </InputTotal>
-          </BudgetTotalContainer>
           <BudgetListContainer>
             <BudgetContainer>
               <CategoryContainer>
@@ -391,6 +394,8 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
                   }}
                   onFocus={() => setIsFoodBudgetInputFilled(true)}
                   onBlur={() => setIsFoodBudgetInputFilled(!!foodBudget)}
+                  ref={foodTextInputRef}
+                  onSubmitEditing={() => transTextInputRef.current.focus()}
                 />
                 <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
@@ -412,6 +417,8 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
                   }}
                   onFocus={() => setIsTransBudgetInputFilled(true)}
                   onBlur={() => setIsTransBudgetInputFilled(!!transBudget)}
+                  ref={transTextInputRef}
+                  onSubmitEditing={() => houseTextInputRef.current.focus()}
                 />
                 <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
@@ -433,6 +440,8 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
                   }}
                   onFocus={() => setIsHouseBudgetInputFilled(true)}
                   onBlur={() => setIsHouseBudgetInputFilled(!!houseBudget)}
+                  ref={houseTextInputRef}
+                  onSubmitEditing={() => shopTextInputRef.current.focus()}
                 />
                 <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
@@ -454,6 +463,8 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
                   }}
                   onFocus={() => setIsShopBudgetInputFilled(true)}
                   onBlur={() => setIsShopBudgetInputFilled(!!shopBudget)}
+                  ref={shopTextInputRef}
+                  onSubmitEditing={() => playTextInputRef.current.focus()}
                 />
                 <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
@@ -475,6 +486,8 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
                   }}
                   onFocus={() => setIsPlayBudgetInputFilled(true)}
                   onBlur={() => setIsPlayBudgetInputFilled(!!playBudget)}
+                  ref={playTextInputRef}
+                  onSubmitEditing={() => etcTextInputRef.current.focus()}
                 />
                 <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
@@ -496,19 +509,31 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
                   }}
                   onFocus={() => setIsEtcBudgetInputFilled(true)}
                   onBlur={() => setIsEtcBudgetInputFilled(!!etcBudget)}
+                  ref={etcTextInputRef}
                 />
                 <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
             </BudgetContainer>
           </BudgetListContainer>
+          <BudgetTotalContainer>
+            <TotalText>총</TotalText>
+            <InputTotal>
+              <BudgetTotalText>{totalBudget}</BudgetTotalText>
+              <MoneyTotalUnitText>{moneyUnit}</MoneyTotalUnitText>
+            </InputTotal>
+          </BudgetTotalContainer>
         </BodyMain>
       </Body>
       <Footer>
         <SubmitButton
-          disabled={!isAnyBudgetInputFilled}
+          disabled={!isAnyBudgetInputFilled || isLoading}
           onPress={handleSaveButtonPress}
         >
-          <ButtonText>저장하기</ButtonText>
+          {isLoading ? (
+            <ActivityIndicator color="#ff0000" />
+          ) : (
+            <ButtonText>저장하기</ButtonText>
+          )}
         </SubmitButton>
       </Footer>
     </RootScrollView>

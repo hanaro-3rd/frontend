@@ -54,6 +54,7 @@ const PickUpKeyPage = ({ navigation }) => {
   const [isMarkerModalVisible, setIsMarkerModalVisible] = useState(false);
   const [isSortModalVisible, setIsSortModalVisible] = useState(false);
   const [currentLocation,setCurrentLocation] = useState({})
+  const [loading,setLoading] = useState(true)
   //KRW,JPY,USD,EUR,all
   //all,false,true
   //distance,amount,limitAmount
@@ -172,6 +173,7 @@ const PickUpKeyPage = ({ navigation }) => {
   const [isSearched, setIsSearched] = useState(false);
   //현재 위치 표시
   useEffect(() => {
+    setLoading(true)
     Geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
@@ -190,13 +192,14 @@ const PickUpKeyPage = ({ navigation }) => {
           markerData: { lat: latitude, lng: longitude },
         });
       },
-
+   
       (error) => {
         console.log(error);
         console.log(error.code, error.message, "geolocation에러");
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
+    setLoading(false)
     console.log("location" + location);
   }, []);
 
@@ -440,212 +443,214 @@ const PickUpKeyPage = ({ navigation }) => {
           </ModalView>
         </ModalWrapper>
       )}
+     {
+       markerList.length > 0 &&  <MarkerList maxHeight={maxHeight}>
+       <UpButtonView onPress={() => setShowElementView(!showElementView)}>
+         <UpButton></UpButton>
+       </UpButtonView>
+       {
+         <MainTextList>
+           <View
+             style={{
+               flexDirection: "row",
+               width: "47%",
+               justifyContent: "flex-start",
+               alignItems: "center",
+               height: 41,
+             }}
+           >
+             <TouchableOpacity
+               style={{
+                 flexDirection: "row",
+                 alignItems: "center",
+               }}
+               onPress={toggleCountryModal}
+             >
+               <Text style={{ fontSize: 13, color: "#191F29" }}>
+                 {countryModal[1]}
+               </Text>
+               <Image
+                 style={{ marginLeft: 5, marginTop: 3 }}
+                 source={selectDown}
+               />
+             </TouchableOpacity>
+             <TouchableOpacity
+               style={{
+                 flexDirection: "row",
+                 alignItems: "center",
+                 marginLeft: 10,
+               }}
+               onPress={toggleMarkerModal}
+             >
+               <Text style={{ fontSize: 13, color: "#191F29" }}>
+                 {markerModal[1]}
+               </Text>
+               <Image
+                 style={{ marginLeft: 5, marginTop: 3 }}
+                 source={selectDown}
+               />
+             </TouchableOpacity>
+           </View>
+           <View
+             style={{
+               flexDirection: "row",
+               width: "47%",
+               justifyContent: "flex-end",
+               alignItems: "center",
+               height: 41,
+             }}
+           >
+             <TouchableOpacity
+               style={{
+                 flexDirection: "row",
+                 alignItems: "center",
+                 fontSize: 15,
+                 marginRight: 10,
+               }}
+               onPress={toggleSortModal}
+             >
+               <Text style={{ fontSize: 13, color: "#191F29" }}>
+                 {sortModal[1]}
+               </Text>
+               <Image
+                 style={{ marginLeft: 5, marginTop: 3 }}
+                 source={selectDown}
+               />
+             </TouchableOpacity>
+             {upDown == false ? (
+               <TouchableOpacity
+                 style={{
+                   flexDirection: "row",
+                   alignItems: "center",
+                   fontSize: 15,
+                 }}
+                 activeOpacity={1}
+                 onPress={toggleUpDown}
+               >
+                 <Text style={{ fontSize: 13, color: "#191F29" }}>
+                   오름차순
+                 </Text>
+                 <View
+                   style={{ marginLeft: 5, marginTop: 3 }}
+                   source={selectDown}
+                 >
+                   <Text>▲</Text>
+                 </View>
+               </TouchableOpacity>
+             ) : (
+               <TouchableOpacity
+                 activeOpacity={1}
+                 style={{
+                   flexDirection: "row",
+                   alignItems: "center",
+                   fontSize: 15,
+                 }}
+                 onPress={toggleUpDown}
+               >
+                 <Text style={{ fontSize: 13 }}>내림차순</Text>
+                 <View
+                   style={{ marginLeft: 5, marginTop: 3 }}
+                   source={selectDown}
+                 >
+                   <Text>▼</Text>
+                 </View>
+               </TouchableOpacity>
+             )}
+           </View>
+         </MainTextList>
+       }
 
-      <MarkerList maxHeight={maxHeight}>
-        <UpButtonView onPress={() => setShowElementView(!showElementView)}>
-          <UpButton></UpButton>
-        </UpButtonView>
-        {
-          <MainTextList>
-            <View
-              style={{
-                flexDirection: "row",
-                width: "47%",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                height: 41,
-              }}
-            >
-              <TouchableOpacity
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-                onPress={toggleCountryModal}
-              >
-                <Text style={{ fontSize: 13, color: "#191F29" }}>
-                  {countryModal[1]}
-                </Text>
-                <Image
-                  style={{ marginLeft: 5, marginTop: 3 }}
-                  source={selectDown}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  marginLeft: 10,
-                }}
-                onPress={toggleMarkerModal}
-              >
-                <Text style={{ fontSize: 13, color: "#191F29" }}>
-                  {markerModal[1]}
-                </Text>
-                <Image
-                  style={{ marginLeft: 5, marginTop: 3 }}
-                  source={selectDown}
-                />
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                width: "47%",
-                justifyContent: "flex-end",
-                alignItems: "center",
-                height: 41,
-              }}
-            >
-              <TouchableOpacity
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  fontSize: 15,
-                  marginRight: 10,
-                }}
-                onPress={toggleSortModal}
-              >
-                <Text style={{ fontSize: 13, color: "#191F29" }}>
-                  {sortModal[1]}
-                </Text>
-                <Image
-                  style={{ marginLeft: 5, marginTop: 3 }}
-                  source={selectDown}
-                />
-              </TouchableOpacity>
-              {upDown == false ? (
-                <TouchableOpacity
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    fontSize: 15,
-                  }}
-                  activeOpacity={1}
-                  onPress={toggleUpDown}
-                >
-                  <Text style={{ fontSize: 13, color: "#191F29" }}>
-                    오름차순
-                  </Text>
-                  <View
-                    style={{ marginLeft: 5, marginTop: 3 }}
-                    source={selectDown}
-                  >
-                    <Text>▲</Text>
-                  </View>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  activeOpacity={1}
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    fontSize: 15,
-                  }}
-                  onPress={toggleUpDown}
-                >
-                  <Text style={{ fontSize: 13 }}>내림차순</Text>
-                  <View
-                    style={{ marginLeft: 5, marginTop: 3 }}
-                    source={selectDown}
-                  >
-                    <Text>▼</Text>
-                  </View>
-                </TouchableOpacity>
-              )}
-            </View>
-          </MainTextList>
-        }
+       {showElementView == true ? (
+         <ElementView>
+           {markerList.length > 0 ? (
+             markerList?.map((marker, idx) => {
+               return (
+                 <MarkerElementView
+                   key={idx}
+                   onPress={() => {
+                     setLocation({
+                       latitude: marker.lat,
+                       longitude: marker.lng,
+                       latitudeDelta: 0.01,
+                       longitudeDelta: 0.01,
+                     });
+                     setShowElementView(false);
+                     setShowModalView({
+                       place: marker.place,
+                       limitAmount: marker.limitAmount,
+                       amount: marker.amount,
+                       markerId: marker.id,
+                       lat: marker.lat,
+                       lng: marker.lng,
+                       isPickUp: marker.isPickUp,
+                       distance: marker.distance,
+                       unit: marker.unit,
+                     });
+                   }}
+                 >
+                   <View>
+                     <View
+                       style={{ flexDirection: "row", alignItems: "flex-end" }}
+                     >
+                       <ElementTitle>{marker.place}</ElementTitle>
+                       <DistanceText>{marker.distance}km</DistanceText>
+                     </View>
 
-        {showElementView == true ? (
-          <ElementView>
-            {markerList.length > 0 ? (
-              markerList?.map((marker, idx) => {
-                return (
-                  <MarkerElementView
-                    key={idx}
-                    onPress={() => {
-                      setLocation({
-                        latitude: marker.lat,
-                        longitude: marker.lng,
-                        latitudeDelta: 0.01,
-                        longitudeDelta: 0.01,
-                      });
-                      setShowElementView(false);
-                      setShowModalView({
-                        place: marker.place,
-                        limitAmount: marker.limitAmount,
-                        amount: marker.amount,
-                        markerId: marker.id,
-                        lat: marker.lat,
-                        lng: marker.lng,
-                        isPickUp: marker.isPickUp,
-                        distance: marker.distance,
-                        unit: marker.unit,
-                      });
-                    }}
-                  >
-                    <View>
-                      <View
-                        style={{ flexDirection: "row", alignItems: "flex-end" }}
-                      >
-                        <ElementTitle>{marker.place}</ElementTitle>
-                        <DistanceText>{marker.distance}km</DistanceText>
-                      </View>
-
-                      {/* <PeopleText>{marker.limitAmount} 키머니</PeopleText> */}
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          width: 100,
-                        }}
-                      >
-                        <Image
-                          source={markerMap}
-                          style={{ marginTop: 7, marginRight: 5 }}
-                        />
-                        <PeopleText>
-                          {getCountryUnit(marker.unit)}
-                          {marker.amount} 키머니
-                        </PeopleText>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          width: 100,
-                        }}
-                      >
-                        <Image
-                          source={markerAddress}
-                          style={{ marginTop: 7, marginRight: 5 }}
-                        />
-                        <PeopleText>{marker.address}</PeopleText>
-                      </View>
-                    </View>
-                    <View>
-                      <MoneyText>{marker.limitAmount}명 남았어요</MoneyText>
-                    </View>
-                  </MarkerElementView>
-                );
-              })
-            ) : (
-              <View
-                style={{
-                  height: 100,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Text>해당 정렬에 마커가 존재하지 않습니다.</Text>
-              </View>
-            )}
-          </ElementView>
-        ) : (
-          <View></View>
-        )}
-      </MarkerList>
+                     {/* <PeopleText>{marker.limitAmount} 키머니</PeopleText> */}
+                     <View
+                       style={{
+                         flexDirection: "row",
+                         alignItems: "center",
+                         width: 100,
+                       }}
+                     >
+                       <Image
+                         source={markerMap}
+                         style={{ marginTop: 7, marginRight: 5 }}
+                       />
+                       <PeopleText>
+                         {getCountryUnit(marker.unit)}
+                         {marker.amount} 키머니
+                       </PeopleText>
+                     </View>
+                     <View
+                       style={{
+                         flexDirection: "row",
+                         alignItems: "center",
+                         width: 100,
+                       }}
+                     >
+                       <Image
+                         source={markerAddress}
+                         style={{ marginTop: 7, marginRight: 5 }}
+                       />
+                       <PeopleText>{marker.address}</PeopleText>
+                     </View>
+                   </View>
+                   <View>
+                     <MoneyText>{marker.limitAmount}명 남았어요</MoneyText>
+                   </View>
+                 </MarkerElementView>
+               );
+             })
+           ) : (
+             <View
+               style={{
+                 height: 100,
+                 alignItems: "center",
+                 justifyContent: "center",
+               }}
+             >
+               <Text>해당 정렬에 마커가 존재하지 않습니다.</Text>
+             </View>
+           )}
+         </ElementView>
+       ) : (
+         <View></View>
+       )}
+     </MarkerList>
+     }
+     
       {isCountryModalVisible && (
         <CountryModalComponent
           closeModal={toggleCountryModal}
