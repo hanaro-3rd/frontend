@@ -13,6 +13,10 @@ export const postSigninPassword = (signInPasswordData) => {
   return axiosClient.post("/signin/password", signInPasswordData);
 };
 
+export const patchUpdatePassword = ({ patchUpdatePasswordData }) => {
+  return axiosClient.patch(`/updatePassword`, patchUpdatePasswordData);
+};
+
 export const postVerification = (verificationData) => {
   return axiosClient.post("/verification", verificationData);
 };
