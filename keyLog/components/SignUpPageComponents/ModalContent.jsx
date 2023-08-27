@@ -27,11 +27,22 @@ const ModalContent = ({
 }) => {
   const [errorCode, setErrorCode] = useState();
   const queryClient = useQueryClient();
+  const navigation = useNavigation();
   const postVerificationAuthMutation = useMutation(postVerificationAuth, {
     onSuccess: (response) => {
       queryClient.invalidateQueries("verificationAuth");
+      if (response.data.result.isExistUser) {
+        navigation.navigate("AlreadySignUpPage", {
+          // deviceId: await DeviceInfo.getUniqueId(),
+          name: name,
+          phoneNum: phoneNumber,
+          registrateNum: personalNumber,
+          createdAt: response.data.result.userResponseDto.createdAt,
+        });
+      } else if (response.isSuccessAuth) {
+        goToLoginPasswordPage();
+      }
       setModalVisible(false);
-      goToLoginPasswordPage();
     },
     onError: (error) => {
       console.log(error.response);
@@ -51,12 +62,13 @@ const ModalContent = ({
     setInputText("");
     toggleModal();
   };
-  const navigation = useNavigation();
+
   const goToLoginPasswordPage = () => {
     navigation.navigate("LoginPasswordPage", {
+      name,
       phoneNumber,
       personalNumber,
-      name,
+      resetPassword: "false",
     });
   };
 

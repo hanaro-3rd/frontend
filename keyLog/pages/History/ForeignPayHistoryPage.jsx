@@ -507,7 +507,7 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
             <CountryContainer>
               <CountrySelectedImage source={selectedImage} />
               <TotalPayCostText>
-                {balance} {unit}
+                {balance.toLocaleString()} {unit}
               </TotalPayCostText>
             </CountryContainer>
             <ButtonContainer>
@@ -640,9 +640,9 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                             <CostTextContainer>
                               <CostText
                                 style={{ color: textColor }}
-                              >{`${type}${item.keymoney} ${item.unit}`}</CostText>
+                              >{`${type}${item.keymoney.toLocaleString()} ${item.unit}`}</CostText>
                               <RemainCostText>
-                                {item.balance} {item.unit}
+                                {item.balance.toLocaleString()} {item.unit}
                               </RemainCostText>
                             </CostTextContainer>
                           </ListInfoContainer>

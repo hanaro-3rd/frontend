@@ -11,7 +11,7 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import TravelDateComponent from "../../components/TravelBudgetPageComponents/TravelDateComponent";
 import { Picker } from "@react-native-picker/picker";
-import { patchTravelPlan, } from "../../api/api";
+import { patchTravelPlan } from "../../api/api";
 import { useMutation, useQuery } from "react-query";
 
 const Root = styled.SafeAreaView`
@@ -202,39 +202,11 @@ const TravelScheduleEditPage = ({ route, navigation }) => {
 
   console.log("여기서 쓸거!", travelData.travelBudget);
 
-  const formatDateToString = (dateArray) => {
-    const year = dateArray[0];
-    const month = String(dateArray[1]).padStart(2, "0");
-    const day = String(dateArray[2]).padStart(2, "0");
-    return `${year}.${month}.${day}`;
-  };
-
-  const startDateString = formatDateToString(travelData.travelBudget.startDate);
-  const endDateString = formatDateToString(travelData.travelBudget.endDate);
-
   const [title, setTitle] = useState(travelData.travelBudget.title);
   const [country, setCountry] = useState(travelData.travelBudget.country);
   const [city, setCity] = useState(travelData.travelBudget.city);
-  const [startDate, setStartDate] = useState(startDateString);
-  const [endDate, setEndDate] = useState(endDateString);
-
-  const patchEditTravelPlanMutation = useMutation(patchTravelPlan, {
-    onSuccess: (response) => {
-      console.log(response.data);
-    },
-    onError: () => {},
-  });
-
-  const handlePatchEditTravelPlan = () => {
-    console.log(selectedChangeCategory, changeMemo);
-    const updatePaymentData = {
-      category: selectedChangeCategory,
-      memo: changeMemo,
-    };
-    console.log(updatePaymentData);
-    patchKeymoneyHistoryMutation.mutate({ historyId, updatePaymentData });
-  };
-
+  const [startDate, setStartDate] = useState(travelData.travelBudget.startDate);
+  const [endDate, setEndDate] = useState(travelData.travelBudget.endDate);
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState(false);
   const [isTravelCountryClick, setIsTravelCountryClick] = useState(false);
 
@@ -310,13 +282,13 @@ const TravelScheduleEditPage = ({ route, navigation }) => {
   const handleNextButtonPress = () => {
     if (isAllFieldsFilled) {
       navigation.navigate("TravelBudgetPlanEditPage", {
-        country,
-        title,
-        city,
+        planId,
+        travelTitle:title,
+        travelCountry:country,
+        travelCountryOption:city,
         startDate,
         endDate,
-        //  category: travelData.category,
-        planId,
+        category: travelData.category
       });
     }
     // else {
@@ -409,6 +381,7 @@ const TravelScheduleEditPage = ({ route, navigation }) => {
               setStartDate={handleStartDateChange}
               endDate={endDate}
               setEndDate={handleEndDateChange}
+              formatDate={true}
             />
           </TravelTitleContainer>
         </BodyMain>
