@@ -53,6 +53,7 @@ const PickUpKeyPage = ({ navigation }) => {
   const [isCountryModalVisible, setIsCountryModalVisible] = useState(false);
   const [isMarkerModalVisible, setIsMarkerModalVisible] = useState(false);
   const [isSortModalVisible, setIsSortModalVisible] = useState(false);
+  const [currentLocation,setCurrentLocation] = useState({})
   //KRW,JPY,USD,EUR,all
   //all,false,true
   //distance,amount,limitAmount
@@ -176,8 +177,8 @@ const PickUpKeyPage = ({ navigation }) => {
         const { latitude, longitude } = position.coords;
         console.log(position.coords, "position가져오니");
         setLocation({
-          latitude: 37.545315,
-          longitude: 127.057088,
+          latitude,
+          longitude,
 
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
@@ -186,7 +187,7 @@ const PickUpKeyPage = ({ navigation }) => {
           unit: countryModal[0],
           isPickup: markerModal[0],
           sort: sortModal[0],
-          markerData: { lat: 37.545315, lng: 127.057088 },
+          markerData: { lat: latitude, lng: longitude },
         });
       },
 
@@ -410,10 +411,8 @@ const PickUpKeyPage = ({ navigation }) => {
               </ModalKeyMoneyText>
             </ModalKeyMoneyView>
             {!showModalView.isPickUp ? (
-              calculateDistance(
-                { latitude: showModalView.lat, longitude: showModalView.lng },
-                { latitude: 37.545315, longitude: 127.057088 }
-              ) < 0.1 ? (
+      
+             showModalView.distance < 0.1 ? (
                 <ModalGetMoneyButton
                   onPress={() => {
                     handlePostMarkers(showModalView.markerId, {
