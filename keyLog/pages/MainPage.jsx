@@ -47,7 +47,6 @@ import { useRecoilState } from "recoil";
 import { usernameAtom } from "../recoil/usernameAtom";
 import { useQuery, useQueryClient } from "react-query";
 import { getExchange } from "../api/api";
-import { he } from "date-fns/locale";
 
 const MainPage = ({ navigation }) => {
   const [username, setUsername] = useRecoilState(usernameAtom);
@@ -333,6 +332,7 @@ const MainPage = ({ navigation }) => {
     font-weight: 700;
     width: ${widthPercentage(80)}px;
     height: ${heightPercentage(15)}px;
+    text-align: center;
   `;
 
   const MenuButton = styled(TouchableOpacity)`

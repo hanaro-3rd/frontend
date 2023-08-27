@@ -28,7 +28,14 @@ import {
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import TravelBudgetPaymentHistoryComponent from "../../components/TravelBudgetPageComponents/TravelBudgetPaymentHistoryComponent";
 import { formatDate } from "../../utils/formatDate";
-
+import markerPin from "../../Images/마커.png";
+import {
+  markerCulture,
+  markerEtc,
+  markerFood,
+  markerHotel,
+  markerTraffic,
+} from "../../utils/image";
 const TravelBudgetDetailPage = ({ navigation, route }) => {
   const { planId, totalBudget } = route.params;
   const [category, setCategory] = useState([]);
@@ -52,7 +59,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
   const [timePaymentHistory, setTimePaymentHistory] = useState({});
   const [totalPayment, setTotalPayment] = useState(0);
   const [travelData, setTravelData] = useState(null);
-
+  let index = 0;
   const deleteTravelBudgetMutation = useMutation(
     (planId) => deleteTravelBudget(planId),
     {
@@ -81,6 +88,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
               ];
             }
           }
+          console.log("subobj", subObj);
           setTimePaymentHistory(subObj);
         }
       },
@@ -168,8 +176,8 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
             try {
               await deleteTravelBudgetMutation.mutateAsync(planId);
               console.log("잘 지워짐!");
-              navigation.navigate("TravelBudgetPage");
               queryClient.invalidateQueries("travelBudgetData");
+              navigation.navigate("TravelBudgetPage");
             } catch (error) {
               console.error("실패", error);
             }
@@ -227,7 +235,78 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
               showsMyLocationButton={true}
               region={location}
             >
-              {foodCategory.length > 0 &&
+              {selectedTab == "date" &&
+                foodCategory.length > 0 &&
+                Object.keys(timePaymentHistory).map((key, idx) => {
+                  return timePaymentHistory[key].map((e, keyIdx) => {
+                    return (
+                      <Marker
+                        key={idx}
+                        opacity={1}
+                        coordinate={{
+                          latitude: e.lat,
+                          longitude: e.lng,
+                        }}
+                        onPress={() => {
+                          setLocation({
+                            longitude: e.lng,
+                            latitude: e.lat,
+                            latitudeDelta: 0.1,
+                            longitudeDelta: 0.1,
+                          });
+                        }}
+                      >
+                        <View>
+                          <Image
+                            source={markerPin} // 마커 이미지 경로
+                            style={{
+                              width: 50, // 원하는 너비
+                              height: 50, // 원하는 높이
+                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                            }}
+                          />
+                          <View
+                            style={{
+                              position: "absolute",
+                              top: 0,
+                              width: "100%",
+                              height: "100%",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              color: "white", // 원하는 텍스트 색상 설정
+                            }}
+                          >
+                            <Text
+                              style={{
+                                marginBottom: 5,
+                                color: "white",
+                                fontWeight: 600,
+                              }}
+                            >
+                              {++index}
+                            </Text>
+                          </View>
+                        </View>
+
+                        <Callout>
+                          <CantGoMarkerView>
+                            <MarkerKeymoneyText>{e.store}</MarkerKeymoneyText>
+                            <MarkerKeymoneyText>
+                              {e.price}JPY
+                            </MarkerKeymoneyText>
+                          </CantGoMarkerView>
+                          <PolygonView>
+                            <PolygonImage
+                              source={require("../../Images/polygon.png")}
+                            />
+                          </PolygonView>
+                        </Callout>
+                      </Marker>
+                    );
+                  });
+                })}
+              {selectedTab == "category" &&
+                foodCategory.length > 0 &&
                 [
                   ...foodCategory,
                   ...transCategory,
@@ -236,10 +315,11 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                   ...sleepCategory,
                   ...cultureCategory,
                 ]?.map((e, idx) => {
+                  console.log(e);
                   return (
                     <Marker
                       key={idx}
-                      opacity={1.5}
+                      opacity={1}
                       coordinate={{
                         latitude: e.lat,
                         longitude: e.lng,
@@ -253,6 +333,80 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                         });
                       }}
                     >
+                      <View>
+                        {e.category == "식비" && (
+                          <Image
+                            source={{ uri: markerFood }} // 마커 이미지 경로
+                            style={{
+                              width: 50, // 원하는 너비
+                              height: 50, // 원하는 높이
+                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                            }}
+                          />
+                        )}
+                        {e.category == "교통" && (
+                          <Image
+                            source={{ uri: markerTraffic }} // 마커 이미지 경로
+                            style={{
+                              width: 50, // 원하는 너비
+                              height: 50, // 원하는 높이
+                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                            }}
+                          />
+                        )}
+                        {e.category == "숙박" && (
+                          <Image
+                            source={{ uri: markerHotel }} // 마커 이미지 경로
+                            style={{
+                              width: 50, // 원하는 너비
+                              height: 50, // 원하는 높이
+                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                            }}
+                          />
+                        )}
+                        {e.category == "문화" && (
+                          <Image
+                            source={{ uri: markerCulture }} // 마커 이미지 경로
+                            style={{
+                              width: 50, // 원하는 너비
+                              height: 50, // 원하는 높이
+                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                            }}
+                          />
+                        )}
+                        {e.category == "기타" && (
+                          <Image
+                            source={{ uri: markerEtc }} // 마커 이미지 경로
+                            style={{
+                              width: 50, // 원하는 너비
+                              height: 50, // 원하는 높이
+                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                            }}
+                          />
+                        )}
+                        <View
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            width: "100%",
+                            height: "100%",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            color: "white", // 원하는 텍스트 색상 설정
+                          }}
+                        >
+                          <Text
+                            style={{
+                              marginBottom: 5,
+                              color: "white",
+                              fontWeight: 600,
+                            }}
+                          >
+                            {idx + 1}
+                          </Text>
+                        </View>
+                      </View>
+
                       <Callout>
                         <CantGoMarkerView>
                           <MarkerKeymoneyText>{e.store}</MarkerKeymoneyText>

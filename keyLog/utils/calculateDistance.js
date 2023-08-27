@@ -24,3 +24,4 @@ export const calculateDistance = (curObj, destObj) => {
   
     return Math.round(result*100)/100;
   };
+  

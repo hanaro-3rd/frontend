@@ -50,7 +50,7 @@ const LoginPasswordPage = ({ route }) => {
     onSuccess: async (response) => {
       console.log("postSigninPassword Data: " + JSON.stringify(response.data));
       console.log("Response Headers: " + JSON.stringify(response.headers));
-
+      queryClient.invalidateQueries("exchange")
       queryClient.invalidateQueries("postSigninPassword");
       // 결과 데이터 및 헤더 정보 처리 로직
 
