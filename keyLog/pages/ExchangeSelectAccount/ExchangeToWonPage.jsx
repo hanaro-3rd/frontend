@@ -314,7 +314,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
               <Text>
                 {accountBalance === false
                   ? ""
-                  : "통장 잔고: " + accountBalance + "원"}
+                  : "통장 잔고: " + accountBalance.toLocaleString() + "원"}
               </Text>
             </View>
             <View style={styles.moneyContainer}>
