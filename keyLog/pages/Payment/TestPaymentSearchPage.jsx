@@ -49,6 +49,28 @@ const TestPaymentSearchPage = ({ navigation }) => {
   //structured_formatting.main_text
   //rating
   //
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        console.log(position.coords, "position가져오니");
+        setLocation({
+          latitude,
+          longitude,
+
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        });
+      },
+   
+      (error) => {
+        console.log(error);
+        console.log(error.code, error.message, "geolocation에러");
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+    );
+    console.log("location" + location);
+  }, []);
   const postMarkersMutation = useMutation(postMarkers, {
     onSuccess: (response) => {
       console.log(response.data);
