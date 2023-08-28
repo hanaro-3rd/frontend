@@ -253,6 +253,7 @@ const TravelBudgetPlanEditPage = ({ navigation, route }) => {
   const patchEditTravelPlanMutation = useMutation(patchTravelPlan, {
     onSuccess: (response) => {
       console.log(response.data);
+      queryClient.invalidateQueries("travelBudgetData");
     },
     onError: () => {
       console.log("실행이 안되니");

@@ -82,7 +82,9 @@ const ExchangeSuccess = ({ navigation, route }) => {
                     </View>
                     <View style={styles.currentExchangeRateTextContainer}>
                       <Text style={styles.exchangeRateText}>
-                        {exchangeRate}
+                        {exchangeToUnit == "JPY"
+                          ? exchangeRate * 1000
+                          : exchangeRate?.toFixed(2)}
                       </Text>
                       {changePrice > 0 ? (
                         <ChangeUpRate>▲ {changePrice}</ChangeUpRate>

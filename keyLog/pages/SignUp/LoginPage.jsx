@@ -14,22 +14,22 @@ const LoginPage = () => {
   const navigation = useNavigation();
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState("")
   const queryClient = useQueryClient();
 
   const postSignInPasswordMutation = useMutation(postSigninPassword, {
-    onSuccess: async (response) => {
+    onSuccess: async response => {
+      if (loginError == false)
+      setLoginError(false)
       await storeAccessToken(response.headers.access_token);
       await storeRefreshToken(response.headers.refresh_token);
-      queryClient.invalidateQueries("postSigninPassword");
+      queryClient.invalidateQueries("exchange");
       navigation.navigate("MainPage");
     },
     onError: (error) => {
       try {
-        if (error.response && error.response.data.errorCode === 401) {
-          setLoginError(true);
-        }
         resetPasswordProcess();
+        setLoginError(true)
       } catch (err) {
         console.error("Something went wrong:", err);
       }
