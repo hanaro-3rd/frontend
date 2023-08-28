@@ -51,6 +51,7 @@ import { usernameAtom } from "./recoil/usernameAtom";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AlreadySignUpPage from "./pages/SignUp/AlreadySignUpPage";
 import TravelScheduleEditPage from "./pages/TravelBudget/TravelScheduleEditPage";
+import TravelBudgetPlanEditPage from "./pages/TravelBudget/TravelBudgetPlanEditPage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -126,7 +127,9 @@ const App = () => {
         <Stack.Navigator
           initialRouteName={
             login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
-            // "SignUpPage"
+            // "LoginPage"
+
+            // "TravelBudgetPage"
           }
         >
           <Stack.Screen
@@ -297,6 +300,11 @@ const App = () => {
           <Stack.Screen
             name="TravelScheduleEditPage"
             component={TravelScheduleEditPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TravelBudgetPlanEditPage"
+            component={TravelBudgetPlanEditPage}
             options={{ headerShown: false }}
           />
           <Stack.Screen

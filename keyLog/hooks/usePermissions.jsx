@@ -7,7 +7,7 @@ function usePermissions() {
   // 파일명을 usePermissions.android.ts, usePermissions.ios.ts 와 같은 형식으로 디바이스별로 나누어도 되긴 한다.
   useEffect(() => {
 
-      check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+      check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION||PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION||PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
         .then((result) => {
           console.log("check location", result);
           if (result === RESULTS.BLOCKED || result === RESULTS.DENIED) {
@@ -21,11 +21,11 @@ function usePermissions() {
                   // ex) tel://01000000000 혹은 sms://01000000000
                   onPress: () => Linking.openSettings(),
                 },
-                {
-                  text: "아니오",
-                  onPress: () => console.log("No Pressed"),
-                  style: "cancel",
-                },
+                // {
+                //   text: "아니오",
+                //   onPress: () => console.log("No Pressed"),
+                //   style: "cancel",
+                // },
               ]
             );
           }

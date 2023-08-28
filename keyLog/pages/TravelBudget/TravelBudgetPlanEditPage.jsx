@@ -17,8 +17,8 @@ import ShopIcon from "../../assets/travelBudget/ShopIcon.png";
 import PlayIcon from "../../assets/travelBudget/PlayIcon.png";
 import EtcIcon from "../../assets/travelBudget/EtcIcon.png";
 import arrow_back from "../../assets/travelBudget/arrow_back.png";
-import { useMutation, useQueryClient } from "react-query";
-import { postTravelBudget,getTravelBudgetDetail } from "../../api/api";
+import { useMutation, useQueryClient, useQuery } from "react-query";
+import { patchTravelPlan, patchTravelBudget } from "../../api/api";
 
 const RootScrollView = styled.ScrollView`
   /* margin-top: ${getStatusBarHeight}px; */
@@ -170,7 +170,7 @@ const BudgetTotalContainer = styled.View`
   border: 1px solid #8b95a1;
   flex-direction: row;
   padding: ${heightPercentage(10)}px ${widthPercentage(20)}px;
-  margin-bottom: ${heightPercentage(19)}px;
+  margin-top: ${heightPercentage(19)}px;
 `;
 
 const BudgetTotalText = styled.Text`
@@ -236,87 +236,52 @@ const TravelBudgetPlanEditPage = ({ navigation, route }) => {
   const handleGoBackToSchedulePage = () => {
     navigation.goBack();
   };
+
   const queryClient = useQueryClient();
-  const postTravelBudgetMutation = useMutation(postTravelBudget, {
-    onSuccess: (response) => {
-      console.log(response.data);
-      queryClient.invalidateQueries("travelBudgetData");
-      navigation.navigate("TravelBudgetPage");
-    },
-    onError: (error) => {
-      console.log(error.response);
-    },
-  });
-  console.log(route.params);
 
   const {
+    planId,
     travelTitle,
     travelCountry,
     travelCountryOption,
     startDate,
     endDate,
+    category,
   } = route.params;
-  const handleSaveButtonPress = () => {
-    postTravelBudgetMutation.mutate({
-      category: [
-        {
-          categoryBudget: foodBudget,
-          categoryId: 1,
-        },
-        {
-          categoryBudget: transBudget,
-          categoryId: 2,
-        },
-        {
-          categoryBudget: houseBudget,
-          categoryId: 3,
-        },
-        {
-          categoryBudget: shopBudget,
-          categoryId: 4,
-        },
-        {
-          categoryBudget: playBudget,
-          categoryId: 5,
-        },
-        {
-          categoryBudget: etcBudget,
-          categoryId: 6,
-        },
-      ],
-      title: travelTitle,
-      totalBudget: totalBudget,
-      startDate: startDate,
-      endDate: endDate,
-      city: travelCountryOption,
-      country: travelCountry,
+
+  console.log("바뀐거 제대로 오는거지", travelTitle, travelCountry, startDate);
+  const patchEditTravelPlanMutation = useMutation(patchTravelPlan, {
+    onSuccess: (response) => {
+      console.log(response.data);
+      queryClient.invalidateQueries("travelBudgetData");
+    },
+    onError: () => {
+      console.log("실행이 안되니");
+    },
+  });
+
+  const patchEditTravelBudgetPlanMutation = useMutation(patchTravelBudget, {
+    onSuccess: (response) => {
+      console.log(response.data);
+    },
+    onError: () => {
+      console.log("실행이 안되니");
+    },
+  });
+
+  const [categoryData, setCategoryData] = useState([]);
+
+  useEffect(() => {
+    let initialTotalBudget = 0;
+    category.forEach((item) => {
+      initialTotalBudget += item.categoryBudget;
     });
-  };
+    setTotalBudget(initialTotalBudget);
+    setCategoryData(category);
+  }, [category]);
 
-  const [foodBudget, setFoodBudget] = useState(0);
-  const [transBudget, setTransBudget] = useState(0);
-  const [houseBudget, setHouseBudget] = useState(0);
-  const [shopBudget, setShopBudget] = useState(0);
-  const [playBudget, setPlayBudget] = useState(0);
-  const [etcBudget, setEtcBudget] = useState(0);
   const [moneyUnit, setMoneyunit] = useState(getMoneyUnit(travelCountry));
-
-  useEffect(() => {
-    const totalBudget =
-      foodBudget +
-      transBudget +
-      houseBudget +
-      shopBudget +
-      playBudget +
-      etcBudget;
-    setTotalBudget(totalBudget);
-  }, [foodBudget, transBudget, houseBudget, shopBudget, playBudget, etcBudget]);
-
   const [totalBudget, setTotalBudget] = useState(0);
-
-  useEffect(() => {
-    setTotalBudget(0);
-  }, []);
 
   useEffect(() => {
     let newMoneyUnit = "₩";
@@ -332,26 +297,78 @@ const TravelBudgetPlanEditPage = ({ navigation, route }) => {
     setMoneyunit(newMoneyUnit);
   }, [travelCountry]);
 
-  const [isBudgetInputFilled, setIsBudgetInputFilled] = useState(false);
-  const [isFoodBudgetInputFilled, setIsFoodBudgetInputFilled] = useState(false);
-  const [isTransBudgetInputFilled, setIsTransBudgetInputFilled] =
-    useState(false);
-  const [isHouseBudgetInputFilled, setIsHouseBudgetInputFilled] =
-    useState(false);
-  const [isShopBudgetInputFilled, setIsShopBudgetInputFilled] = useState(false);
-  const [isPlayBudgetInputFilled, setIsPlayBudgetInputFilled] = useState(false);
-  const [isEtcBudgetInputFilled, setIsEtcBudgetInputFilled] = useState(false);
+  const categoryNames = {
+    1: "식비",
+    2: "교통",
+    3: "숙박",
+    4: "쇼핑 · 편의점 · 마트",
+    5: "문화 · 여가",
+    6: "기타",
+  };
 
-  {
-    /* 저장하기 버튼 활성화 */
-  }
-  const isAnyBudgetInputFilled =
-    isFoodBudgetInputFilled ||
-    isTransBudgetInputFilled ||
-    isHouseBudgetInputFilled ||
-    isShopBudgetInputFilled ||
-    isPlayBudgetInputFilled ||
-    isEtcBudgetInputFilled;
+  const categoryIcons = {
+    1: FoodIcon,
+    2: TransIcon,
+    3: HouseIcon,
+    4: ShopIcon,
+    5: PlayIcon,
+    6: EtcIcon,
+  };
+
+  const handleSaveButtonPress = () => {
+    const updateTravelPlanData = {
+      city: travelCountryOption,
+      country: travelCountry,
+      endDate: endDate,
+      startDate: startDate,
+      title: travelTitle,
+    };
+
+    patchEditTravelPlanMutation.mutate({
+      planId: planId,
+      patchTravelPlanData: updateTravelPlanData,
+    });
+
+    const updateTravelBudgetData = {
+      category: categoryData.map((category) => ({
+        categoryBudget: category.categoryBudget,
+        categoryId: category.categoryId,
+      })),
+    };
+
+    patchEditTravelBudgetPlanMutation.mutate({
+      plan_id: planId,
+      patchTravelBudgetData: updateTravelBudgetData,
+    });
+
+    console.log(
+      "제대로 다 됐을까?",
+      updateTravelPlanData,
+      updateTravelBudgetData
+    );
+    navigation.navigate("TravelBudgetPage");
+  };
+
+  const handleCategoryBudgetChange = (categoryId, value) => {
+    const updatedCategoryData = categoryData.map((item) =>
+      item.categoryId === categoryId
+        ? { ...item, categoryBudget: parseInt(value) || 0, isFilled: !!value }
+        : item
+    );
+    setCategoryData(updatedCategoryData);
+
+    const newTotalBudget = updatedCategoryData.reduce(
+      (total, category) => total + category.categoryBudget,
+      0
+    );
+    setTotalBudget(newTotalBudget);
+
+    console.log("총 금액 변경됐니? :", newTotalBudget);
+  };
+
+  const isAnyCategoryFilled =
+    categoryData.some((category) => category.isFilled) ||
+    categoryData.some((category) => category.categoryBudget > 0);
 
   return (
     <RootScrollView>
@@ -366,6 +383,49 @@ const TravelBudgetPlanEditPage = ({ navigation, route }) => {
           <Subtitle>카테고리별 여행 경비를 작성해주세요.</Subtitle>
         </BodyHeader>
         <BodyMain>
+          <BudgetListContainer>
+            {categoryData.map((category) => (
+              <BudgetContainer key={category.categoryId}>
+                <CategoryContainer>
+                  <Icon>
+                    <Image source={categoryIcons[category.categoryId]} />
+                  </Icon>
+                  <CategoryText>
+                    {categoryNames[category.categoryId]}
+                  </CategoryText>
+                </CategoryContainer>
+                <Input
+                  isFilled={category.isFilled || category.categoryBudget > 0}
+                >
+                  <BudgetInput
+                    keyboardType="numeric"
+                    placeholder="0"
+                    value={category.categoryBudget.toString()}
+                    onChangeText={(text) => {
+                      handleCategoryBudgetChange(category.categoryId, text);
+                    }}
+                    onFocus={() => {
+                      const updatedCategoryData = categoryData.map((item) =>
+                        item.categoryId === category.categoryId
+                          ? { ...item, isInputFocused: true }
+                          : item
+                      );
+                      setCategoryData(updatedCategoryData);
+                    }}
+                    onBlur={() => {
+                      const updatedCategoryData = categoryData.map((item) =>
+                        item.categoryId === category.categoryId
+                          ? { ...item, isInputFocused: false }
+                          : item
+                      );
+                      setCategoryData(updatedCategoryData);
+                    }}
+                  />
+                  <MoneyUnitText>{moneyUnit}</MoneyUnitText>
+                </Input>
+              </BudgetContainer>
+            ))}
+          </BudgetListContainer>
           <BudgetTotalContainer>
             <TotalText>총</TotalText>
             <InputTotal>
@@ -373,139 +433,11 @@ const TravelBudgetPlanEditPage = ({ navigation, route }) => {
               <MoneyTotalUnitText>{moneyUnit}</MoneyTotalUnitText>
             </InputTotal>
           </BudgetTotalContainer>
-          <BudgetListContainer>
-            <BudgetContainer>
-              <CategoryContainer>
-                <Icon>
-                  <Image source={FoodIcon} />
-                </Icon>
-                <CategoryText>식비</CategoryText>
-              </CategoryContainer>
-              <Input isFilled={isFoodBudgetInputFilled}>
-                <BudgetInput
-                  keyboardType="numeric"
-                  placeholder="0"
-                  onChangeText={(text) => {
-                    setFoodBudget(parseInt(text) || 0);
-                    setIsFoodBudgetInputFilled(!!text);
-                  }}
-                  onFocus={() => setIsFoodBudgetInputFilled(true)}
-                  onBlur={() => setIsFoodBudgetInputFilled(!!foodBudget)}
-                />
-                <MoneyUnitText>{moneyUnit}</MoneyUnitText>
-              </Input>
-            </BudgetContainer>
-            <BudgetContainer>
-              <CategoryContainer>
-                <Icon>
-                  <Image source={TransIcon} />
-                </Icon>
-                <CategoryText>교통</CategoryText>
-              </CategoryContainer>
-              <Input isFilled={isTransBudgetInputFilled}>
-                <BudgetInput
-                  keyboardType="numeric"
-                  placeholder="0"
-                  onChangeText={(text) => {
-                    setTransBudget(parseInt(text) || 0);
-                    setIsTransBudgetInputFilled(!!text);
-                  }}
-                  onFocus={() => setIsTransBudgetInputFilled(true)}
-                  onBlur={() => setIsTransBudgetInputFilled(!!transBudget)}
-                />
-                <MoneyUnitText>{moneyUnit}</MoneyUnitText>
-              </Input>
-            </BudgetContainer>
-            <BudgetContainer>
-              <CategoryContainer>
-                <Icon>
-                  <Image source={HouseIcon} />
-                </Icon>
-                <CategoryText>숙박</CategoryText>
-              </CategoryContainer>
-              <Input isFilled={isHouseBudgetInputFilled}>
-                <BudgetInput
-                  keyboardType="numeric"
-                  placeholder="0"
-                  onChangeText={(text) => {
-                    setHouseBudget(parseInt(text) || 0);
-                    setIsHouseBudgetInputFilled(!!text);
-                  }}
-                  onFocus={() => setIsHouseBudgetInputFilled(true)}
-                  onBlur={() => setIsHouseBudgetInputFilled(!!houseBudget)}
-                />
-                <MoneyUnitText>{moneyUnit}</MoneyUnitText>
-              </Input>
-            </BudgetContainer>
-            <BudgetContainer>
-              <CategoryContainer>
-                <Icon>
-                  <Image source={ShopIcon} />
-                </Icon>
-                <CategoryText>쇼핑 · 편의점 · 마트</CategoryText>
-              </CategoryContainer>
-              <Input isFilled={isShopBudgetInputFilled}>
-                <BudgetInput
-                  keyboardType="numeric"
-                  placeholder="0"
-                  onChangeText={(text) => {
-                    setShopBudget(parseInt(text) || 0);
-                    setIsShopBudgetInputFilled(!!text);
-                  }}
-                  onFocus={() => setIsShopBudgetInputFilled(true)}
-                  onBlur={() => setIsShopBudgetInputFilled(!!shopBudget)}
-                />
-                <MoneyUnitText>{moneyUnit}</MoneyUnitText>
-              </Input>
-            </BudgetContainer>
-            <BudgetContainer>
-              <CategoryContainer>
-                <Icon>
-                  <Image source={PlayIcon} />
-                </Icon>
-                <CategoryText>문화 · 여가</CategoryText>
-              </CategoryContainer>
-              <Input isFilled={isPlayBudgetInputFilled}>
-                <BudgetInput
-                  keyboardType="numeric"
-                  placeholder="0"
-                  onChangeText={(text) => {
-                    setPlayBudget(parseInt(text) || 0);
-                    setIsPlayBudgetInputFilled(!!text);
-                  }}
-                  onFocus={() => setIsPlayBudgetInputFilled(true)}
-                  onBlur={() => setIsPlayBudgetInputFilled(!!playBudget)}
-                />
-                <MoneyUnitText>{moneyUnit}</MoneyUnitText>
-              </Input>
-            </BudgetContainer>
-            <BudgetContainer>
-              <CategoryContainer>
-                <Icon>
-                  <Image source={EtcIcon} />
-                </Icon>
-                <CategoryText>기타</CategoryText>
-              </CategoryContainer>
-              <Input isFilled={isEtcBudgetInputFilled}>
-                <BudgetInput
-                  keyboardType="numeric"
-                  placeholder="0"
-                  onChangeText={(text) => {
-                    setEtcBudget(parseInt(text) || 0);
-                    setIsEtcBudgetInputFilled(!!text);
-                  }}
-                  onFocus={() => setIsEtcBudgetInputFilled(true)}
-                  onBlur={() => setIsEtcBudgetInputFilled(!!etcBudget)}
-                />
-                <MoneyUnitText>{moneyUnit}</MoneyUnitText>
-              </Input>
-            </BudgetContainer>
-          </BudgetListContainer>
         </BodyMain>
       </Body>
       <Footer>
         <SubmitButton
-          disabled={!isAnyBudgetInputFilled}
+          disabled={!isAnyCategoryFilled}
           onPress={handleSaveButtonPress}
         >
           <ButtonText>저장하기</ButtonText>

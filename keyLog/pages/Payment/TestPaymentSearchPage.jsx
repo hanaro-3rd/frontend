@@ -15,6 +15,7 @@ import { calculateDistance } from "../../utils/calculateDistance";
 import leftArrow from "../../assets/accountImg/Vector.png";
 import { NavigationContainer } from "@react-navigation/native";
 import Swiper from "react-native-swiper";
+import arrowBack from "../../assets/travelBudget/arrow_back.png";
 const TestPaymentSearchPage = ({ navigation }) => {
   const [location, setLocation] = useState({
     latitude: 37.545315,
@@ -48,6 +49,28 @@ const TestPaymentSearchPage = ({ navigation }) => {
   //structured_formatting.main_text
   //rating
   //
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        console.log(position.coords, "position가져오니");
+        setLocation({
+          latitude,
+          longitude,
+
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        });
+      },
+   
+      (error) => {
+        console.log(error);
+        console.log(error.code, error.message, "geolocation에러");
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+    );
+    console.log("location" + location);
+  }, []);
   const postMarkersMutation = useMutation(postMarkers, {
     onSuccess: (response) => {
       console.log(response.data);
@@ -105,7 +128,7 @@ const TestPaymentSearchPage = ({ navigation }) => {
             navigation.navigate("TestPaymentPage");
           }}
         >
-          <Image source={leftArrow} />
+          <Image source={arrowBack} />
         </TouchableOpacity>
         <View style={{ width: "90%" }}>
           <GooglePlacesAutocomplete
@@ -147,7 +170,7 @@ const TestPaymentSearchPage = ({ navigation }) => {
             fetchDetails={true}
             query={{
               key: "AIzaSyB_nxmsBL4iSwU9dniKHw4GWOXONVfCUZw",
-              language: "ko",
+              language: "ko"||"en",
             }}
             ref={placesRef}
           />
