@@ -33,9 +33,10 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 
-const SignUpPage = ({ navigation }) => {
+const SignUpPage = ({ navigation,route }) => {
   const queryClient = useQueryClient();
-
+  const isFindPassword = route?.params?.isFindPassword
+  console.log(isFindPassword)
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [name, setName] = useState("");
   const [turnName,setTurnName] = useState(false)
@@ -362,6 +363,7 @@ const SignUpPage = ({ navigation }) => {
           name={name}
           setModalVisible={setModalVisible}
           navigation={navigation}
+          isFindPassword={isFindPassword}
         />
       </View>
     </ScrollView>

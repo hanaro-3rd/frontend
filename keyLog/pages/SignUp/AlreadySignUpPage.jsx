@@ -101,7 +101,7 @@ const BodyMainTitleText = styled.Text`
   font-size: ${fontPercentage(16)}px;
   font-style: normal;
   font-weight: 700;
-  width: ${widthPercentage(60)}px;
+  width: ${widthPercentage(80)}px;
   height: ${heightPercentage(22)}px;
 `;
 
@@ -164,12 +164,12 @@ const ButtonText = styled.Text`
 
 const AlreadySignUpPage = ({ route, navigation }) => {
   const queryClient = useQueryClient();
-  const { name, phoneNum, registrateNum, createdAt } = route?.params;
-
-  const formattedRegistrateNum = `${registrateNum.slice(
+  const { name, phoneNum, registrationNum, createdAt } = route?.params;
+  console.log(route.params,"route.params")
+  const formattedRegistrateNum = `${registrationNum.slice(
     0,
     6
-  )}-${registrateNum.slice(6)}`;
+  )}-${registrationNum.slice(6)}`;
   const formattedPhoneNum = `${phoneNum.slice(0, 3)}-${phoneNum.slice(
     3,
     7
@@ -186,7 +186,7 @@ const AlreadySignUpPage = ({ route, navigation }) => {
     <Root>
       <Header />
       <BodyHeader>
-        <BodyHeaderTitle>이미 가입된 회원</BodyHeaderTitle>
+        <BodyHeaderTitle>가입된 회원</BodyHeaderTitle>
         <BodyHeaderText>
           회원 정보가 일치하면 확인 버튼을 눌러주세요
         </BodyHeaderText>
@@ -236,11 +236,11 @@ const AlreadySignUpPage = ({ route, navigation }) => {
       <Footer>
         <SubmitButton
           onPress={() =>
-            navigation.navigate("LoginPasswordPage", {
+            navigation.navigate("UpdateDevicePage", {
               name: name,
               phoneNumber: phoneNum,
-              personalNumber: registrateNum,
-              resetPassword: "true"
+              personalNumber: registrationNum,
+             
             })
           }
         >

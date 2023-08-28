@@ -24,7 +24,7 @@ const LoginPage = () => {
       await storeAccessToken(response.headers.access_token);
       await storeRefreshToken(response.headers.refresh_token);
       queryClient.invalidateQueries("exchange");
-      navigation.navigate("MainPage");
+      navigation.replace("MainPage");
     },
     onError: (error) => {
       try {
@@ -83,11 +83,11 @@ const LoginPage = () => {
             <Text style={styles.mainText}>비밀번호를 입력해주세요</Text>
             <PasswordSymbol password={password} />
             {loginError && (
-              <Text style={{ color: "red" }}>비밀번호를 다시 입력해주세요</Text>
+              <Text style={{ color: "red" }}>비밀번호가 틀립니다</Text>
             )}
           </View>
           <TouchableOpacity
-            onPress={() => navigation.navigate("SignUpPage")}
+            onPress={() => navigation.navigate("SignUpPage",{isFindPassword:true})}
           >
             <ForgetText>비밀번호를 잊어버렸어요</ForgetText>
             </TouchableOpacity>
@@ -97,11 +97,6 @@ const LoginPage = () => {
           />
         </View>
         <View style={styles.bodyFooter}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("LoginPatternPage")}
-          >
-            <Text>패턴으로 로그인하기</Text>
-          </TouchableOpacity>
         </View>
       </View>
     </View>
