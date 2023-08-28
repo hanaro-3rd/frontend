@@ -27,6 +27,7 @@ const ExchangeSuccess = ({ navigation, route }) => {
     exchangeFromUnit,
     exchangeRate,
     changePrice,
+    isBought,
   } = route?.params;
   return (
     <View style={styles.root}>
@@ -83,7 +84,7 @@ const ExchangeSuccess = ({ navigation, route }) => {
                     <View style={styles.currentExchangeRateTextContainer}>
                       <Text style={styles.exchangeRateText}>
                         {exchangeToUnit == "JPY"
-                          ? exchangeRate * 1000
+                          ? exchangeRate * 100
                           : exchangeRate?.toFixed(2)}
                       </Text>
                       {changePrice > 0 ? (
@@ -104,7 +105,7 @@ const ExchangeSuccess = ({ navigation, route }) => {
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.submitButton}
-          onPress={() => navigation.navigate("MainPage")}
+          onPress={() => navigation.navigate("KeyMoneyHistoryPage")}
         >
           <Text style={styles.buttonText}>하나머니 확인하기</Text>
         </TouchableOpacity>

@@ -60,6 +60,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
   const [foreignTextInput, setForeignTextInput] = useState();
   const [subForeignText, setSubForeignText] = useState();
   const [apiTime, setApiTime] = useState([]);
+  const [isBought, setIsBought] = useState(false);
   const { Keyunit, Keybalance } = route?.params;
   const placeholderText = `잔액: ${Keybalance}`;
   const [selectedMoney, setSelectedMoney] = useState(Keyunit);
@@ -152,6 +153,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
         exchangeUnit: selectedMoney,
         exchangeRate: exchangeRate,
         changePrice: changePrice,
+        isBought: isBought,
       });
     },
     onError: (error) => {
@@ -172,7 +174,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
       accountId: accountId,
       changePrice: changePrice,
       exchangeRate: exchangeRate,
-      isBought: true,
+      isBought: false,
       money: koreaTextInput,
       moneyToExchange: foreignTextInput,
       unit: selectedMoney,
