@@ -87,7 +87,10 @@ const LoginPage = () => {
             )}
           </View>
           <TouchableOpacity
-            onPress={() => navigation.navigate("SignUpPage",{isFindPassword:true})}
+            onPress={() => 
+              {  setLoginError(false) 
+                navigation.navigate("SignUpPage",{isFindPassword:true})
+             }}
           >
             <ForgetText>비밀번호를 잊어버렸어요</ForgetText>
             </TouchableOpacity>

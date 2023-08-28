@@ -17,15 +17,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const FindPasswordPage = ({ route }) => {
   const navigation = useNavigation();
 
-  //   const {
-  //     name ,
-  //     phoneNumber ,
-  //     personalNumber ,
-  //   } = route?.params;
+    const {
+      name ,
+      phoneNumber ,
+      personalNumber ,
+    } = route?.params;
 
-  const name = "이수창";
-  const phoneNumber = "01063572816";
-  const personalNumber = "9709171";
+ 
 
   console.log("routeParams", route.params);
   const [password, setPassword] = useState("");

@@ -130,9 +130,9 @@ const App = () => {
         <Stack.Navigator
           initialRouteName={
             // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
-            // "LoginPage"
+            "LoginPage"
             
-            "FindPasswordPage"
+            // "FindPasswordPage"
           }
         >
           <Stack.Screen
