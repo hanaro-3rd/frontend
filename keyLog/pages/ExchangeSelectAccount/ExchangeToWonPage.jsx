@@ -135,11 +135,11 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
     setForeignTextInput(`${exchangeMoney}`);
   };
 
-  const handleAllMoney =  () =>{
-    console.log("???",Keybalance)
-    setForeignTextInput(String(Keybalance))
-    setKoreaTextInput(String(Math.floor(Keybalance*exchangeRate)))
-  }
+  const handleAllMoney = () => {
+    console.log("???", Keybalance);
+    setForeignTextInput(String(Keybalance));
+    setKoreaTextInput(String(Math.floor(Keybalance * exchangeRate)));
+  };
 
   const postExchangeMutation = useMutation(postExchange, {
     onSuccess: (response) => {
@@ -252,15 +252,13 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
             <Text>
               {accountBalance === false
                 ? ""
-                : "통장 잔고: " + accountBalance + "원"}
+                : "통장 잔고: " + accountBalance.toLocaleString() + "원"}
             </Text>
           </View>
           <View style={styles.moneyContainer}>
             <View style={styles.titleContainer}>
               <Text style={styles.containerTitle2}>환전 금액</Text>
-              <Text style={styles.containerSubtitle}>
-                주말, 공휴일 수수료 원화 20원이 적용됩니다
-              </Text>
+              <Text style={styles.containerSubtitle}></Text>
             </View>
 
             {/* 환율부분 */}
@@ -310,11 +308,20 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                 keyboardType="numeric"
                 style={{ textAlign: "right" }}
               />
-              <TouchableOpacity onPress={handleAllMoney} style={{borderColor:"#55ACEE",borderWidth:1,paddingHorizontal:10,borderRadius:5,paddingVertical:5}}>
-                <Text style={{color:`#55ACEE`}}>전액</Text>
+              <TouchableOpacity
+                onPress={handleAllMoney}
+                style={{
+                  borderColor: "#55ACEE",
+                  borderWidth: 1,
+                  paddingHorizontal: 10,
+                  borderRadius: 5,
+                  paddingVertical: 5,
+                }}
+              >
+                <Text style={{ color: `#55ACEE` }}>전액</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ width: "100%", }}>
+            <View style={{ width: "100%" }}>
               <Text
                 style={{
                   textAlign: "right",
@@ -346,29 +353,6 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                     </CollapseHeader>
                   </Collapse>
                 </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={styles.accountSelect}
-                  onPress={handleChooseAccountComponent}
-                >
-                  <Text style={styles.placeholder}>계좌를 선택해주세요</Text>
-                  <Image
-                    source={require("../../assets/exchangeImg/SelectButton.png")}
-                  />
-                </TouchableOpacity>
-              )}
-              <Text>
-                {accountBalance === false
-                  ? ""
-                  : "통장 잔고: " + accountBalance.toLocaleString() + "원"}
-              </Text>
-            </View>
-            <View style={styles.moneyContainer}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.containerTitle2}>환전 금액</Text>
-                <Text style={styles.containerSubtitle}>
-                  주말, 공휴일 수수료 원화 20원이 적용됩니다
-                </Text>
               </View>
               <View style={styles.foreignCurrencyInput}>
                 <TextInput //한화
@@ -444,9 +428,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
       </View>
       <View style={styles.footer}>
         <View style={styles.informationContainer}>
-          <Text style={styles.informationText}>
-            * 주말 및 공휴일은 수수료가 붙습니다
-          </Text>
+          <Text style={styles.informationText}></Text>
         </View>
         {koreaTextInput > 0 &&
         foreignTextInput > 0 &&
