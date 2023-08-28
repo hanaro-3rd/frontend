@@ -592,7 +592,7 @@ const TestPaymentPage = ({ navigation, route }) => {
                     alignItems: "center",
                   }}
                 >
-                  <ModalText>연결된 외환 계좌가 없습니다.</ModalText>
+                  <ModalText>환전한 키머니 잔액이 없습니다.</ModalText>
                 </ModalTextContainer>
               </View>
             </View>
