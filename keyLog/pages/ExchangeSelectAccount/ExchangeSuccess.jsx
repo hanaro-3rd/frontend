@@ -56,7 +56,9 @@ const ExchangeSuccess = ({ navigation, route }) => {
                     <Text style={styles.koreaMoneyUnitText}>
                       {exchangeToUnit}
                     </Text>
-                    <Text style={styles.koreaMoneyText}>{exchangeToMoney}</Text>
+                    <Text style={styles.koreaMoneyText}>
+                      {exchangeToMoney.toLocaleString()}
+                    </Text>
                   </View>
                   <Image source={Vector} />
                   <View style={styles.foreignMoneyContainer}>
@@ -64,7 +66,7 @@ const ExchangeSuccess = ({ navigation, route }) => {
                       {exchangeFromUnit}
                     </Text>
                     <Text style={styles.foreignMoneyText}>
-                      {exchangeFromMoney}
+                      {exchangeFromMoney.toLocaleString()}
                     </Text>
                   </View>
                 </View>
@@ -84,7 +86,7 @@ const ExchangeSuccess = ({ navigation, route }) => {
                     <View style={styles.currentExchangeRateTextContainer}>
                       <Text style={styles.exchangeRateText}>
                         {exchangeToUnit == "JPY"
-                          ? exchangeRate * 100
+                          ? exchangeRate * 1000
                           : exchangeRate?.toFixed(2)}
                       </Text>
                       {changePrice > 0 ? (

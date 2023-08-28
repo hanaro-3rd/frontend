@@ -41,6 +41,7 @@ import _ from "lodash";
 import { useDebouncedEffect } from "../../hooks/useDebouncedEffect";
 import { integerUnit, minimumUnit } from "../../utils/ExchangeSentence";
 import styled from "styled-components/native";
+import ForeignPayHistoryPage from "../History/ForeignPayHistoryPage";
 
 export const ExchangeToWonPage = ({ route, navigation }) => {
   const [accountList, setAccountList] = useState([]);
@@ -180,10 +181,16 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
       unit: selectedMoney,
     });
   };
-
   return (
     <ScrollView>
-      <DeleteHeader navigation={navigation} to="MainPage" />
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={require("../../Images/삭제.png")}
+            style={{ width: widthPercentage(24), height: heightPercentage(24) }}
+          />
+        </TouchableOpacity>
+      </View>
       <View style={styles.body}>
         <View style={styles.bodyHeader}>
           <Text style={styles.title}>원화 계좌로 송금하기</Text>
