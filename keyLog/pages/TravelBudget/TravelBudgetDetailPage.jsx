@@ -78,16 +78,35 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
         if (response.data.result.timePaymentHistory) {
           const obj = response.data.result.timePaymentHistory;
           const subObj = {};
+          const travelBudgetCountry = response.data.result.travelBudget.country;
+
           for (key in obj) {
-            if (subObj[formatDate(key)] == undefined) {
-              subObj[formatDate(key)] = obj[key];
-            } else {
-              subObj[formatDate(key)] = [
-                ...subObj[formatDate(key)],
-                ...obj[key],
-              ];
+            //   if (subObj[formatDate(key)] == undefined) {
+            //     subObj[formatDate(key)] = obj[key];
+            //   } else {
+            //     subObj[formatDate(key)] = [
+            //       ...subObj[formatDate(key)],
+            //       ...obj[key],
+            //     ];
+            //   }
+            // }
+            const filteredPayments = obj[key].filter(
+              (payment) => payment.unit === travelBudgetCountry
+            );
+
+            if (filteredPayments.length > 0) {
+              const formattedDate = formatDate(key);
+              if (!subObj[formattedDate]) {
+                subObj[formattedDate] = filteredPayments;
+              } else {
+                subObj[formattedDate] = [
+                  ...subObj[formattedDate],
+                  ...filteredPayments,
+                ];
+              }
             }
           }
+
           console.log("subobj", subObj);
           setTimePaymentHistory(subObj);
         }
@@ -238,8 +257,10 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
               {selectedTab == "date" &&
                 foodCategory.length > 0 &&
                 Object.keys(timePaymentHistory).map((key, idx) => {
-                  return timePaymentHistory[key].map((e, keyIdx) => {
-                    return (
+                  const paymentsForDate = timePaymentHistory[key];
+
+                  if (paymentsForDate.length > 0) {
+                    return paymentsForDate.map((e, keyIdx) => (
                       <Marker
                         key={idx}
                         opacity={1}
@@ -302,8 +323,9 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                           </PolygonView>
                         </Callout>
                       </Marker>
-                    );
-                  });
+                    ));
+                  }
+                  return null;
                 })}
               {selectedTab == "category" &&
                 foodCategory.length > 0 &&
