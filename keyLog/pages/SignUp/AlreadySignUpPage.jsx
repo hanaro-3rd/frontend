@@ -18,7 +18,10 @@ import {
   phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
-import { useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
+import { patchUpdateDevice } from "../../api/api";
+import DeviceInfo from "react-native-device-info";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
@@ -163,6 +166,7 @@ const ButtonText = styled.Text`
 `;
 
 const AlreadySignUpPage = ({ route, navigation }) => {
+
   const queryClient = useQueryClient();
   const { name, phoneNum, registrationNum, createdAt } = route?.params;
   console.log(route.params,"route.params")
@@ -180,7 +184,18 @@ const AlreadySignUpPage = ({ route, navigation }) => {
   const day = createdAt[2];
 
   const formattedDate = `${year}년 ${month}월 ${day}일`;
-
+  const patchUpdateMutation = useMutation(patchUpdateDevice, {
+    onSuccess: async response => {
+      console.log(response.data);
+      if(await AsyncStorage.getItem("access_token")) {
+        await AsyncStorage.removeItem("access_token")
+      }
+      navigation.replace("LoginPage")
+    },
+    onError: error => {
+      console.log('signup' + error);
+    },
+  });
   const [signUpDate, setSignUpDate] = useState();
   return (
     <Root>
@@ -235,16 +250,17 @@ const AlreadySignUpPage = ({ route, navigation }) => {
       </BodyMainContainer>
       <Footer>
         <SubmitButton
-          onPress={() =>
-            navigation.navigate("UpdateDevicePage", {
-              name: name,
-              phoneNumber: phoneNum,
-              personalNumber: registrationNum,
-             
-            })
+          onPress={async() =>
+            {
+              patchUpdateMutation.mutate({
+                newDeviceId: await DeviceInfo.getUniqueId(),
+                phonenum : phoneNum
+              })
+            }
+
           }
         >
-          <ButtonText>비밀번호 재설정 하기</ButtonText>
+          <ButtonText>로그인 하기</ButtonText>
         </SubmitButton>
       </Footer>
     </Root>

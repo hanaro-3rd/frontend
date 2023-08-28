@@ -10,7 +10,7 @@ const NotificationPage = () => {
   const [data, setData] = useState();
   const [type,setType] = useState("")
   const [createdAt,setCreatedAt] = useState("")
-  const [isModalVisible, setModalVisible] = useState(true);
+  const [isModalVisible, setModalVisible] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => {
       setModalVisible(false);

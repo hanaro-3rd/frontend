@@ -26,7 +26,7 @@ const UpdateDevicePage = ({ route }) => {
   const patchUpdateMutation = useMutation(patchUpdateDevice, {
     onSuccess: async response => {
       console.log(response.data);
-      navigation.navigate("LoginPage")
+      navigation.dispatch("LoginPage")
     },
     onError: error => {
       console.log('signup' + error);

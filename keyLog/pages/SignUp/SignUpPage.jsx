@@ -364,6 +364,10 @@ const SignUpPage = ({ navigation,route }) => {
           setModalVisible={setModalVisible}
           navigation={navigation}
           isFindPassword={isFindPassword}
+          setPersonalNumber={setPersonalNumber}
+          setPhoneNumber={setPhoneNumber}
+          setName={setName}
+          setOneNumber={setOneNumber}
         />
       </View>
     </ScrollView>

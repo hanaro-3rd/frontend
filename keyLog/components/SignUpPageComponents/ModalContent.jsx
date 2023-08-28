@@ -25,11 +25,20 @@ const ModalContent = ({
   name,
   setModalVisible,
   isFindPassword,
+  setOneNumber,
+  setName,
+  setPhoneNumber,
+  setPersonalNumber,
 }) => {
   const [errorCode, setErrorCode] = useState();
   const queryClient = useQueryClient();
   const postVerificationAuthMutation = useMutation(postVerificationAuth, {
     onSuccess: (response) => {
+      setInputText("")
+      setOneNumber("")
+      setName("")
+      setPersonalNumber("")
+      setPhoneNumber("")
       if (response.data.result.isExistUser) {
         if (isFindPassword == true) {
           console.log("isFindPassword true");

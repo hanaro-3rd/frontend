@@ -410,7 +410,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                       <Callout>
                         <CantGoMarkerView>
                           <MarkerKeymoneyText>{e.store}</MarkerKeymoneyText>
-                          <MarkerKeymoneyText>{e.price}JPY</MarkerKeymoneyText>
+                          <MarkerKeymoneyText>{e.price}</MarkerKeymoneyText>
                         </CantGoMarkerView>
                         <PolygonView>
                           <PolygonImage

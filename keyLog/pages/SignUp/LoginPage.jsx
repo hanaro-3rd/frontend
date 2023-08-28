@@ -19,7 +19,8 @@ const LoginPage = () => {
 
   const postSignInPasswordMutation = useMutation(postSigninPassword, {
     onSuccess: async response => {
-      if (loginError == false)
+      console.log(response.data,"로그인")
+      if (loginError == true)
       setLoginError(false)
       await storeAccessToken(response.headers.access_token);
       await storeRefreshToken(response.headers.refresh_token);
@@ -80,7 +81,8 @@ const LoginPage = () => {
       <View style={styles.body}>
         <View style={styles.bodyMain}>
           <View style={styles.textContainer}>
-            <Text style={styles.mainText}>비밀번호를 입력해주세요</Text>
+           
+            <Text style={styles.mainText}>로그인을 위해 비밀번호를 입력해주세요</Text>
             <PasswordSymbol password={password} />
             {loginError && (
               <Text style={{ color: "red" }}>비밀번호가 틀립니다</Text>
