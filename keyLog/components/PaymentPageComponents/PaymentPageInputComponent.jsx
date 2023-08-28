@@ -16,7 +16,6 @@ import {
   phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
-import DeleteHeader from "../Header/DeleteHeader";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getDetailKeymoneyHistory, updatepayment } from "../../api/api";
 
@@ -156,7 +155,7 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
     historyId,
     type,
     unitSymbol,
-    totalBalance
+    totalBalance,
   } = route.params;
   StatusBar.setTranslucent(true);
   const [openCategory, setOpenCategory] = useState(false);
@@ -213,7 +212,10 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
       console.log(response.data);
 
       // 결제 내역 업데이트가 성공하면 ForeignPayHistoryPage로 이동
-      navigation.navigate("ForeignPayHistoryPage", { unit, balance:totalBalance });
+      navigation.navigate("ForeignPayHistoryPage", {
+        unit,
+        balance: totalBalance,
+      });
     } catch (error) {
       // 에러 처리
     }
@@ -232,7 +234,11 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
   return (
     <Main categoryMode={openCategory}>
       <View>
-        <DeleteHeader navigation={navigation} to="KeyMoneyHistoryPage" />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <DeleteHeader>
+            <HeaderImage source={require("../../Images/삭제.png")} />
+          </DeleteHeader>
+        </TouchableOpacity>
         <TitleView>
           <TitleText>결제내역</TitleText>
         </TitleView>
@@ -358,6 +364,18 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
 };
 
 export default PaymentPageInputComponent;
+
+const DeleteHeader = styled.View`
+  width: ${phoneWidth}px;
+  height: ${heightPercentage(50)}px;
+  justify-content: center;
+  background-color: white;
+`;
+const HeaderImage = styled.Image`
+  margin-left: ${widthPercentage(12)}px;
+  width: ${widthPercentage(24)}px;
+  height: ${heightPercentage(24)}px;
+`;
 
 const Header = styled.View`
   width: 100%;
