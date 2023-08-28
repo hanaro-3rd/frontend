@@ -52,6 +52,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AlreadySignUpPage from "./pages/SignUp/AlreadySignUpPage";
 import TravelScheduleEditPage from "./pages/TravelBudget/TravelScheduleEditPage";
 import TravelBudgetPlanEditPage from "./pages/TravelBudget/TravelBudgetPlanEditPage";
+import SplashScreen from "react-native-splash-screen";
+
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -60,6 +62,17 @@ const App = () => {
   const [haveDeviceId, setHaveDeviceId] = useState(false);
   const [username, setUsername] = useRecoilState(usernameAtom);
   usePermissions();
+
+  useEffect(() => {
+    try {
+      setTimeout(() => {
+        SplashScreen.hide();
+      }, 2000); //스플래시 활성화 시간 2초
+    } catch (e) {
+      console.log(e.message);
+    }
+  });
+
   const { data } = useQuery(
     "registration",
     async () => getRegistrationDeviceId(await DeviceInfo.getUniqueId()),
