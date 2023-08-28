@@ -52,6 +52,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AlreadySignUpPage from "./pages/SignUp/AlreadySignUpPage";
 import TravelScheduleEditPage from "./pages/TravelBudget/TravelScheduleEditPage";
 import TravelBudgetPlanEditPage from "./pages/TravelBudget/TravelBudgetPlanEditPage";
+import NotificationPage from "./pages/NotificationPage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -126,12 +127,17 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName={
-            login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
-            // "LoginPage"
+            // login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
+            "NotificationPage"
 
             // "TravelBudgetPage"
           }
         >
+          <Stack.Screen
+            name ="NotificationPage"
+            component = {NotificationPage}
+            options = {{headerShown:false}}
+          />
           <Stack.Screen
             name="AlreadySignUpPage"
             component={AlreadySignUpPage}
