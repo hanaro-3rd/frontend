@@ -129,7 +129,7 @@ const TravelBudgetPaymentHistoryComponent = ({
 
         <PaymentTotalContainer>
           <UsedCostText>
-            결제금액 ￥
+            결제금액 {travelBudgetUnit}
             {categoryList.reduce((acc, cur) => {
               return (acc += cur.price);
             }, 0)}
