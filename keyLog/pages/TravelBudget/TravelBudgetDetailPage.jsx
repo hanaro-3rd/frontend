@@ -59,7 +59,12 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
   const [etcMarker, setEtcMarker] = useState([]);
   const queryClient = useQueryClient();
   const [isMarker, setIsMarker] = useState(false);
-  const [location, setLocation] = useState();
+  const [location, setLocation] = useState({
+    latitude: 37.545315,
+    longitude: 127.057088,
+    latitudeDelta: 3,
+    longitudeDelta: 3,
+  });
   const [isSelected, setIsSelected] = useState(false);
   const [travelBudget, setTravelBudget] = useState();
   const [timePaymentHistory, setTimePaymentHistory] = useState({});
@@ -95,7 +100,9 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
             } else {
               subObj[formatDate(key)] = [
                 ...subObj[formatDate(key)],
-                ...obj[key],
+                ...obj[key].filter(
+                  (e) => getCountryUnit(e.unit) == getMoneyUnit(country)
+                ),
               ];
             }
           }
@@ -123,7 +130,13 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
           const obj = response.data.result.categoryPaymentHistory;
           console.log(response.data.result.travelBudget.country, "맞아?");
           for (key in obj) {
-            if (obj[key].length > 0) {
+            if (
+              obj[key].filter(
+                (e) =>
+                  getCountryUnit(e.unit) ==
+                  getMoneyUnit(response.data.result.travelBudget.country)
+              ).length > 0
+            ) {
               setLocation({
                 longitude: obj[key][0].lng,
                 latitude: obj[key][0].lat,
@@ -470,7 +483,10 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                       <Callout>
                         <CantGoMarkerView>
                           <MarkerKeymoneyText>{e.store}</MarkerKeymoneyText>
-                          <MarkerKeymoneyText>{e.price}</MarkerKeymoneyText>
+                          <MarkerKeymoneyText>
+                            {e.price}
+                            {e.unit}
+                          </MarkerKeymoneyText>
                         </CantGoMarkerView>
                         <PolygonView>
                           <PolygonImage

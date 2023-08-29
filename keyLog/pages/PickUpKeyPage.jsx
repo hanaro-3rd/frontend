@@ -154,6 +154,9 @@ const PickUpKeyPage = ({ navigation }) => {
     }
   };
   const toggleUpDown = () => {
+    if (markerList.length == 0) {
+      return
+    }
     setUpDown(!upDown);
     setMarkerList((prevMarkerList) => {
       // Sort the prevMarkerList based on sortModal
@@ -354,6 +357,7 @@ const PickUpKeyPage = ({ navigation }) => {
                   lng: marker.lng,
                   isPickUp: marker.isPickUp,
                   unit: marker.unit,
+                  distance: marker.distance
                 });
               }}
             >
@@ -921,3 +925,4 @@ const customCalloutStyle = StyleSheet.create({
 });
 
 export default PickUpKeyPage;
+

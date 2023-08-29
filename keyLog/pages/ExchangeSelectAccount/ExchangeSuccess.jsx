@@ -28,6 +28,7 @@ const ExchangeSuccess = ({ navigation, route }) => {
     exchangeFromUnit,
     exchangeRate,
     changePrice,
+    isBought,
   } = route?.params;
   return (
     <View style={styles.root}>
@@ -59,7 +60,9 @@ const ExchangeSuccess = ({ navigation, route }) => {
                     <Text style={styles.koreaMoneyUnitText}>
                       {exchangeToUnit}
                     </Text>
-                    <Text style={styles.koreaMoneyText}>{exchangeToMoney}</Text>
+                    <Text style={styles.koreaMoneyText}>
+                      {exchangeToMoney.toLocaleString()}
+                    </Text>
                   </View>
                   <Image source={Vector} />
                   <View style={styles.foreignMoneyContainer}>
@@ -67,7 +70,7 @@ const ExchangeSuccess = ({ navigation, route }) => {
                       {exchangeFromUnit}
                     </Text>
                     <Text style={styles.foreignMoneyText}>
-                      {exchangeFromMoney}
+                      {exchangeFromMoney.toLocaleString()}
                     </Text>
                   </View>
                 </View>
