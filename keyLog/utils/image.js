@@ -45,6 +45,8 @@ export const close =
   "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/close.png";
 export const deleteIcon =
   "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/delete.png";
+export const edit =
+  "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/edit.png";
 export const markerBlue =
   "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/marker-blue.png";
 export const markderGray =
@@ -85,9 +87,18 @@ export const categoryShoppging =
   "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/category-shopping.png";
 export const categoryFood =
   "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/category-food.png";
+export const categoryTraffic =
+  "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/category-traffic.png";
 export const categoryHotel =
   "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/category-hotel.png";
 export const categoryCulture =
   "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/category-culture.png";
 export const categoryEtc =
   "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/category-etc.png";
+
+export const expandGray =
+  "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/expand-gray.png";
+export const reduceGray =
+  "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/reduce-gray.png";
+export const markerTail =
+  "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/marker-tail.png";

@@ -1,6 +1,4 @@
 import { StyleSheet, View, Text, Image } from "react-native";
-import Close from "../../assets/accountImg/CloseButton.png";
-import Fail from "../../assets/accountImg/AccountFail.png";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -10,6 +8,7 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
+import { Fail } from "../../utils/image";
 
 const AccountConnectFail = ({ navigation }) => {
   return (
@@ -24,7 +23,13 @@ const AccountConnectFail = ({ navigation }) => {
         </View>
         <View style={styles.bodyMain}>
           <View style={styles.mainIconContainer}>
-            <Image source={Fail} />
+            <Image
+              source={{ uri: Fail }}
+              style={{
+                width: widthPercentage(150),
+                height: heightPercentage(150),
+              }}
+            />
           </View>
           <View style={styles.exchangeInformationContainer}>
             <View style={styles.informationContainer}>

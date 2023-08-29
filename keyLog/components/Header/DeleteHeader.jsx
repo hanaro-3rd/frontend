@@ -6,6 +6,7 @@ import {
   phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
+import { close, deleteIcon } from "../../utils/image";
 const DeleteHeader = ({ navigation, to }) => {
   const Header = styled.View`
     width: ${phoneWidth}px;
@@ -21,7 +22,7 @@ const DeleteHeader = ({ navigation, to }) => {
   return (
     <TouchableOpacity onPress={() => navigation.navigate(to)}>
       <Header>
-        <HeaderImage source={require("../../Images/삭제.png")} />
+        <HeaderImage source={{ uri: close }} />
       </Header>
     </TouchableOpacity>
   );

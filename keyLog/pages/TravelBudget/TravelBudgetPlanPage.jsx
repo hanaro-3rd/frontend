@@ -19,6 +19,15 @@ import EtcIcon from "../../assets/travelBudget/EtcIcon.png";
 import arrow_back from "../../assets/travelBudget/arrow_back.png";
 import { useMutation, useQueryClient } from "react-query";
 import { postTravelBudget } from "../../api/api";
+import {
+  arrowBack,
+  categoryCulture,
+  categoryEtc,
+  categoryFood,
+  categoryHotel,
+  categoryShoppging,
+  categoryTraffic,
+} from "../../utils/image";
 
 const RootScrollView = styled.ScrollView`
   /* margin-top: ${getStatusBarHeight}px; */
@@ -368,7 +377,13 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
     <RootScrollView>
       <Header>
         <TouchableOpacity onPress={handleGoBackToSchedulePage}>
-          <Image source={arrow_back} />
+          <Image
+            source={{ uri: arrowBack }}
+            style={{
+              width: widthPercentage(24),
+              height: heightPercentage(24),
+            }}
+          />
         </TouchableOpacity>
       </Header>
       <Body>
@@ -381,7 +396,14 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
             <BudgetContainer>
               <CategoryContainer>
                 <Icon>
-                  <Image source={FoodIcon} />
+                  <Image
+                    source={{ uri: categoryFood }}
+                    style={{
+                      width: widthPercentage(30),
+                      height: heightPercentage(30),
+                    }}
+                    resizeMode="contain"
+                  />
                 </Icon>
                 <CategoryText>식비</CategoryText>
               </CategoryContainer>
@@ -404,7 +426,14 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
             <BudgetContainer>
               <CategoryContainer>
                 <Icon>
-                  <Image source={TransIcon} />
+                  <Image
+                    source={{ uri: categoryTraffic }}
+                    style={{
+                      width: widthPercentage(30),
+                      height: heightPercentage(30),
+                    }}
+                    resizeMode="contain"
+                  />
                 </Icon>
                 <CategoryText>교통</CategoryText>
               </CategoryContainer>
@@ -427,7 +456,14 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
             <BudgetContainer>
               <CategoryContainer>
                 <Icon>
-                  <Image source={HouseIcon} />
+                  <Image
+                    source={{ uri: categoryHotel }}
+                    style={{
+                      width: widthPercentage(30),
+                      height: heightPercentage(30),
+                    }}
+                    resizeMode="contain"
+                  />
                 </Icon>
                 <CategoryText>숙박</CategoryText>
               </CategoryContainer>
@@ -450,7 +486,14 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
             <BudgetContainer>
               <CategoryContainer>
                 <Icon>
-                  <Image source={ShopIcon} />
+                  <Image
+                    source={{ uri: categoryShoppging }}
+                    style={{
+                      width: widthPercentage(30),
+                      height: heightPercentage(30),
+                    }}
+                    resizeMode="contain"
+                  />
                 </Icon>
                 <CategoryText>쇼핑 · 편의점 · 마트</CategoryText>
               </CategoryContainer>
@@ -473,7 +516,14 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
             <BudgetContainer>
               <CategoryContainer>
                 <Icon>
-                  <Image source={PlayIcon} />
+                  <Image
+                    source={{ uri: categoryCulture }}
+                    style={{
+                      width: widthPercentage(30),
+                      height: heightPercentage(30),
+                    }}
+                    resizeMode="contain"
+                  />
                 </Icon>
                 <CategoryText>문화 · 여가</CategoryText>
               </CategoryContainer>
@@ -496,7 +546,14 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
             <BudgetContainer>
               <CategoryContainer>
                 <Icon>
-                  <Image source={EtcIcon} />
+                  <Image
+                    source={{ uri: categoryEtc }}
+                    style={{
+                      width: widthPercentage(30),
+                      height: heightPercentage(30),
+                    }}
+                    resizeMode="contain"
+                  />
                 </Icon>
                 <CategoryText>기타</CategoryText>
               </CategoryContainer>

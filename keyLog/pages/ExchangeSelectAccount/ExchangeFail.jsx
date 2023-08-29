@@ -1,6 +1,4 @@
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
-import Close from "../../assets/accountImg/CloseButton.png";
-import FailImg from "../../assets/exchangeImg/Fail.png";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -10,6 +8,7 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
+import { Fail } from "../../utils/image";
 
 const ExchangeFail = ({ navigation }) => {
   const handleAgain = () => {
@@ -28,7 +27,13 @@ const ExchangeFail = ({ navigation }) => {
         </View>
         <View style={styles.bodyMain}>
           <View style={styles.mainIconContainer}>
-            <Image source={FailImg} />
+            <Image
+              source={{ uri: Fail }}
+              style={{
+                width: widthPercentage(150),
+                height: heightPercentage(150),
+              }}
+            />
           </View>
         </View>
       </View>
