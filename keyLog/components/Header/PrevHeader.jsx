@@ -20,13 +20,11 @@ const PrevHeader = ({ navigation, to }) => {
     height: ${heightPercentage(24)}px;
   `;
   return (
-    <TouchableOpacity onPress={() => navigation.navigate(to)}>
-      <Header>
-        <HeaderImage
-          source={{uri:arrowBack}}
-        />
-      </Header>
-    </TouchableOpacity>
+    <Header>
+      <TouchableOpacity onPress={() => navigation.navigate(to)}>
+        <HeaderImage source={{ uri: arrowBack }} />
+      </TouchableOpacity>
+    </Header>
   );
 };
 

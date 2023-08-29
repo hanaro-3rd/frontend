@@ -12,7 +12,7 @@ import { Fail } from "../../utils/image";
 
 const ExchangeFail = ({ navigation }) => {
   const handleAgain = () => {
-    navigation.navigate("ExchangePage");
+    navigation.goBack();
   };
 
   return (
@@ -33,6 +33,7 @@ const ExchangeFail = ({ navigation }) => {
                 width: widthPercentage(150),
                 height: heightPercentage(150),
               }}
+              resizeMode="contain"
             />
           </View>
         </View>

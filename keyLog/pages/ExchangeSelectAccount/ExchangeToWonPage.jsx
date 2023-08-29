@@ -42,6 +42,7 @@ import { useDebouncedEffect } from "../../hooks/useDebouncedEffect";
 import { integerUnit, minimumUnit } from "../../utils/ExchangeSentence";
 import styled from "styled-components/native";
 import {
+  close,
   euFlag,
   expandGray,
   japanFlag,
@@ -196,7 +197,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
-            source={require("../../Images/삭제.png")}
+            source={{ uri: close }}
             style={{ width: widthPercentage(24), height: heightPercentage(24) }}
           />
         </TouchableOpacity>
@@ -343,6 +344,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                 value={foreignTextInput}
                 onChangeText={(text) => foreignInputChange(text)}
                 placeholder={placeholderText}
+                placeholderTextColor="#b0b8c1"
                 keyboardType="numeric"
                 style={{ textAlign: "right" }}
               />
@@ -354,6 +356,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                   paddingHorizontal: 10,
                   borderRadius: 5,
                   paddingVertical: 5,
+                  backgroundColor: "#fff",
                 }}
               >
                 <Text style={{ color: `#55ACEE` }}>전액</Text>
