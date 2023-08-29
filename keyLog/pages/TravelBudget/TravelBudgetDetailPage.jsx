@@ -528,9 +528,6 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
             />
           )}
         </MapImage>
-        {/* <DropImage
-          source={require("../../assets/travelBudget/Header-Back.png")}
-        /> */}
         <BodyMain>
           <TotalBudgetContainer>
             <View style={styles.planpayContainer}>

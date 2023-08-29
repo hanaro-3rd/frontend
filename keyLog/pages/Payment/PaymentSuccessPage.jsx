@@ -16,7 +16,7 @@ const PaymentSuccessPage = ({ route, navigation }) => {
   const { storeTitle, category, moneyText, unit, memoText } = route?.params;
   return (
     <Root>
-      <DeleteHeader navigation={navigation} to="MainPage"/>
+      <DeleteHeader navigation={navigation} to="MainPage" />
       <BodyContainer>
         <BodyHeader>
           <BodyHeaderTitle>결제 완료</BodyHeaderTitle>
@@ -27,9 +27,10 @@ const PaymentSuccessPage = ({ route, navigation }) => {
             <Image
               source={{ uri: paymentSuccess }}
               style={{
-            width: widthPercentage(162.269),
-            height: heightPercentage(129.167),
-          }}
+                width: widthPercentage(162.269),
+                height: heightPercentage(129.167),
+              }}
+              resizeMode="contain"
             />
           </CreditImageContainer>
           <InfoContainer>

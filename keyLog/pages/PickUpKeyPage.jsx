@@ -37,6 +37,7 @@ import {
   expandGray,
   keyCircle,
   markerBlue,
+  markerTail,
   placeCircle,
 } from "../utils/image";
 const PickUpKeyPage = ({ navigation }) => {
@@ -392,7 +393,7 @@ const PickUpKeyPage = ({ navigation }) => {
                 </MarkerView>
 
                 <PolygonView>
-                  <PolygonImage source={require("../Images/polygon.png")} />
+                  <PolygonImage source={{ uri: markerTail }} />
                 </PolygonView>
               </Callout>
             </Marker>
@@ -553,9 +554,7 @@ const PickUpKeyPage = ({ navigation }) => {
                     <Text style={{ fontSize: 13, color: "#191F29" }}>
                       오름차순
                     </Text>
-                    <View
-                      style={{ marginLeft: 5, marginTop: 3 }}
-                    >
+                    <View style={{ marginLeft: 5, marginTop: 3 }}>
                       <Text>▲</Text>
                     </View>
                   </TouchableOpacity>
@@ -570,9 +569,7 @@ const PickUpKeyPage = ({ navigation }) => {
                     onPress={toggleUpDown}
                   >
                     <Text style={{ fontSize: 13 }}>내림차순</Text>
-                    <View
-                      style={{ marginLeft: 5, marginTop: 3 }}
-                    >
+                    <View style={{ marginLeft: 5, marginTop: 3 }}>
                       <Text>▼</Text>
                     </View>
                   </TouchableOpacity>

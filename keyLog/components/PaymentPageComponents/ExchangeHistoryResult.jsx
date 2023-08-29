@@ -19,6 +19,7 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 import { getDetailKeymoneyHistory } from "../../api/api";
+import { close, exchangeImage } from "../../utils/image";
 
 export const ExchangeHistoryResult = ({ route, navigation }) => {
   const { keymoney, unit, time, historyId, type, totalBalance, isBoughtText } =
@@ -48,7 +49,7 @@ export const ExchangeHistoryResult = ({ route, navigation }) => {
     <View style={styles.root}>
       <DeleteHeader>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <HeaderImage source={require("../../Images/삭제.png")} />
+          <HeaderImage source={{ uri: close }} />
         </TouchableOpacity>
       </DeleteHeader>
 
@@ -61,7 +62,7 @@ export const ExchangeHistoryResult = ({ route, navigation }) => {
         <View style={styles.bodyMain}>
           <View style={styles.frame79}>
             <Image
-              source={require("../../assets/History/환전.png")}
+              source={{ uri: exchangeImage }}
               style={{ width: 40, height: 40 }}
             />
             <View style={styles.wheretochange}>
