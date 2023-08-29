@@ -91,3 +91,8 @@ export const categoryCulture =
   "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/category-culture.png";
 export const categoryEtc =
   "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/category-etc.png";
+
+export const expandGray =
+  "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/expand-gray.png";
+export const reduceGray =
+  "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/reduce-gray.png";

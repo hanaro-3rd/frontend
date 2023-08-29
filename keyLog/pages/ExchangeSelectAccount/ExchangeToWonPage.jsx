@@ -41,6 +41,13 @@ import _ from "lodash";
 import { useDebouncedEffect } from "../../hooks/useDebouncedEffect";
 import { integerUnit, minimumUnit } from "../../utils/ExchangeSentence";
 import styled from "styled-components/native";
+import {
+  euFlag,
+  expandGray,
+  japanFlag,
+  koreaFlag,
+  usaFlag,
+} from "../../utils/image";
 
 export const ExchangeToWonPage = ({ route, navigation }) => {
   const [accountList, setAccountList] = useState([]);
@@ -98,13 +105,10 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
           : Keyunit == "JPY"
           ? (setExchangeRate(response.data.result.jpy.exchangeRate / 100),
             setChangePrice(response.data.result.jpy.changePrice))
-          : Keyunit=="EUR" ? (setExchangeRate(response.data.result.eur.exchangeRate),
+          : Keyunit == "EUR"
+          ? (setExchangeRate(response.data.result.eur.exchangeRate),
             setChangePrice(response.data.result.eur.changePrice))
-            : (
-              setExchangeRate(1),
-            setChangePrice(1)
-            )
-            ;
+          : (setExchangeRate(1), setChangePrice(1));
         setApiTime(response.data.result.updatedAt);
       },
       onError: (error) => {
@@ -201,7 +205,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
               <TouchableOpacity>
                 <Collapse
                   isExpanded={expanded}
-                  onToggle={(isExpanded) => setExpanded({ isExpanded: false })}
+                  onToggle={() => setExpanded(!expanded)} // 수정된 부분: expanded 값을 토글
                 >
                   <CollapseHeader>
                     <View style={styles.countrySelect1}>
@@ -210,9 +214,24 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                           ? selectedAccount
                           : "계좌를 선택해주세요"}
                       </Text>
-                      <Image
-                        source={require("../../assets/exchangeImg/SelectButton.png")}
-                      />
+                      {expanded ? (
+                        <Image
+                          source={{ uri: expandGray }}
+                          style={{
+                            width: widthPercentage(30),
+                            height: heightPercentage(15),
+                            transform: [{ rotate: `${180}deg` }],
+                          }}
+                        />
+                      ) : (
+                        <Image
+                          source={{ uri: expandGray }}
+                          style={{
+                            width: widthPercentage(30),
+                            height: heightPercentage(15),
+                          }}
+                        />
+                      )}
                     </View>
                   </CollapseHeader>
                   <CollapseBody>
@@ -250,7 +269,11 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
               >
                 <Text style={styles.placeholder}>계좌를 선택해주세요</Text>
                 <Image
-                  source={require("../../assets/exchangeImg/SelectButton.png")}
+                  source={{ uri: expandGray }}
+                  style={{
+                    width: widthPercentage(30),
+                    height: heightPercentage(15),
+                  }}
                 />
               </TouchableOpacity>
             )}
@@ -272,7 +295,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
               <View style={styles.textContainer}>
                 {Keyunit == "USD" ? (
                   <Image
-                    source={require("../../assets/exchangeImg/USD.png")}
+                    source={{ uri: usaFlag }}
                     style={{
                       width: widthPercentage(32),
                       height: heightPercentage(30),
@@ -280,7 +303,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                   />
                 ) : Keyunit == "JPY" ? (
                   <Image
-                    source={require("../../assets/exchangeImg/Japan.png")}
+                    source={{ uri: japanFlag }}
                     style={{
                       width: widthPercentage(32),
                       height: heightPercentage(30),
@@ -288,7 +311,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                   />
                 ) : Keyunit == "EUR" ? (
                   <Image
-                    source={require("../../assets/exchangeImg/EUR.png")}
+                    source={{ uri: euFlag }}
                     style={{
                       width: widthPercentage(32),
                       height: heightPercentage(30),
@@ -296,7 +319,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                   />
                 ) : (
                   <Image
-                    source={require("../../assets/exchangeImg/Korea.png")}
+                    source={{ uri: koreaFlag }}
                     style={{
                       width: widthPercentage(32),
                       height: heightPercentage(30),
@@ -344,16 +367,32 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                     <CollapseHeader>
                       <View style={styles.countrySelect2}>
                         <Image
-                          source={require("../../assets/exchangeImg/Korea.png")}
+                          source={{ uri: koreaFlag }}
                           style={{
                             width: widthPercentage(32),
                             height: heightPercentage(30),
+                            marginLeft: widthPercentage(7),
                           }}
                         />
                         <Text style={styles.unitText}>KRW</Text>
-                        <Image
-                          source={require("../../assets/exchangeImg/SelectButton.png")}
-                        />
+                        {expanded ? (
+                          <Image
+                            source={{ uri: expandGray }}
+                            style={{
+                              width: widthPercentage(30),
+                              height: heightPercentage(15),
+                              transform: [{ rotate: `${180}deg` }],
+                            }}
+                          />
+                        ) : (
+                          <Image
+                            source={{ uri: expandGray }}
+                            style={{
+                              width: widthPercentage(30),
+                              height: heightPercentage(15),
+                            }}
+                          />
+                        )}
                       </View>
                     </CollapseHeader>
                   </Collapse>
@@ -396,7 +435,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                     : ""}
                 </Text>
               </View>
-              
+
               <View style={styles.currentExchangeRateContainer}>
                 <View style={styles.countryInformationContainer}>
                   <Text style={styles.countryText}>
@@ -767,7 +806,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     backgroundColor: "#FFF",
     flexDirection: "row",
-    paddingHorizontal: widthPercentage(40),
+    paddingHorizontal: widthPercentage(45),
     borderRadius: 10,
   },
   accountLists: {

@@ -19,6 +19,7 @@ import {
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
 import { styled } from "styled-components/native";
+import { connectSuccess, exchangeSucess } from "../../utils/image";
 const ExchangeSuccess = ({ navigation, route }) => {
   const {
     exchangeToUnit,
@@ -42,8 +43,11 @@ const ExchangeSuccess = ({ navigation, route }) => {
           <View style={styles.bodyMain}>
             <View style={styles.mainIconContainer}>
               <Image
-                source={Success}
-                style={{ width: 100, height: 100 }}
+                source={{ uri: exchangeSucess }}
+                style={{
+                  width: widthPercentage(150),
+                  height: heightPercentage(150),
+                }}
                 resizeMode="contain"
               />
             </View>
@@ -104,7 +108,7 @@ const ExchangeSuccess = ({ navigation, route }) => {
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.submitButton}
-          onPress={() => navigation.navigate("MainPage")}
+          onPress={() => navigation.navigate("KeyMoneyHistoryPage")}
         >
           <Text style={styles.buttonText}>하나머니 확인하기</Text>
         </TouchableOpacity>
