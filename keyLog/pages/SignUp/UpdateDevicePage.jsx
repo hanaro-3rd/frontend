@@ -26,7 +26,7 @@ const UpdateDevicePage = ({ route }) => {
   const patchUpdateMutation = useMutation(patchUpdateDevice, {
     onSuccess: async response => {
       console.log(response.data);
-      navigation.replace("LoginPage")
+      navigation.dispatch("LoginPage")
     },
     onError: error => {
       console.log('signup' + error);
@@ -110,6 +110,9 @@ const UpdateDevicePage = ({ route }) => {
     }
   }, [isPasswordMismatch]);
 
+  const goToMainPage = () => {
+    navigation.navigate("MainPage");
+  };
   return (
     <View style={styles.root}>
       <View style={styles.header}></View>

@@ -36,12 +36,13 @@ import Swiper from "react-native-swiper";
 import { useRecoilState } from "recoil";
 import { usernameAtom } from "../recoil/usernameAtom";
 import { useQuery, useQueryClient } from "react-query";
-import { getExchange } from "../api/api";
+import { getExchange, getRegistrationDeviceId } from "../api/api";
 import Modal from "react-native-modal";
 import NotificationPage from "./NotificationPage";
+import DeviceInfo from "react-native-device-info";
 
 const MainPage = ({ navigation }) => {
-  const [username, setUsername] = useRecoilState(usernameAtom);
+  const [username, setUsername] = useState();
   const [USD, setUSD] = useState();
   const [EUR, setEUR] = useState();
   const [JPY, setJPY] = useState();
@@ -410,9 +411,9 @@ const MainPage = ({ navigation }) => {
     align-self: stretch;
     flex-direction: row;
   `;
-
+  const [isLoading,setIsLoading] = useState(true)
   const queryClient = useQueryClient();
-  const { data } = useQuery("exchange", async () => getExchange(), {
+  const { data2 } = useQuery("exchange", async () => getExchange(), {
     onSuccess: (response) => {
       console.log(response.data, "메인환율");
       setUSD(response.data.result.usd);
@@ -464,7 +465,28 @@ const MainPage = ({ navigation }) => {
       }
     });
   };
-
+  const {data} = useQuery(
+    "findUsername",
+    async () => getRegistrationDeviceId(await DeviceInfo.getUniqueId()),
+    {
+      //DeviceId가 존재할떄
+      onSuccess: async (response) => {
+        
+        // console.log(JSON.stringify(response));
+        console.log(response.data)
+        console.log(response.data,"mainPage");
+        setUsername(response.data.result.name);
+       
+      },
+      //DeviceId가 존재하지 않을 때
+      onError: async (error) => {
+   
+      },
+    }
+  );
+  useEffect(()=>{
+    queryClient.invalidateQueries("findUsername")
+  },[])
   // const handleHanaServiceLink = (serviceName) => {
   //   let url;
 
