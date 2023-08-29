@@ -26,6 +26,7 @@ import {
 } from "accordion-collapse-react-native";
 import { useQueryClient, useQuery } from "react-query";
 import { getAccount, getExchange } from "../../api/api";
+import { euFlag, expandGray, japanFlag, usaFlag } from "../../utils/image";
 
 export const CountryChoiceComponent = ({
   setSelectedMoney,
@@ -40,17 +41,17 @@ export const CountryChoiceComponent = ({
   const [list, setList] = useState([
     {
       name: "USD",
-      country_url: require("../../assets/exchangeImg/USD.png"),
+      country_url: { uri: usaFlag },
       minimum: 10,
     },
     {
       name: "JPY",
-      country_url: require("../../assets/exchangeImg/Japan.png"),
+      country_url: { uri: japanFlag },
       minimum: 1000,
     },
     {
       name: "EUR",
-      country_url: require("../../assets/exchangeImg/EUR.png"),
+      country_url: { uri: euFlag },
       minimum: 10,
     },
   ]);
@@ -62,7 +63,7 @@ export const CountryChoiceComponent = ({
       setList([
         {
           name: "USD",
-          country_url: require("../../assets/exchangeImg/USD.png"),
+          country_url: { uri: usaFlag },
           exchangeRate: response.data.result.usd.exchangeRate,
           changePrice: response.data.result.usd.changePrice,
           minimum: 10,
@@ -70,7 +71,7 @@ export const CountryChoiceComponent = ({
         },
         {
           name: "JPY",
-          country_url: require("../../assets/exchangeImg/Japan.png"),
+          country_url: { uri: japanFlag },
           exchangeRate: response.data.result.jpy.exchangeRate / 1000,
           changePrice: response.data.result.jpy.changePrice,
           minimum: 1000,
@@ -78,7 +79,7 @@ export const CountryChoiceComponent = ({
         },
         {
           name: "EUR",
-          country_url: require("../../assets/exchangeImg/EUR.png"),
+          country_url: { uri: euFlag },
           exchangeRate: response.data.result.eur.exchangeRate,
           changePrice: response.data.result.eur.changePrice,
           minimum: 10,
@@ -123,12 +124,20 @@ export const CountryChoiceComponent = ({
               <Text style={styles.unitText}>{selectedCountry?.name}</Text>
               {expanded ? (
                 <Image
-                  source={require("../../assets/exchangeImg/SelectButton.png")}
-                  style={{ transform: [{ rotate: `${180}deg` }] }}
+                  source={{ uri: expandGray }}
+                  style={{
+                    width: widthPercentage(30),
+                    height: heightPercentage(15),
+                    transform: [{ rotate: `${180}deg` }],
+                  }}
                 />
               ) : (
                 <Image
-                  source={require("../../assets/exchangeImg/SelectButton.png")}
+                  source={{ uri: expandGray }}
+                  style={{
+                    width: widthPercentage(30),
+                    height: heightPercentage(15),
+                  }}
                 />
               )}
             </View>
@@ -180,7 +189,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     backgroundColor: "#FFF",
     flexDirection: "row",
-    paddingHorizontal: widthPercentage(15),
+    paddingHorizontal: widthPercentage(10),
     borderRadius: 10,
   },
   countrySelectRow: {

@@ -37,6 +37,7 @@ import {
 import _ from "lodash";
 import { useDebouncedEffect } from "../../hooks/useDebouncedEffect";
 import { integerUnit, minimumUnit } from "../../utils/ExchangeSentence";
+import { expandGray, koreaFlag } from "../../utils/image";
 export const ExchangePage = () => {
   const [accountList, setAccountList] = useState([]);
   const inputRef = useRef(null);
@@ -301,12 +302,20 @@ export const ExchangePage = () => {
                         </Text>
                         {expanded ? (
                           <Image
-                            source={require("../../assets/exchangeImg/SelectButton.png")}
-                            style={{ transform: [{ rotate: `${180}deg` }] }}
+                            source={{ uri: expandGray }}
+                            style={{
+                              width: widthPercentage(30),
+                              height: heightPercentage(15),
+                              transform: [{ rotate: `${180}deg` }],
+                            }}
                           />
                         ) : (
                           <Image
-                            source={require("../../assets/exchangeImg/SelectButton.png")}
+                            source={{ uri: expandGray }}
+                            style={{
+                              width: widthPercentage(30),
+                              height: heightPercentage(15),
+                            }}
                           />
                         )}
                       </View>
@@ -348,7 +357,11 @@ export const ExchangePage = () => {
                 >
                   <Text style={styles.placeholder}>계좌를 선택해주세요</Text>
                   <Image
-                    source={require("../../assets/exchangeImg/SelectButton.png")}
+                    source={{ uri: expandGray }}
+                    style={{
+                      width: widthPercentage(30),
+                      height: heightPercentage(15),
+                    }}
                   />
                 </TouchableOpacity>
               )}
@@ -372,7 +385,11 @@ export const ExchangePage = () => {
               <View style={styles.koreaWonContainer}>
                 <View style={styles.textContainer}>
                   <Image
-                    source={require("../../assets/exchangeImg/Korea.png")}
+                    source={{ uri: koreaFlag }}
+                    style={{
+                      width: widthPercentage(30),
+                      height: heightPercentage(30),
+                    }}
                   />
                   <Text style={styles.unitText2}>KRW</Text>
                 </View>
@@ -612,8 +629,8 @@ const styles = StyleSheet.create({
     height: 32,
   },
   foreignCurrencyContainer: {
-    alignItems: "flex-start",
     gap: 10,
+    alignItems: "flex-start",
     alignSelf: "stretch",
     flexDirection: "row",
   },
