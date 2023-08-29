@@ -39,7 +39,6 @@ import {
   check,
 } from "../../utils/image";
 
-
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
   /* padding-top: ${getStatusBarHeight}px; */
@@ -572,7 +571,9 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                 {items.filter(
                   (item) =>
                     filter === "all" ||
-                    (filter === "payment" && item.type === "payment") ||
+                    (filter === "payment" &&
+                      (item.type === "payment" ||
+                        item.subject === "원화 환전")) ||
                     (filter === "exchangeOrMarker" &&
                       (item.type === "exchange" || item.type === "marker"))
                 ).length > 0 && (
@@ -584,7 +585,7 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                           (item.type === "exchange" ||
                             item.type === "marker")) ||
                         (filter === "exchangeOrMarker" &&
-                          item.type === "payment")
+                          (item.type === "payment" || item.type === "marker"))
                       ) {
                         return null;
                       }
@@ -693,7 +694,9 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                 {items.filter(
                   (item) =>
                     filter === "all" ||
-                    (filter === "payment" && item.type === "payment") ||
+                    (filter === "payment" &&
+                      (item.type === "payment" ||
+                        item.subject === "원화 환전")) ||
                     (filter === "exchangeOrMarker" &&
                       (item.type === "exchange" || item.type === "marker"))
                 ).length === 0 && <Text>내역이 없습니다.</Text>}
