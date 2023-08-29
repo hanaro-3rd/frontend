@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import DeviceInfo from "react-native-device-info";
 import Modal from "react-native-modal";
 import { useMutation, useQueryClient } from "react-query";
 import { postVerification, postVerificationAuth } from "../../api/api";
@@ -34,31 +35,40 @@ const ModalContent = ({
   const queryClient = useQueryClient();
   const postVerificationAuthMutation = useMutation(postVerificationAuth, {
     onSuccess: (response) => {
+      console.log("isExist데이터",response.data)
       setInputText("")
       setOneNumber("")
       setName("")
       setPersonalNumber("")
       setPhoneNumber("")
-      if (response.data.result.isExistUser) {
-        if (isFindPassword == true) {
-          console.log("isFindPassword true");
-          navigation.replace("FindPasswordPage", {
-            phoneNumber,
-            personalNumber, 
-            name,
-          });
-        } else {
-          console.log(response.data.result.userResponseDto);
-          navigation.replace(
-            "AlreadySignUpPage",
-            response.data.result.userResponseDto
-          );
-        }
-      } else {
+      const isExistUser = response.data.result.isExistUser
+      const isExistDevice = response.data.result.isExistDevice
+      if (isExistUser == true && isExistDevice == true) { //번호이동
+        console.log("findPAssword 이동")
+        navigation.replace("FindPasswordPage", {
+          phoneNumber,
+          personalNumber, 
+          name,
+        });
+      }
+      if (isExistUser == true && isExistDevice == false) { //기기변경
+        console.log(response.data.result.userResponseDto);
+        navigation.replace(
+          "AlreadySignUpPage",
+          response.data.result.userResponseDto
+        );
+      }
+      if (isExistUser == false && isExistDevice == true) { //회원가입
         queryClient.invalidateQueries("verificationAuth");
         setModalVisible(false);
         goToLoginPasswordPage();
       }
+      if (isExistUser == false && isExistDevice == false) { //회원가입
+        queryClient.invalidateQueries("verificationAuth");
+        setModalVisible(false);
+        goToLoginPasswordPage();
+      }
+  
     },
     onError: (error) => {
       console.log(error.response);
@@ -72,6 +82,7 @@ const ModalContent = ({
     postVerificationAuthMutation.mutate({
       code: inputText,
       phonenum: phoneNumber,
+      deviceId : await DeviceInfo.getUniqueId()
     });
   };
   const handleTogglemodal = () => {
