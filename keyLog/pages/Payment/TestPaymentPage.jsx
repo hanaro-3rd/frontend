@@ -494,7 +494,7 @@ const TestPaymentPage = ({ navigation, route }) => {
                       }}
                       onFocus={() => {}}
                       style={{
-                        width: widthPercentage(110),
+                        width: widthPercentage(120),
                         color: unit ? "#000" : "#b0b8c1",
                         textAlign: "right",
                       }}

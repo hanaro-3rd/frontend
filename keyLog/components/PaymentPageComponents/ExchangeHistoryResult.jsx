@@ -46,11 +46,12 @@ export const ExchangeHistoryResult = ({ route, navigation }) => {
   };
   return (
     <View style={styles.root}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <DeleteHeader>
+      <DeleteHeader>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <HeaderImage source={require("../../Images/삭제.png")} />
-        </DeleteHeader>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </DeleteHeader>
+
       <View style={styles.bodyHeader}>
         <View style={styles.frame76}>
           <Text style={styles.____}>환전 내역</Text>

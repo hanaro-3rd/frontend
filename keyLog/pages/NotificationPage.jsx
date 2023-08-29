@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button,Image } from "react-native";
+import { View, Text, Button, Image } from "react-native";
 import { Client } from "@stomp/stompjs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Modal from "react-native-modal";
@@ -8,8 +8,8 @@ const SOCKET_URL = "ws://172.16.20.76:8083/ws"; // WebSocket 서버 주소
 
 const NotificationPage = () => {
   const [data, setData] = useState();
-  const [type,setType] = useState("")
-  const [createdAt,setCreatedAt] = useState("")
+  const [type, setType] = useState("");
+  const [createdAt, setCreatedAt] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -33,17 +33,15 @@ const NotificationPage = () => {
         reconnectDelay: 10000,
         onConnect: () => {
           console.log("connected");
-          client.subscribe("/sub/channel/keylog", async (message) =>
-          {  let messageBody = JSON.parse(message.body)
-             console.log(messageBody.data,"뭐지")
-            setData(messageBody.data)
-            setType(messageBody.type)
-            setCreatedAt(messageBody.createdAt.substring(0,10))
-            setModalVisible(true)
-            console.log(`Received: ${message.body}`)
-          }
-       
-          );
+          client.subscribe("/sub/channel/keylog", async (message) => {
+            let messageBody = JSON.parse(message.body);
+            console.log(messageBody.data, "뭐지");
+            setData(messageBody.data);
+            setType(messageBody.type);
+            setCreatedAt(messageBody.createdAt.substring(0, 10));
+            setModalVisible(true);
+            console.log(`Received: ${message.body}`);
+          });
           client.publish({
             destination: "/pub/alarm",
             body: JSON.stringify({ sender: "soo", type: "HI" }),
@@ -56,7 +54,7 @@ const NotificationPage = () => {
 
       client.activate();
     };
-    
+
     setupWebSocket(); // 비동기 함수를 바로 호출
 
     return () => {
@@ -95,24 +93,36 @@ const NotificationPage = () => {
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
-          
+
           elevation: 3,
         }}
-      ><View style={{width:"80%",flexDirection:"row",alignItems:"center"}}>
-        <Image
-          source={{ uri: exchangeSucess }}
-          style={{ width: 60, height: 60,marginLeft:10 }}
-        />
-        <View style={{ justifyContent: "space-between", height: 50,marginLeft:10, }}>
-          <Text style={{ color: "#191F29", fontSize: 16, fontWeight: 700 }}>
-            {type}
-          </Text>
-          <Text>{data}</Text>
+      >
+        <View
+          style={{ width: "75%", flexDirection: "row", alignItems: "center" }}
+        >
+          <Image
+            source={{ uri: exchangeSucess }}
+            style={{ width: 60, height: 60, marginLeft: 10 }}
+          />
+          <View
+            style={{
+              justifyContent: "space-between",
+              height: 50,
+              marginLeft: 10,
+            }}
+          >
+            <Text style={{ color: "#191F29", fontSize: 16, fontWeight: 700 }}>
+              {type}
+            </Text>
+            <Text>{data}</Text>
+          </View>
         </View>
-      </View>
 
-        <View style={{ height: 50,width:"40%",marginRight:20 }}>
-          <Text>{createdAt}{" "}</Text>
+        <View style={{ height: 50, width: "40%", marginRight: 20 }}>
+          <Text>
+            {createdAt}
+            {""}
+          </Text>
         </View>
       </View>
     </Modal>

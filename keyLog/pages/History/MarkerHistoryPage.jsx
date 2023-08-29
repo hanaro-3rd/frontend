@@ -102,17 +102,18 @@ const MarkerHistoryPage = ({ route, navigation }) => {
   return (
     <Main>
       <View>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <DeleteHeader>
-            <HeaderImage source={{uri:close}} />
-          </DeleteHeader>
-        </TouchableOpacity>
+        <DeleteHeader>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <HeaderImage source={{ uri: close }} />{" "}
+          </TouchableOpacity>
+        </DeleteHeader>
+
         <TitleView>
           <TitleText>마커 줍기 내역</TitleText>
         </TitleView>
         <MainComponent>
           <InfoContainer>
-            <CategoryTitleImage source={{uri:keymoneyCoin}} />
+            <CategoryTitleImage source={{ uri: keymoneyCoin }} />
             <NameText>{subject}</NameText>
           </InfoContainer>
           <DetailContainer>

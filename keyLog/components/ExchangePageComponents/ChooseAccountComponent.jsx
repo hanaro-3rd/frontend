@@ -42,11 +42,11 @@ const ChooseAccountComponent = ({ navigate, route }) => {
   return (
     <View style={styles.root}>
       <View>
-        <TouchableOpacity onPress={closeChooseAccountComponent}>
-          <Header>
+        <Header>
+          <TouchableOpacity onPress={closeChooseAccountComponent}>
             <HeaderImage source={require("../../Images/삭제.png")} />
-          </Header>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </Header>
       </View>
       <View style={styles.bodyHeader}>
         <Text style={styles.title}>내 계좌를 연결합니다.</Text>

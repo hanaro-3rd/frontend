@@ -246,11 +246,12 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
   return (
     <Main categoryMode={openCategory}>
       <View>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <DeleteHeader>
+        <DeleteHeader>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <HeaderImage source={{ uri: close }} />
-          </DeleteHeader>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </DeleteHeader>
+
         <TitleView>
           <TitleText>결제내역</TitleText>
         </TitleView>
