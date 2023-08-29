@@ -20,6 +20,7 @@ import {
 } from "../../utils/ResponseSize";
 import styled from "styled-components/native";
 import ExchangePage from "../../pages/ExchangeSelectAccount/ExchangePage";
+import { close } from "../../utils/image";
 
 const ChooseAccountComponent = ({ navigate, route }) => {
   const Header = styled.View`
@@ -44,7 +45,7 @@ const ChooseAccountComponent = ({ navigate, route }) => {
       <View>
         <Header>
           <TouchableOpacity onPress={closeChooseAccountComponent}>
-            <HeaderImage source={require("../../Images/삭제.png")} />
+            <HeaderImage source={{ uri: close }} />
           </TouchableOpacity>
         </Header>
       </View>
@@ -57,14 +58,8 @@ const ChooseAccountComponent = ({ navigate, route }) => {
           개인신용정보 전송요구 및 수집 · 이용
         </Text>
         <View style={styles.frame145}>
-          <Text style={styles.containerTitle2}>정보 제공자</Text>
-          <Text style={styles.containerTitle3}>
-            하나은행, 국민은행, 우리은행, 신한은행 카카오뱅크, 토스
-          </Text>
-        </View>
-        <View style={styles.frame145}>
           <Text style={styles.containerTitle2}>정보 수신자</Text>
-          <Text style={styles.containerTitle5}>키로그</Text>
+          <Text style={styles.containerTitle3}>키로그</Text>
         </View>
         <View style={styles.frame147}>
           <Text style={styles.containerTitle2}>전송 정보</Text>

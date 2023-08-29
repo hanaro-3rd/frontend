@@ -27,6 +27,7 @@ const LoginPage = () => {
       await storeAccessToken(response.headers.access_token);
       await storeRefreshToken(response.headers.refresh_token);
       setUsername(response.data.result)
+      console.log(response.data.result)
       queryClient.invalidateQueries("exchange");
       navigation.replace("MainPage");
     },
