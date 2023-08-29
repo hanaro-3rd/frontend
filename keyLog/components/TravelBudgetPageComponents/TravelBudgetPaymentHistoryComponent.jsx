@@ -25,6 +25,15 @@ import HeaderBack from "../../assets/travelBudget/Header-Back.png";
 import { useQuery, useQueryClient } from "react-query";
 import { getTravelBudgetCategory, getTravelBudgetDetail } from "../../api/api";
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import {
+  expand,
+  categoryCulture,
+  categoryEtc,
+  categoryFood,
+  categoryHotel,
+  categoryShoppging,
+  categoryTraffic,
+} from "../../utils/image";
 const TravelBudgetPaymentHistoryComponent = ({
   category,
   categoryList,
@@ -60,7 +69,7 @@ const TravelBudgetPaymentHistoryComponent = ({
             {travelBudgetUnit}
             {category.categoryBudget}
           </CostText>
-          <SelectButtonImage source={SelectButton} />
+          <SelectButtonImage source={{ uri: expand }} />
         </RemainCostContainer>
       </CategoryCardContainer>
       <PaymentListContainer>
@@ -81,32 +90,62 @@ const TravelBudgetPaymentHistoryComponent = ({
                 <Icon>
                   {(categoryIcon == "foodIcon" && (
                     <Image
-                      source={require(`../../assets/travelBudget/FoodIcon.png`)}
+                      source={{ uri: categoryFood }}
+                      style={{
+                        width: widthPercentage(30),
+                        height: heightPercentage(30),
+                      }}
+                      resizeMode="contain"
                     />
                   )) ||
                     (categoryIcon == "transIcon" && (
                       <Image
-                        source={require(`../../assets/travelBudget/TransIcon.png`)}
+                        source={{ uri: categoryTraffic }}
+                        style={{
+                          width: widthPercentage(30),
+                          height: heightPercentage(30),
+                        }}
+                        resizeMode="contain"
                       />
                     )) ||
                     (categoryIcon == "houseIcon" && (
                       <Image
-                        source={require(`../../assets/travelBudget/HouseIcon.png`)}
+                        source={{ uri: categoryHotel }}
+                        style={{
+                          width: widthPercentage(30),
+                          height: heightPercentage(30),
+                        }}
+                        resizeMode="contain"
                       />
                     )) ||
                     (categoryIcon == "shopIcon" && (
                       <Image
-                        source={require(`../../assets/travelBudget/ShopIcon.png`)}
+                        source={{ uri: categoryShoppging }}
+                        style={{
+                          width: widthPercentage(30),
+                          height: heightPercentage(30),
+                        }}
+                        resizeMode="contain"
                       />
                     )) ||
                     (categoryIcon == "playIcon" && (
                       <Image
-                        source={require(`../../assets/travelBudget/PlayIcon.png`)}
+                        source={{ uri: categoryCulture }}
+                        style={{
+                          width: widthPercentage(30),
+                          height: heightPercentage(30),
+                        }}
+                        resizeMode="contain"
                       />
                     )) ||
                     (categoryIcon == "etcIcon" && (
                       <Image
-                        source={require(`../../assets/travelBudget/EtcIcon.png`)}
+                        source={{ uri: categoryEtc }}
+                        style={{
+                          width: widthPercentage(30),
+                          height: heightPercentage(30),
+                        }}
+                        resizeMode="contain"
                       />
                     ))}
                 </Icon>
@@ -129,7 +168,7 @@ const TravelBudgetPaymentHistoryComponent = ({
 
         <PaymentTotalContainer>
           <UsedCostText>
-            결제금액   {travelBudgetUnit}
+            결제금액 {travelBudgetUnit}
             {categoryList.reduce((acc, cur) => {
               return (acc += cur.price);
             }, 0)}

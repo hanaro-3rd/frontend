@@ -29,12 +29,17 @@ import {
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import TravelBudgetPaymentHistoryComponent from "../../components/TravelBudgetPageComponents/TravelBudgetPaymentHistoryComponent";
 import { formatDate } from "../../utils/formatDate";
-import markerPin from "../../Images/마커.png";
 import {
+  close,
+  deleteIcon,
+  edit,
+  expand,
+  markerBlue,
   markerCulture,
   markerEtc,
   markerFood,
   markerHotel,
+  markerTail,
   markerTraffic,
 } from "../../utils/image";
 const TravelBudgetDetailPage = ({ navigation, route }) => {
@@ -75,17 +80,18 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
     () => getTravelBudgetDetail(planId),
     {
       onSuccess: (response) => {
-      
         if (response.data.result.timePaymentHistory) {
-          console.log(response.data.result.travelBudget.country,"country")
-          console.log(response.data.result.timePaymentHistory)
-          const country =response.data.result.travelBudget.country
+          console.log(response.data.result.travelBudget.country, "country");
+          console.log(response.data.result.timePaymentHistory);
+          const country = response.data.result.travelBudget.country;
           const obj = response.data.result.timePaymentHistory;
           const subObj = {};
           for (key in obj) {
             if (subObj[formatDate(key)] == undefined) {
-              console.log(obj[key])
-              subObj[formatDate(key)] = obj[key].filter(e=>getCountryUnit(e.unit)==getMoneyUnit(country));
+              console.log(obj[key]);
+              subObj[formatDate(key)] = obj[key].filter(
+                (e) => getCountryUnit(e.unit) == getMoneyUnit(country)
+              );
             } else {
               subObj[formatDate(key)] = [
                 ...subObj[formatDate(key)],
@@ -107,7 +113,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
     () => getTravelBudgetCategory(planId),
     {
       onSuccess: (response) => {
-        console.log(response.data.result.categoryPaymentHistory,"category")
+        console.log(response.data.result.categoryPaymentHistory, "category");
         setCategory(response.data.result.category);
         setTravelBudget(
           getMoneyUnit(response.data.result.travelBudget.country)
@@ -115,7 +121,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
         setTravelData(response.data.result);
         if (response.data.result.categoryPaymentHistory) {
           const obj = response.data.result.categoryPaymentHistory;
-          console.log(response.data.result.travelBudget.country,"맞아?")
+          console.log(response.data.result.travelBudget.country, "맞아?");
           for (key in obj) {
             if (obj[key].length > 0) {
               setLocation({
@@ -131,22 +137,58 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
           for (key in obj) {
             switch (key) {
               case "교통":
-                setTransCategory(obj[key].filter(e=>getCountryUnit(e.unit)==getMoneyUnit(response.data.result.travelBudget.country)));
+                setTransCategory(
+                  obj[key].filter(
+                    (e) =>
+                      getCountryUnit(e.unit) ==
+                      getMoneyUnit(response.data.result.travelBudget.country)
+                  )
+                );
                 break;
               case "식비":
-                setFoodCategory(obj[key].filter(e=>getCountryUnit(e.unit)==getMoneyUnit(response.data.result.travelBudget.country)));
+                setFoodCategory(
+                  obj[key].filter(
+                    (e) =>
+                      getCountryUnit(e.unit) ==
+                      getMoneyUnit(response.data.result.travelBudget.country)
+                  )
+                );
                 break;
               case "숙박":
-                setSleepCategory(obj[key].filter(e=>getCountryUnit(e.unit)==getMoneyUnit(response.data.result.travelBudget.country)));
+                setSleepCategory(
+                  obj[key].filter(
+                    (e) =>
+                      getCountryUnit(e.unit) ==
+                      getMoneyUnit(response.data.result.travelBudget.country)
+                  )
+                );
                 break;
               case "쇼핑":
-                setShoppingCategory(obj[key].filter(e=>getCountryUnit(e.unit)==getMoneyUnit(response.data.result.travelBudget.country)));
+                setShoppingCategory(
+                  obj[key].filter(
+                    (e) =>
+                      getCountryUnit(e.unit) ==
+                      getMoneyUnit(response.data.result.travelBudget.country)
+                  )
+                );
                 break;
               case "문화":
-                setCultureCategory(obj[key].filter(e=>getCountryUnit(e.unit)==getMoneyUnit(response.data.result.travelBudget.country)));
+                setCultureCategory(
+                  obj[key].filter(
+                    (e) =>
+                      getCountryUnit(e.unit) ==
+                      getMoneyUnit(response.data.result.travelBudget.country)
+                  )
+                );
                 break;
               default:
-                setEtcCategory(obj[key].filter(e=>getCountryUnit(e.unit)==getMoneyUnit(response.data.result.travelBudget.country)));
+                setEtcCategory(
+                  obj[key].filter(
+                    (e) =>
+                      getCountryUnit(e.unit) ==
+                      getMoneyUnit(response.data.result.travelBudget.country)
+                  )
+                );
                 break;
             }
           }
@@ -159,7 +201,6 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
   const handlePressCategory = () => {
     setSelectedTab("category");
     setClickCount((prev) => prev + 1);
-   
   };
 
   const [selectedTab, setSelectedTab] = useState("category");
@@ -205,17 +246,31 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
             navigation.navigate("TravelBudgetPage");
           }}
         >
-          <HeaderImage source={require("../../Images/삭제.png")} />
+          <HeaderImage
+            source={{ uri: close }}
+            style={{
+              width: widthPercentage(24),
+              height: heightPercentage(24),
+            }}
+          />
         </TouchableOpacity>
         <HeaderRight>
           <TouchableOpacity onPress={handleDeleteImageClick}>
             <HeaderImage
-              source={require("../../assets/travelBudget/delete.png")}
+              source={{ uri: deleteIcon }}
+              style={{
+                width: widthPercentage(24),
+                height: heightPercentage(24),
+              }}
             />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleEditButtonClick}>
             <HeaderImage
-              source={require("../../assets/travelBudget/edit.png")}
+              source={{ uri: edit }}
+              style={{
+                width: widthPercentage(24),
+                height: heightPercentage(24),
+              }}
             />
           </TouchableOpacity>
         </HeaderRight>
@@ -259,7 +314,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                       >
                         <View>
                           <Image
-                            source={markerPin} // 마커 이미지 경로
+                            source={{ uri: markerBlue }} // 마커 이미지 경로
                             style={{
                               width: 50, // 원하는 너비
                               height: 50, // 원하는 높이
@@ -293,12 +348,17 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                           <CantGoMarkerView>
                             <MarkerKeymoneyText>{e.store}</MarkerKeymoneyText>
                             <MarkerKeymoneyText>
-                              {e.price}{e.unit}
+                              {e.price}
+                              {e.unit}
                             </MarkerKeymoneyText>
                           </CantGoMarkerView>
                           <PolygonView>
-                            <PolygonImage
-                              source={require("../../Images/polygon.png")}
+                            <Image
+                              source={{ uri: markerTail }}
+                              style={{
+                                width: widthPercentage(15),
+                                height: heightPercentage(6),
+                              }}
                             />
                           </PolygonView>
                         </Callout>
@@ -316,7 +376,6 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                   ...sleepCategory,
                   ...cultureCategory,
                 ]?.map((e, idx) => {
-              
                   return (
                     <Marker
                       key={idx}
@@ -339,49 +398,49 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                           <Image
                             source={{ uri: markerFood }} // 마커 이미지 경로
                             style={{
-                              width: 50, // 원하는 너비
-                              height: 50, // 원하는 높이
-                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                              width: 50,
+                              height: 50,
+                              resizeMode: "contain",
                             }}
                           />
                         )}
                         {e.category == "교통" && (
                           <Image
-                            source={{ uri: markerTraffic }} // 마커 이미지 경로
+                            source={{ uri: markerTraffic }}
                             style={{
-                              width: 50, // 원하는 너비
-                              height: 50, // 원하는 높이
-                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                              width: 50,
+                              height: 50,
+                              resizeMode: "contain",
                             }}
                           />
                         )}
                         {e.category == "숙박" && (
                           <Image
-                            source={{ uri: markerHotel }} // 마커 이미지 경로
+                            source={{ uri: markerHotel }}
                             style={{
-                              width: 50, // 원하는 너비
-                              height: 50, // 원하는 높이
-                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                              width: 50,
+                              height: 50,
+                              resizeMode: "contain",
                             }}
                           />
                         )}
                         {e.category == "문화" && (
                           <Image
-                            source={{ uri: markerCulture }} // 마커 이미지 경로
+                            source={{ uri: markerCulture }}
                             style={{
-                              width: 50, // 원하는 너비
-                              height: 50, // 원하는 높이
-                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                              width: 50,
+                              height: 50,
+                              resizeMode: "contain",
                             }}
                           />
                         )}
                         {e.category == "기타" && (
                           <Image
-                            source={{ uri: markerEtc }} // 마커 이미지 경로
+                            source={{ uri: markerEtc }}
                             style={{
-                              width: 50, // 원하는 너비
-                              height: 50, // 원하는 높이
-                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                              width: 50,
+                              height: 50,
+                              resizeMode: "contain",
                             }}
                           />
                         )}
@@ -393,7 +452,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                             height: "100%",
                             justifyContent: "center",
                             alignItems: "center",
-                            color: "white", // 원하는 텍스트 색상 설정
+                            color: "white",
                           }}
                         >
                           <Text
@@ -438,9 +497,9 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
             />
           )}
         </MapImage>
-        <DropImage
+        {/* <DropImage
           source={require("../../assets/travelBudget/Header-Back.png")}
-        />
+        /> */}
         <BodyMain>
           <TotalBudgetContainer>
             <View style={styles.planpayContainer}>
@@ -583,12 +642,11 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                         <CategoryText>{key}</CategoryText>
                       </CategoryContainer>
                       <RemainCostContainer>
-                        <SelectButtonImage source={SelectButton} />
+                        <SelectButtonImage source={{ uri: expand }} />
                       </RemainCostContainer>
                     </CategoryCardContainer>
                     <PaymentListContainer>
                       {timePaymentHistory[key].map((e, idx) => {
-                    
                         return (
                           <PaymentContainer
                             onPress={() => {
@@ -603,34 +661,24 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                             <CategoryDetailContainer>
                               <Icon>
                                 {(e.category == "식비" && (
-                                  <Image
-                                    source={require(`../../assets/travelBudget/FoodIcon.png`)}
-                                  />
+                                  <Image source={{ uri: categoryFood }} />
                                 )) ||
                                   (e.category == "교통" && (
-                                    <Image
-                                      source={require(`../../assets/travelBudget/TransIcon.png`)}
-                                    />
+                                    <Image source={{ uri: categoryTraffic }} />
                                   )) ||
                                   (e.category == "숙박" && (
-                                    <Image
-                                      source={require(`../../assets/travelBudget/HouseIcon.png`)}
-                                    />
+                                    <Image source={{ uri: categoryHotel }} />
                                   )) ||
                                   (e.category == "쇼핑" && (
                                     <Image
-                                      source={require(`../../assets/travelBudget/ShopIcon.png`)}
+                                      source={{ uri: categoryShoppging }}
                                     />
                                   )) ||
                                   (e.category == "문화" && (
-                                    <Image
-                                      source={require(`../../assets/travelBudget/PlayIcon.png`)}
-                                    />
+                                    <Image source={{ uri: categoryCulture }} />
                                   )) ||
                                   (e.category == "기타" && (
-                                    <Image
-                                      source={require(`../../assets/travelBudget/EtcIcon.png`)}
-                                    />
+                                    <Image source={{ uri: categoryEtc }} />
                                   ))}
                               </Icon>
                               <CategoryDetailTextContainer>
