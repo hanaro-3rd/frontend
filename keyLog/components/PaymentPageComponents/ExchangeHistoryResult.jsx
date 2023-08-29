@@ -22,7 +22,6 @@ import { getDetailKeymoneyHistory } from "../../api/api";
 export const ExchangeHistoryResult = ({ route, navigation }) => {
   const { keymoney, unit, time, historyId, type, totalBalance, isBoughtText } =
     route.params;
-  console.log("뭐라고", isBoughtText);
   const [exchangeRate, setExchangeRate] = useState();
   const [exchangeWon, setExchangeWon] = useState();
   const { data } = useQuery(
