@@ -1,11 +1,12 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { close } from "../utils/image";
 
 const TravelRecordPage = () => {
   return (
     <View style={styles.main}>
       <View style={styles.bgWhite}>
-        <Image source={require("../Images/삭제.png")} style={styles.image} />
+        <Image source={{ uri: close }} style={styles.image} />
       </View>
       <Text style={[styles.title, styles.bgWhite]}>내 여행 기록</Text>
       <View style={[styles.planContainer, styles.bgWhite]}>
@@ -74,7 +75,6 @@ const TravelRecordPage = () => {
           </View>
         </View>
       </View>
-    
     </View>
   );
 };
@@ -141,9 +141,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10, // 왼쪽 아래 모서리를 둥글게 설정
   },
   planTextContainer: {
-    marginLeft:10,
+    marginLeft: 10,
     marginTop: 10,
-    width:"70%"
+    width: "70%",
   },
   planTitle: {
     fontSize: 20,
@@ -156,13 +156,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   planPriceWrapper: {
-    width:"100%",
-    paddingRight:20,
-    marginTop:10,
+    width: "100%",
+    paddingRight: 20,
+    marginTop: 10,
     flexDirection: "row",
-    justifyContent:"flex-end"
+    justifyContent: "flex-end",
   },
   planPriceText: {
-    color:"black"
+    color: "black",
   },
 });

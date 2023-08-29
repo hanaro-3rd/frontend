@@ -20,6 +20,7 @@ import EtcIcon from "../../assets/travelBudget/EtcIcon.png";
 import arrow_back from "../../assets/travelBudget/arrow_back.png";
 import { useMutation, useQueryClient, useQuery } from "react-query";
 import { patchTravelPlan, patchTravelBudget } from "../../api/api";
+import { arrowBack } from "../../utils/image";
 
 const RootScrollView = styled.ScrollView`
   /* margin-top: ${getStatusBarHeight}px; */
@@ -336,12 +337,12 @@ const TravelBudgetPlanEditPage = ({ navigation, route }) => {
         categoryId: category.categoryId,
       })),
     };
-    
+
     patchEditTravelBudgetPlanMutation.mutate({
       plan_id: planId,
       patchTravelBudgetData: updateTravelBudgetData,
     });
-    
+
     console.log(
       "제대로 다 됐을까?",
       updateTravelPlanData,
@@ -375,7 +376,7 @@ const TravelBudgetPlanEditPage = ({ navigation, route }) => {
     <RootScrollView>
       <Header>
         <TouchableOpacity onPress={handleGoBackToSchedulePage}>
-          <Image source={arrow_back} />
+          <Image source={{ uri: arrowBack }} />
         </TouchableOpacity>
       </Header>
       <Body>

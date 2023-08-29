@@ -13,6 +13,7 @@ import TravelDateComponent from "../../components/TravelBudgetPageComponents/Tra
 import { Picker } from "@react-native-picker/picker";
 import { patchTravelPlan } from "../../api/api";
 import { useMutation, useQuery } from "react-query";
+import { close } from "../../utils/image";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
@@ -283,12 +284,12 @@ const TravelScheduleEditPage = ({ route, navigation }) => {
     if (isAllFieldsFilled) {
       navigation.navigate("TravelBudgetPlanEditPage", {
         planId,
-        travelTitle:title,
-        travelCountry:country,
-        travelCountryOption:city,
+        travelTitle: title,
+        travelCountry: country,
+        travelCountryOption: city,
         startDate,
         endDate,
-        category: travelData.category
+        category: travelData.category,
       });
     }
     // else {
@@ -304,7 +305,7 @@ const TravelScheduleEditPage = ({ route, navigation }) => {
         }}
       >
         <Header>
-          <HeaderImage source={require("../../Images/삭제.png")} />
+          <HeaderImage source={{ uri: close }} />
         </Header>
       </TouchableOpacity>
       <Body>

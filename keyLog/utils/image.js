@@ -114,3 +114,5 @@ export const reduceGray =
   "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/reduce-gray.png";
 export const markerTail =
   "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/marker-tail.png";
+export const plus =
+  "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/add.png";
