@@ -16,9 +16,21 @@ import {
   phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
-import DeleteHeader from "../../components/Header/DeleteHeader";
 import MarkerPickUp from "../../assets/History/MarkerPickUp.png";
+import { he } from "date-fns/locale";
+import { close, keymoneyCoin } from "../../utils/image";
 
+const DeleteHeader = styled.View`
+  width: ${phoneWidth}px;
+  height: ${heightPercentage(50)}px;
+  justify-content: center;
+  background-color: white;
+`;
+const HeaderImage = styled.Image`
+  margin-left: ${widthPercentage(12)}px;
+  width: ${widthPercentage(24)}px;
+  height: ${heightPercentage(24)}px;
+`;
 const TitleView = styled.View`
   width: 100%;
   height: ${heightPercentage(50)}px;
@@ -40,6 +52,7 @@ const NameText = styled.Text`
   color: #191f29;
   font-size: ${fontPercentage(20)}px;
   font-weight: 700;
+  text-align: center;
   margin-top: ${heightPercentage(10)}px;
 `;
 const PriceText = styled.Text`
@@ -68,8 +81,9 @@ const InfoContainer = styled.View`
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  width: ${widthPercentage(100)}px;
+  width: 100%;
   height: ${heightPercentage(134)}px;
+  margin-top: ${heightPercentage(30)}px;
 `;
 
 const DetailContainer = styled.View`
@@ -81,19 +95,24 @@ const DetailContainer = styled.View`
 `;
 
 const MarkerHistoryPage = ({ route, navigation }) => {
-  const { keymoney, unit, time, historyId, subject, unitSymbol,totalBalance } = route.params;
+  const { keymoney, unit, time, historyId, subject, unitSymbol, totalBalance } =
+    route.params;
   console.log(subject);
 
   return (
     <Main>
       <View>
-        <DeleteHeader navigation={navigation} to="KeyMoneyHistoryPage" />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <DeleteHeader>
+            <HeaderImage source={{uri:close}} />
+          </DeleteHeader>
+        </TouchableOpacity>
         <TitleView>
           <TitleText>마커 줍기 내역</TitleText>
         </TitleView>
         <MainComponent>
           <InfoContainer>
-            <CategoryTitleImage source={MarkerPickUp} />
+            <CategoryTitleImage source={{uri:keymoneyCoin}} />
             <NameText>{subject}</NameText>
           </InfoContainer>
           <DetailContainer>
@@ -121,7 +140,10 @@ const MarkerHistoryPage = ({ route, navigation }) => {
         <TouchableOpacity
           style={styles.frame17}
           onPress={() => {
-              navigation.navigate("ForeignPayHistoryPage", { unit, balance:totalBalance });
+            navigation.navigate("ForeignPayHistoryPage", {
+              unit,
+              balance: totalBalance,
+            });
           }}
         >
           <Text style={styles.____3}>확인</Text>

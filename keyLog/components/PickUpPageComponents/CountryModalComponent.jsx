@@ -1,8 +1,16 @@
-import { View, Text, TouchableOpacity,Image } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import { styled } from "styled-components/native";
-import closeButton from "../../assets/travelBudget/CloseButton.png";
-const CountryModalComponent = ({closeModal,countryModal,setCountryModal}) => {
+import { heightPercentage, widthPercentage } from "../../utils/ResponseSize";
+import {
+  check,
+  close
+} from "../../utils/image";
+const CountryModalComponent = ({
+  closeModal,
+  countryModal,
+  setCountryModal,
+}) => {
   return (
     <View
       style={{
@@ -52,7 +60,13 @@ const CountryModalComponent = ({closeModal,countryModal,setCountryModal}) => {
         >
           <CountryText>나라 선택</CountryText>
           <TouchableOpacity onPress={closeModal}>
-            <Image source={closeButton} />
+            <Image
+              source={{ uri: close }}
+              style={{
+                width: widthPercentage(24),
+                height: heightPercentage(24),
+              }}
+            />
           </TouchableOpacity>
         </View>
         <View
@@ -65,17 +79,31 @@ const CountryModalComponent = ({closeModal,countryModal,setCountryModal}) => {
         ></View>
         <View style={{ paddingTop: 20 }}>
           <TouchableOpacity
-            style={[{
-              flexDirection: "row",
-              width: "100%",
-              justifyContent: "space-between",
-              height: 40,
-            },countryModal[0]&&{color:"#55ACEE"}]}
+            style={[
+              {
+                flexDirection: "row",
+                width: "100%",
+                justifyContent: "space-between",
+                height: 40,
+              },
+              countryModal[0] && { color: "#55ACEE" },
+            ]}
             activeOpacity={1}
-            onPress={()=>setCountryModal(["all","나라 전체"])}
+            onPress={() => setCountryModal(["all", "나라 전체"])}
           >
-            <Text style={countryModal[0]=="all"&&{color:"#55ACEE"}}>전체</Text>
-            {countryModal[0]=="all"&&<Image source={require("../../assets/Setting/check.png")} />}
+            <Text style={countryModal[0] == "all" && { color: "#55ACEE" }}>
+              전체
+            </Text>
+            {countryModal[0] == "all" && (
+              <Image
+                source={{ uri: check }}
+                style={{
+                  width: widthPercentage(24),
+                  height: heightPercentage(24),
+                  resizeMode: "contain",
+                }}
+              />
+            )}
           </TouchableOpacity>
           <TouchableOpacity
             style={{
@@ -85,10 +113,21 @@ const CountryModalComponent = ({closeModal,countryModal,setCountryModal}) => {
               height: 40,
             }}
             activeOpacity={1}
-            onPress={()=>setCountryModal(["KRW","한국"])}
+            onPress={() => setCountryModal(["KRW", "한국"])}
           >
-            <Text style={countryModal[0]=="KRW"&&{color:"#55ACEE"}}>한국</Text>
-            {countryModal[0]=="KRW"&&<Image source={require("../../assets/Setting/check.png")} />}
+            <Text style={countryModal[0] == "KRW" && { color: "#55ACEE" }}>
+              한국
+            </Text>
+            {countryModal[0] == "KRW" && (
+              <Image
+                source={{ uri: check }}
+                style={{
+                  width: widthPercentage(24),
+                  height: heightPercentage(24),
+                  resizeMode: "contain",
+                }}
+              />
+            )}
           </TouchableOpacity>
           <TouchableOpacity
             style={{
@@ -98,10 +137,21 @@ const CountryModalComponent = ({closeModal,countryModal,setCountryModal}) => {
               height: 40,
             }}
             activeOpacity={1}
-            onPress={()=>setCountryModal(["USD","미국"])}
+            onPress={() => setCountryModal(["USD", "미국"])}
           >
-            <Text style={countryModal[0]=="USD"&&{color:"#55ACEE"}}>미국</Text>
-            {countryModal[0]=="USD"&&<Image source={require("../../assets/Setting/check.png")} />}
+            <Text style={countryModal[0] == "USD" && { color: "#55ACEE" }}>
+              미국
+            </Text>
+            {countryModal[0] == "USD" && (
+              <Image
+                source={{ uri: check }}
+                style={{
+                  width: widthPercentage(24),
+                  height: heightPercentage(24),
+                  resizeMode: "contain",
+                }}
+              />
+            )}
           </TouchableOpacity>
           <TouchableOpacity
             style={{
@@ -111,10 +161,21 @@ const CountryModalComponent = ({closeModal,countryModal,setCountryModal}) => {
               height: 40,
             }}
             activeOpacity={1}
-            onPress={()=>setCountryModal(["EUR","유럽"])}
+            onPress={() => setCountryModal(["EUR", "유럽"])}
           >
-            <Text style={countryModal[0]=="EUR"&&{color:"#55ACEE"}}>유럽</Text>
-            {countryModal[0]=="EUR"&&<Image source={require("../../assets/Setting/check.png")} />}
+            <Text style={countryModal[0] == "EUR" && { color: "#55ACEE" }}>
+              유럽
+            </Text>
+            {countryModal[0] == "EUR" && (
+              <Image
+                source={{ uri: check }}
+                style={{
+                  width: widthPercentage(24),
+                  height: heightPercentage(24),
+                  resizeMode: "contain",
+                }}
+              />
+            )}
           </TouchableOpacity>
           <TouchableOpacity
             style={{
@@ -124,10 +185,21 @@ const CountryModalComponent = ({closeModal,countryModal,setCountryModal}) => {
               height: 40,
             }}
             activeOpacity={1}
-            onPress={()=>setCountryModal(["JPY","일본"])}
+            onPress={() => setCountryModal(["JPY", "일본"])}
           >
-            <Text style={countryModal[0]=="JPY"&&{color:"#55ACEE"}}>일본</Text>
-            {countryModal[0]=="JPY"&&<Image source={require("../../assets/Setting/check.png")} />}
+            <Text style={countryModal[0] == "JPY" && { color: "#55ACEE" }}>
+              일본
+            </Text>
+            {countryModal[0] == "JPY" && (
+              <Image
+                source={{ uri: check }}
+                style={{
+                  width: widthPercentage(24),
+                  height: heightPercentage(24),
+                  resizeMode: "contain",
+                }}
+              />
+            )}
           </TouchableOpacity>
         </View>
         <TouchableOpacity

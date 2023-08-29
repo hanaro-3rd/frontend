@@ -91,6 +91,8 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
           const country = response.data.result.travelBudget.country;
           const obj = response.data.result.timePaymentHistory;
           const subObj = {};
+          const travelBudgetCountry = response.data.result.travelBudget.country;
+
           for (key in obj) {
             if (subObj[formatDate(key)] == undefined) {
               console.log(obj[key]);
@@ -307,8 +309,10 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
               {selectedTab == "date" &&
                 foodCategory.length > 0 &&
                 Object.keys(timePaymentHistory).map((key, idx) => {
-                  return timePaymentHistory[key].map((e, keyIdx) => {
-                    return (
+                  const paymentsForDate = timePaymentHistory[key];
+
+                  if (paymentsForDate.length > 0) {
+                    return paymentsForDate.map((e, keyIdx) => (
                       <Marker
                         key={idx}
                         opacity={1}
@@ -376,8 +380,9 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                           </PolygonView>
                         </Callout>
                       </Marker>
-                    );
-                  });
+                    ));
+                  }
+                  return null;
                 })}
               {selectedTab == "category" &&
                 foodCategory.length > 0 &&

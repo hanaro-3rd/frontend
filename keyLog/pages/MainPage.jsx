@@ -15,33 +15,22 @@ import {
   widthPercentage,
 } from "../utils/ResponseSize";
 import styled from "styled-components/native";
-import { exchangeSucess } from "../utils/image";
+import {
+  accountMenu,
+  euFlag,
+  exchangeSucess,
+  japanFlag,
+  keylogLogo,
+  keymoneyBill,
+  keymoneyCoin,
+  leftGray,
+  markerMenu,
+  planMenu,
+  rightGray,
+  scan,
+  usaFlag,
+} from "../utils/image";
 import MainCarousels from "../components/MainPageComponents/MainCarousels";
-import arrow_next from "../assets/Main/arrow_next.png";
-import Scan from "../assets/Main/scan.png";
-import SettingButton from "../assets/Main/SettingButton.png";
-import arrow_prev from "../assets/Main/arrow_prev.png";
-import CarouselMoneyIcon from "../assets/Main/CarouselIcon.png";
-import CarouselIconKeymoney from "../assets/Main/CarouselIconKeymoney.png";
-import CarouselAccountIcon from "../assets/Main/CarouselAccountIcon.png";
-import CarouselKeyMoneyIcon from "../assets/Main/CarouselKeyMoneyIcon.png";
-import CarouselRecordIcon from "../assets/Main/CarouselRecordIcon.png";
-import CarouselPickUpIcon from "../assets/Main/CarouselPickUpIcon.png";
-import USIcon from "../assets/Main/CountryIcon.png";
-import JapanIcon from "../assets/Setting/JapanCountryIcon.png";
-import EuroIcon from "../assets/exchangeImg/EUR.png";
-import KeyPickIcon from "../assets/Main/MenuIcon1.png";
-import PlanTravelBudgetIcon from "../assets/Main/MenuIcon2.png";
-import RecordTravleIcon from "../assets/Main/MenuIcon3.png";
-import MoneyIcon from "../assets/Main/MenuIcon4.png";
-import ExchangeIcon from "../assets/Main/ExchangeIcon.png";
-import AccountConnectIcon from "../assets/Main/MenuIcon6.png";
-import HanaBankIcon from "../assets/Main/HanaServiceIcon1.png";
-import HanaCardIcon from "../assets/Main/HanaServiceIcon2.png";
-import HanaCapitalIcon from "../assets/Main/HanaServiceIcon3.png";
-import HanaLifeIcon from "../assets/Main/HanaServiceIcon4.png";
-import HanaStockIcon from "../assets/Main/HanaServiceIcon5.png";
-import HanaSavingIcon from "../assets/Main/HanaServiceIcon6.png";
 import React, { useState, useEffect } from "react";
 import Swiper from "react-native-swiper";
 import { useRecoilState } from "recoil";
@@ -57,35 +46,35 @@ const MainPage = ({ navigation }) => {
   const [EUR, setEUR] = useState();
   const [JPY, setJPY] = useState();
   const [exchangeDate, setExchangeDate] = useState();
-  
+
   const firstMainCardContent = {
     subTitle: "바로 사용할 수 있는",
     title: "키머니 확인",
-    imageSource: CarouselIconKeymoney,
+    imageSource: { uri: keymoneyCoin },
     buttonText: "키머니 확인하기",
   };
   const secondMainCardContent = {
     subTitle: "3초만에 간편하게",
     title: "계좌연결",
-    imageSource: CarouselAccountIcon,
+    imageSource: { uri: accountMenu },
     buttonText: "계좌연결하기",
   };
   const thirdMainCardContent = {
     subTitle: "수수료 걱정없는",
     title: "키머니 환전",
-    imageSource: CarouselKeyMoneyIcon,
+    imageSource: { uri: keymoneyBill },
     buttonText: "키머니 환전하기",
   };
   const fourthMainCardContent = {
     subTitle: "한눈에 알아볼 수 있는",
     title: "여행 경비 계획",
-    imageSource: CarouselRecordIcon,
+    imageSource: { uri: planMenu },
     buttonText: "여행 계획하기",
   };
   const fifthMainCardContent = {
     subTitle: "여행도 하고 돈도 줍고",
     title: "키머니 줍기",
-    imageSource: CarouselPickUpIcon,
+    imageSource: { uri: markerMenu },
     buttonText: "키머니 주우러 가기",
   };
 
@@ -103,7 +92,6 @@ const MainPage = ({ navigation }) => {
     width: 100%;
     background-color: #f2f4f6;
     flex-direction: column;
-
   `;
   const Header = styled.View`
     width: ${phoneWidth}px;
@@ -113,7 +101,7 @@ const MainPage = ({ navigation }) => {
     flex-direction: row;
     align-self: stretch;
     padding: ${heightPercentage(13)}px ${widthPercentage(12)}px;
-   z-index: 3;
+    z-index: 3;
   `;
 
   const LogoImg = styled.View`
@@ -501,16 +489,18 @@ const MainPage = ({ navigation }) => {
   return (
     <Main>
       <Header>
-        <LogoText>키로그</LogoText>
-        {/* <Image
-          source={require("../assets/Main/KeyLog.png")}
-          style={{ marginTop: 5 }}
-        /> */}
+        <Image
+          source={{ uri: keylogLogo }}
+          style={{
+            width: widthPercentage(88.29),
+            height: heightPercentage(23.313),
+          }}
+        />
         <Setting>
           <TouchableOpacity
             onPress={() => navigation.navigate("TestPaymentPage")}
           >
-            <SettingImage source={Scan} />
+            <SettingImage source={{ uri: scan }} />
           </TouchableOpacity>
           {/* <TouchableOpacity onPress={() => navigation.navigate("SettingPage")}>
             <SettingImage source={SettingButton} />
@@ -551,12 +541,42 @@ const MainPage = ({ navigation }) => {
             return (
               <ExchangeRateContainer key={idx}>
                 <PrevOrNextButton>
-                  <Image source={arrow_prev} />
+                  <Image
+                    source={{ uri: leftGray }}
+                    style={{
+                      width: widthPercentage(24),
+                      height: heightPercentage(24),
+                    }}
+                  />
                 </PrevOrNextButton>
                 <CountryExchangeRateContainer>
-                  {idx == 0 && <Image source={USIcon} />}
-                  {idx == 1 && <Image source={JapanIcon} />}
-                  {idx == 2 && <Image source={EuroIcon} />}
+                  {idx == 0 && (
+                    <Image
+                      source={{ uri: usaFlag }}
+                      style={{
+                        width: widthPercentage(65),
+                        height: heightPercentage(70),
+                      }}
+                    />
+                  )}
+                  {idx == 1 && (
+                    <Image
+                      source={{ uri: japanFlag }}
+                      style={{
+                        width: widthPercentage(65),
+                        height: heightPercentage(70),
+                      }}
+                    />
+                  )}
+                  {idx == 2 && (
+                    <Image
+                      source={{ uri: euFlag }}
+                      style={{
+                        width: widthPercentage(65),
+                        height: heightPercentage(70),
+                      }}
+                    />
+                  )}
                   <TextContainer>
                     <CountryTextContainer>
                       <CountryContainer>
@@ -584,7 +604,13 @@ const MainPage = ({ navigation }) => {
                   </TextContainer>
                 </CountryExchangeRateContainer>
                 <PrevOrNextButton>
-                  <Image source={arrow_next} />
+                  <Image
+                    source={{ uri: rightGray }}
+                    style={{
+                      width: widthPercentage(24),
+                      height: heightPercentage(24),
+                    }}
+                  />
                 </PrevOrNextButton>
               </ExchangeRateContainer>
             );
@@ -594,7 +620,7 @@ const MainPage = ({ navigation }) => {
         {/* 메뉴들 */}
         <MenuContainer>
           <MenuCard>
-            <KeyMoneyImage source={ExchangeIcon} />
+            <KeyMoneyImage source={{ uri: keymoneyBill }} />
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>키머니 환전하기</MenuTitle>
@@ -608,7 +634,7 @@ const MainPage = ({ navigation }) => {
             </MenuSubContainer>
           </MenuCard>
           <MenuCard>
-            <KeyMoneyImage source={AccountConnectIcon} />
+            <KeyMoneyImage source={{ uri: accountMenu }} />
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>계좌 연결하기</MenuTitle>
@@ -624,7 +650,7 @@ const MainPage = ({ navigation }) => {
             </MenuSubContainer>
           </MenuCard>
           <MenuCard>
-            <KeyMoneyImage source={KeyPickIcon} />
+            <KeyMoneyImage source={{ uri: markerMenu }} />
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>키머니 줍기</MenuTitle>
@@ -636,7 +662,7 @@ const MainPage = ({ navigation }) => {
             </MenuSubContainer>
           </MenuCard>
           <MenuCard>
-            <KeyMoneyImage source={RecordTravleIcon} />
+            <KeyMoneyImage source={{ uri: planMenu }} />
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>여행 계획하기</MenuTitle>
@@ -652,7 +678,7 @@ const MainPage = ({ navigation }) => {
             </MenuSubContainer>
           </MenuCard>
           <MenuCard>
-            <KeyMoneyImage source={CarouselIconKeymoney} />
+            <KeyMoneyImage source={{ uri: keymoneyCoin }} />
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>키머니 확인하기</MenuTitle>
@@ -726,7 +752,7 @@ const MainPage = ({ navigation }) => {
           setModalVisible(false); // 모달을 닫을 수 있도록 상태 업데이트
         }}
       > */}
-        {/* <View
+      {/* <View
           style={{
             width: "95%",
             height: 80,
@@ -748,8 +774,7 @@ const MainPage = ({ navigation }) => {
           </View>
 
         </View> */}
-        <NotificationPage/>
-      
+      <NotificationPage />
     </Main>
   );
 };
