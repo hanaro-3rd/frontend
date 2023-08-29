@@ -42,14 +42,14 @@ const ModalContent = ({
       if (response.data.result.isExistUser) {
         if (isFindPassword == true) {
           console.log("isFindPassword true");
-          navigation.navigate("FindPasswordPage", {
+          navigation.replace("FindPasswordPage", {
             phoneNumber,
             personalNumber, 
             name,
           });
         } else {
           console.log(response.data.result.userResponseDto);
-          navigation.navigate(
+          navigation.replace(
             "AlreadySignUpPage",
             response.data.result.userResponseDto
           );
@@ -80,7 +80,7 @@ const ModalContent = ({
   };
   const navigation = useNavigation();
   const goToLoginPasswordPage = () => {
-    navigation.navigate("LoginPasswordPage", {
+    navigation.replace("LoginPasswordPage", {
       phoneNumber,
       personalNumber,
       name,

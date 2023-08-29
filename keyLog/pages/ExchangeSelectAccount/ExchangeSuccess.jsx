@@ -20,6 +20,8 @@ import {
 import DeleteHeader from "../../components/Header/DeleteHeader";
 import { styled } from "styled-components/native";
 import { connectSuccess, exchangeSucess } from "../../utils/image";
+import { useQueryClient } from "react-query";
+import { useEffect } from "react";
 const ExchangeSuccess = ({ navigation, route }) => {
   const {
     exchangeToUnit,
@@ -30,6 +32,11 @@ const ExchangeSuccess = ({ navigation, route }) => {
     changePrice,
     isBought,
   } = route?.params;
+  const queryClient =  useQueryClient()
+  useEffect(() => {
+    queryClient.invalidateQueries("keymoney")
+  }, []);
+
   return (
     <View style={styles.root}>
       <View>
