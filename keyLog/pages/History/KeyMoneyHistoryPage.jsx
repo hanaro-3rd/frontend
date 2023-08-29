@@ -27,21 +27,18 @@ const KeyMoneyHistoryPage = ({ route, navigation }) => {
   const [unitSymbol, setUnitSymbol] = useState("");
 
   const queryClient = useQueryClient();
-  const { data: keyMoneyData } = useQuery(
-    "keymoney",
-    async () => getMyKeymoney(),
-    {
-      onSuccess: (response) => {
-        console.log(response.data);
-        console.log("키머니 계좌 불러오기" + response.data.result);
-        setKeyMoneyAccountList(response.data.result);
-        console.log(response.data.result);
-      },
-      onError: (error) => {
-        console.log(error);
-      },
-    }
-  );
+  const { keymoney } = useQuery("keymoney", async () => getMyKeymoney(), {
+    onSuccess: (response) => {
+      console.log(response.data);
+      console.log("키머니 계좌 불러오기" + response.data.result);
+      setKeyMoneyAccountList(response.data.result);
+      console.log(response.data.result);
+      queryClient.invalidateQueries("keymoney");
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   const unitImageMap = {
     KRW: { uri: koreaFlag },
