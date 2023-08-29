@@ -924,6 +924,5 @@ const customCalloutStyle = StyleSheet.create({
   },
 });
 
-
 export default PickUpKeyPage;
 
