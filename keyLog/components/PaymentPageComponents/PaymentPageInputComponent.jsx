@@ -18,6 +18,16 @@ import {
 } from "../../utils/ResponseSize";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getDetailKeymoneyHistory, updatepayment } from "../../api/api";
+import {
+  categoryCulture,
+  categoryEtc,
+  categoryFood,
+  categoryHotel,
+  categoryShoppging,
+  categoryTraffic,
+  close,
+  rightGray,
+} from "../../utils/image";
 
 const CategoryComponent = styled.View`
   background-color: white;
@@ -33,7 +43,8 @@ const CategoryTitleList = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
+  margin-top: ${heightPercentage(10)}px;
+  /* margin-bottom: ${heightPercentage(20)}px; */
 `;
 const CategoryList = styled.TouchableOpacity`
   width: ${widthPercentage(350)}px;
@@ -48,7 +59,8 @@ const CategoryText = styled.Text`
 `;
 const CategoryImage = styled.Image`
   margin-right: ${widthPercentage(15)}px;
-  width: ${widthPercentage(30)};
+  width: ${widthPercentage(30)}px;
+  height: ${heightPercentage(30)}px;
 `;
 const TitleView = styled.View`
   width: 100%;
@@ -137,8 +149,8 @@ const CategoryTitleImage = styled.Image`
   height: ${heightPercentage(40)}px;
 `;
 const CategoryButtonImage = styled.Image`
-  width: ${widthPercentage(13)}px;
-  height: ${heightPercentage(9)}px;
+  width: ${widthPercentage(16)}px;
+  height: ${heightPercentage(13)}px;
   margin-top: ${heightPercentage(5)}px;
 `;
 const CategoryView = styled.View`
@@ -236,7 +248,7 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
       <View>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <DeleteHeader>
-            <HeaderImage source={require("../../Images/삭제.png")} />
+            <HeaderImage source={{ uri: close }} />
           </DeleteHeader>
         </TouchableOpacity>
         <TitleView>
@@ -258,9 +270,7 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
           <TouchableOpacity onPress={() => setOpenCategory(true)}>
             <CategoryView>
               <CategoryPickWord>{selectedChangeCategory}</CategoryPickWord>
-              <CategoryButtonImage
-                source={require("../../assets/Main/arrow_next.png")}
-              />
+              <CategoryButtonImage source={{ uri: rightGray }} />
             </CategoryView>
           </TouchableOpacity>
         </CategoryWrapper>
@@ -301,8 +311,11 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
             <CategoryText>카테고리 선택</CategoryText>
             <TouchableOpacity onPress={() => setOpenCategory(false)}>
               <Image
-                source={require("../../Images/삭제.png")}
-                style={styles.image}
+                source={{ uri: close }}
+                style={{
+                  width: widthPercentage(24),
+                  height: heightPercentage(24),
+                }}
               />
             </TouchableOpacity>
           </CategoryTitleList>
@@ -312,7 +325,7 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
             }}
           >
             <CategoryImage
-              source={require("../../Images/식비.png")}
+              source={{ uri: categoryFood }}
               resizeMode="contain"
             />
             <CategoryText>식비</CategoryText>
@@ -322,7 +335,7 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
               handleChangeCategory("교통");
             }}
           >
-            <CategoryImage source={require("../../Images/교통.png")} />
+            <CategoryImage source={{ uri: categoryTraffic }} />
             <CategoryText>교통</CategoryText>
           </CategoryList>
           <CategoryList
@@ -330,7 +343,7 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
               handleChangeCategory("숙박");
             }}
           >
-            <CategoryImage source={require("../../Images/숙박.png")} />
+            <CategoryImage source={{ uri: categoryHotel }} />
             <CategoryText>숙박</CategoryText>
           </CategoryList>
           <CategoryList
@@ -338,7 +351,7 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
               handleChangeCategory("쇼핑 · 편의점 · 마트");
             }}
           >
-            <CategoryImage source={require("../../Images/쇼핑.png")} />
+            <CategoryImage source={{ uri: categoryShoppging }} />
             <CategoryText>쇼핑 · 편의점 · 마트</CategoryText>
           </CategoryList>
           <CategoryList
@@ -346,7 +359,7 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
               handleChangeCategory("문화 · 여가");
             }}
           >
-            <CategoryImage source={require("../../Images/문화.png")} />
+            <CategoryImage source={{ uri: categoryCulture }} />
             <CategoryText>문화 · 여가</CategoryText>
           </CategoryList>
           <CategoryList
@@ -354,7 +367,7 @@ const PaymentPageInputComponent = ({ route, navigation }) => {
               handleChangeCategory("기타");
             }}
           >
-            <CategoryImage source={require("../../Images/기타.png")} />
+            <CategoryImage source={{ uri: categoryEtc }} />
             <CategoryText>기타</CategoryText>
           </CategoryList>
         </CategoryComponent>

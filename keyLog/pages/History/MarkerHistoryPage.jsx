@@ -18,6 +18,7 @@ import {
 } from "../../utils/ResponseSize";
 import MarkerPickUp from "../../assets/History/MarkerPickUp.png";
 import { he } from "date-fns/locale";
+import { close, keymoneyCoin } from "../../utils/image";
 
 const DeleteHeader = styled.View`
   width: ${phoneWidth}px;
@@ -103,7 +104,7 @@ const MarkerHistoryPage = ({ route, navigation }) => {
       <View>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <DeleteHeader>
-            <HeaderImage source={require("../../Images/삭제.png")} />
+            <HeaderImage source={{uri:close}} />
           </DeleteHeader>
         </TouchableOpacity>
         <TitleView>
@@ -111,7 +112,7 @@ const MarkerHistoryPage = ({ route, navigation }) => {
         </TitleView>
         <MainComponent>
           <InfoContainer>
-            <CategoryTitleImage source={MarkerPickUp} />
+            <CategoryTitleImage source={{uri:keymoneyCoin}} />
             <NameText>{subject}</NameText>
           </InfoContainer>
           <DetailContainer>

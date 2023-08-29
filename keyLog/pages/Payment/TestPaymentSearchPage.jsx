@@ -226,7 +226,7 @@ const TestPaymentSearchPage = ({ navigation }) => {
                         pair.map((e,idx)=>{
                           return(
                             <Image
-                            style={{ width: "50%", height: 150 }}
+                            style={{ width: "49%", height: 150, marginRight: 5, borderRadius:10 }}
                             source={{
                               uri: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${e.photo_reference}&key=AIzaSyB_nxmsBL4iSwU9dniKHw4GWOXONVfCUZw`,
                             }}

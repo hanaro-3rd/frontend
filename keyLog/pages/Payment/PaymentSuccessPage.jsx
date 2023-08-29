@@ -10,6 +10,7 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
+import { paymentSuccess } from "../../utils/image";
 
 const PaymentSuccessPage = ({ route, navigation }) => {
   const { storeTitle, category, moneyText, unit, memoText } = route?.params;
@@ -24,7 +25,11 @@ const PaymentSuccessPage = ({ route, navigation }) => {
         <BodyMainContainer>
           <CreditImageContainer>
             <Image
-              source={require("../../assets/Setting/PaymentSuccess.png")}
+              source={{ uri: paymentSuccess }}
+              style={{
+            width: widthPercentage(162.269),
+            height: heightPercentage(129.167),
+          }}
             />
           </CreditImageContainer>
           <InfoContainer>

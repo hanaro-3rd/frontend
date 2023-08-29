@@ -20,6 +20,24 @@ import PrevHeader from "../../components/Header/PrevHeader";
 import { useQuery, useQueryClient } from "react-query";
 import { getMyKeymoneyUnit } from "../../api/api";
 import { isNewBackTitleImplementation } from "react-native-screens";
+import {
+  categoryCulture,
+  categoryEtc,
+  categoryFood,
+  categoryHotel,
+  categoryShoppging,
+  categoryTraffic,
+  close,
+  euFlag,
+  exchangeImage,
+  expandGray,
+  japanFlag,
+  keymoneyCoin,
+  koreaFlag,
+  loop,
+  usaFlag,
+} from "../../utils/image";
+import { check } from "react-native-permissions";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
@@ -160,7 +178,7 @@ const SelectTextContainer = styled.TouchableOpacity`
   display: flex;
   padding: ${heightPercentage(15)}px ${widthPercentage(20)}px;
   align-items: center;
-  gap: 5px;
+  /* gap: 5px; */
   align-self: stretch;
 
   flex-direction: row;
@@ -175,7 +193,7 @@ const SelectText = styled.Text`
 `;
 
 const SelectImage = styled.Image`
-  width: ${widthPercentage(15)}px;
+  width: ${widthPercentage(20)}px;
   height: ${heightPercentage(9.262)}px;
   margin-top: ${heightPercentage(5)}px;
 `;
@@ -489,10 +507,10 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
   // };
 
   const UnitImageMap = {
-    KRW: require("../../assets/Setting/KoreaCountryIcon.png"),
-    USD: require("../../assets/History/USD.png"),
-    JPY: require("../../assets/Setting/JapanCountryIcon.png"),
-    EUR: require("../../assets/History/EUR.png"),
+    KRW: { uri: koreaFlag },
+    USD: { uri: usaFlag },
+    JPY: { uri: japanFlag },
+    EUR: { uri: euFlag },
   };
 
   const selectedImage = UnitImageMap[unit];
@@ -512,7 +530,13 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
             </CountryContainer>
             <ButtonContainer>
               <RevertToWonButton onPress={handleNavigationToWon}>
-                <Image source={require("../../assets/Setting/loop.png")} />
+                <Image
+                  source={{ uri: loop }}
+                  style={{
+                    width: widthPercentage(20),
+                    height: heightPercentage(20),
+                  }}
+                />
                 <ButtonText>원화</ButtonText>
               </RevertToWonButton>
 
@@ -538,9 +562,7 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
           <SelectContainer>
             <SelectTextContainer onPress={() => setOpenSelect(true)}>
               <SelectText>{selectedCategory}</SelectText>
-              <SelectImage
-                source={require("../../assets/travelBudget/SelectButtonBefore.png")}
-              />
+              <SelectImage source={{ uri: expandGray }} />
             </SelectTextContainer>
           </SelectContainer>
           <HistoryContainer>
@@ -577,20 +599,20 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                       const textColor =
                         item.type === "payment" ? "black" : "#55ACEE";
                       const categoryIconMap = {
-                        식비: require("../../assets/travelBudget/FoodIcon.png"),
-                        교통: require("../../assets/travelBudget/TransIcon.png"),
-                        숙박: require("../../assets/travelBudget/HouseIcon.png"),
-                        "쇼핑 · 편의점 · 마트": require("../../assets/travelBudget/ShopIcon.png"),
-                        쇼핑: require("../../assets/travelBudget/ShopIcon.png"),
-                        "문화 · 여가": require("../../assets/travelBudget/PlayIcon.png"),
-                        문화: require("../../assets/travelBudget/PlayIcon.png"),
-                        기타: require("../../assets/travelBudget/EtcIcon.png"),
-                        마커: require("../../assets/travelBudget/MarkerIcon.png"),
+                        식비: { uri: categoryFood },
+                        교통: { uri: categoryTraffic },
+                        숙박: { uri: categoryHotel },
+                        "쇼핑 · 편의점 · 마트": { uri: categoryShoppging },
+                        쇼핑: { uri: categoryShoppging },
+                        "문화 · 여가": { uri: categoryCulture },
+                        문화: { uri: categoryCulture },
+                        기타: { uri: categoryEtc },
+                        마커: { uri: keymoneyCoin },
                       };
 
-                      const categoryIcon =
-                        categoryIconMap[item.category] ||
-                        require("../../assets/travelBudget/환전.png");
+                      const categoryIcon = categoryIconMap[item.category] || {
+                        uri: exchangeImage,
+                      };
 
                       return (
                         <ListContainer
@@ -631,7 +653,13 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                             }
                           }}
                         >
-                          <Image source={categoryIcon} />
+                          <Image
+                            source={categoryIcon}
+                            style={{
+                              width: widthPercentage(30),
+                              height: heightPercentage(30),
+                            }}
+                          />
                           <ListInfoContainer>
                             <ListTextContainer>
                               <ListText>{item.subject}</ListText>
@@ -640,7 +668,9 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                             <CostTextContainer>
                               <CostText
                                 style={{ color: textColor }}
-                              >{`${type}${item.keymoney.toLocaleString()} ${item.unit}`}</CostText>
+                              >{`${type}${item.keymoney.toLocaleString()} ${
+                                item.unit
+                              }`}</CostText>
                               <RemainCostText>
                                 {item.balance.toLocaleString()} {item.unit}
                               </RemainCostText>
@@ -675,7 +705,7 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                   setSelectedCategory("전체");
                 }}
               >
-                <DeleteImage source={require("../../Images/삭제.png")} />
+                <DeleteImage source={{ uri: close }} />
               </TouchableOpacity>
             </CategoryTitleList>
             <CategoryListContainer>
@@ -688,7 +718,13 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                   전체
                 </CategoryText>
                 {selectedCategory === "전체" && (
-                  <Image source={require("../../assets/Setting/check.png")} />
+                  <Image
+                    source={{ uri: check }}
+                    style={{
+                      width: widthPercentage(24),
+                      height: heightPercentage(24),
+                    }}
+                  />
                 )}
               </CategoryList>
               <CategoryList onPress={() => handleCategorySelect("입금")}>
@@ -700,7 +736,13 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                   입금
                 </CategoryText>
                 {selectedCategory === "입금" && (
-                  <Image source={require("../../assets/Setting/check.png")} />
+                  <Image
+                    source={{ uri: check }}
+                    style={{
+                      width: widthPercentage(24),
+                      height: heightPercentage(24),
+                    }}
+                  />
                 )}
               </CategoryList>
               <CategoryList onPress={() => handleCategorySelect("출금")}>
@@ -712,7 +754,13 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                   출금
                 </CategoryText>
                 {selectedCategory === "출금" && (
-                  <Image source={require("../../assets/Setting/check.png")} />
+                  <Image
+                    source={{ uri: check }}
+                    style={{
+                      width: widthPercentage(24),
+                      height: heightPercentage(24),
+                    }}
+                  />
                 )}
               </CategoryList>
             </CategoryListContainer>

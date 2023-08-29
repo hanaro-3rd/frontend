@@ -479,10 +479,15 @@ const TestPaymentPage = ({ navigation, route }) => {
                             if (x.unit == "JPY")
                               setBalance("잔액: " + String(x.balance) + "JPY");
                           }
-                        } else {
+                        } else if (itemValue == "EUR") {
                           for (x of units) {
                             if (x.unit == "EUR")
                               setBalance("잔액: " + String(x.balance) + "EUR");
+                          }
+                        } else {
+                          for (x of units) {
+                            if (x.unit == "KRW")
+                              setBalance("잔액: " + String(x.balance) + "KRW");
                           }
                         }
                         updateIsAllFieldsFilled();
