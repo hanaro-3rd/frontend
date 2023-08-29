@@ -221,7 +221,7 @@ const TravelBudgetPage = ({ route, navigation }) => {
 
         console.log(sortedData);
         setData(sortedData);
-        queryClient.invalidateQueries("travelBudgetData");
+        // queryClient.invalidateQueries("travelBudgetData");
       },
       onError: () => {},
     }
