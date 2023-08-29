@@ -24,25 +24,41 @@ const ModalContent = ({
   personalNumber,
   name,
   setModalVisible,
+  isFindPassword,
+  setOneNumber,
+  setName,
+  setPhoneNumber,
+  setPersonalNumber,
 }) => {
   const [errorCode, setErrorCode] = useState();
   const queryClient = useQueryClient();
-  const navigation = useNavigation();
   const postVerificationAuthMutation = useMutation(postVerificationAuth, {
     onSuccess: (response) => {
-      queryClient.invalidateQueries("verificationAuth");
+      setInputText("")
+      setOneNumber("")
+      setName("")
+      setPersonalNumber("")
+      setPhoneNumber("")
       if (response.data.result.isExistUser) {
-        navigation.navigate("AlreadySignUpPage", {
-          // deviceId: await DeviceInfo.getUniqueId(),
-          name: name,
-          phoneNum: phoneNumber,
-          registrateNum: personalNumber,
-          createdAt: response.data.result.userResponseDto.createdAt,
-        });
-      } else if (response.isSuccessAuth) {
+        if (isFindPassword == true) {
+          console.log("isFindPassword true");
+          navigation.navigate("FindPasswordPage", {
+            phoneNumber,
+            personalNumber, 
+            name,
+          });
+        } else {
+          console.log(response.data.result.userResponseDto);
+          navigation.navigate(
+            "AlreadySignUpPage",
+            response.data.result.userResponseDto
+          );
+        }
+      } else {
+        queryClient.invalidateQueries("verificationAuth");
+        setModalVisible(false);
         goToLoginPasswordPage();
       }
-      setModalVisible(false);
     },
     onError: (error) => {
       console.log(error.response);
@@ -62,13 +78,12 @@ const ModalContent = ({
     setInputText("");
     toggleModal();
   };
-
+  const navigation = useNavigation();
   const goToLoginPasswordPage = () => {
     navigation.navigate("LoginPasswordPage", {
-      name,
       phoneNumber,
       personalNumber,
-      resetPassword: "false",
+      name,
     });
   };
 

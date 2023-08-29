@@ -310,7 +310,7 @@ const TravelScheduleEditPage = ({ route, navigation }) => {
       <Body>
         <BodyHeader>
           <Title>계획 작성</Title>
-          <SubTitle>계획중인 여행의 정보를 작성해주세요.</SubTitle>
+          <SubTitle>계획중인 여행의 정보를 수정해주세요.</SubTitle>
         </BodyHeader>
         <BodyMain>
           <TravelTitleContainer>
@@ -355,10 +355,10 @@ const TravelScheduleEditPage = ({ route, navigation }) => {
                     }}
                   >
                     {country == "" && <Picker.Item label="나라" value="" />}
-                    <Picker.Item label="한국" value="KRW" />
+                    <Picker.Item label="한국" value="Korea" />
                     <Picker.Item label="미국" value="USA" />
-                    <Picker.Item label="일본" value="JPY" />
-                    <Picker.Item label="유럽" value="EUR" />
+                    <Picker.Item label="일본" value="Japan" />
+                    <Picker.Item label="유럽" value="Europe" />
                   </Picker>
                 </View>
               </PickerContainer>

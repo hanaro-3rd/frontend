@@ -4,6 +4,7 @@ import {
   ScrollView,
   Linking,
   Text,
+  View,
 } from "react-native";
 import {
   fontPercentage,
@@ -14,7 +15,7 @@ import {
   widthPercentage,
 } from "../utils/ResponseSize";
 import styled from "styled-components/native";
-
+import { exchangeSucess } from "../utils/image";
 import MainCarousels from "../components/MainPageComponents/MainCarousels";
 import arrow_next from "../assets/Main/arrow_next.png";
 import Scan from "../assets/Main/scan.png";
@@ -47,6 +48,8 @@ import { useRecoilState } from "recoil";
 import { usernameAtom } from "../recoil/usernameAtom";
 import { useQuery, useQueryClient } from "react-query";
 import { getExchange } from "../api/api";
+import Modal from "react-native-modal";
+import NotificationPage from "./NotificationPage";
 
 const MainPage = ({ navigation }) => {
   const [username, setUsername] = useRecoilState(usernameAtom);
@@ -54,6 +57,7 @@ const MainPage = ({ navigation }) => {
   const [EUR, setEUR] = useState();
   const [JPY, setJPY] = useState();
   const [exchangeDate, setExchangeDate] = useState();
+  
   const firstMainCardContent = {
     subTitle: "바로 사용할 수 있는",
     title: "키머니 확인",
@@ -99,6 +103,7 @@ const MainPage = ({ navigation }) => {
     width: 100%;
     background-color: #f2f4f6;
     flex-direction: column;
+
   `;
   const Header = styled.View`
     width: ${phoneWidth}px;
@@ -108,6 +113,7 @@ const MainPage = ({ navigation }) => {
     flex-direction: row;
     align-self: stretch;
     padding: ${heightPercentage(13)}px ${widthPercentage(12)}px;
+   z-index: 3;
   `;
 
   const LogoImg = styled.View`
@@ -702,6 +708,48 @@ const MainPage = ({ navigation }) => {
           </ButtonContainer>
         </HanaServiceContainer> */}
       </BodyMain>
+      {/* <Modal
+        style={{
+          padding: 0,
+          margin: 0,
+          width: "100%",
+          position: "absolute",
+          alignItems:"center",
+          left: 0,
+          bottom: 5,
+        }}
+        backdropOpacity={0}
+        backdropColor="transparent"
+        isVisible={isModalVisible}
+        onBackdropPress={() => {
+          // 모달 밖을 터치했을 때 실행될 함수
+          setModalVisible(false); // 모달을 닫을 수 있도록 상태 업데이트
+        }}
+      > */}
+        {/* <View
+          style={{
+            width: "95%",
+            height: 80,
+            backgroundColor: "white",
+            borderRadius: 10,
+            flexDirection:"row",
+            alignItems:"center",
+            justifyContent:"space-around",
+            elevation: 3
+          }}
+        >
+          <Image source={{uri:exchangeSucess}} style={{width:60,height:60}} />
+          <View style={{justifyContent:"space-between",height:50}}>
+          <Text style={{color:"#191F29",fontSize:16,fontWeight:700}}>이벤트</Text>
+          <Text>선물을 받을 수 있는 이벤트가 있어요</Text>
+          </View>
+          <View style={{height:50}}>
+          <Text>8월 30일</Text>
+          </View>
+
+        </View> */}
+        <NotificationPage/>
+      
     </Main>
   );
 };

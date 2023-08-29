@@ -8,6 +8,7 @@ import {
   phoneWidth,
   widthPercentage,
   getMoneyUnit,
+  getCountryUnit,
 } from "../../utils/ResponseSize";
 import styled from "styled-components/native";
 import FoodIcon from "../../assets/travelBudget/FoodIcon.png";
@@ -288,9 +289,9 @@ const TravelBudgetPlanEditPage = ({ navigation, route }) => {
 
     if (travelCountry === "USA") {
       newMoneyUnit = "$";
-    } else if (travelCountry === "JPY") {
+    } else if (travelCountry === "Japan") {
       newMoneyUnit = "¥";
-    } else if (travelCountry === "EUR") {
+    } else if (travelCountry === "Europe") {
       newMoneyUnit = "€";
     }
 
@@ -315,7 +316,7 @@ const TravelBudgetPlanEditPage = ({ navigation, route }) => {
     6: EtcIcon,
   };
 
-  const handleSaveButtonPress = () => {
+  const handleSaveButtonPress = async () => {
     const updateTravelPlanData = {
       city: travelCountryOption,
       country: travelCountry,
@@ -335,12 +336,12 @@ const TravelBudgetPlanEditPage = ({ navigation, route }) => {
         categoryId: category.categoryId,
       })),
     };
-
+    
     patchEditTravelBudgetPlanMutation.mutate({
       plan_id: planId,
       patchTravelBudgetData: updateTravelBudgetData,
     });
-
+    
     console.log(
       "제대로 다 됐을까?",
       updateTravelPlanData,
@@ -380,7 +381,7 @@ const TravelBudgetPlanEditPage = ({ navigation, route }) => {
       <Body>
         <BodyHeader>
           <Title>경비 작성</Title>
-          <Subtitle>카테고리별 여행 경비를 작성해주세요.</Subtitle>
+          <Subtitle>카테고리별 여행 경비를 수정해주세요.</Subtitle>
         </BodyHeader>
         <BodyMain>
           <BudgetListContainer>

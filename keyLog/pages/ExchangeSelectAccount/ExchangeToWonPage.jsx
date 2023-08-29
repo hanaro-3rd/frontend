@@ -98,8 +98,13 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
           : Keyunit == "JPY"
           ? (setExchangeRate(response.data.result.jpy.exchangeRate / 100),
             setChangePrice(response.data.result.jpy.changePrice))
-          : (setExchangeRate(response.data.result.eur.exchangeRate),
-            setChangePrice(response.data.result.eur.changePrice));
+          : Keyunit=="EUR" ? (setExchangeRate(response.data.result.eur.exchangeRate),
+            setChangePrice(response.data.result.eur.changePrice))
+            : (
+              setExchangeRate(1),
+            setChangePrice(1)
+            )
+            ;
         setApiTime(response.data.result.updatedAt);
       },
       onError: (error) => {
@@ -379,7 +384,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
           </View>
 
           {/* 환율 부분 */}
-          {Keyunit == "Korea" ? (
+          {Keyunit == "KRW" ? (
             <View />
           ) : (
             <View style={styles.exchangeRateContainer}>
@@ -391,6 +396,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                     : ""}
                 </Text>
               </View>
+              
               <View style={styles.currentExchangeRateContainer}>
                 <View style={styles.countryInformationContainer}>
                   <Text style={styles.countryText}>

@@ -18,7 +18,10 @@ import {
   phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
-import { useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
+import { patchUpdateDevice } from "../../api/api";
+import DeviceInfo from "react-native-device-info";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
@@ -101,7 +104,7 @@ const BodyMainTitleText = styled.Text`
   font-size: ${fontPercentage(16)}px;
   font-style: normal;
   font-weight: 700;
-  width: ${widthPercentage(60)}px;
+  width: ${widthPercentage(80)}px;
   height: ${heightPercentage(22)}px;
 `;
 
@@ -163,13 +166,14 @@ const ButtonText = styled.Text`
 `;
 
 const AlreadySignUpPage = ({ route, navigation }) => {
-  const queryClient = useQueryClient();
-  const { name, phoneNum, registrateNum, createdAt } = route?.params;
 
-  const formattedRegistrateNum = `${registrateNum.slice(
+  const queryClient = useQueryClient();
+  const { name, phoneNum, registrationNum, createdAt } = route?.params;
+  console.log(route.params,"route.params")
+  const formattedRegistrateNum = `${registrationNum.slice(
     0,
     6
-  )}-${registrateNum.slice(6)}`;
+  )}-${registrationNum.slice(6)}`;
   const formattedPhoneNum = `${phoneNum.slice(0, 3)}-${phoneNum.slice(
     3,
     7
@@ -180,13 +184,24 @@ const AlreadySignUpPage = ({ route, navigation }) => {
   const day = createdAt[2];
 
   const formattedDate = `${year}년 ${month}월 ${day}일`;
-
+  const patchUpdateMutation = useMutation(patchUpdateDevice, {
+    onSuccess: async response => {
+      console.log(response.data);
+      if(await AsyncStorage.getItem("access_token")) {
+        await AsyncStorage.removeItem("access_token")
+      }
+      navigation.replace("LoginPage")
+    },
+    onError: error => {
+      console.log('signup' + error);
+    },
+  });
   const [signUpDate, setSignUpDate] = useState();
   return (
     <Root>
       <Header />
       <BodyHeader>
-        <BodyHeaderTitle>이미 가입된 회원</BodyHeaderTitle>
+        <BodyHeaderTitle>가입된 회원</BodyHeaderTitle>
         <BodyHeaderText>
           회원 정보가 일치하면 확인 버튼을 눌러주세요
         </BodyHeaderText>
@@ -235,16 +250,17 @@ const AlreadySignUpPage = ({ route, navigation }) => {
       </BodyMainContainer>
       <Footer>
         <SubmitButton
-          onPress={() =>
-            navigation.navigate("LoginPasswordPage", {
-              name: name,
-              phoneNumber: phoneNum,
-              personalNumber: registrateNum,
-              resetPassword: "true"
-            })
+          onPress={async() =>
+            {
+              patchUpdateMutation.mutate({
+                newDeviceId: await DeviceInfo.getUniqueId(),
+                phonenum : phoneNum
+              })
+            }
+
           }
         >
-          <ButtonText>비밀번호 재설정 하기</ButtonText>
+          <ButtonText>로그인 하기</ButtonText>
         </SubmitButton>
       </Footer>
     </Root>
