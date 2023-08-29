@@ -65,7 +65,7 @@ export function getCountryUnit(country) {
   switch (country) {
     case "KRW":
       return "₩";
-    case "USA":
+    case "USD":
       return "$";
     case "JPY":
       return "¥";

@@ -2,6 +2,7 @@ import { AppRegistry, LogBox, YellowBox } from 'react-native';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import App from './App';
 import { RecoilRoot } from 'recoil';
+import * as encoding from 'text-encoding';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

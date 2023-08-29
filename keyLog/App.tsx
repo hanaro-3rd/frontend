@@ -54,6 +54,9 @@ import TravelScheduleEditPage from "./pages/TravelBudget/TravelScheduleEditPage"
 import TravelBudgetPlanEditPage from "./pages/TravelBudget/TravelBudgetPlanEditPage";
 import SplashScreen from "react-native-splash-screen";
 
+import NotificationPage from "./pages/NotificationPage";
+import FindPasswordPage from "./pages/SignUp/FindPasswordPage";
+import UpdateDevicePage from "./pages/SignUp/UpdateDevicePage";
 const App = () => {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient();
@@ -141,10 +144,25 @@ const App = () => {
           initialRouteName={
             login ? "MainPage" : haveDeviceId ? "LoginPage" : "SignUpPage"
             // "LoginPage"
-
-            // "TravelBudgetPage"
+            // "NotificationPage"
+            // "FindPasswordPage"
           }
         >
+          <Stack.Screen
+            name="FindPasswordPage"
+            component={FindPasswordPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="UpdateDevicePage"
+            component={UpdateDevicePage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="NotificationPage"
+            component={NotificationPage}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="AlreadySignUpPage"
             component={AlreadySignUpPage}

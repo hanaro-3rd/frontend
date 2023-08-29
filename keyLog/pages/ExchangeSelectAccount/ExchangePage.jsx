@@ -111,12 +111,30 @@ export const ExchangePage = () => {
   // 2. 최소금액 설정하기 (USD= 1달러, EUR = 1유로, JPY= 1000엔)
   // 3. 잔액보다 값이 높으면 잔액으로 리턴 => 소수점 걸리면 내림으로 가야함
   const foreignInputChange = (text) => {
-    setForeignTextInput(String(text));
-    const exchangeKoreaMoney = Math.floor(text * exchangeRate);
-    setKoreaTextInput(String(exchangeKoreaMoney));
-    if (minimumMoney == 1000) {
-      //일본 환전할 시
-      if (text % minimumMoney == 0) {
+    // 숫자와 쉼표 이외의 문자를 제거하여 순수한 숫자 문자열을 얻습니다.
+    const foreignpureNumber = text.replace(/[^\d]/g, "");
+
+    // 숫자 문자열을 정수로 변환한 후 세 자리마다 쉼표를 찍어줍니다.
+    const foreignnumberWithCommas = parseInt(
+      foreignpureNumber,
+      10
+    ).toLocaleString();
+    console.log(foreignnumberWithCommas);
+
+    if (foreignpureNumber == "") {
+      setForeignTextInput("");
+    } else {
+      setForeignTextInput(foreignnumberWithCommas);
+    }
+
+    if (!isNaN(foreignpureNumber)) {
+      const exchangeForeignMoney = Math.floor(foreignpureNumber * exchangeRate);
+      const exchangeForeignMoneyWithCommas =
+        exchangeForeignMoney.toLocaleString(); // 세 자리마다 쉼표 추가
+      setKoreaTextInput(exchangeForeignMoneyWithCommas);
+    }
+    if (minimumMoney === 1000) {
+      if (foreignpureNumber % minimumMoney === 0) {
         setSubForeignText("");
       } else {
         setSubForeignText(integerUnit(minimumMoney, selectedMoney));
@@ -125,54 +143,95 @@ export const ExchangePage = () => {
   };
 
   const koreaInputChange = (text) => {
-    setKoreaTextInput(text);
-    console.log("sdf", text / exchangeRate);
-    const exchangeMoney = Math.floor(text / exchangeRate);
-    setForeignTextInput(`${exchangeMoney}`);
+    // 숫자와 쉼표 이외의 문자를 제거하여 순수한 숫자 문자열을 얻습니다.
+    const pureNumber = text.replace(/[^\d]/g, "");
+
+    // 숫자 문자열을 정수로 변환한 후 세 자리마다 쉼표를 찍어줍니다.
+    const numberWithCommas = parseInt(pureNumber, 10).toLocaleString();
+
+    if (pureNumber == "") {
+      setKoreaTextInput("");
+    } else {
+      setKoreaTextInput(numberWithCommas);
+    }
+
+    if (!isNaN(pureNumber)) {
+      const exchangeMoney = Math.floor(pureNumber / exchangeRate);
+      const exchangeMoneyWithCommas = exchangeMoney.toLocaleString(); // 세 자리마다 쉼표 추가
+      setForeignTextInput(exchangeMoneyWithCommas);
+    }
   };
 
   // Debounce된 함수 생성
   const handleDebouncedInputChange = () => {
-    const numericValue = parseInt(koreaTextInput);
-    console.log(minimumMoney, "minimumMoney");
-    if (isNaN(numericValue)) {
-      Keyboard.dismiss();
-      return;
-    }
-    if (numericValue > 1000000) {
-      //한국돈 100만원보다 클때
-      let exchangeMoney = Math.floor(1000000 / exchangeRate);
-      console.log("exchangeRate", exchangeRate);
-      console.log(exchangeMoney, "exchangeMoney1000000");
-      if (selectedMoney == "JPY") {
-        exchangeMoney = Math.floor(exchangeMoney / 1000) * 1000;
+    if (koreaTextInput != undefined) {
+      const numericValue = parseInt(koreaTextInput.replace(/[^\d]/g, "")); //한국 pureNumber
+      console.log("numericValue", numericValue);
+      console.log(minimumMoney, "minimumMoney");
+
+      if (isNaN(numericValue)) {
+        Keyboard.dismiss();
+        return;
       }
-      const koreaMoney = Math.floor(exchangeMoney * exchangeRate);
-      setForeignTextInput(String(exchangeMoney));
-      setKoreaTextInput(String(koreaMoney));
-      setSubForeignText("최대 환전금액은 원화 기준 100만원입니다.");
-      Keyboard.dismiss();
-      return;
-    }
-    if (numericValue / exchangeRate < minimumMoney) {
-      //입력값이 최소 환전 금액보다 작을 때
-      const exchangeValue = minimumMoney;
-      setForeignTextInput(`${exchangeValue}`);
-      const koreaValue = Math.floor(exchangeValue * exchangeRate);
-      setKoreaTextInput(`${koreaValue}`);
-      setSubForeignText(minimumUnit(minimumMoney, selectedMoney));
-    } else {
-      if (minimumMoney == 1000) {
-        //  foreignTextInput % 1000 == 0 ? setSubForeignText("") : setSubForeignText(integerUnit(minimumMoney,selectedMoney))
-        const japanMoney = Math.round(foreignTextInput / 1000) * 1000;
-        console.log(japanMoney);
-        setForeignTextInput(String(japanMoney));
-        setKoreaTextInput(String(Math.floor(japanMoney * exchangeRate)));
+
+      if (numericValue > 1000000) {
+        //한국돈 100만원보다 클때
+        let exchangeMoney = Math.floor(1000000 / exchangeRate);
+        console.log("exchangeRate", exchangeRate);
+        console.log(exchangeMoney, "exchangeMoney1000000");
+        if (selectedMoney == "JPY") {
+          exchangeMoney = Math.floor(exchangeMoney / 1000) * 1000;
+        }
+        const koreaMoney = Math.floor(exchangeMoney * exchangeRate);
+        const exchangeMoneyWithCommas = parseInt(
+          exchangeMoney,
+          10
+        ).toLocaleString();
+        const koreaMoneyWithCommas = parseInt(koreaMoney, 10).toLocaleString();
+        setForeignTextInput(exchangeMoneyWithCommas);
+        setKoreaTextInput(koreaMoneyWithCommas);
+        setSubForeignText("최대 환전금액은 원화 기준 100만원입니다.");
+        Keyboard.dismiss();
+        return;
+      }
+      if (numericValue / exchangeRate < minimumMoney) {
+        //입력값이 최소 환전 금액보다 작을 때
+        const exchangeValue = minimumMoney;
+        setForeignTextInput(`${exchangeValue}`);
+        const koreaValue = Math.floor(exchangeValue * exchangeRate);
+        const koreaValueWithCommas = parseInt(koreaValue, 10).toLocaleString();
+        setKoreaTextInput(`${koreaValueWithCommas}`);
+        setSubForeignText(minimumUnit(minimumMoney, selectedMoney));
       } else {
-        setKoreaTextInput(String(Math.floor(foreignTextInput * exchangeRate)));
+        if (minimumMoney === 1000) {
+          const numericValue = parseInt(foreignTextInput.replace(/[^\d]/g, ""));
+          const japanMoney = Math.round(numericValue / 1000) * 1000;
+          console.log(japanMoney);
+          const japanValueWithCommas = parseInt(
+            japanMoney,
+            10
+          ).toLocaleString();
+          setForeignTextInput(japanValueWithCommas);
+          const koreaMoney = Math.floor(japanMoney * exchangeRate);
+          const koreaValueWithCommas = parseInt(
+            koreaMoney,
+            10
+          ).toLocaleString();
+          setKoreaTextInput(koreaValueWithCommas);
+        } else {
+          if (foreignTextInput != undefined) {
+            const numericValue2 =
+              parseInt(foreignTextInput.replace(/[^\d]/g, "")) * exchangeRate;
+            const koreaValueWithCommas2 = parseInt(
+              numericValue2,
+              10
+            ).toLocaleString();
+            setKoreaTextInput(`${koreaValueWithCommas2}`);
+          }
+        }
       }
+      Keyboard.dismiss();
     }
-    Keyboard.dismiss();
   };
 
   const postExchangeMutation = useMutation(postExchange, {
@@ -202,13 +261,14 @@ export const ExchangePage = () => {
     console.log("accountId", accountId);
     console.log("money", koreaTextInput);
     console.log("unit", selectedMoney);
+
     postExchangeMutation.mutate({
       accountId: accountId,
       changePrice: changePrice,
       exchangeRate: exchangeRate,
       isBought: true,
-      money: koreaTextInput,
-      moneyToExchange: foreignTextInput,
+      money: parseInt(koreaTextInput.replace(/[^\d]/g, "")),
+      moneyToExchange: parseInt(foreignTextInput.replace(/[^\d]/g, "")),
       unit: selectedMoney,
     });
   };
@@ -296,7 +356,7 @@ export const ExchangePage = () => {
               <Text>
                 {accountBalance === false
                   ? ""
-                  : "통장 잔고: " + accountBalance + "원"}
+                  : "통장 잔고: " + accountBalance.toLocaleString() + "원"}
               </Text>
             </View>
             <View style={styles.moneyContainer}>
@@ -417,8 +477,9 @@ export const ExchangePage = () => {
               * 주말 및 공휴일은 수수료가 붙습니다
             </Text>
           </View>
-          {koreaTextInput > 0 &&
-          foreignTextInput > 0 &&
+          {console.log(koreaTextInput, foreignTextInput)}
+          {koreaTextInput != null &&
+          foreignTextInput != null &&
           selectedAccount !== undefined ? (
             <TouchableOpacity
               onPress={handleExchangeSubmit}

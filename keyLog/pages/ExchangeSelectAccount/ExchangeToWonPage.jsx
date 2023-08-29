@@ -98,8 +98,13 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
           : Keyunit == "JPY"
           ? (setExchangeRate(response.data.result.jpy.exchangeRate / 100),
             setChangePrice(response.data.result.jpy.changePrice))
-          : (setExchangeRate(response.data.result.eur.exchangeRate),
-            setChangePrice(response.data.result.eur.changePrice));
+          : Keyunit=="EUR" ? (setExchangeRate(response.data.result.eur.exchangeRate),
+            setChangePrice(response.data.result.eur.changePrice))
+            : (
+              setExchangeRate(1),
+            setChangePrice(1)
+            )
+            ;
         setApiTime(response.data.result.updatedAt);
       },
       onError: (error) => {
@@ -135,11 +140,11 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
     setForeignTextInput(`${exchangeMoney}`);
   };
 
-  const handleAllMoney =  () =>{
-    console.log("???",Keybalance)
-    setForeignTextInput(String(Keybalance))
-    setKoreaTextInput(String(Math.floor(Keybalance*exchangeRate)))
-  }
+  const handleAllMoney = () => {
+    console.log("???", Keybalance);
+    setForeignTextInput(String(Keybalance));
+    setKoreaTextInput(String(Math.floor(Keybalance * exchangeRate)));
+  };
 
   const postExchangeMutation = useMutation(postExchange, {
     onSuccess: (response) => {
@@ -252,15 +257,13 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
             <Text>
               {accountBalance === false
                 ? ""
-                : "통장 잔고: " + accountBalance + "원"}
+                : "통장 잔고: " + accountBalance.toLocaleString() + "원"}
             </Text>
           </View>
           <View style={styles.moneyContainer}>
             <View style={styles.titleContainer}>
               <Text style={styles.containerTitle2}>환전 금액</Text>
-              <Text style={styles.containerSubtitle}>
-                주말, 공휴일 수수료 원화 20원이 적용됩니다
-              </Text>
+              <Text style={styles.containerSubtitle}></Text>
             </View>
 
             {/* 환율부분 */}
@@ -310,11 +313,20 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                 keyboardType="numeric"
                 style={{ textAlign: "right" }}
               />
-              <TouchableOpacity onPress={handleAllMoney} style={{borderColor:"#55ACEE",borderWidth:1,paddingHorizontal:10,borderRadius:5,paddingVertical:5}}>
-                <Text style={{color:`#55ACEE`}}>전액</Text>
+              <TouchableOpacity
+                onPress={handleAllMoney}
+                style={{
+                  borderColor: "#55ACEE",
+                  borderWidth: 1,
+                  paddingHorizontal: 10,
+                  borderRadius: 5,
+                  paddingVertical: 5,
+                }}
+              >
+                <Text style={{ color: `#55ACEE` }}>전액</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ width: "100%", }}>
+            <View style={{ width: "100%" }}>
               <Text
                 style={{
                   textAlign: "right",
@@ -372,7 +384,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
           </View>
 
           {/* 환율 부분 */}
-          {Keyunit == "Korea" ? (
+          {Keyunit == "KRW" ? (
             <View />
           ) : (
             <View style={styles.exchangeRateContainer}>
@@ -384,6 +396,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                     : ""}
                 </Text>
               </View>
+              
               <View style={styles.currentExchangeRateContainer}>
                 <View style={styles.countryInformationContainer}>
                   <Text style={styles.countryText}>
@@ -421,9 +434,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
       </View>
       <View style={styles.footer}>
         <View style={styles.informationContainer}>
-          <Text style={styles.informationText}>
-            * 주말 및 공휴일은 수수료가 붙습니다
-          </Text>
+          <Text style={styles.informationText}></Text>
         </View>
         {koreaTextInput > 0 &&
         foreignTextInput > 0 &&
