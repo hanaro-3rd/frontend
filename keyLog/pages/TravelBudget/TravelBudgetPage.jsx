@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -182,6 +182,7 @@ const TravelBudgetPage = ({ route, navigation }) => {
 
   // const [data, setData] = useState({});
   const [data, setData] = useState([]);
+
   const { travelBudgetData } = useQuery(
     "travelBudgetData",
     () => getTravelBudget(),
@@ -260,10 +261,10 @@ const TravelBudgetPage = ({ route, navigation }) => {
                     if (e.country === "USA") {
                       unit = "$";
                       countryName = "미국";
-                    } else if (e.country === "JPY") {
+                    } else if (e.country === "Japan") {
                       unit = "￥";
                       countryName = "일본";
-                    } else if (e.country === "EUR") {
+                    } else if (e.country === "Europe") {
                       unit = "€";
                       countryName = "유럽";
                     } else {

@@ -21,7 +21,8 @@ import {
 import { getDetailKeymoneyHistory } from "../../api/api";
 
 export const ExchangeHistoryResult = ({ route, navigation }) => {
-  const { keymoney, unit, time, historyId, type, totalBalance } = route.params;
+  const { keymoney, unit, time, historyId, type, totalBalance, isBoughtText } =
+    route.params;
   const [exchangeRate, setExchangeRate] = useState();
   const [exchangeWon, setExchangeWon] = useState();
   const { data } = useQuery(
@@ -62,7 +63,18 @@ export const ExchangeHistoryResult = ({ route, navigation }) => {
               source={require("../../assets/History/환전.png")}
               style={{ width: 40, height: 40 }}
             />
-            <Text style={styles.krwJpy}>KRW -> JPY</Text>
+            <View style={styles.wheretochange}>
+              <Text style={styles.krwJpy}>KRW </Text>
+              {isBoughtText == "원화 환전" ? (
+                <Image source={Vector} />
+              ) : (
+                <Image
+                  source={Vector}
+                  style={{ transform: [{ rotate: `${180}deg` }] }}
+                />
+              )}
+              <Text style={styles.krwJpy}> {unit}</Text>
+            </View>
           </View>
           <View style={styles.frame80}>
             <Text style={styles.____2}>환전 금액</Text>
@@ -74,7 +86,7 @@ export const ExchangeHistoryResult = ({ route, navigation }) => {
                 : unit == "USD"
                 ? "$"
                 : "₩"}
-              {keymoney}
+              {keymoney.toLocaleString()}
             </Text>
             <Text style={styles.$202307011359}>
               {time[0]}.{time[1]}.{time[2]} {time[3]}:{time[4]}
@@ -86,12 +98,27 @@ export const ExchangeHistoryResult = ({ route, navigation }) => {
               <View style={styles.exchangeMoneyBox}>
                 <View style={styles.koreaMoneyContianer}>
                   <Text style={styles.koreaMoneyUnitText}>KRW</Text>
-                  <Text style={styles.koreaMoneyText}>{exchangeWon}</Text>
+                  <Text style={styles.koreaMoneyText}>
+                    {exchangeWon != undefined
+                      ? exchangeWon.toLocaleString()
+                      : exchangeWon}
+                  </Text>
                 </View>
-                <Image source={Vector} />
+                {isBoughtText == "원화 환전" ? (
+                  <Image source={Vector} />
+                ) : (
+                  <Image
+                    source={Vector}
+                    style={{ transform: [{ rotate: `${180}deg` }] }}
+                  />
+                )}
                 <View style={styles.foreignMoneyContainer}>
                   <Text style={styles.foreignMoneyUnitText}>{unit}</Text>
-                  <Text style={styles.foreignMoneyText}>{keymoney}</Text>
+                  <Text style={styles.foreignMoneyText}>
+                    {keymoney != undefined
+                      ? keymoney.toLocaleString()
+                      : keymoney}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -105,7 +132,11 @@ export const ExchangeHistoryResult = ({ route, navigation }) => {
                   <Text style={styles.unitText}>{unit}</Text>
                 </View>
                 <View style={styles.currentExchangeRateTextContainer}>
-                  <Text style={styles.exchangeRateText}>{exchangeRate}</Text>
+                  <Text style={styles.exchangeRateText}>
+                    {unit == "JPY"
+                      ? exchangeRate * 1000
+                      : exchangeRate?.toFixed(2)}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -395,5 +426,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 10,
     borderRadius: 10,
+  },
+  wheretochange: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

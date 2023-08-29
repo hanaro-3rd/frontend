@@ -292,6 +292,7 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
       city: travelCountryOption,
       country: travelCountry,
     });
+    queryClient.invalidateQueries("travelBudgetData")
     navigation.navigate("TravelBudgetPage");
     setIsLoading(false);
   };
@@ -327,9 +328,9 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
 
     if (travelCountry === "USA") {
       newMoneyUnit = "$";
-    } else if (travelCountry === "JPY") {
+    } else if (travelCountry === "Japan") {
       newMoneyUnit = "¥";
-    } else if (travelCountry === "EUR") {
+    } else if (travelCountry === "Europe") {
       newMoneyUnit = "€";
     }
 
