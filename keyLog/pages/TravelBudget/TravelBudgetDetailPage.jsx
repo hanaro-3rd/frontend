@@ -500,8 +500,12 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                           </MarkerKeymoneyText>
                         </CantGoMarkerView>
                         <PolygonView>
-                          <PolygonImage
-                            source={require("../../Images/polygon.png")}
+                          <Image
+                            source={{ uri: markerTail }}
+                            style={{
+                              width: widthPercentage(15),
+                              height: heightPercentage(6),
+                            }}
                           />
                         </PolygonView>
                       </Callout>
