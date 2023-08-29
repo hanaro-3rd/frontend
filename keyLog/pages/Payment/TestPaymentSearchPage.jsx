@@ -16,6 +16,7 @@ import leftArrow from "../../assets/accountImg/Vector.png";
 import { NavigationContainer } from "@react-navigation/native";
 import Swiper from "react-native-swiper";
 import arrowBack from "../../assets/travelBudget/arrow_back.png";
+import { star, starHalf } from "../../utils/image";
 const TestPaymentSearchPage = ({ navigation }) => {
   const [location, setLocation] = useState({
     latitude: 37.545315,
@@ -62,7 +63,7 @@ const TestPaymentSearchPage = ({ navigation }) => {
           longitudeDelta: 0.01,
         });
       },
-   
+
       (error) => {
         console.log(error);
         console.log(error.code, error.message, "geolocation에러");
@@ -90,20 +91,30 @@ const TestPaymentSearchPage = ({ navigation }) => {
 
   const generateStarIcons = (rating) => {
     const fullStars = Math.floor(rating);
-    const halfStar = rating - fullStars >= 0.5;
+    const hasHalfStar = rating - fullStars >= 0.5;
 
-    // Generate the star icons
-    const stars = Array.from({ length: 5 }, (_, index) => {
-      if (index < fullStars) {
-        return "★";
-      } else if (index === fullStars && halfStar) {
-        return "½";
-      } else {
-        return "☆";
-      }
-    });
+    const fullStarImage = { uri: star };
+    const halfStarImage = { uri: starHalf };
 
-    return stars.join("");
+    const stars = [];
+
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<Image key={i} source={fullStarImage} style={{
+        width: widthPercentage(22),
+        height: heightPercentage(22),
+        marginRight:widthPercentage(2)
+      }}/>);
+    }
+
+    if (hasHalfStar) {
+      stars.push(<Image key="half" source={halfStarImage} style={{
+        width: widthPercentage(22),
+        height: heightPercentage(22),
+        marginRight:widthPercentage(2)
+      }}/>);
+    }
+
+    return stars;
   };
   return (
     <View style={{ flex: 1 }}>
@@ -136,14 +147,14 @@ const TestPaymentSearchPage = ({ navigation }) => {
             onPress={(data, details) => {
               console.log(details.photos, "details");
               const imagePairs = [];
-             if(details.photos) {
-              for (let i = 0; i < details.photos.length; i += 2) {
-                // 이미지를 두 개씩 묶어서 배열에 추가
-                const pair = details.photos.slice(i, i + 2);
-                imagePairs.push(pair);
+              if (details.photos) {
+                for (let i = 0; i < details.photos.length; i += 2) {
+                  // 이미지를 두 개씩 묶어서 배열에 추가
+                  const pair = details.photos.slice(i, i + 2);
+                  imagePairs.push(pair);
+                }
+                setPhotos(imagePairs);
               }
-              setPhotos(imagePairs);
-             }
 
               // console.log(data);
               // console.log(details.geometry.location.lat);
@@ -170,7 +181,7 @@ const TestPaymentSearchPage = ({ navigation }) => {
             fetchDetails={true}
             query={{
               key: "AIzaSyB_nxmsBL4iSwU9dniKHw4GWOXONVfCUZw",
-              language: "ko"||"en",
+              language: "ko" || "en",
             }}
             ref={placesRef}
           />
@@ -208,8 +219,10 @@ const TestPaymentSearchPage = ({ navigation }) => {
           <SelectStoreContainer>
             <SelectStoreText>{markerInformation.store}</SelectStoreText>
             <RankTextContainer>
-              <RankText>{markerInformation.rating}</RankText>
-              <StarText>{generateStarIcons(markerInformation.rating)}</StarText>
+              <RankText>{markerInformation.rating} </RankText>
+              <StarImageContainer>
+                {generateStarIcons(markerInformation.rating)}
+              </StarImageContainer>
             </RankTextContainer>
             <View style={{ width: "100%", height: 150 }}>
               <Swiper
@@ -222,18 +235,21 @@ const TestPaymentSearchPage = ({ navigation }) => {
                 {photos.map((pair, idx) => {
                   return (
                     <View style={{ flexDirection: "row" }}>
-                      {
-                        pair.map((e,idx)=>{
-                          return(
-                            <Image
-                            style={{ width: "49%", height: 150, marginRight: 5, borderRadius:10 }}
+                      {pair.map((e, idx) => {
+                        return (
+                          <Image
+                            style={{
+                              width: "49%",
+                              height: 150,
+                              marginRight: 5,
+                              borderRadius: 10,
+                            }}
                             source={{
                               uri: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${e.photo_reference}&key=AIzaSyB_nxmsBL4iSwU9dniKHw4GWOXONVfCUZw`,
                             }}
                           />
-                          )
-                        })
-                      }
+                        );
+                      })}
                     </View>
                   );
                 })}
@@ -272,14 +288,11 @@ const SelectStoreText = styled.Text`
   font-weight: 400;
 `;
 
-const StarText = styled.Text`
-  color: #ffac33;
-  font-family: Inter;
-  font-size: ${fontPercentage(18)}px;
-  font-style: normal;
-  font-weight: 400;
-  margin-left: ${widthPercentage(5)}px;
-  margin-bottom: ${heightPercentage(5)}px;
+const StarImageContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  width: ${widthPercentage(126)}px;
+  height: ${heightPercentage(22)}px;
 `;
 const ModalWrapper = styled.View`
   width: 100%;

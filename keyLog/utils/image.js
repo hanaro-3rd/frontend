@@ -22,7 +22,7 @@ export const japanFlag =
 export const koreaFlag =
   "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/korea-flag.png";
 
-export const start =
+export const star =
   "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/star.png";
 export const starHalf =
   "https://keylog-bucket.s3.ap-northeast-2.amazonaws.com/star-half.png";
