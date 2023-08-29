@@ -301,7 +301,7 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
       city: travelCountryOption,
       country: travelCountry,
     });
-    queryClient.invalidateQueries("travelBudgetData")
+    queryClient.invalidateQueries("travelBudgetData");
     navigation.navigate("TravelBudgetPage");
     setIsLoading(false);
   };
@@ -419,6 +419,7 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
                   onBlur={() => setIsFoodBudgetInputFilled(!!foodBudget)}
                   ref={foodTextInputRef}
                   onSubmitEditing={() => transTextInputRef.current.focus()}
+                  maxLength={10}
                 />
                 <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
@@ -449,6 +450,7 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
                   onBlur={() => setIsTransBudgetInputFilled(!!transBudget)}
                   ref={transTextInputRef}
                   onSubmitEditing={() => houseTextInputRef.current.focus()}
+                  maxLength={10}
                 />
                 <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
@@ -479,6 +481,7 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
                   onBlur={() => setIsHouseBudgetInputFilled(!!houseBudget)}
                   ref={houseTextInputRef}
                   onSubmitEditing={() => shopTextInputRef.current.focus()}
+                  maxLength={10}
                 />
                 <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
@@ -509,6 +512,7 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
                   onBlur={() => setIsShopBudgetInputFilled(!!shopBudget)}
                   ref={shopTextInputRef}
                   onSubmitEditing={() => playTextInputRef.current.focus()}
+                  maxLength={10}
                 />
                 <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
@@ -539,6 +543,7 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
                   onBlur={() => setIsPlayBudgetInputFilled(!!playBudget)}
                   ref={playTextInputRef}
                   onSubmitEditing={() => etcTextInputRef.current.focus()}
+                  maxLength={10}
                 />
                 <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
@@ -568,6 +573,7 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
                   onFocus={() => setIsEtcBudgetInputFilled(true)}
                   onBlur={() => setIsEtcBudgetInputFilled(!!etcBudget)}
                   ref={etcTextInputRef}
+                  maxLength={10}
                 />
                 <MoneyUnitText>{moneyUnit}</MoneyUnitText>
               </Input>
@@ -576,7 +582,7 @@ const TravelBudgetPlanPage = ({ navigation, route }) => {
           <BudgetTotalContainer>
             <TotalText>총</TotalText>
             <InputTotal>
-              <BudgetTotalText>{totalBudget}</BudgetTotalText>
+              <BudgetTotalText>{totalBudget.toLocaleString()}</BudgetTotalText>
               <MoneyTotalUnitText>{moneyUnit}</MoneyTotalUnitText>
             </InputTotal>
           </BudgetTotalContainer>

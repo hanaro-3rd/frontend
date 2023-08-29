@@ -20,11 +20,11 @@ const DeleteHeader = ({ navigation, to }) => {
     height: ${heightPercentage(24)}px;
   `;
   return (
-    <TouchableOpacity onPress={() => navigation.navigate(to)}>
-      <Header>
+    <Header>
+      <TouchableOpacity onPress={() => navigation.navigate(to)}>
         <HeaderImage source={{ uri: close }} />
-      </Header>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </Header>
   );
 };
 

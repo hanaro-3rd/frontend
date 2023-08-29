@@ -44,9 +44,8 @@ const TravelBudgetPaymentHistoryComponent = ({
   setTotalPayment,
   clickCount,
 }) => {
-
   const filteredCategoryList = categoryList.filter(
-    (payment) => payment.unit === travelBudgetUnit 
+    (payment) => payment.unit === travelBudgetUnit
   );
 
   const calculateOneCategoryTotal = () => {

@@ -30,6 +30,12 @@ import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import TravelBudgetPaymentHistoryComponent from "../../components/TravelBudgetPageComponents/TravelBudgetPaymentHistoryComponent";
 import { formatDate } from "../../utils/formatDate";
 import {
+  categoryCulture,
+  categoryEtc,
+  categoryFood,
+  categoryHotel,
+  categoryShoppging,
+  categoryTraffic,
   close,
   deleteIcon,
   edit,
@@ -682,24 +688,64 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                             <CategoryDetailContainer>
                               <Icon>
                                 {(e.category == "식비" && (
-                                  <Image source={{ uri: categoryFood }} />
+                                  <Image
+                                    source={{ uri: categoryFood }}
+                                    style={{
+                                      width: widthPercentage(30),
+                                      height: heightPercentage(30),
+                                    }}
+                                    resizeMode="contain"
+                                  />
                                 )) ||
                                   (e.category == "교통" && (
-                                    <Image source={{ uri: categoryTraffic }} />
+                                    <Image
+                                      source={{ uri: categoryTraffic }}
+                                      style={{
+                                        width: widthPercentage(30),
+                                        height: heightPercentage(30),
+                                      }}
+                                      resizeMode="contain"
+                                    />
                                   )) ||
                                   (e.category == "숙박" && (
-                                    <Image source={{ uri: categoryHotel }} />
+                                    <Image
+                                      source={{ uri: categoryHotel }}
+                                      style={{
+                                        width: widthPercentage(30),
+                                        height: heightPercentage(30),
+                                      }}
+                                      resizeMode="contain"
+                                    />
                                   )) ||
                                   (e.category == "쇼핑" && (
                                     <Image
                                       source={{ uri: categoryShoppging }}
+                                      style={{
+                                        width: widthPercentage(30),
+                                        height: heightPercentage(30),
+                                      }}
+                                      resizeMode="contain"
                                     />
                                   )) ||
                                   (e.category == "문화" && (
-                                    <Image source={{ uri: categoryCulture }} />
+                                    <Image
+                                      source={{ uri: categoryCulture }}
+                                      style={{
+                                        width: widthPercentage(30),
+                                        height: heightPercentage(30),
+                                      }}
+                                      resizeMode="contain"
+                                    />
                                   )) ||
                                   (e.category == "기타" && (
-                                    <Image source={{ uri: categoryEtc }} />
+                                    <Image
+                                      source={{ uri: categoryEtc }}
+                                      style={{
+                                        width: widthPercentage(30),
+                                        height: heightPercentage(30),
+                                      }}
+                                      resizeMode="contain"
+                                    />
                                   ))}
                               </Icon>
                               <CategoryDetailTextContainer>

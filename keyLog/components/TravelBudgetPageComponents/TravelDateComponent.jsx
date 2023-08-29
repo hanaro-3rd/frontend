@@ -14,6 +14,7 @@ import {
 } from "../../utils/ResponseSize";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import { expandGray } from "../../utils/image";
 
 const SelectedFrame = styled.View`
   display: flex;
@@ -162,7 +163,13 @@ const TravelDateComponent = ({
                 }}
               >
                 <PlaceholderText>시작일</PlaceholderText>
-                <Image source={SelectButtonBefore} />
+                <Image
+                  source={{ uri: expandGray }}
+                  style={{
+                    width: widthPercentage(25),
+                    height: heightPercentage(15),
+                  }}
+                />
               </View>
             )}
           </TravelPeriodTextContainer>
@@ -194,7 +201,13 @@ const TravelDateComponent = ({
                 }}
               >
                 <PlaceholderText>종료일</PlaceholderText>
-                <Image source={SelectButtonBefore} />
+                <Image
+                  source={{ uri: expandGray }}
+                  style={{
+                    width: widthPercentage(25),
+                    height: heightPercentage(15),
+                  }}
+                />
               </View>
             )}
           </TravelPeriodTextContainer>

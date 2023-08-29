@@ -110,8 +110,8 @@ const KeyMoneyHistoryPage = ({ route, navigation }) => {
                     <Image
                       source={{ uri: rightGray }}
                       style={{
-                        width: widthPercentage(15),
-                        height: heightPercentage(9.262),
+                        width: widthPercentage(30),
+                        height: heightPercentage(20),
                       }}
                     />
                   </AccountInfoContainer>
