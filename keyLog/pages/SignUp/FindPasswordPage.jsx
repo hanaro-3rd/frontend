@@ -41,7 +41,7 @@ const FindPasswordPage = ({ route }) => {
       console.log("성공?");
       console.log(response.data);
       setErrorCode(false);
-      navigation.navigate("LoginPage");
+      navigation.replace("LoginPage");
     },
     onError: (error) => {
       console.log(error.response, "patchError");
@@ -133,18 +133,6 @@ const FindPasswordPage = ({ route }) => {
     }
   }, [isPasswordMismatch]);
 
-  const goToMainPage = () => {
-    navigation.navigate("MainPage");
-  };
-
-  const goToLoginPatternPage = () => {
-    navigation.navigate("LoginPatternPage", {
-      name,
-      phoneNumber,
-      personalNumber,
-      password,
-    });
-  };
 
   return (
     <View style={styles.root}>

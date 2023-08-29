@@ -9,6 +9,8 @@ import NumberPad from "../../components/SignUpPageComponents/NumberPad";
 import PasswordSymbol from "../../components/SignUpPageComponents/PasswordSymbol";
 import { fontPercentage, heightPercentage } from "../../utils/ResponseSize";
 import styled from "styled-components/native";
+import { useRecoilState } from "recoil";
+import { loginAtom } from "../../recoil/loginAtom";
 
 const LoginPage = () => {
   const navigation = useNavigation();
@@ -16,7 +18,7 @@ const LoginPage = () => {
   const [loginError, setLoginError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("")
   const queryClient = useQueryClient();
-
+  const [username,setUsername] = useRecoilState(loginAtom);
   const postSignInPasswordMutation = useMutation(postSigninPassword, {
     onSuccess: async response => {
       console.log(response.data,"로그인")
@@ -24,6 +26,7 @@ const LoginPage = () => {
       setLoginError(false)
       await storeAccessToken(response.headers.access_token);
       await storeRefreshToken(response.headers.refresh_token);
+      setUsername(response.data.result)
       queryClient.invalidateQueries("exchange");
       navigation.replace("MainPage");
     },
@@ -91,7 +94,7 @@ const LoginPage = () => {
           <TouchableOpacity
             onPress={() => 
               {  setLoginError(false) 
-                navigation.navigate("SignUpPage",{isFindPassword:true})
+                navigation.replace("SignUpPage",{isFindPassword:true})
              }}
           >
             <ForgetText>비밀번호를 잊어버렸어요</ForgetText>

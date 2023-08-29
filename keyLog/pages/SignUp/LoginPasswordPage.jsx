@@ -152,17 +152,9 @@ const LoginPasswordPage = ({ route }) => {
   }, [isPasswordMismatch]);
 
   const goToMainPage = () => {
-    navigation.navigate("MainPage");
+    navigation.replace("MainPage");
   };
 
-  const goToLoginPatternPage = () => {
-    navigation.navigate("LoginPatternPage", {
-      name,
-      phoneNumber,
-      personalNumber,
-      password,
-    });
-  };
 
   return (
     <View style={styles.root}>
