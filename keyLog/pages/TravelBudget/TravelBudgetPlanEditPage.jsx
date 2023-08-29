@@ -315,7 +315,7 @@ const TravelBudgetPlanEditPage = ({ navigation, route }) => {
     6: EtcIcon,
   };
 
-  const handleSaveButtonPress = () => {
+  const handleSaveButtonPress = async () => {
     const updateTravelPlanData = {
       city: travelCountryOption,
       country: travelCountry,

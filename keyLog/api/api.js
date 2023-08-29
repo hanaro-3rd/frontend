@@ -13,10 +13,12 @@ export const postSigninPassword = (signInPasswordData) => {
   return axiosClient.post("/signin/password", signInPasswordData);
 };
 
-export const patchUpdatePassword = ({ patchUpdatePasswordData }) => {
-  return axiosClient.patch(`/updatePassword`, patchUpdatePasswordData);
+export const patchUpdatePassword = (patchUpdatePasswordData) => {
+  return axios.patch(
+    `http://3.38.13.139:8081/updatePassword`,
+    patchUpdatePasswordData
+  );
 };
-
 export const postVerification = (verificationData) => {
   return axiosClient.post("/verification", verificationData);
 };
@@ -31,8 +33,11 @@ export const getRegistrationDeviceId = (deviceId) => {
 export const getRefresh = async () => {
   return axiosRefreshClient.get("/refresh");
 };
-export const postMarker = ({sort,isPickup,unit,markerData}) => {
-  return axiosClient.post(`/marker?unit=${unit}&isPickup=${isPickup}&sort=${sort}`,markerData);
+export const postMarker = ({ sort, isPickup, unit, markerData }) => {
+  return axiosClient.post(
+    `/marker?unit=${unit}&isPickup=${isPickup}&sort=${sort}`,
+    markerData
+  );
 };
 
 export const postMarkers = ({ markerId, markerData }) => {
@@ -110,4 +115,7 @@ export const getDetailKeymoneyHistory = ({ historyId, type }) => {
   return axiosClient.get(
     `/keymoney/detail?historyId=${historyId}&type=${type}`
   );
+};
+export const patchUpdateDevice = (updateDeviceData) => {
+  return axiosClient.patch(`/updateDevice`, updateDeviceData);
 };
