@@ -93,7 +93,7 @@ const KeyMoneyHistoryPage = ({ route, navigation }) => {
                     }}
                   >
                     <AccountInfo>
-                      <CountryImage source={unitImageMap[item.unit]} />
+                      <CountryImage source={unitImageMap[item.unit]} resizeMode="contain" />
                       <AccountInfoTextContainer>
                         <AccountCountryText>{item.unit}</AccountCountryText>
                         <AccountMoneyText>
