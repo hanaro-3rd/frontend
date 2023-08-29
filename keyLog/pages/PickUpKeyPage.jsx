@@ -25,15 +25,20 @@ import leftArrow from "../assets/accountImg/Vector.png";
 import { NavigationContainer } from "@react-navigation/native";
 import { navigateToLoginPage } from "../utils/NavigateToLoginPage";
 import Geolocation from "react-native-geolocation-service";
-import arrowBack from "../assets/travelBudget/arrow_back.png";
 import selectDown from "../assets/exchangeImg/SelectButton.png";
 import closeButton from "../assets/travelBudget/CloseButton.png";
-import markerMap from "../Images/마커지도.png";
-import markerAddress from "../Images/마커주소.png";
-import markerPin from "../Images/마커.png";
 import CountryModalComponent from "../components/PickUpPageComponents/CountryModalComponent";
 import MarkerModalComponent from "../components/PickUpPageComponents/MarkerModalComponent";
 import SortModalComponent from "../components/PickUpPageComponents/SortModalComponent";
+import {
+  arrowBack,
+  clear,
+  close,
+  expandGray,
+  keyCircle,
+  markerBlue,
+  placeCircle,
+} from "../utils/image";
 const PickUpKeyPage = ({ navigation }) => {
   const [location, setLocation] = useState({
     latitude: 37.545315,
@@ -155,7 +160,7 @@ const PickUpKeyPage = ({ navigation }) => {
   };
   const toggleUpDown = () => {
     if (markerList.length == 0) {
-      return
+      return;
     }
     setUpDown(!upDown);
     setMarkerList((prevMarkerList) => {
@@ -239,7 +244,13 @@ const PickUpKeyPage = ({ navigation }) => {
             navigation.navigate("MainPage");
           }}
         >
-          <Image source={arrowBack} />
+          <Image
+            source={{ uri: arrowBack }}
+            style={{
+              width: widthPercentage(24),
+              height: heightPercentage(24),
+            }}
+          />
         </TouchableOpacity>
         <View style={{ width: "90%" }}>
           <GooglePlacesAutocomplete
@@ -303,7 +314,7 @@ const PickUpKeyPage = ({ navigation }) => {
               }}
             >
               <Image
-                source={require("../Images/삭제_흰.png")}
+                source={{ uri: clear }}
                 style={{ zIndex: 1111, width: 10, height: 10 }}
               />
             </TouchableOpacity>
@@ -357,12 +368,12 @@ const PickUpKeyPage = ({ navigation }) => {
                   lng: marker.lng,
                   isPickUp: marker.isPickUp,
                   unit: marker.unit,
-                  distance: marker.distance
+                  distance: marker.distance,
                 });
               }}
             >
               <Image
-                source={markerPin} // 마커 이미지 경로
+                source={{ uri: markerBlue }} // 마커 이미지 경로
                 style={{
                   width: 50, // 원하는 너비
                   height: 50, // 원하는 높이
@@ -400,7 +411,7 @@ const PickUpKeyPage = ({ navigation }) => {
               </ModalTextView>
               <ModalDeleteButton onPress={() => setShowModalView(false)}>
                 <ModalDeleteImage
-                  source={require("../Images/삭제.png")}
+                  source={{ uri: close }}
                   resizeMode="contain"
                 />
               </ModalDeleteButton>
@@ -467,8 +478,13 @@ const PickUpKeyPage = ({ navigation }) => {
                     {countryModal[1]}
                   </Text>
                   <Image
-                    style={{ marginLeft: 5, marginTop: 3 }}
-                    source={selectDown}
+                    style={{
+                      marginLeft: 2,
+                      marginTop: 3,
+                      width: widthPercentage(20),
+                      height: heightPercentage(10),
+                    }}
+                    source={{ uri: expandGray }}
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -483,8 +499,13 @@ const PickUpKeyPage = ({ navigation }) => {
                     {markerModal[1]}
                   </Text>
                   <Image
-                    style={{ marginLeft: 5, marginTop: 3 }}
-                    source={selectDown}
+                    style={{
+                      marginLeft: 2,
+                      marginTop: 3,
+                      width: widthPercentage(20),
+                      height: heightPercentage(10),
+                    }}
+                    source={{ uri: expandGray }}
                   />
                 </TouchableOpacity>
               </View>
@@ -510,8 +531,13 @@ const PickUpKeyPage = ({ navigation }) => {
                     {sortModal[1]}
                   </Text>
                   <Image
-                    style={{ marginLeft: 5, marginTop: 3 }}
-                    source={selectDown}
+                    style={{
+                      marginLeft: 2,
+                      marginTop: 3,
+                      width: widthPercentage(20),
+                      height: heightPercentage(10),
+                    }}
+                    source={{ uri: expandGray }}
                   />
                 </TouchableOpacity>
                 {upDown == false ? (
@@ -529,7 +555,6 @@ const PickUpKeyPage = ({ navigation }) => {
                     </Text>
                     <View
                       style={{ marginLeft: 5, marginTop: 3 }}
-                      source={selectDown}
                     >
                       <Text>▲</Text>
                     </View>
@@ -547,7 +572,6 @@ const PickUpKeyPage = ({ navigation }) => {
                     <Text style={{ fontSize: 13 }}>내림차순</Text>
                     <View
                       style={{ marginLeft: 5, marginTop: 3 }}
-                      source={selectDown}
                     >
                       <Text>▼</Text>
                     </View>
@@ -592,16 +616,15 @@ const PickUpKeyPage = ({ navigation }) => {
                             alignItems: "flex-start",
                             width: "100%",
                             justifyContent: "space-between",
-                 
-                            
                           }}
                         >
-                         
-                          <View style={{width:"50%"}}>
+                          <View style={{ width: "50%" }}>
                             <ElementTitle>{marker.place}</ElementTitle>
                             <DistanceText>{marker.distance}km</DistanceText>
                           </View>
-                          <MoneyText style={{ textAlign: "right",width:"50%" }}>
+                          <MoneyText
+                            style={{ textAlign: "right", width: "50%" }}
+                          >
                             {marker.limitAmount}명 남았어요
                           </MoneyText>
                         </View>
@@ -615,8 +638,14 @@ const PickUpKeyPage = ({ navigation }) => {
                           }}
                         >
                           <Image
-                            source={markerMap}
-                            style={{ marginTop: 7, marginRight: 5 }}
+                            source={{ uri: keyCircle }}
+                            style={{
+                              marginTop: 7,
+                              marginRight: 5,
+                              width: widthPercentage(14),
+                              height: heightPercentage(14),
+                              resizeMode: "contain",
+                            }}
                           />
                           <PeopleText>
                             {getCountryUnit(marker.unit)}
@@ -631,8 +660,14 @@ const PickUpKeyPage = ({ navigation }) => {
                           }}
                         >
                           <Image
-                            source={markerAddress}
-                            style={{ marginTop: 7, marginRight: 5 }}
+                            source={{ uri: placeCircle }}
+                            style={{
+                              marginTop: 7,
+                              marginRight: 5,
+                              width: widthPercentage(14),
+                              height: heightPercentage(14),
+                              resizeMode: "contain",
+                            }}
                           />
                           <PeopleText>{marker.address}</PeopleText>
                         </View>
@@ -925,4 +960,3 @@ const customCalloutStyle = StyleSheet.create({
 });
 
 export default PickUpKeyPage;
-

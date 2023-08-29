@@ -36,8 +36,9 @@ import {
   koreaFlag,
   loop,
   usaFlag,
+  check,
 } from "../../utils/image";
-import { check } from "react-native-permissions";
+
 
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
