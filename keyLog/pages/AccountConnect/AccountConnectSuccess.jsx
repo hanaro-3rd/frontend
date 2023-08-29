@@ -31,6 +31,7 @@ const AccountConnectSuccess = ({ navigation, route }) => {
                 width: widthPercentage(150),
                 height: heightPercentage(150),
               }}
+              resizeMode="contain"
             />
           </View>
           <View style={styles.frame91}>

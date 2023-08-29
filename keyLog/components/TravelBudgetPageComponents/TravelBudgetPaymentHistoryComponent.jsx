@@ -44,9 +44,8 @@ const TravelBudgetPaymentHistoryComponent = ({
   setTotalPayment,
   clickCount,
 }) => {
-
   const filteredCategoryList = categoryList.filter(
-    (payment) => payment.unit === travelBudgetUnit 
+    (payment) => payment.unit === travelBudgetUnit
   );
 
   const calculateOneCategoryTotal = () => {
@@ -277,7 +276,7 @@ const RemainCostContainer = styled.View`
 
 const SelectButtonImage = styled.Image`
   height: ${heightPercentage(19)}px;
-  margin-top: ${heightPercentage(4)}px;
+  width: ${widthPercentage(25)}px;
 `;
 
 const CategoryDetailText = styled.Text`

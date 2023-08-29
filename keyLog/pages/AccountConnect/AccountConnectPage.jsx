@@ -33,6 +33,7 @@ import {
 } from "react-query";
 import { getAccounExternal, postAccountExternal } from "../../api/api";
 import { initialWindowMetrics } from "react-native-safe-area-context";
+import { check, close } from "../../utils/image";
 
 export const AccountConnectPage = ({ navigation, route }) => {
   const [selectedItem, setSelectedItem] = useState({});
@@ -178,8 +179,12 @@ export const AccountConnectPage = ({ navigation, route }) => {
                     </Text>
                     {isSelected && (
                       <Image
-                        source={require("../../assets/accountImg/check.png")}
-                        style={{ marginRight: 20 }}
+                        source={{ uri: check }}
+                        style={{
+                          marginRight: 20,
+                          width: widthPercentage(20),
+                          height: heightPercentage(20),
+                        }}
                         resizeMode="contain"
                         visible=""
                       />
@@ -221,10 +226,7 @@ export const AccountConnectPage = ({ navigation, route }) => {
                 <Text style={styles.popupHeaderText}>계좌 비밀번호 입력</Text>
 
                 <Pressable onPress={() => setModalVisible(!modalVisible)}>
-                  <Image
-                    source={require("../../assets/accountImg/CloseButton.png")}
-                    style={styles.button}
-                  />
+                  <Image source={{ uri: close }} style={styles.close} />
                 </Pressable>
               </View>
               <Text style={styles.popupRedHeaderText}>
@@ -500,4 +502,5 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     textAlign: "center",
   },
+  close: { width: widthPercentage(20), height: heightPercentage(20) },
 });
