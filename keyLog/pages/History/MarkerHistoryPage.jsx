@@ -104,7 +104,7 @@ const MarkerHistoryPage = ({ route, navigation }) => {
       <View>
         <DeleteHeader>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <HeaderImage source={{ uri: close }} />{" "}
+            <HeaderImage source={{ uri: close }} />
           </TouchableOpacity>
         </DeleteHeader>
 
@@ -147,7 +147,7 @@ const MarkerHistoryPage = ({ route, navigation }) => {
             });
           }}
         >
-          <Text style={styles.____3}>확인</Text>
+          <SubmitText>확인</SubmitText>
         </TouchableOpacity>
       </View>
     </Main>
@@ -189,6 +189,10 @@ const SubmitView = styled.View`
 const SubmitText = styled.Text`
   color: #fff;
   font-size: 16px;
+  font-family: Inter;
+  font-size: ${fontPercentage(16)}px;
+  font-style: normal;
+  font-weight: 700;
 `;
 
 const styles = StyleSheet.create({
