@@ -1,6 +1,4 @@
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
-import Close from "../../assets/accountImg/CloseButton.png";
-import FailImg from "../../assets/exchangeImg/Fail.png";
 import {
   fontPercentage,
   getStatusBarHeight,

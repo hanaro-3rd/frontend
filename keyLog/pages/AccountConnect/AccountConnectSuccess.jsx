@@ -1,6 +1,4 @@
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
-import Close from "../../assets/accountImg/CloseButton.png";
-import Success from "../../assets/accountImg/AccountSuccess.png";
 import {
   fontPercentage,
   getStatusBarHeight,
@@ -10,6 +8,7 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
+import { connectSuccess } from "../../utils/image";
 
 const AccountConnectSuccess = ({ navigation, route }) => {
   const { bank, balance, accountNum, page } = route?.params;
@@ -26,7 +25,13 @@ const AccountConnectSuccess = ({ navigation, route }) => {
         </View>
         <View style={styles.bodyMain}>
           <View style={styles.mainIconContainer}>
-            <Image source={Success} />
+            <Image
+              source={{ uri: connectSuccess }}
+              style={{
+                width: widthPercentage(150),
+                height: heightPercentage(150),
+              }}
+            />
           </View>
           <View style={styles.frame91}>
             <Text style={styles.containerTitle}>계좌 정보</Text>
