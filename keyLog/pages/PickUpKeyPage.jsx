@@ -958,5 +958,4 @@ const customCalloutStyle = StyleSheet.create({
     fontSize: 16,
   },
 });
-
 export default PickUpKeyPage;
