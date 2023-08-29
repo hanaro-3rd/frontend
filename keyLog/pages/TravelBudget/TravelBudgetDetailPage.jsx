@@ -54,7 +54,12 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
   const [etcMarker, setEtcMarker] = useState([]);
   const queryClient = useQueryClient();
   const [isMarker, setIsMarker] = useState(false);
-  const [location, setLocation] = useState();
+  const [location, setLocation] = useState({
+    latitude: 37.545315,
+    longitude: 127.057088,
+    latitudeDelta: 3,
+    longitudeDelta: 3,
+  });
   const [isSelected, setIsSelected] = useState(false);
   const [travelBudget, setTravelBudget] = useState();
   const [timePaymentHistory, setTimePaymentHistory] = useState({});
@@ -75,21 +80,24 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
     () => getTravelBudgetDetail(planId),
     {
       onSuccess: (response) => {
-      
         if (response.data.result.timePaymentHistory) {
-          console.log(response.data.result.travelBudget.country,"country")
-          console.log(response.data.result.timePaymentHistory)
-          const country =response.data.result.travelBudget.country
+          console.log(response.data.result.travelBudget.country, "country");
+          console.log(response.data.result.timePaymentHistory);
+          const country = response.data.result.travelBudget.country;
           const obj = response.data.result.timePaymentHistory;
           const subObj = {};
           for (key in obj) {
             if (subObj[formatDate(key)] == undefined) {
-              console.log(obj[key])
-              subObj[formatDate(key)] = obj[key].filter(e=>getCountryUnit(e.unit)==getMoneyUnit(country));
+              console.log(obj[key]);
+              subObj[formatDate(key)] = obj[key].filter(
+                (e) => getCountryUnit(e.unit) == getMoneyUnit(country)
+              );
             } else {
               subObj[formatDate(key)] = [
                 ...subObj[formatDate(key)],
-                ...obj[key],
+                ...obj[key].filter(
+                  (e) => getCountryUnit(e.unit) == getMoneyUnit(country)
+                ),
               ];
             }
           }
@@ -107,7 +115,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
     () => getTravelBudgetCategory(planId),
     {
       onSuccess: (response) => {
-        console.log(response.data.result.categoryPaymentHistory,"category")
+        console.log(response.data.result.categoryPaymentHistory, "category");
         setCategory(response.data.result.category);
         setTravelBudget(
           getMoneyUnit(response.data.result.travelBudget.country)
@@ -115,9 +123,17 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
         setTravelData(response.data.result);
         if (response.data.result.categoryPaymentHistory) {
           const obj = response.data.result.categoryPaymentHistory;
-          console.log(response.data.result.travelBudget.country,"맞아?")
+          console.log(obj)
+          console.log(response.data.result.travelBudget.country, "맞아?");
           for (key in obj) {
-            if (obj[key].length > 0) {
+
+            if (
+              obj[key].filter(
+                (e) =>
+                  getCountryUnit(e.unit) ==
+                  getMoneyUnit(response.data.result.travelBudget.country)
+              ).length > 0
+            ) {
               setLocation({
                 longitude: obj[key][0].lng,
                 latitude: obj[key][0].lat,
@@ -131,22 +147,58 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
           for (key in obj) {
             switch (key) {
               case "교통":
-                setTransCategory(obj[key].filter(e=>getCountryUnit(e.unit)==getMoneyUnit(response.data.result.travelBudget.country)));
+                setTransCategory(
+                  obj[key].filter(
+                    (e) =>
+                      getCountryUnit(e.unit) ==
+                      getMoneyUnit(response.data.result.travelBudget.country)
+                  )
+                );
                 break;
               case "식비":
-                setFoodCategory(obj[key].filter(e=>getCountryUnit(e.unit)==getMoneyUnit(response.data.result.travelBudget.country)));
+                setFoodCategory(
+                  obj[key].filter(
+                    (e) =>
+                      getCountryUnit(e.unit) ==
+                      getMoneyUnit(response.data.result.travelBudget.country)
+                  )
+                );
                 break;
               case "숙박":
-                setSleepCategory(obj[key].filter(e=>getCountryUnit(e.unit)==getMoneyUnit(response.data.result.travelBudget.country)));
+                setSleepCategory(
+                  obj[key].filter(
+                    (e) =>
+                      getCountryUnit(e.unit) ==
+                      getMoneyUnit(response.data.result.travelBudget.country)
+                  )
+                );
                 break;
               case "쇼핑":
-                setShoppingCategory(obj[key].filter(e=>getCountryUnit(e.unit)==getMoneyUnit(response.data.result.travelBudget.country)));
+                setShoppingCategory(
+                  obj[key].filter(
+                    (e) =>
+                      getCountryUnit(e.unit) ==
+                      getMoneyUnit(response.data.result.travelBudget.country)
+                  )
+                );
                 break;
               case "문화":
-                setCultureCategory(obj[key].filter(e=>getCountryUnit(e.unit)==getMoneyUnit(response.data.result.travelBudget.country)));
+                setCultureCategory(
+                  obj[key].filter(
+                    (e) =>
+                      getCountryUnit(e.unit) ==
+                      getMoneyUnit(response.data.result.travelBudget.country)
+                  )
+                );
                 break;
               default:
-                setEtcCategory(obj[key].filter(e=>getCountryUnit(e.unit)==getMoneyUnit(response.data.result.travelBudget.country)));
+                setEtcCategory(
+                  obj[key].filter(
+                    (e) =>
+                      getCountryUnit(e.unit) ==
+                      getMoneyUnit(response.data.result.travelBudget.country)
+                  )
+                );
                 break;
             }
           }
@@ -159,7 +211,6 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
   const handlePressCategory = () => {
     setSelectedTab("category");
     setClickCount((prev) => prev + 1);
-   
   };
 
   const [selectedTab, setSelectedTab] = useState("category");
@@ -293,7 +344,8 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                           <CantGoMarkerView>
                             <MarkerKeymoneyText>{e.store}</MarkerKeymoneyText>
                             <MarkerKeymoneyText>
-                              {e.price}{e.unit}
+                              {e.price}
+                              {e.unit}
                             </MarkerKeymoneyText>
                           </CantGoMarkerView>
                           <PolygonView>
@@ -316,7 +368,6 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                   ...sleepCategory,
                   ...cultureCategory,
                 ]?.map((e, idx) => {
-              
                   return (
                     <Marker
                       key={idx}
@@ -411,7 +462,10 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                       <Callout>
                         <CantGoMarkerView>
                           <MarkerKeymoneyText>{e.store}</MarkerKeymoneyText>
-                          <MarkerKeymoneyText>{e.price}</MarkerKeymoneyText>
+                          <MarkerKeymoneyText>
+                            {e.price}
+                            {e.unit}
+                          </MarkerKeymoneyText>
                         </CantGoMarkerView>
                         <PolygonView>
                           <PolygonImage
@@ -576,83 +630,83 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
           ) : (
             <MainContainer>
               {Object.keys(timePaymentHistory).map((key, idx) => {
-                return (
-                  <CategoryPaymentContainer key={idx}>
-                    <CategoryCardContainer>
-                      <CategoryContainer>
-                        <CategoryText>{key}</CategoryText>
-                      </CategoryContainer>
-                      <RemainCostContainer>
-                        <SelectButtonImage source={SelectButton} />
-                      </RemainCostContainer>
-                    </CategoryCardContainer>
-                    <PaymentListContainer>
-                      {timePaymentHistory[key].map((e, idx) => {
-                    
-                        return (
-                          <PaymentContainer
-                            onPress={() => {
-                              setLocation({
-                                longitude: e.lng,
-                                latitude: e.lat,
-                                latitudeDelta: 0.1,
-                                longitudeDelta: 0.1,
-                              });
-                            }}
-                          >
-                            <CategoryDetailContainer>
-                              <Icon>
-                                {(e.category == "식비" && (
-                                  <Image
-                                    source={require(`../../assets/travelBudget/FoodIcon.png`)}
-                                  />
-                                )) ||
-                                  (e.category == "교통" && (
+                if (timePaymentHistory[key].length > 0)
+                  return (
+                    <CategoryPaymentContainer key={idx}>
+                      <CategoryCardContainer>
+                        <CategoryContainer>
+                          <CategoryText>{key}</CategoryText>
+                        </CategoryContainer>
+                        <RemainCostContainer>
+                          <SelectButtonImage source={SelectButton} />
+                        </RemainCostContainer>
+                      </CategoryCardContainer>
+                      <PaymentListContainer>
+                        {timePaymentHistory[key].map((e, idx) => {
+                          return (
+                            <PaymentContainer
+                              onPress={() => {
+                                setLocation({
+                                  longitude: e.lng,
+                                  latitude: e.lat,
+                                  latitudeDelta: 0.1,
+                                  longitudeDelta: 0.1,
+                                });
+                              }}
+                            >
+                              <CategoryDetailContainer>
+                                <Icon>
+                                  {(e.category == "식비" && (
                                     <Image
-                                      source={require(`../../assets/travelBudget/TransIcon.png`)}
+                                      source={require(`../../assets/travelBudget/FoodIcon.png`)}
                                     />
                                   )) ||
-                                  (e.category == "숙박" && (
-                                    <Image
-                                      source={require(`../../assets/travelBudget/HouseIcon.png`)}
-                                    />
-                                  )) ||
-                                  (e.category == "쇼핑" && (
-                                    <Image
-                                      source={require(`../../assets/travelBudget/ShopIcon.png`)}
-                                    />
-                                  )) ||
-                                  (e.category == "문화" && (
-                                    <Image
-                                      source={require(`../../assets/travelBudget/PlayIcon.png`)}
-                                    />
-                                  )) ||
-                                  (e.category == "기타" && (
-                                    <Image
-                                      source={require(`../../assets/travelBudget/EtcIcon.png`)}
-                                    />
-                                  ))}
-                              </Icon>
-                              <CategoryDetailTextContainer>
-                                <CategoryDetailText>
-                                  {e.store}
-                                </CategoryDetailText>
-                                <DateAndTimeText>
-                                  {e.createdAt[1]}월 {e.createdAt[2]}일{" "}
-                                  {e.createdAt[3]}:{e.createdAt[4]}
-                                </DateAndTimeText>
-                              </CategoryDetailTextContainer>
-                            </CategoryDetailContainer>
-                            <PayCostText>
-                              {getCountryUnit(e.unit)}
-                              {e.price}
-                            </PayCostText>
-                          </PaymentContainer>
-                        );
-                      })}
-                    </PaymentListContainer>
-                  </CategoryPaymentContainer>
-                );
+                                    (e.category == "교통" && (
+                                      <Image
+                                        source={require(`../../assets/travelBudget/TransIcon.png`)}
+                                      />
+                                    )) ||
+                                    (e.category == "숙박" && (
+                                      <Image
+                                        source={require(`../../assets/travelBudget/HouseIcon.png`)}
+                                      />
+                                    )) ||
+                                    (e.category == "쇼핑" && (
+                                      <Image
+                                        source={require(`../../assets/travelBudget/ShopIcon.png`)}
+                                      />
+                                    )) ||
+                                    (e.category == "문화" && (
+                                      <Image
+                                        source={require(`../../assets/travelBudget/PlayIcon.png`)}
+                                      />
+                                    )) ||
+                                    (e.category == "기타" && (
+                                      <Image
+                                        source={require(`../../assets/travelBudget/EtcIcon.png`)}
+                                      />
+                                    ))}
+                                </Icon>
+                                <CategoryDetailTextContainer>
+                                  <CategoryDetailText>
+                                    {e.store}
+                                  </CategoryDetailText>
+                                  <DateAndTimeText>
+                                    {e.createdAt[1]}월 {e.createdAt[2]}일{" "}
+                                    {e.createdAt[3]}:{e.createdAt[4]}
+                                  </DateAndTimeText>
+                                </CategoryDetailTextContainer>
+                              </CategoryDetailContainer>
+                              <PayCostText>
+                                {getCountryUnit(e.unit)}
+                                {e.price}
+                              </PayCostText>
+                            </PaymentContainer>
+                          );
+                        })}
+                      </PaymentListContainer>
+                    </CategoryPaymentContainer>
+                  );
               })}
             </MainContainer>
           )}
