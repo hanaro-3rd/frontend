@@ -22,6 +22,7 @@ import AddButton from "../../assets/travelBudget/add.png";
 import Delete from "../../assets/travelBudget/delete.png";
 import { useQuery, useQueryClient } from "react-query";
 import { getTravelBudget } from "../../api/api";
+import { close, plus } from "../../utils/image";
 
 //gesture
 
@@ -230,11 +231,11 @@ const TravelBudgetPage = ({ route, navigation }) => {
     <RootScrollView>
       <Header>
         <TouchableOpacity onPress={handleGoBack}>
-          <HeaderImage source={require("../../Images/삭제.png")} />
+          <HeaderImage source={{ uri: close }} />
         </TouchableOpacity>
         <HeaderRight>
           <TouchableOpacity onPress={handleGoToTravelSchedule}>
-            <HeaderImage source={AddButton} />
+            <HeaderImage source={{ uri: plus }} />
           </TouchableOpacity>
         </HeaderRight>
       </Header>

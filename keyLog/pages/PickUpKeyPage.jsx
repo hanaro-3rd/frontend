@@ -640,7 +640,7 @@ const PickUpKeyPage = ({ navigation }) => {
                           <Image
                             source={{ uri: keyCircle }}
                             style={{
-                              marginTop: 7,
+                              marginTop: 2,
                               marginRight: 5,
                               width: widthPercentage(14),
                               height: heightPercentage(14),
@@ -662,7 +662,7 @@ const PickUpKeyPage = ({ navigation }) => {
                           <Image
                             source={{ uri: placeCircle }}
                             style={{
-                              marginTop: 7,
+                              marginTop: 2,
                               marginRight: 5,
                               width: widthPercentage(14),
                               height: heightPercentage(14),

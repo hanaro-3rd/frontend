@@ -216,7 +216,7 @@ const MainPage = ({ navigation }) => {
   `;
   const Country = styled.Text`
     width: ${widthPercentage(34)}px;
-    height: ${heightPercentage(18)}px;
+    height: ${heightPercentage(22)}px;
     color: #191f29;
     font-family: Inter;
     font-size: ${fontPercentage(18)}px;
@@ -225,7 +225,7 @@ const MainPage = ({ navigation }) => {
   `;
   const MoneytaryUnit = styled.Text`
     width: ${widthPercentage(26)}px;
-    height: ${heightPercentage(12)}px;
+    height: ${heightPercentage(15)}px;
     color: #191f29;
     font-family: Inter;
     font-size: ${fontPercentage(12)}px;
@@ -238,6 +238,7 @@ const MainPage = ({ navigation }) => {
     font-size: ${fontPercentage(12)}px;
     font-style: normal;
     font-weight: 400;
+    width: ${widthPercentage(100)}px;
   `;
   const ExchangeRate = styled.Text`
     color: #191f29;
@@ -418,6 +419,14 @@ const MainPage = ({ navigation }) => {
       setEUR(response.data.result.eur);
       setJPY(response.data.result.jpy);
       let today = new Date(); // today 객체에 Date()의 결과를 넣어줬다
+
+      const padZero = (number) => {
+        if (number < 10) {
+          return `0${number}`;
+        }
+        return number.toString();
+      };
+
       let time = {
         year: today.getFullYear(), //현재 년도
         month: today.getMonth() + 1, // 현재 월
@@ -426,7 +435,9 @@ const MainPage = ({ navigation }) => {
         minutes: today.getMinutes(), //현재 분
       };
       setExchangeDate(
-        `${time.year}/${time.month}/${time.date} ${time.hours}:${time.minutes}`
+        `${time.year}/${time.month}/${time.date} ${time.hours}:${padZero(
+          time.minutes
+        )}`
       );
     },
     onError: (error) => {},
@@ -495,12 +506,13 @@ const MainPage = ({ navigation }) => {
             width: widthPercentage(88.29),
             height: heightPercentage(23.313),
           }}
+          resizeMode="contain"
         />
         <Setting>
           <TouchableOpacity
             onPress={() => navigation.navigate("TestPaymentPage")}
           >
-            <SettingImage source={{ uri: scan }} />
+            <SettingImage source={{ uri: scan }} resizeMode="contain" />
           </TouchableOpacity>
           {/* <TouchableOpacity onPress={() => navigation.navigate("SettingPage")}>
             <SettingImage source={SettingButton} />
@@ -547,6 +559,7 @@ const MainPage = ({ navigation }) => {
                       width: widthPercentage(24),
                       height: heightPercentage(24),
                     }}
+                    resizeMode="contain"
                   />
                 </PrevOrNextButton>
                 <CountryExchangeRateContainer>
@@ -557,6 +570,7 @@ const MainPage = ({ navigation }) => {
                         width: widthPercentage(65),
                         height: heightPercentage(70),
                       }}
+                      resizeMode="contain"
                     />
                   )}
                   {idx == 1 && (
@@ -566,6 +580,7 @@ const MainPage = ({ navigation }) => {
                         width: widthPercentage(65),
                         height: heightPercentage(70),
                       }}
+                      resizeMode="contain"
                     />
                   )}
                   {idx == 2 && (
@@ -575,6 +590,7 @@ const MainPage = ({ navigation }) => {
                         width: widthPercentage(65),
                         height: heightPercentage(70),
                       }}
+                      resizeMode="contain"
                     />
                   )}
                   <TextContainer>
@@ -610,6 +626,7 @@ const MainPage = ({ navigation }) => {
                       width: widthPercentage(24),
                       height: heightPercentage(24),
                     }}
+                    resizeMode="contain"
                   />
                 </PrevOrNextButton>
               </ExchangeRateContainer>
@@ -620,7 +637,10 @@ const MainPage = ({ navigation }) => {
         {/* 메뉴들 */}
         <MenuContainer>
           <MenuCard>
-            <KeyMoneyImage source={{ uri: keymoneyBill }} />
+            <KeyMoneyImage
+              source={{ uri: keymoneyBill }}
+              resizeMode="contain"
+            />
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>키머니 환전하기</MenuTitle>
@@ -634,7 +654,7 @@ const MainPage = ({ navigation }) => {
             </MenuSubContainer>
           </MenuCard>
           <MenuCard>
-            <KeyMoneyImage source={{ uri: accountMenu }} />
+            <KeyMoneyImage source={{ uri: accountMenu }} resizeMode="contain" />
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>계좌 연결하기</MenuTitle>
@@ -650,7 +670,7 @@ const MainPage = ({ navigation }) => {
             </MenuSubContainer>
           </MenuCard>
           <MenuCard>
-            <KeyMoneyImage source={{ uri: markerMenu }} />
+            <KeyMoneyImage source={{ uri: markerMenu }} resizeMode="contain" />
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>키머니 줍기</MenuTitle>
@@ -662,7 +682,7 @@ const MainPage = ({ navigation }) => {
             </MenuSubContainer>
           </MenuCard>
           <MenuCard>
-            <KeyMoneyImage source={{ uri: planMenu }} />
+            <KeyMoneyImage source={{ uri: planMenu }} resizeMode="contain" />
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>여행 계획하기</MenuTitle>
@@ -678,7 +698,10 @@ const MainPage = ({ navigation }) => {
             </MenuSubContainer>
           </MenuCard>
           <MenuCard>
-            <KeyMoneyImage source={{ uri: keymoneyCoin }} />
+            <KeyMoneyImage
+              source={{ uri: keymoneyCoin }}
+              resizeMode="contain"
+            />
             <MenuSubContainer>
               <MenuTextContainer>
                 <MenuTitle>키머니 확인하기</MenuTitle>

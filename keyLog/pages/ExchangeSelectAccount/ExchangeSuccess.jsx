@@ -45,7 +45,7 @@ const ExchangeSuccess = ({ navigation, route }) => {
           <View style={styles.bodyHeader}>
             <Text style={styles.title}>환전 완료</Text>
             <Text style={styles.subtitle}>
-              환전이 완료되었어요. 하나머니를 확인해주세요.
+              환전이 완료되었어요. 키머니를 확인해주세요.
             </Text>
           </View>
           <View style={styles.bodyMain}>
@@ -120,7 +120,7 @@ const ExchangeSuccess = ({ navigation, route }) => {
           style={styles.submitButton}
           onPress={() => navigation.navigate("KeyMoneyHistoryPage")}
         >
-          <Text style={styles.buttonText}>하나머니 확인하기</Text>
+          <Text style={styles.buttonText}>키머니 확인하기</Text>
         </TouchableOpacity>
       </View>
     </View>
