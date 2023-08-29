@@ -39,7 +39,6 @@ import {
   check,
 } from "../../utils/image";
 
-
 const Root = styled.SafeAreaView`
   width: ${phoneWidth}px;
   /* padding-top: ${getStatusBarHeight}px; */
@@ -482,7 +481,7 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
     } else if (category === "입금") {
       setFilter("exchangeOrMarker");
     } else if (category === "출금") {
-      setFilter("payment");
+      setFilter("paymentOrReExchange");
     }
     setOpenSelect(false);
     handleReloadQuery();
@@ -524,7 +523,10 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
           <BodyHeaderContainer>
             <TitleText>입출금 내역</TitleText>
             <CountryContainer>
-              <CountrySelectedImage source={selectedImage} />
+              <CountrySelectedImage
+                source={selectedImage}
+                resizeMode="contain"
+              />
               <TotalPayCostText>
                 {balance.toLocaleString()} {unit}
               </TotalPayCostText>
@@ -572,19 +574,27 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                 {items.filter(
                   (item) =>
                     filter === "all" ||
-                    (filter === "payment" && item.type === "payment") ||
+                    (filter === "paymentOrReExchange" &&
+                      (item.type === "payment" ||
+                        item.subject === "원화 환전")) ||
                     (filter === "exchangeOrMarker" &&
-                      (item.type === "exchange" || item.type === "marker"))
+                      (item.subject === "달러 환전" ||
+                        item.subject === "유로 환전" ||
+                        item.subject === "엔화 환전" ||
+                        item.type === "marker"))
                 ).length > 0 && (
                   <>
                     <DateText>{formattedDate}</DateText>
                     {items.map((item, idx) => {
                       if (
-                        (filter === "payment" &&
-                          (item.type === "exchange" ||
+                        (filter === "paymentOrReExchange" &&
+                          (item.subject === "달러 환전" ||
+                            item.subject === "유로 환전" ||
+                            item.subject === "엔화 환전" ||
                             item.type === "marker")) ||
                         (filter === "exchangeOrMarker" &&
-                          item.type === "payment")
+                          (item.type === "payment" ||
+                            item.subject === "원화 환전"))
                       ) {
                         return null;
                       }
@@ -693,9 +703,14 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                 {items.filter(
                   (item) =>
                     filter === "all" ||
-                    (filter === "payment" && item.type === "payment") ||
+                    (filter === "paymentOrReExchange" &&
+                      (item.type === "payment" ||
+                        item.subject === "원화 환전")) ||
                     (filter === "exchangeOrMarker" &&
-                      (item.type === "exchange" || item.type === "marker"))
+                      (item.subject === "달러 환전" ||
+                        item.subject === "유로 환전" ||
+                        item.subject === "엔화 환전" ||
+                        item.type === "marker"))
                 ).length === 0 && <Text>내역이 없습니다.</Text>}
               </React.Fragment>
             ))}
