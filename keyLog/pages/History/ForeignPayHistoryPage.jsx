@@ -573,9 +573,16 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                         "0"
                       )}:${String(minute).padStart(2, "0")}`;
 
-                      const type = item.type === "payment" ? "-" : "+";
+                      const type =
+                        item.type === "payment" || item.subject === "원화 환전"
+                          ? "-"
+                          : "+";
                       const textColor =
-                        item.type === "payment" ? "black" : "#55ACEE";
+                        item.type === "payment"
+                          ? "black"
+                          : item.subject === "원화 환전"
+                          ? "#ee5555"
+                          : "#55ACEE";
                       const categoryIconMap = {
                         식비: require("../../assets/travelBudget/FoodIcon.png"),
                         교통: require("../../assets/travelBudget/TransIcon.png"),
@@ -604,6 +611,7 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                                 historyId: item.historyId,
                                 type: item.type,
                                 totalBalance: balance,
+                                isBoughtText: item.subject,
                               });
                             } else if (item.type === "payment") {
                               navigation.navigate("PaymentPageInputComponent", {
@@ -640,7 +648,9 @@ const ForeignPayHistoryPage = ({ route, navigation }) => {
                             <CostTextContainer>
                               <CostText
                                 style={{ color: textColor }}
-                              >{`${type}${item.keymoney.toLocaleString()} ${item.unit}`}</CostText>
+                              >{`${type}${item.keymoney.toLocaleString()} ${
+                                item.unit
+                              }`}</CostText>
                               <RemainCostText>
                                 {item.balance.toLocaleString()} {item.unit}
                               </RemainCostText>
