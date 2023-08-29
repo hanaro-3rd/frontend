@@ -29,12 +29,17 @@ import {
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import TravelBudgetPaymentHistoryComponent from "../../components/TravelBudgetPageComponents/TravelBudgetPaymentHistoryComponent";
 import { formatDate } from "../../utils/formatDate";
-import markerPin from "../../Images/마커.png";
 import {
+  close,
+  deleteIcon,
+  edit,
+  expand,
+  markerBlue,
   markerCulture,
   markerEtc,
   markerFood,
   markerHotel,
+  markerTail,
   markerTraffic,
 } from "../../utils/image";
 const TravelBudgetDetailPage = ({ navigation, route }) => {
@@ -86,6 +91,8 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
           const country = response.data.result.travelBudget.country;
           const obj = response.data.result.timePaymentHistory;
           const subObj = {};
+          const travelBudgetCountry = response.data.result.travelBudget.country;
+
           for (key in obj) {
             if (subObj[formatDate(key)] == undefined) {
               console.log(obj[key]);
@@ -123,10 +130,8 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
         setTravelData(response.data.result);
         if (response.data.result.categoryPaymentHistory) {
           const obj = response.data.result.categoryPaymentHistory;
-          console.log(obj)
           console.log(response.data.result.travelBudget.country, "맞아?");
           for (key in obj) {
-
             if (
               obj[key].filter(
                 (e) =>
@@ -256,17 +261,31 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
             navigation.navigate("TravelBudgetPage");
           }}
         >
-          <HeaderImage source={require("../../Images/삭제.png")} />
+          <HeaderImage
+            source={{ uri: close }}
+            style={{
+              width: widthPercentage(24),
+              height: heightPercentage(24),
+            }}
+          />
         </TouchableOpacity>
         <HeaderRight>
           <TouchableOpacity onPress={handleDeleteImageClick}>
             <HeaderImage
-              source={require("../../assets/travelBudget/delete.png")}
+              source={{ uri: deleteIcon }}
+              style={{
+                width: widthPercentage(24),
+                height: heightPercentage(24),
+              }}
             />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleEditButtonClick}>
             <HeaderImage
-              source={require("../../assets/travelBudget/edit.png")}
+              source={{ uri: edit }}
+              style={{
+                width: widthPercentage(24),
+                height: heightPercentage(24),
+              }}
             />
           </TouchableOpacity>
         </HeaderRight>
@@ -290,8 +309,10 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
               {selectedTab == "date" &&
                 foodCategory.length > 0 &&
                 Object.keys(timePaymentHistory).map((key, idx) => {
-                  return timePaymentHistory[key].map((e, keyIdx) => {
-                    return (
+                  const paymentsForDate = timePaymentHistory[key];
+
+                  if (paymentsForDate.length > 0) {
+                    return paymentsForDate.map((e, keyIdx) => (
                       <Marker
                         key={idx}
                         opacity={1}
@@ -310,7 +331,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                       >
                         <View>
                           <Image
-                            source={markerPin} // 마커 이미지 경로
+                            source={{ uri: markerBlue }} // 마커 이미지 경로
                             style={{
                               width: 50, // 원하는 너비
                               height: 50, // 원하는 높이
@@ -349,14 +370,19 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                             </MarkerKeymoneyText>
                           </CantGoMarkerView>
                           <PolygonView>
-                            <PolygonImage
-                              source={require("../../Images/polygon.png")}
+                            <Image
+                              source={{ uri: markerTail }}
+                              style={{
+                                width: widthPercentage(15),
+                                height: heightPercentage(6),
+                              }}
                             />
                           </PolygonView>
                         </Callout>
                       </Marker>
-                    );
-                  });
+                    ));
+                  }
+                  return null;
                 })}
               {selectedTab == "category" &&
                 foodCategory.length > 0 &&
@@ -390,49 +416,49 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                           <Image
                             source={{ uri: markerFood }} // 마커 이미지 경로
                             style={{
-                              width: 50, // 원하는 너비
-                              height: 50, // 원하는 높이
-                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                              width: 50,
+                              height: 50,
+                              resizeMode: "contain",
                             }}
                           />
                         )}
                         {e.category == "교통" && (
                           <Image
-                            source={{ uri: markerTraffic }} // 마커 이미지 경로
+                            source={{ uri: markerTraffic }}
                             style={{
-                              width: 50, // 원하는 너비
-                              height: 50, // 원하는 높이
-                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                              width: 50,
+                              height: 50,
+                              resizeMode: "contain",
                             }}
                           />
                         )}
                         {e.category == "숙박" && (
                           <Image
-                            source={{ uri: markerHotel }} // 마커 이미지 경로
+                            source={{ uri: markerHotel }}
                             style={{
-                              width: 50, // 원하는 너비
-                              height: 50, // 원하는 높이
-                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                              width: 50,
+                              height: 50,
+                              resizeMode: "contain",
                             }}
                           />
                         )}
                         {e.category == "문화" && (
                           <Image
-                            source={{ uri: markerCulture }} // 마커 이미지 경로
+                            source={{ uri: markerCulture }}
                             style={{
-                              width: 50, // 원하는 너비
-                              height: 50, // 원하는 높이
-                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                              width: 50,
+                              height: 50,
+                              resizeMode: "contain",
                             }}
                           />
                         )}
                         {e.category == "기타" && (
                           <Image
-                            source={{ uri: markerEtc }} // 마커 이미지 경로
+                            source={{ uri: markerEtc }}
                             style={{
-                              width: 50, // 원하는 너비
-                              height: 50, // 원하는 높이
-                              resizeMode: "contain", // 가로세로 비율 유지하며 조절
+                              width: 50,
+                              height: 50,
+                              resizeMode: "contain",
                             }}
                           />
                         )}
@@ -444,7 +470,7 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
                             height: "100%",
                             justifyContent: "center",
                             alignItems: "center",
-                            color: "white", // 원하는 텍스트 색상 설정
+                            color: "white",
                           }}
                         >
                           <Text
@@ -492,9 +518,9 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
             />
           )}
         </MapImage>
-        <DropImage
+        {/* <DropImage
           source={require("../../assets/travelBudget/Header-Back.png")}
-        />
+        /> */}
         <BodyMain>
           <TotalBudgetContainer>
             <View style={styles.planpayContainer}>
@@ -630,83 +656,72 @@ const TravelBudgetDetailPage = ({ navigation, route }) => {
           ) : (
             <MainContainer>
               {Object.keys(timePaymentHistory).map((key, idx) => {
-                if (timePaymentHistory[key].length > 0)
-                  return (
-                    <CategoryPaymentContainer key={idx}>
-                      <CategoryCardContainer>
-                        <CategoryContainer>
-                          <CategoryText>{key}</CategoryText>
-                        </CategoryContainer>
-                        <RemainCostContainer>
-                          <SelectButtonImage source={SelectButton} />
-                        </RemainCostContainer>
-                      </CategoryCardContainer>
-                      <PaymentListContainer>
-                        {timePaymentHistory[key].map((e, idx) => {
-                          return (
-                            <PaymentContainer
-                              onPress={() => {
-                                setLocation({
-                                  longitude: e.lng,
-                                  latitude: e.lat,
-                                  latitudeDelta: 0.1,
-                                  longitudeDelta: 0.1,
-                                });
-                              }}
-                            >
-                              <CategoryDetailContainer>
-                                <Icon>
-                                  {(e.category == "식비" && (
+                return (
+                  <CategoryPaymentContainer key={idx}>
+                    <CategoryCardContainer>
+                      <CategoryContainer>
+                        <CategoryText>{key}</CategoryText>
+                      </CategoryContainer>
+                      <RemainCostContainer>
+                        <SelectButtonImage source={{ uri: expand }} />
+                      </RemainCostContainer>
+                    </CategoryCardContainer>
+                    <PaymentListContainer>
+                      {timePaymentHistory[key].map((e, idx) => {
+                        return (
+                          <PaymentContainer
+                            onPress={() => {
+                              setLocation({
+                                longitude: e.lng,
+                                latitude: e.lat,
+                                latitudeDelta: 0.1,
+                                longitudeDelta: 0.1,
+                              });
+                            }}
+                          >
+                            <CategoryDetailContainer>
+                              <Icon>
+                                {(e.category == "식비" && (
+                                  <Image source={{ uri: categoryFood }} />
+                                )) ||
+                                  (e.category == "교통" && (
+                                    <Image source={{ uri: categoryTraffic }} />
+                                  )) ||
+                                  (e.category == "숙박" && (
+                                    <Image source={{ uri: categoryHotel }} />
+                                  )) ||
+                                  (e.category == "쇼핑" && (
                                     <Image
-                                      source={require(`../../assets/travelBudget/FoodIcon.png`)}
+                                      source={{ uri: categoryShoppging }}
                                     />
                                   )) ||
-                                    (e.category == "교통" && (
-                                      <Image
-                                        source={require(`../../assets/travelBudget/TransIcon.png`)}
-                                      />
-                                    )) ||
-                                    (e.category == "숙박" && (
-                                      <Image
-                                        source={require(`../../assets/travelBudget/HouseIcon.png`)}
-                                      />
-                                    )) ||
-                                    (e.category == "쇼핑" && (
-                                      <Image
-                                        source={require(`../../assets/travelBudget/ShopIcon.png`)}
-                                      />
-                                    )) ||
-                                    (e.category == "문화" && (
-                                      <Image
-                                        source={require(`../../assets/travelBudget/PlayIcon.png`)}
-                                      />
-                                    )) ||
-                                    (e.category == "기타" && (
-                                      <Image
-                                        source={require(`../../assets/travelBudget/EtcIcon.png`)}
-                                      />
-                                    ))}
-                                </Icon>
-                                <CategoryDetailTextContainer>
-                                  <CategoryDetailText>
-                                    {e.store}
-                                  </CategoryDetailText>
-                                  <DateAndTimeText>
-                                    {e.createdAt[1]}월 {e.createdAt[2]}일{" "}
-                                    {e.createdAt[3]}:{e.createdAt[4]}
-                                  </DateAndTimeText>
-                                </CategoryDetailTextContainer>
-                              </CategoryDetailContainer>
-                              <PayCostText>
-                                {getCountryUnit(e.unit)}
-                                {e.price}
-                              </PayCostText>
-                            </PaymentContainer>
-                          );
-                        })}
-                      </PaymentListContainer>
-                    </CategoryPaymentContainer>
-                  );
+                                  (e.category == "문화" && (
+                                    <Image source={{ uri: categoryCulture }} />
+                                  )) ||
+                                  (e.category == "기타" && (
+                                    <Image source={{ uri: categoryEtc }} />
+                                  ))}
+                              </Icon>
+                              <CategoryDetailTextContainer>
+                                <CategoryDetailText>
+                                  {e.store}
+                                </CategoryDetailText>
+                                <DateAndTimeText>
+                                  {e.createdAt[1]}월 {e.createdAt[2]}일{" "}
+                                  {e.createdAt[3]}:{e.createdAt[4]}
+                                </DateAndTimeText>
+                              </CategoryDetailTextContainer>
+                            </CategoryDetailContainer>
+                            <PayCostText>
+                              {getCountryUnit(e.unit)}
+                              {e.price}
+                            </PayCostText>
+                          </PaymentContainer>
+                        );
+                      })}
+                    </PaymentListContainer>
+                  </CategoryPaymentContainer>
+                );
               })}
             </MainContainer>
           )}

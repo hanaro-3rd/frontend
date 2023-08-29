@@ -8,13 +8,14 @@ import {
 } from "react-native";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import React, { useState } from "react";
-import DeleteHeader from "../Header/DeleteHeader";
+import styled from "styled-components/native";
 import Vector from "../../assets/accountImg/Vector.png";
 import {
   fontPercentage,
   getStatusBarHeight,
   heightPercentage,
   phoneHeight,
+  phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
 import { getDetailKeymoneyHistory } from "../../api/api";
@@ -45,7 +46,11 @@ export const ExchangeHistoryResult = ({ route, navigation }) => {
   };
   return (
     <View style={styles.root}>
-      <DeleteHeader navigation={navigation} to="KeyMoneyHistoryPage" />
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <DeleteHeader>
+          <HeaderImage source={require("../../Images/삭제.png")} />
+        </DeleteHeader>
+      </TouchableOpacity>
       <View style={styles.bodyHeader}>
         <View style={styles.frame76}>
           <Text style={styles.____}>환전 내역</Text>
@@ -147,6 +152,18 @@ export const ExchangeHistoryResult = ({ route, navigation }) => {
   );
 };
 export default ExchangeHistoryResult;
+
+const DeleteHeader = styled.View`
+  width: ${phoneWidth}px;
+  height: ${heightPercentage(50)}px;
+  justify-content: center;
+  background-color: white;
+`;
+const HeaderImage = styled.Image`
+  margin-left: ${widthPercentage(12)}px;
+  width: ${widthPercentage(24)}px;
+  height: ${heightPercentage(24)}px;
+`;
 
 const styles = StyleSheet.create({
   root: {

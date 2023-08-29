@@ -6,6 +6,7 @@ import {
   phoneWidth,
   widthPercentage,
 } from "../../utils/ResponseSize";
+import { arrowBack } from "../../utils/image";
 const PrevHeader = ({ navigation, to }) => {
   const Header = styled.View`
     width: ${phoneWidth}px;
@@ -22,7 +23,7 @@ const PrevHeader = ({ navigation, to }) => {
     <TouchableOpacity onPress={() => navigation.navigate(to)}>
       <Header>
         <HeaderImage
-          source={require("../../assets/travelBudget/arrow_back.png")}
+          source={{uri:arrowBack}}
         />
       </Header>
     </TouchableOpacity>

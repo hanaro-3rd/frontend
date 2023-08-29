@@ -12,6 +12,14 @@ import {
 import PrevHeader from "../../components/Header/PrevHeader";
 import { useQueryClient, useQuery, useMutation } from "react-query";
 import { getMyKeymoney, getAccount } from "../../api/api";
+import {
+  euFlag,
+  exchangeImage,
+  japanFlag,
+  koreaFlag,
+  rightGray,
+  usaFlag,
+} from "../../utils/image";
 
 const KeyMoneyHistoryPage = ({ route, navigation }) => {
   const [KeyMoneyAccountList, setKeyMoneyAccountList] = useState([]);
@@ -36,10 +44,10 @@ const KeyMoneyHistoryPage = ({ route, navigation }) => {
   );
 
   const unitImageMap = {
-    KRW: require("../../assets/History/KRW.png"),
-    USD: require("../../assets/History/USD.png"),
-    JPY: require("../../assets/History/JPY.png"),
-    EUR: require("../../assets/History/EUR.png"),
+    KRW: { uri: koreaFlag },
+    USD: { uri: usaFlag },
+    JPY: { uri: japanFlag },
+    EUR: { uri: euFlag },
   };
   // const { data: accountData } = useQuery("account", async () => getAccount(), {
   //   onSuccess: (response) => {
@@ -94,19 +102,30 @@ const KeyMoneyHistoryPage = ({ route, navigation }) => {
                       <AccountInfoTextContainer>
                         <AccountCountryText>{item.unit}</AccountCountryText>
                         <AccountMoneyText>
-                          {item.balance.toLocaleString()}{unitSymbol}
+                          {item.balance.toLocaleString()}
+                          {unitSymbol}
                         </AccountMoneyText>
                       </AccountInfoTextContainer>
                     </AccountInfo>
                     <Image
-                      source={require("../../assets/History/SelectButton.png")}
+                      source={{ uri: rightGray }}
+                      style={{
+                        width: widthPercentage(15),
+                        height: heightPercentage(9.262),
+                      }}
                     />
                   </AccountInfoContainer>
                 );
               })
             ) : (
               <NoAccountMessageContainer>
-                <Image source={require("../../assets/History/Exchange.png")} />
+                <Image
+                  source={{ uri: exchangeImage }}
+                  style={{
+                    width: widthPercentage(100),
+                    height: heightPercentage(100),
+                  }}
+                />
                 <NoAccountMessage>보유중인 키머니가 없습니다.</NoAccountMessage>
               </NoAccountMessageContainer>
             )}

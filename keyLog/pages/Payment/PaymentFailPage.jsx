@@ -10,11 +10,12 @@ import {
   widthPercentage,
 } from "../../utils/ResponseSize";
 import DeleteHeader from "../../components/Header/DeleteHeader";
+import { paymentFail } from "../../utils/image";
 
 const PaymentFailPage = ({ navigation }) => {
   return (
     <Root>
-      <DeleteHeader navigation={navigation} to="MainPage"/>
+      <DeleteHeader navigation={navigation} to="MainPage" />
       <BodyContainer>
         <BodyHeader>
           <BodyHeaderTitle>잔액 부족</BodyHeaderTitle>
@@ -24,7 +25,13 @@ const PaymentFailPage = ({ navigation }) => {
         </BodyHeader>
         <BodyMainContainer>
           <CreditImageContainer>
-            <Image source={require("../../assets/Setting/PaymentFail.png")} />
+            <Image
+              source={{ uri: paymentFail }}
+              style={{
+                width: widthPercentage(162.269),
+                height: heightPercentage(129.167),
+              }}
+            />
           </CreditImageContainer>
           <InfoTextContainer>
             <InfoText>* 계속해서 실패할 경우 아래로 문의해주세요.</InfoText>
