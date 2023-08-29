@@ -60,6 +60,8 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
   const [foreignTextInput, setForeignTextInput] = useState();
   const [subForeignText, setSubForeignText] = useState();
   const [apiTime, setApiTime] = useState([]);
+  const [isBought, setIsBought] = useState(false);
+
   const { Keyunit, Keybalance } = route?.params;
   const placeholderText = `잔액: ${Keybalance}`;
   const [selectedMoney, setSelectedMoney] = useState(Keyunit);
@@ -98,13 +100,10 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
           : Keyunit == "JPY"
           ? (setExchangeRate(response.data.result.jpy.exchangeRate / 100),
             setChangePrice(response.data.result.jpy.changePrice))
-          : Keyunit=="EUR" ? (setExchangeRate(response.data.result.eur.exchangeRate),
+          : Keyunit == "EUR"
+          ? (setExchangeRate(response.data.result.eur.exchangeRate),
             setChangePrice(response.data.result.eur.changePrice))
-            : (
-              setExchangeRate(1),
-            setChangePrice(1)
-            )
-            ;
+          : (setExchangeRate(1), setChangePrice(1));
         setApiTime(response.data.result.updatedAt);
       },
       onError: (error) => {
@@ -157,6 +156,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
         exchangeUnit: selectedMoney,
         exchangeRate: exchangeRate,
         changePrice: changePrice,
+        isBought: isBought,
       });
     },
     onError: (error) => {
@@ -177,7 +177,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
       accountId: accountId,
       changePrice: changePrice,
       exchangeRate: exchangeRate,
-      isBought: true,
+      isBought: false,
       money: koreaTextInput,
       moneyToExchange: foreignTextInput,
       unit: selectedMoney,
@@ -186,7 +186,14 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
 
   return (
     <ScrollView>
-      <DeleteHeader navigation={navigation} to="MainPage" />
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={require("../../Images/삭제.png")}
+            style={{ width: widthPercentage(24), height: heightPercentage(24) }}
+          />
+        </TouchableOpacity>
+      </View>
       <View style={styles.body}>
         <View style={styles.bodyHeader}>
           <Text style={styles.title}>원화 계좌로 송금하기</Text>
@@ -396,7 +403,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                     : ""}
                 </Text>
               </View>
-              
+
               <View style={styles.currentExchangeRateContainer}>
                 <View style={styles.countryInformationContainer}>
                   <Text style={styles.countryText}>
