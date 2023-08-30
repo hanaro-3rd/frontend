@@ -430,7 +430,7 @@ export const ExchangeToWonPage = ({ route, navigation }) => {
                   marginBottom: 10,
                 }}
               >
-                {subForeignText}
+               
               </Text>
             </View>
           </View>
