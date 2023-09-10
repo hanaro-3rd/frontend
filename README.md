@@ -49,6 +49,9 @@
 ## 4. 페이지 뷰 및 구현 기능
 
 - [Figma 링크](https://www.figma.com/file/tedyiFzoNtrIWbhn2lxi3s/keylog?type=design&node-id=0-1&mode=design&t=1rNfoIukcXKQhOVu-0)
+  > 언제 어디서나 앱을 통해 각 나라의 화폐로 환전하여 바로 카드를 사용할 수 있고, 여행 계획을 세울 수 있으며 결제 내역을 한눈에 볼 수 있음
+
+  <br/>
 
 <details>
 <summary><b>회원가입 및 휴대폰 인증 페이지</b></summary>
@@ -150,7 +153,11 @@
 
 
 ## 5. 강점
-언제 어디서나 앱을 통해 각 나라의 화폐로 환전하여 바로 카드를 사용할 수 있고, 여행 계획을 세울 수 있으며 결제 내역을 한눈에 볼 수 있다.
+1.  react query를 사용하여 간단하고 직관적인 API 작성
+2.  recoil의 'atom', 'selector'를 활용한 상태 관리
+3.  다중 API 일괄 처리
+4.  환전 기능 Debounce
+
 
 <br/>
 
