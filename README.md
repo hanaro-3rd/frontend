@@ -61,51 +61,96 @@
 - 휴대폰번호 본인 인증을 통해 회원가입 완료
 </details>
 
-
 <details>
 <summary><b>비밀번호 설정 페이지</b></summary>
 
+![image](https://github.com/hanaro-3rd/frontend/assets/79887655/4aa4fdd6-30ae-4957-8531-eb0a0e71649b)
+![image](https://github.com/hanaro-3rd/frontend/assets/79887655/e9904248-03ba-4ab2-a304-82f414d770d6)
+
+- 회원가입 후 비밀번호 6자리 설정, 재확인
+- 패턴도 등록 가능(선택사항)
 </details>
 
 <details>
 <summary><b>메인화면</b></summary>
 
+![image](https://github.com/hanaro-3rd/frontend/assets/79887655/fcc9a2c1-f89a-4da7-bd95-2b957b357fc4)
+
+- 메인 화면에서 키머니 환전, 게좌 연결, 키머니 줍기, 여행 계획하기, 키머니 확인 페이지로 이동
+- 당일 환율 체크 가능
+  
 </details>
 
 <details>
 <summary><b>결제 페이지</b></summary>
 
+![image](https://github.com/hanaro-3rd/frontend/assets/79887655/388a93ee-e465-41b5-afbf-981552d017da)
+
+- 시연을 위한 결제 페이지 구현
+- 실제 앱 구동 시에는 카드 결제 내역을 자동으로 받아와 카테고리별로 저장
+  
 </details>
 
 <details>
-<summary><b>계좌연결 페이지</b></summary>
+<summary><b>계좌 연결 페이지</b></summary>
+
+![image](https://github.com/hanaro-3rd/frontend/assets/79887655/7a662b09-ec59-4d20-a882-d726af4f86ea)
+
+- 오픈뱅킹에서 계좌를 연결하듯이 외부 계좌 연결
+- 해당 계좌에 맞는 비밀번호 입력 후 연결
 
 </details>
 
 <details>
 <summary><b>키머니 환전 페이지</b></summary>
+  
+![image](https://github.com/hanaro-3rd/frontend/assets/79887655/61ef16fe-f0e1-4b34-836d-607ee3a0f833)
 
+
+- 연결한 원화 계좌에서 원하는 외화로 환전
+- 실시간 환율 API를 받아와 그에 맞는 환율로 환전됨
+
+- 외화 -> 원화로 환전도 가능
+  
 </details>
 
 <details>
 <summary><b>여행 계획 정보 작성 및 경비 계획 페이지</b></summary>
+  
+![image](https://github.com/hanaro-3rd/frontend/assets/79887655/516b1477-5293-41f4-be64-ae2a13ec5591)
+![image](https://github.com/hanaro-3rd/frontend/assets/79887655/a5898607-b66c-42f3-a9f6-060de102ba4f)
+<img src="https://github.com/hanaro-3rd/frontend/assets/79887655/3d3cbdcf-7179-4773-9965-49d8b0841ea4" width="25%" height="25%">
+
+- 여행할 날짜, 여행지, 이름을 설정
+- 각 카테고리별 경비 계획 설정
+- 카드로 결제하면 경비에서 쓴 가격이 차감됨
 
 </details>
 
 <details>
 <summary><b>키머니 줍기 페이지</b></summary>
 
+![image](https://github.com/hanaro-3rd/frontend/assets/79887655/0f7af147-b872-42b1-9e93-b7f42b7211cc)
+
+- 여행 시 본인 위치에서 100m 이내인 마커를 주울 수 있음
+- 주운 마커는 각 화폐 단위 키머니로 합산됨
+
 </details>
 
 <details>
 <summary><b>키머니 확인 페이지</b></summary>
+  
+![image](https://github.com/hanaro-3rd/frontend/assets/79887655/5a2a74ef-604c-46bd-85d7-11bde44def4e)
 
+- 각 화폐 단위별 키머니 확인
+- 사용 내역을 확인할 수 있고, 메모 작성 가능
+  
 </details>
 <br/>
 
 
 ## 5. 강점
-
+언제 어디서나 앱을 통해 각 나라의 화폐로 환전하여 바로 카드를 사용할 수 있고, 여행 계획을 세울 수 있으며 결제 내역을 한눈에 볼 수 있다.
 
 <br/>
 
